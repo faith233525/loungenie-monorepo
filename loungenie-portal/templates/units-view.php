@@ -10,6 +10,23 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+/**
+ * Get color hex code for LounGenie color tags
+ *
+ * @param string $color_name Color name
+ * @return string Hex color code
+ */
+function lgp_get_color_hex( $color_name ) {
+    $color_map = array(
+        'yellow' => '#FFD700',
+        'red' => '#DC143C',
+        'classic blue' => '#4169E1',
+        'ice blue' => '#87CEEB',
+    );
+    $color_lower = strtolower( trim( $color_name ) );
+    return isset( $color_map[$color_lower] ) ? $color_map[$color_lower] : '#999';
+}
+
 global $wpdb;
 
 $units_table = $wpdb->prefix . 'lgp_units';
@@ -28,14 +45,17 @@ if ( ! $is_support && $company_id ) {
 
 $where_sql = implode( ' AND ', $where_clauses );
 
-// Fetch units
+// Fetch units (table names are from wpdb prefix which is safe)
 $units = $wpdb->get_results(
-    "SELECT u.*, c.name as company_name 
-    FROM $units_table u 
-    LEFT JOIN $companies_table c ON u.company_id = c.id 
-    WHERE $where_sql 
-    ORDER BY u.created_at DESC 
-    LIMIT 100"
+    $wpdb->prepare(
+        "SELECT u.*, c.name as company_name 
+        FROM {$units_table} u 
+        LEFT JOIN {$companies_table} c ON u.company_id = c.id 
+        WHERE {$where_sql}
+        ORDER BY u.created_at DESC 
+        LIMIT %d",
+        100
+    )
 );
 
 ?>
@@ -168,14 +188,7 @@ $units = $wpdb->get_results(
                                 <td><?php echo esc_html( $unit->company_name ); ?></td>
                                 <td>
                                     <?php if ( $unit->color_tag ) : 
-                                        $color_map = array(
-                                            'yellow' => '#FFD700',
-                                            'red' => '#DC143C',
-                                            'classic blue' => '#4169E1',
-                                            'ice blue' => '#87CEEB',
-                                        );
-                                        $color_lower = strtolower( $unit->color_tag );
-                                        $color_hex = isset( $color_map[$color_lower] ) ? $color_map[$color_lower] : '#999';
+                                        $color_hex = lgp_get_color_hex( $unit->color_tag );
                                     ?>
                                         <span class="lgp-color-tag">
                                             <span class="lgp-color-indicator" style="background-color: <?php echo esc_attr( $color_hex ); ?>"></span>

@@ -10,6 +10,23 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+/**
+ * Get color hex code for LounGenie color tags
+ *
+ * @param string $color_name Color name
+ * @return string Hex color code
+ */
+function lgp_get_color_hex( $color_name ) {
+    $color_map = array(
+        'yellow' => '#FFD700',
+        'red' => '#DC143C',
+        'classic blue' => '#4169E1',
+        'ice blue' => '#87CEEB',
+    );
+    $color_lower = strtolower( trim( $color_name ) );
+    return isset( $color_map[$color_lower] ) ? $color_map[$color_lower] : '#999';
+}
+
 global $wpdb;
 
 // Fetch statistics
@@ -109,16 +126,8 @@ $yearround_units = $wpdb->get_var( "SELECT COUNT(*) FROM $units_table WHERE seas
                 <h3 class="lgp-metric-title"><?php esc_html_e( 'Top Colors', 'loungenie-portal' ); ?></h3>
                 <?php if ( ! empty( $top_colors ) ) : ?>
                     <ul class="lgp-metric-list">
-                        <?php 
-                        $color_map = array(
-                            'yellow' => '#FFD700',
-                            'red' => '#DC143C',
-                            'classic blue' => '#4169E1',
-                            'ice blue' => '#87CEEB',
-                        );
-                        foreach ( $top_colors as $color ) : 
-                            $color_lower = strtolower( $color->color_tag );
-                            $color_hex = isset( $color_map[$color_lower] ) ? $color_map[$color_lower] : '#999';
+                        <?php foreach ( $top_colors as $color ) : 
+                            $color_hex = lgp_get_color_hex( $color->color_tag );
                         ?>
                             <li class="lgp-metric-item">
                                 <span class="lgp-metric-label">

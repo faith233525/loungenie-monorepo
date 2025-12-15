@@ -305,8 +305,10 @@
                 for (const [filterType, filterValue] of Object.entries(activeFilters)) {
                     if (filterValue === '') continue;
                     
-                    const rowValue = row.getAttribute('data-' + filterType);
-                    if (rowValue !== filterValue) {
+                    const rowValue = (row.getAttribute('data-' + filterType) || '').trim().toLowerCase();
+                    const compareValue = filterValue.trim().toLowerCase();
+                    
+                    if (rowValue !== compareValue) {
                         show = false;
                         break;
                     }
@@ -416,26 +418,31 @@
             
             rows.forEach(row => {
                 const cells = row.querySelectorAll('td');
+                // Get values from cells, using data attributes where available
                 const rowData = [
-                    cells[0].textContent.trim(),
-                    cells[1].textContent.trim(),
-                    cells[2].textContent.trim(),
-                    cells[3].textContent.trim(),
-                    cells[4].textContent.trim(),
-                    cells[5].textContent.trim(),
-                    cells[6].textContent.trim(),
-                    cells[7].textContent.trim()
+                    cells[0] ? cells[0].textContent.trim() : '',
+                    cells[1] ? cells[1].textContent.trim() : '',
+                    row.getAttribute('data-color') || '',
+                    row.getAttribute('data-season') || '',
+                    row.getAttribute('data-venue') || '',
+                    row.getAttribute('data-lock-brand') || '',
+                    row.getAttribute('data-status') || '',
+                    cells[7] ? cells[7].textContent.trim() : ''
                 ];
                 
-                csv += rowData.map(field => `"${field}"`).join(',') + '\n';
+                csv += rowData.map(field => '"' + field.replace(/"/g, '""') + '"').join(',') + '\n';
             });
             
             // Download CSV
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
+            const today = new Date();
+            const dateString = today.getFullYear() + '-' + 
+                              String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+                              String(today.getDate()).padStart(2, '0');
             a.href = url;
-            a.download = `loungenie-units-${new Date().toISOString().split('T')[0]}.csv`;
+            a.download = 'loungenie-units-' + dateString + '.csv';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
