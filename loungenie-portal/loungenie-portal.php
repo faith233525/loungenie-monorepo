@@ -128,6 +128,13 @@ function lgp_init() {
     require_once LGP_PLUGIN_DIR . 'includes/class-lgp-router.php';
     require_once LGP_PLUGIN_DIR . 'includes/class-lgp-auth.php';
     require_once LGP_PLUGIN_DIR . 'includes/class-lgp-assets.php';
+    
+    // Load enterprise features (backported from PoolSafe Portal v3.3.0)
+    require_once LGP_PLUGIN_DIR . 'includes/class-lgp-cache.php';
+    require_once LGP_PLUGIN_DIR . 'includes/class-lgp-security.php';
+    require_once LGP_PLUGIN_DIR . 'includes/class-lgp-microsoft-sso.php';
+    
+    // Load integration classes
     require_once LGP_PLUGIN_DIR . 'includes/class-lgp-hubspot.php';
     require_once LGP_PLUGIN_DIR . 'includes/class-lgp-outlook.php';
     
@@ -148,6 +155,10 @@ function lgp_init() {
     
     // Initialize asset management
     LGP_Assets::init();
+    
+    // Initialize enterprise features
+    // Note: Security headers initialized via plugins_loaded hook in class
+    // Cache and SSO initialized via their own hooks
     
     // Initialize integrations
     LGP_HubSpot::init();

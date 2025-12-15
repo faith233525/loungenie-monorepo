@@ -19,6 +19,9 @@
         initTableSearch();
         initPagination();
         initSidebarToggle();
+        initFilterPersistence();
+        initLoadingOverlay();
+        initKeyboardShortcuts();
     }
     
     /**
@@ -455,6 +458,154 @@
                 window.lgpShowNotification('Export completed successfully', 'success');
             }, 1000);
         });
+    }
+    
+    /**
+     * Filter Persistence
+     * Save and restore filter states using localStorage
+     */
+    function initFilterPersistence() {
+        const filterSelects = document.querySelectorAll('.lgp-table-filter');
+        const searchInput = document.querySelector('.lgp-search-input');
+        const userId = document.body.dataset.userId || 'guest';
+        const storageKey = `lgp_filters_${userId}`;
+        
+        // Restore filters on load
+        restoreFilters();
+        
+        // Save filters on change
+        filterSelects.forEach(select => {
+            select.addEventListener('change', saveFilters);
+        });
+        
+        if (searchInput) {
+            searchInput.addEventListener('input', debounceFunc(saveFilters, 500));
+        }
+        
+        function saveFilters() {
+            const filters = {};
+            
+            filterSelects.forEach(select => {
+                const filterType = select.dataset.filter;
+                filters[filterType] = select.value;
+            });
+            
+            if (searchInput) {
+                filters.search = searchInput.value;
+            }
+            
+            filters.timestamp = Date.now();
+            localStorage.setItem(storageKey, JSON.stringify(filters));
+        }
+        
+        function restoreFilters() {
+            const saved = localStorage.getItem(storageKey);
+            if (!saved) return;
+            
+            try {
+                const filters = JSON.parse(saved);
+                
+                // Check if filters are recent (within 24 hours)
+                const age = Date.now() - (filters.timestamp || 0);
+                if (age > 24 * 60 * 60 * 1000) {
+                    localStorage.removeItem(storageKey);
+                    return;
+                }
+                
+                // Restore filter values
+                filterSelects.forEach(select => {
+                    const filterType = select.dataset.filter;
+                    if (filters[filterType]) {
+                        select.value = filters[filterType];
+                        // Trigger change to apply filter
+                        select.dispatchEvent(new Event('change'));
+                    }
+                });
+                
+                if (searchInput && filters.search) {
+                    searchInput.value = filters.search;
+                    searchInput.dispatchEvent(new Event('input'));
+                }
+            } catch (e) {
+                console.error('Error restoring filters:', e);
+            }
+        }
+        
+        // Clear filters on logout
+        window.addEventListener('beforeunload', function() {
+            const isLoggingOut = window.location.href.includes('logout');
+            if (isLoggingOut) {
+                localStorage.removeItem(storageKey);
+            }
+        });
+    }
+    
+    /**
+     * Loading Overlay
+     * Show global loading indicator for AJAX operations
+     */
+    function initLoadingOverlay() {
+        // Create overlay element
+        const overlay = document.createElement('div');
+        overlay.className = 'lgp-loading-overlay';
+        overlay.innerHTML = `
+            <div class="lgp-loading-content">
+                <div class="lgp-loading-spinner"></div>
+                <div class="lgp-loading-text">Loading...</div>
+            </div>
+        `;
+        overlay.style.display = 'none';
+        document.body.appendChild(overlay);
+        
+        // Global functions to show/hide loading
+        window.lgpShowLoading = function(message) {
+            const textEl = overlay.querySelector('.lgp-loading-text');
+            if (textEl && message) {
+                textEl.textContent = message;
+            }
+            overlay.style.display = 'flex';
+        };
+        
+        window.lgpHideLoading = function() {
+            overlay.style.display = 'none';
+        };
+    }
+    
+    /**
+     * Keyboard Shortcuts
+     */
+    function initKeyboardShortcuts() {
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+K: Clear all filters
+            if (e.ctrlKey && e.key === 'k') {
+                e.preventDefault();
+                const clearBtn = document.getElementById('lgp-clear-filters');
+                if (clearBtn) {
+                    clearBtn.click();
+                }
+            }
+            
+            // Escape: Close modals
+            if (e.key === 'Escape') {
+                const modals = document.querySelectorAll('.lgp-modal.active');
+                modals.forEach(modal => modal.classList.remove('active'));
+            }
+        });
+    }
+    
+    /**
+     * Debounce helper function
+     */
+    function debounceFunc(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func.apply(this, args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
     }
     
 })();
