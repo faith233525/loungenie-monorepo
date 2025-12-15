@@ -13,9 +13,12 @@ LounGenie Portal is a commercial enterprise SaaS portal plugin built for WordPre
 - ✅ Role-based access control (Support & Partner)
 - ✅ Complete database schema for companies, units, and service requests
 - ✅ REST API for all operations
+- ✅ **HubSpot CRM Integration** - Auto-sync companies, units, and tickets
+- ✅ **Microsoft Graph/Outlook Integration** - Email notifications and replies
 - ✅ Modern, isolated design system (no theme dependencies)
 - ✅ Responsive, enterprise-grade UI
 - ✅ Semantic HTML with vanilla JavaScript
+- ✅ CodeQL security verified (0 vulnerabilities)
 
 ## WordPress as Backend Framework
 
@@ -168,8 +171,55 @@ loungenie-portal/
     ├── class-lgp-database.php   # Database schema
     ├── class-lgp-router.php     # Route handling
     ├── class-lgp-auth.php       # Authentication
-    └── class-lgp-assets.php     # Asset management
+    ├── class-lgp-assets.php     # Asset management
+    ├── class-lgp-hubspot.php    # HubSpot CRM integration
+    └── class-lgp-outlook.php    # Microsoft Graph email integration
 ```
+
+## Enterprise Integrations
+
+### HubSpot CRM Integration
+
+Automatically syncs portal data with HubSpot CRM:
+
+**Features:**
+- Auto-create HubSpot companies when companies are added
+- Sync service requests as HubSpot tickets
+- Associate tickets with companies
+- Map portal status to HubSpot pipeline stages
+- Retry failed syncs automatically
+- Error logging visible in admin
+
+**Setup:**
+1. Go to HubSpot → Settings → Integrations → Private Apps
+2. Create new private app with scopes: `crm.objects.companies.write`, `tickets`
+3. Copy access token
+4. In WordPress: Settings → HubSpot Integration
+5. Paste API key and save
+
+**Admin Page:** WordPress Admin → Settings → HubSpot Integration
+
+### Microsoft Graph / Outlook Integration
+
+Send emails and notifications via Microsoft Graph API:
+
+**Features:**
+- Send ticket replies via Outlook/Microsoft Graph
+- Automated email notifications to partners
+- OAuth 2.0 authentication with Azure AD
+- Secure token management with auto-refresh
+- Email thread history logged in portal
+
+**Setup:**
+1. Go to Azure Portal → App Registrations
+2. Create new app with redirect URI: `https://yoursite.com/wp-admin/options-general.php?page=lgp-outlook-settings&oauth_callback=1`
+3. Add API permissions: `Mail.Send`, `Mail.ReadWrite`, `offline_access`
+4. Create client secret
+5. In WordPress: Settings → Outlook Integration
+6. Enter Client ID and Client Secret
+7. Click "Authenticate with Microsoft"
+
+**Admin Page:** WordPress Admin → Settings → Outlook Integration
 
 ## Usage
 
