@@ -121,7 +121,7 @@ $companies = $wpdb->get_results(
                             <tr>
                                 <td><strong><?php echo esc_html( $company->name ); ?></strong></td>
                                 <td><?php echo esc_html( $company->address ); ?></td>
-                                <td><?php echo esc_html( $company->state ?: __( 'N/A', 'loungenie-portal' ) ); ?></td>
+                                <td><?php echo esc_html( $company->state ?? __( 'N/A', 'loungenie-portal' ) ); ?></td>
                                 <td>
                                     <span class="lgp-badge lgp-badge-info">
                                         <?php echo esc_html( $company->unit_count ); ?> <?php esc_html_e( 'units', 'loungenie-portal' ); ?>

@@ -86,8 +86,8 @@ $recent_tickets = $wpdb->get_results(
                         <?php foreach ( $recent_tickets as $ticket ) : ?>
                             <tr>
                                 <td>#<?php echo esc_html( $ticket->id ); ?></td>
-                                <td><?php echo esc_html( $ticket->company_name ?: __( 'N/A', 'loungenie-portal' ) ); ?></td>
-                                <td><?php echo esc_html( ucfirst( $ticket->request_type ?: 'general' ) ); ?></td>
+                                <td><?php echo esc_html( $ticket->company_name ?? __( 'N/A', 'loungenie-portal' ) ); ?></td>
+                                <td><?php echo esc_html( ucfirst( $ticket->request_type ?? 'general' ) ); ?></td>
                                 <td>
                                     <?php
                                     $status_class = 'info';

@@ -66,14 +66,14 @@ $recent_requests = $wpdb->get_results( $wpdb->prepare(
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-lg);">
             <div>
                 <p><strong><?php esc_html_e( 'Company Name:', 'loungenie-portal' ); ?></strong> <?php echo esc_html( $company->name ); ?></p>
-                <p><strong><?php esc_html_e( 'Address:', 'loungenie-portal' ); ?></strong> <?php echo esc_html( $company->address ?: __( 'N/A', 'loungenie-portal' ) ); ?></p>
-                <p><strong><?php esc_html_e( 'State:', 'loungenie-portal' ); ?></strong> <?php echo esc_html( $company->state ?: __( 'N/A', 'loungenie-portal' ) ); ?></p>
+                <p><strong><?php esc_html_e( 'Address:', 'loungenie-portal' ); ?></strong> <?php echo esc_html( $company->address ?? __( 'N/A', 'loungenie-portal' ) ); ?></p>
+                <p><strong><?php esc_html_e( 'State:', 'loungenie-portal' ); ?></strong> <?php echo esc_html( $company->state ?? __( 'N/A', 'loungenie-portal' ) ); ?></p>
             </div>
             <?php if ( $management_company ) : ?>
             <div>
                 <p><strong><?php esc_html_e( 'Management Company:', 'loungenie-portal' ); ?></strong> <?php echo esc_html( $management_company->name ); ?></p>
-                <p><strong><?php esc_html_e( 'Contact:', 'loungenie-portal' ); ?></strong> <?php echo esc_html( $management_company->contact_name ?: __( 'N/A', 'loungenie-portal' ) ); ?></p>
-                <p><strong><?php esc_html_e( 'Email:', 'loungenie-portal' ); ?></strong> <?php echo esc_html( $management_company->contact_email ?: __( 'N/A', 'loungenie-portal' ) ); ?></p>
+                <p><strong><?php esc_html_e( 'Contact:', 'loungenie-portal' ); ?></strong> <?php echo esc_html( $management_company->contact_name ?? __( 'N/A', 'loungenie-portal' ) ); ?></p>
+                <p><strong><?php esc_html_e( 'Email:', 'loungenie-portal' ); ?></strong> <?php echo esc_html( $management_company->contact_email ?? __( 'N/A', 'loungenie-portal' ) ); ?></p>
             </div>
             <?php endif; ?>
         </div>
