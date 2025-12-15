@@ -27,14 +27,8 @@ vendor/
 composer.lock
 
 # Env & Sensitive Files
-.env
-.env.*
+.env*
 *.env
-.env.local
-.env.development
-.env.production
-.env.test
-.env.staging
 
 # Build & Development Tools
 build-metadata.json
