@@ -123,8 +123,13 @@ class LGP_Companies_API {
             return new WP_Error( 'db_error', __( 'Failed to create company', 'loungenie-portal' ), array( 'status' => 500 ) );
         }
         
+        $company_id = $wpdb->insert_id;
+        
+        // Fire action for integrations
+        do_action( 'lgp_company_created', $company_id );
+        
         return rest_ensure_response( array(
-            'id' => $wpdb->insert_id,
+            'id' => $company_id,
             'message' => __( 'Company created successfully', 'loungenie-portal' ),
         ) );
     }

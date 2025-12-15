@@ -128,6 +128,8 @@ function lgp_init() {
     require_once LGP_PLUGIN_DIR . 'includes/class-lgp-router.php';
     require_once LGP_PLUGIN_DIR . 'includes/class-lgp-auth.php';
     require_once LGP_PLUGIN_DIR . 'includes/class-lgp-assets.php';
+    require_once LGP_PLUGIN_DIR . 'includes/class-lgp-hubspot.php';
+    require_once LGP_PLUGIN_DIR . 'includes/class-lgp-outlook.php';
     
     // Load API endpoints
     require_once LGP_PLUGIN_DIR . 'api/companies.php';
@@ -146,6 +148,10 @@ function lgp_init() {
     
     // Initialize asset management
     LGP_Assets::init();
+    
+    // Initialize integrations
+    LGP_HubSpot::init();
+    LGP_Outlook::init();
     
     // Initialize REST API endpoints
     LGP_Companies_API::init();

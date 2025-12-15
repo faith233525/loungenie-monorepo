@@ -180,9 +180,13 @@ class LGP_Tickets_API {
         );
         
         $wpdb->insert( $tickets_table, $ticket_data );
+        $ticket_id = $wpdb->insert_id;
+        
+        // Fire action for integrations
+        do_action( 'lgp_ticket_created', $ticket_id, (object) array_merge( (array) $ticket_data, (array) $request_data ) );
         
         return rest_ensure_response( array(
-            'ticket_id' => $wpdb->insert_id,
+            'ticket_id' => $ticket_id,
             'service_request_id' => $service_request_id,
             'message' => __( 'Service request submitted successfully', 'loungenie-portal' ),
         ) );
@@ -206,6 +210,9 @@ class LGP_Tickets_API {
         if ( $updated === false ) {
             return new WP_Error( 'db_error', __( 'Failed to update ticket', 'loungenie-portal' ), array( 'status' => 500 ) );
         }
+        
+        // Fire action for integrations
+        do_action( 'lgp_ticket_updated', $id, $data['status'] );
         
         return rest_ensure_response( array(
             'message' => __( 'Ticket updated successfully', 'loungenie-portal' ),
@@ -246,6 +253,10 @@ class LGP_Tickets_API {
             array( 'thread_history' => wp_json_encode( $thread ) ),
             array( 'id' => $id )
         );
+        
+        // Fire action for integrations
+        $message = sanitize_textarea_field( $request->get_param( 'message' ) );
+        do_action( 'lgp_ticket_reply_added', $id, $message, $ticket );
         
         return rest_ensure_response( array(
             'message' => __( 'Reply added successfully', 'loungenie-portal' ),
