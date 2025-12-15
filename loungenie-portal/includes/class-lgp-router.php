@@ -66,11 +66,23 @@ class LGP_Router {
         // Re-add only our assets
         add_action( 'wp_enqueue_scripts', array( 'LGP_Assets', 'enqueue_portal_assets' ) );
         
-        // Determine which dashboard to show based on user role
-        $current_user = wp_get_current_user();
-        $is_support = in_array( 'lgp_support', $current_user->roles );
+        // Check if specific section is requested
+        $section = get_query_var( 'lgp_section' );
         
-        // Load portal shell template
+        // If map section and user is support, load map view directly
+        if ( $section === 'map' && LGP_Auth::is_support() ) {
+            self::load_map_view();
+            return;
+        }
+        
+        // Otherwise load portal shell (which includes dashboards)
+        require_once LGP_PLUGIN_DIR . 'templates/portal-shell.php';
+    }
+    
+    /**
+     * Load map view in portal shell
+     */
+    private static function load_map_view() {
         require_once LGP_PLUGIN_DIR . 'templates/portal-shell.php';
     }
 }

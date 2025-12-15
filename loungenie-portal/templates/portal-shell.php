@@ -124,10 +124,16 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
     <!-- Main Content Area -->
     <main class="lgp-main">
         <?php
-        // Load the appropriate dashboard or section template
-        $template_file = LGP_PLUGIN_DIR . 'templates/' . $dashboard_template;
+        // Load the appropriate template based on section
+        if ( $section === 'map' && $is_support ) {
+            $template_file = LGP_PLUGIN_DIR . 'templates/map-view.php';
+        } elseif ( $section === 'dashboard' || empty( $section ) ) {
+            $template_file = LGP_PLUGIN_DIR . 'templates/' . $dashboard_template;
+        } else {
+            $template_file = null;
+        }
         
-        if ( file_exists( $template_file ) ) {
+        if ( $template_file && file_exists( $template_file ) ) {
             include $template_file;
         } else {
             echo '<div class="lgp-card">';

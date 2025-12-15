@@ -228,4 +228,53 @@
         }, 3000);
     };
     
+    /**
+     * Initialize service request form
+     */
+    function initServiceRequestForm() {
+        const form = document.getElementById('service-request-form');
+        if (!form) return;
+        
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            const data = {
+                request_type: formData.get('request_type'),
+                priority: formData.get('priority'),
+                notes: formData.get('notes'),
+                unit_id: formData.get('unit_id') || 0
+            };
+            
+            // Submit to REST API
+            fetch(lgpData.restUrl + 'tickets', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-WP-Nonce': lgpData.nonce
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.message) {
+                    window.lgpShowNotification(result.message, 'success');
+                    form.reset();
+                    
+                    // Reload page after 2 seconds to show updated data
+                    setTimeout(() => window.location.reload(), 2000);
+                }
+            })
+            .catch(error => {
+                window.lgpShowNotification('Error submitting request. Please try again.', 'error');
+                console.error('Error:', error);
+            });
+        });
+    }
+    
+    // Initialize form on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        initServiceRequestForm();
+    });
+    
 })();

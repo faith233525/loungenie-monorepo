@@ -527,6 +527,74 @@ a:hover {
     }
 }
 
+/* Alerts */
+.lgp-alert {
+    padding: var(--space-md);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-md);
+    border-left: 4px solid;
+}
+
+.lgp-alert-info {
+    background-color: rgba(37, 208, 238, 0.1);
+    border-color: var(--info);
+    color: var(--dark);
+}
+
+.lgp-alert-success {
+    background-color: rgba(76, 175, 80, 0.1);
+    border-color: var(--success);
+    color: var(--dark);
+}
+
+.lgp-alert-warning {
+    background-color: rgba(255, 193, 7, 0.1);
+    border-color: var(--warning);
+    color: var(--dark);
+}
+
+.lgp-alert-error {
+    background-color: rgba(244, 67, 54, 0.1);
+    border-color: var(--error);
+    color: var(--dark);
+}
+
+/* Notifications */
+.lgp-notification {
+    position: fixed;
+    top: 80px;
+    right: var(--space-lg);
+    padding: var(--space-md) var(--space-lg);
+    background-color: var(--white);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-lg);
+    z-index: 9999;
+    opacity: 0;
+    transform: translateX(400px);
+    transition: all 0.3s ease;
+}
+
+.lgp-notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.lgp-notification-info {
+    border-left: 4px solid var(--info);
+}
+
+.lgp-notification-success {
+    border-left: 4px solid var(--success);
+}
+
+.lgp-notification-warning {
+    border-left: 4px solid var(--warning);
+}
+
+.lgp-notification-error {
+    border-left: 4px solid var(--error);
+}
+
 /* ============================================================================
    UTILITY CLASSES
    ============================================================================ */
