@@ -29,6 +29,7 @@ class LGP_Database {
             name varchar(255) NOT NULL,
             address text,
             state varchar(50),
+            venue_type varchar(50),
             contact_name varchar(255),
             contact_email varchar(255),
             contact_phone varchar(50),
@@ -36,7 +37,8 @@ class LGP_Database {
             created_at datetime DEFAULT CURRENT_TIMESTAMP,
             updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
-            KEY management_company_id (management_company_id)
+            KEY management_company_id (management_company_id),
+            KEY venue_type (venue_type)
         ) $charset_collate;";
         
         // Management Companies table
@@ -61,7 +63,10 @@ class LGP_Database {
             management_company_id bigint(20) UNSIGNED,
             address text,
             lock_type varchar(100),
+            lock_brand varchar(50),
             color_tag varchar(50),
+            season varchar(20) DEFAULT 'year-round',
+            venue_type varchar(50),
             status varchar(50) DEFAULT 'active',
             install_date date,
             service_history text,
@@ -70,7 +75,11 @@ class LGP_Database {
             PRIMARY KEY (id),
             KEY company_id (company_id),
             KEY management_company_id (management_company_id),
-            KEY status (status)
+            KEY status (status),
+            KEY color_tag (color_tag),
+            KEY season (season),
+            KEY venue_type (venue_type),
+            KEY lock_brand (lock_brand)
         ) $charset_collate;";
         
         // Service Requests table

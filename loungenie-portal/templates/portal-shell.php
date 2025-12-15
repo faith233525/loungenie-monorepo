@@ -127,6 +127,8 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
         // Load the appropriate template based on section
         if ( $section === 'map' && $is_support ) {
             $template_file = LGP_PLUGIN_DIR . 'templates/map-view.php';
+        } elseif ( $section === 'units' ) {
+            $template_file = LGP_PLUGIN_DIR . 'templates/units-view.php';
         } elseif ( $section === 'dashboard' || empty( $section ) ) {
             $template_file = LGP_PLUGIN_DIR . 'templates/' . $dashboard_template;
         } else {

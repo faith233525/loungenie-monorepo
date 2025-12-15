@@ -8,28 +8,28 @@ INSERT INTO wp_lgp_management_companies (name, address, contact_name, contact_em
 ('Sunshine Properties', '789 Beach Blvd, Miami, FL 33101', 'Mike Johnson', 'mike@sunshineprops.com', '(555) 333-4444'),
 ('Mountain View Management', '321 Alpine Road, Denver, CO 80202', 'Sarah Williams', 'sarah@mountainview.com', '(555) 555-6666');
 
--- Sample Companies
-INSERT INTO wp_lgp_companies (name, address, state, contact_name, contact_email, contact_phone, management_company_id) VALUES
-('Acme Corporation', '123 Main Street, Suite 100, Los Angeles, CA 90001', 'CA', 'John Doe', 'john@acme.com', '(555) 123-4567', 1),
-('TechStart Inc', '456 Innovation Drive, San Francisco, CA 94102', 'CA', 'Alice Brown', 'alice@techstart.com', '(555) 234-5678', 1),
-('Global Solutions LLC', '789 Business Park, Miami, FL 33101', 'FL', 'Bob Wilson', 'bob@globalsolutions.com', '(555) 345-6789', 2),
-('Coastal Resorts', '321 Oceanfront Way, Miami, FL 33139', 'FL', 'Emma Davis', 'emma@coastalresorts.com', '(555) 456-7890', 2),
-('Peak Enterprises', '654 Mountain Pass, Denver, CO 80202', 'CO', 'Chris Taylor', 'chris@peakenterprises.com', '(555) 567-8901', 3);
+-- Sample Companies (with venue_type)
+INSERT INTO wp_lgp_companies (name, address, state, venue_type, contact_name, contact_email, contact_phone, management_company_id) VALUES
+('Acme Corporation', '123 Main Street, Suite 100, Los Angeles, CA 90001', 'CA', 'Hotel', 'John Doe', 'john@acme.com', '(555) 123-4567', 1),
+('TechStart Inc', '456 Innovation Drive, San Francisco, CA 94102', 'CA', 'Resort', 'Alice Brown', 'alice@techstart.com', '(555) 234-5678', 1),
+('Global Solutions LLC', '789 Business Park, Miami, FL 33101', 'FL', 'Waterpark', 'Bob Wilson', 'bob@globalsolutions.com', '(555) 345-6789', 2),
+('Coastal Resorts', '321 Oceanfront Way, Miami, FL 33139', 'FL', 'Resort', 'Emma Davis', 'emma@coastalresorts.com', '(555) 456-7890', 2),
+('Peak Enterprises', '654 Mountain Pass, Denver, CO 80202', 'CO', 'Surf Park', 'Chris Taylor', 'chris@peakenterprises.com', '(555) 567-8901', 3);
 
--- Sample LounGenie Units
-INSERT INTO wp_lgp_units (company_id, management_company_id, address, lock_type, color_tag, status, install_date, service_history) VALUES
-(1, 1, 'Pool Area A, 123 Main Street, Los Angeles, CA', 'Smart Lock Pro', 'Blue', 'active', '2024-01-15', 'Initial installation completed'),
-(1, 1, 'Pool Area B, 123 Main Street, Los Angeles, CA', 'Smart Lock Pro', 'Red', 'active', '2024-01-15', 'Initial installation completed'),
-(1, 1, 'Spa Area, 123 Main Street, Los Angeles, CA', 'Smart Lock Basic', 'Green', 'active', '2024-02-01', 'Installed with standard package'),
-(2, 1, 'Main Pool, 456 Innovation Drive, San Francisco, CA', 'Smart Lock Pro', 'Blue', 'active', '2024-01-20', 'Installation and testing complete'),
-(2, 1, 'Rooftop Pool, 456 Innovation Drive, San Francisco, CA', 'Smart Lock Elite', 'Gold', 'active', '2024-02-15', 'Elite unit with premium features'),
-(3, 2, 'Pool Complex A, 789 Business Park, Miami, FL', 'Smart Lock Pro', 'Blue', 'active', '2024-01-25', 'Installed successfully'),
-(3, 2, 'Pool Complex B, 789 Business Park, Miami, FL', 'Smart Lock Pro', 'Blue', 'install', '2024-03-01', 'Installation scheduled'),
-(4, 2, 'Beach Pool 1, 321 Oceanfront Way, Miami, FL', 'Smart Lock Elite', 'Platinum', 'active', '2023-12-10', 'Premium installation with warranty'),
-(4, 2, 'Beach Pool 2, 321 Oceanfront Way, Miami, FL', 'Smart Lock Elite', 'Platinum', 'active', '2023-12-10', 'Premium installation with warranty'),
-(4, 2, 'Spa Complex, 321 Oceanfront Way, Miami, FL', 'Smart Lock Pro', 'Silver', 'service', '2023-11-15', 'Scheduled for routine maintenance'),
-(5, 3, 'Mountain Pool, 654 Mountain Pass, Denver, CO', 'Smart Lock Pro', 'Blue', 'active', '2024-02-20', 'Cold weather installation complete'),
-(5, 3, 'Indoor Pool, 654 Mountain Pass, Denver, CO', 'Smart Lock Basic', 'Green', 'active', '2024-02-20', 'Standard installation');
+-- Sample LounGenie Units (with new fields: lock_brand, season, venue_type)
+INSERT INTO wp_lgp_units (company_id, management_company_id, address, lock_type, lock_brand, color_tag, season, venue_type, status, install_date, service_history) VALUES
+(1, 1, 'Pool Area A, 123 Main Street, Los Angeles, CA', 'Smart Lock Pro', 'MAKE', 'Yellow', 'year-round', 'Hotel', 'active', '2024-01-15', 'Initial installation completed'),
+(1, 1, 'Pool Area B, 123 Main Street, Los Angeles, CA', 'Smart Lock Pro', 'MAKE', 'Red', 'seasonal', 'Hotel', 'active', '2024-01-15', 'Initial installation completed'),
+(1, 1, 'Spa Area, 123 Main Street, Los Angeles, CA', 'Smart Lock Basic', 'L&F', 'Classic Blue', 'year-round', 'Hotel', 'active', '2024-02-01', 'Installed with standard package'),
+(2, 1, 'Main Pool, 456 Innovation Drive, San Francisco, CA', 'Smart Lock Pro', 'MAKE', 'Ice Blue', 'year-round', 'Resort', 'active', '2024-01-20', 'Installation and testing complete'),
+(2, 1, 'Rooftop Pool, 456 Innovation Drive, San Francisco, CA', 'Smart Lock Elite', 'MAKE', 'Yellow', 'seasonal', 'Resort', 'active', '2024-02-15', 'Elite unit with premium features'),
+(3, 2, 'Pool Complex A, 789 Business Park, Miami, FL', 'Smart Lock Pro', 'L&F', 'Red', 'year-round', 'Waterpark', 'active', '2024-01-25', 'Installed successfully'),
+(3, 2, 'Pool Complex B, 789 Business Park, Miami, FL', 'Smart Lock Pro', 'MAKE', 'Classic Blue', 'seasonal', 'Waterpark', 'install', '2024-03-01', 'Installation scheduled'),
+(4, 2, 'Beach Pool 1, 321 Oceanfront Way, Miami, FL', 'Smart Lock Elite', 'MAKE', 'Ice Blue', 'seasonal', 'Resort', 'active', '2023-12-10', 'Premium installation with warranty'),
+(4, 2, 'Beach Pool 2, 321 Oceanfront Way, Miami, FL', 'Smart Lock Elite', 'L&F', 'Yellow', 'seasonal', 'Resort', 'active', '2023-12-10', 'Premium installation with warranty'),
+(4, 2, 'Spa Complex, 321 Oceanfront Way, Miami, FL', 'Smart Lock Pro', 'MAKE', 'Red', 'year-round', 'Resort', 'service', '2023-11-15', 'Scheduled for routine maintenance'),
+(5, 3, 'Mountain Pool, 654 Mountain Pass, Denver, CO', 'Smart Lock Pro', 'L&F', 'Classic Blue', 'seasonal', 'Surf Park', 'active', '2024-02-20', 'Cold weather installation complete'),
+(5, 3, 'Indoor Pool, 654 Mountain Pass, Denver, CO', 'Smart Lock Basic', 'MAKE', 'Ice Blue', 'year-round', 'Hotel', 'active', '2024-02-20', 'Standard installation');
 
 -- Sample Service Requests
 INSERT INTO wp_lgp_service_requests (company_id, unit_id, request_type, priority, status, notes) VALUES

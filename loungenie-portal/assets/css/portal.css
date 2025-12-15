@@ -595,6 +595,232 @@ a:hover {
     border-left: 4px solid var(--error);
 }
 
+/* Loading Spinner */
+.lgp-loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2xl);
+}
+
+.lgp-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid var(--soft);
+    border-top: 4px solid var(--primary);
+    border-radius: 50%;
+    animation: lgp-spin 1s linear infinite;
+}
+
+@keyframes lgp-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Empty States */
+.lgp-empty-state {
+    color: var(--neutral);
+    font-style: italic;
+    padding: var(--space-md);
+    text-align: center;
+}
+
+.lgp-empty-state-card {
+    text-align: center;
+    padding: var(--space-2xl);
+}
+
+.lgp-empty-state-icon {
+    font-size: 64px;
+    margin-bottom: var(--space-md);
+}
+
+.lgp-empty-state-title {
+    font-size: var(--font-size-xl);
+    color: var(--dark);
+    margin-bottom: var(--space-sm);
+}
+
+.lgp-empty-state-text {
+    color: var(--neutral);
+    font-size: var(--font-size-base);
+}
+
+.lgp-empty-value {
+    color: var(--neutral);
+    font-style: italic;
+}
+
+/* Top Metrics Grid */
+.lgp-top-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-lg);
+}
+
+.lgp-top-metric {
+    background-color: var(--background);
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+}
+
+.lgp-metric-title {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
+    border-bottom: 2px solid var(--soft);
+}
+
+.lgp-metric-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.lgp-metric-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--soft);
+}
+
+.lgp-metric-item:last-child {
+    border-bottom: none;
+}
+
+.lgp-metric-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--font-size-sm);
+    color: var(--text);
+}
+
+.lgp-metric-value {
+    font-weight: 600;
+    color: var(--primary);
+    font-size: var(--font-size-sm);
+}
+
+/* Color Indicator */
+.lgp-color-indicator {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--white);
+    box-shadow: 0 0 0 1px var(--soft);
+}
+
+.lgp-color-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+/* Advanced Filters */
+.lgp-advanced-filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.lgp-active-filters {
+    margin-top: var(--space-lg);
+    padding: var(--space-md);
+    background-color: var(--background);
+    border-radius: var(--radius-sm);
+}
+
+.lgp-filter-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+}
+
+.lgp-filter-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-md);
+    background-color: var(--primary);
+    color: var(--white);
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-sm);
+}
+
+.lgp-filter-tag-remove {
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: var(--space-xs);
+}
+
+.lgp-filter-tag-remove:hover {
+    color: var(--error);
+}
+
+/* Button Sizes */
+.lgp-btn-sm {
+    padding: var(--space-xs) var(--space-md);
+    font-size: var(--font-size-sm);
+}
+
+/* Results Info */
+.lgp-results-info {
+    margin-top: var(--space-lg);
+    padding: var(--space-md);
+    text-align: center;
+    color: var(--neutral);
+    font-size: var(--font-size-sm);
+    background-color: var(--background);
+    border-radius: var(--radius-sm);
+}
+
+.lgp-results-info span {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+/* Hover States for Tables */
+.lgp-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.lgp-table tbody tr:hover {
+    background-color: var(--background);
+    cursor: pointer;
+}
+
+/* Button Hover States */
+.lgp-btn {
+    transition: all 0.2s ease;
+}
+
+.lgp-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.lgp-btn:active {
+    transform: translateY(0);
+}
+
+/* Input Focus States */
+.lgp-input:focus,
+.lgp-textarea:focus,
+.lgp-select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(58, 166, 185, 0.15);
+    transition: all 0.2s ease;
+}
+
 /* ============================================================================
    UTILITY CLASSES
    ============================================================================ */

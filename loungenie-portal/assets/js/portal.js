@@ -275,6 +275,179 @@
     // Initialize form on page load
     document.addEventListener('DOMContentLoaded', function() {
         initServiceRequestForm();
+        initAdvancedFilters();
+        initExportCSV();
     });
+    
+    /**
+     * Initialize advanced filters for units table
+     */
+    function initAdvancedFilters() {
+        const filters = document.querySelectorAll('.lgp-table-filter');
+        const clearButton = document.getElementById('lgp-clear-filters');
+        const activeFiltersContainer = document.getElementById('active-filters');
+        const activeFiltersList = document.getElementById('active-filters-list');
+        const table = document.getElementById('units-table');
+        
+        if (!table || filters.length === 0) return;
+        
+        const activeFilters = {};
+        
+        // Apply filters
+        function applyFilters() {
+            const rows = table.querySelectorAll('tbody tr');
+            let visibleCount = 0;
+            
+            rows.forEach(row => {
+                let show = true;
+                
+                // Check each active filter
+                for (const [filterType, filterValue] of Object.entries(activeFilters)) {
+                    if (filterValue === '') continue;
+                    
+                    const rowValue = row.getAttribute('data-' + filterType);
+                    if (rowValue !== filterValue) {
+                        show = false;
+                        break;
+                    }
+                }
+                
+                row.style.display = show ? '' : 'none';
+                if (show) visibleCount++;
+            });
+            
+            // Update counts
+            const visibleCountEl = document.getElementById('visible-count');
+            if (visibleCountEl) visibleCountEl.textContent = visibleCount;
+            
+            // Update active filters display
+            updateActiveFiltersDisplay();
+        }
+        
+        // Update active filters display
+        function updateActiveFiltersDisplay() {
+            const hasActiveFilters = Object.values(activeFilters).some(v => v !== '');
+            
+            if (hasActiveFilters) {
+                activeFiltersContainer.style.display = 'block';
+                activeFiltersList.innerHTML = '';
+                
+                for (const [filterType, filterValue] of Object.entries(activeFilters)) {
+                    if (filterValue === '') continue;
+                    
+                    const tag = document.createElement('span');
+                    tag.className = 'lgp-filter-tag';
+                    tag.innerHTML = `
+                        ${filterType}: ${filterValue}
+                        <span class="lgp-filter-tag-remove" data-filter="${filterType}">✕</span>
+                    `;
+                    activeFiltersList.appendChild(tag);
+                }
+                
+                // Add click handlers for remove buttons
+                activeFiltersList.querySelectorAll('.lgp-filter-tag-remove').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const filterType = this.getAttribute('data-filter');
+                        activeFilters[filterType] = '';
+                        
+                        // Reset the select
+                        const select = document.querySelector(`[data-filter="${filterType}"]`);
+                        if (select) select.value = '';
+                        
+                        applyFilters();
+                    });
+                });
+            } else {
+                activeFiltersContainer.style.display = 'none';
+            }
+        }
+        
+        // Filter change handler
+        filters.forEach(filter => {
+            filter.addEventListener('change', function() {
+                const filterType = this.getAttribute('data-filter');
+                const filterValue = this.value;
+                activeFilters[filterType] = filterValue;
+                applyFilters();
+            });
+        });
+        
+        // Clear all filters
+        if (clearButton) {
+            clearButton.addEventListener('click', function() {
+                filters.forEach(filter => {
+                    filter.value = '';
+                    const filterType = filter.getAttribute('data-filter');
+                    activeFilters[filterType] = '';
+                });
+                applyFilters();
+            });
+        }
+    }
+    
+    /**
+     * Initialize CSV export functionality
+     */
+    function initExportCSV() {
+        const exportButton = document.getElementById('lgp-export-units');
+        if (!exportButton) return;
+        
+        exportButton.addEventListener('click', function() {
+            const table = document.getElementById('units-table');
+            if (!table) return;
+            
+            // Show loading state
+            exportButton.disabled = true;
+            exportButton.textContent = '⏳ Exporting...';
+            
+            // Get visible rows only
+            const rows = Array.from(table.querySelectorAll('tbody tr'))
+                .filter(row => row.style.display !== 'none');
+            
+            if (rows.length === 0) {
+                window.lgpShowNotification('No data to export', 'warning');
+                exportButton.disabled = false;
+                exportButton.innerHTML = '📥 Export to CSV';
+                return;
+            }
+            
+            // Build CSV
+            let csv = 'Unit ID,Company,Color,Season,Venue,Lock Brand,Status,Install Date\n';
+            
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const rowData = [
+                    cells[0].textContent.trim(),
+                    cells[1].textContent.trim(),
+                    cells[2].textContent.trim(),
+                    cells[3].textContent.trim(),
+                    cells[4].textContent.trim(),
+                    cells[5].textContent.trim(),
+                    cells[6].textContent.trim(),
+                    cells[7].textContent.trim()
+                ];
+                
+                csv += rowData.map(field => `"${field}"`).join(',') + '\n';
+            });
+            
+            // Download CSV
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `loungenie-units-${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            // Reset button
+            setTimeout(() => {
+                exportButton.disabled = false;
+                exportButton.innerHTML = '📥 Export to CSV';
+                window.lgpShowNotification('Export completed successfully', 'success');
+            }, 1000);
+        });
+    }
     
 })();
