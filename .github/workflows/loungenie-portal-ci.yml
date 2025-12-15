@@ -7,6 +7,11 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
 jobs:
   wordpress-setup-and-test:
     name: WordPress Setup + Full Test Suite
@@ -140,10 +145,12 @@ jobs:
 
       - name: Run JavaScript Tests
         run: |
-          if [ -f "jest.config.js" ]; then
-            npm test -- --passWithNoTests || echo "⚠ Some JS tests failed"
+          if [ -f "package.json" ]; then
+            echo "Running Jest tests..."
+            npx jest --passWithNoTests --verbose || echo "⚠ Some JS tests failed"
+            echo "✓ JavaScript tests completed"
           else
-            echo "⚠ No jest.config.js found"
+            echo "⚠ No package.json found, skipping JS tests"
           fi
 
       - name: Validate Plugin Files
@@ -257,12 +264,15 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
-          languages: javascript, php
+          languages: ['javascript', 'php']
+          queries: security-and-quality
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:javascript,php"
 
       - name: Security Scan Complete
         run: echo "✓ CodeQL security scan completed"
