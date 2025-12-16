@@ -128,11 +128,29 @@ class LGP_Units_API {
             'management_company_id' => absint( $request->get_param( 'management_company_id' ) ),
             'address' => sanitize_textarea_field( $request->get_param( 'address' ) ),
             'lock_type' => sanitize_text_field( $request->get_param( 'lock_type' ) ),
+            'lock_brand' => sanitize_text_field( $request->get_param( 'lock_brand' ) ),
             'color_tag' => sanitize_text_field( $request->get_param( 'color_tag' ) ),
+            'serial_number' => sanitize_text_field( $request->get_param( 'serial_number' ) ),
+            'warranty_date' => sanitize_text_field( $request->get_param( 'warranty_date' ) ),
+            'seasonality' => sanitize_text_field( $request->get_param( 'seasonality' ) ?: 'year-round' ),
+            'assigned_technician' => sanitize_text_field( $request->get_param( 'assigned_technician' ) ),
+            'venue_type' => sanitize_text_field( $request->get_param( 'venue_type' ) ),
             'status' => sanitize_text_field( $request->get_param( 'status' ) ?: 'active' ),
             'install_date' => sanitize_text_field( $request->get_param( 'install_date' ) ),
-            'service_history' => sanitize_textarea_field( $request->get_param( 'service_history' ) ),
+            'service_history' => wp_json_encode( $request->get_param( 'service_history' ) ?: array() ),
         );
+        
+        // Validate color tag
+        $valid_colors = array( 'classic-blue', 'ice-blue', 'ducati-red', 'yellow', 'custom' );
+        if ( ! empty( $data['color_tag'] ) && ! in_array( $data['color_tag'], $valid_colors ) ) {
+            return new WP_Error( 'invalid_color', __( 'Invalid color tag', 'loungenie-portal' ), array( 'status' => 400 ) );
+        }
+        
+        // Validate lock brand
+        $valid_locks = array( 'MAKE', 'L&F', 'other' );
+        if ( ! empty( $data['lock_brand'] ) && ! in_array( $data['lock_brand'], $valid_locks ) ) {
+            return new WP_Error( 'invalid_lock', __( 'Invalid lock brand', 'loungenie-portal' ), array( 'status' => 400 ) );
+        }
         
         $inserted = $wpdb->insert( $table, $data );
         
@@ -160,11 +178,29 @@ class LGP_Units_API {
             'management_company_id' => absint( $request->get_param( 'management_company_id' ) ),
             'address' => sanitize_textarea_field( $request->get_param( 'address' ) ),
             'lock_type' => sanitize_text_field( $request->get_param( 'lock_type' ) ),
+            'lock_brand' => sanitize_text_field( $request->get_param( 'lock_brand' ) ),
             'color_tag' => sanitize_text_field( $request->get_param( 'color_tag' ) ),
+            'serial_number' => sanitize_text_field( $request->get_param( 'serial_number' ) ),
+            'warranty_date' => sanitize_text_field( $request->get_param( 'warranty_date' ) ),
+            'seasonality' => sanitize_text_field( $request->get_param( 'seasonality' ) ),
+            'assigned_technician' => sanitize_text_field( $request->get_param( 'assigned_technician' ) ),
+            'venue_type' => sanitize_text_field( $request->get_param( 'venue_type' ) ),
             'status' => sanitize_text_field( $request->get_param( 'status' ) ),
             'install_date' => sanitize_text_field( $request->get_param( 'install_date' ) ),
-            'service_history' => sanitize_textarea_field( $request->get_param( 'service_history' ) ),
+            'service_history' => wp_json_encode( $request->get_param( 'service_history' ) ),
         );
+        
+        // Validate color tag
+        $valid_colors = array( 'classic-blue', 'ice-blue', 'ducati-red', 'yellow', 'custom' );
+        if ( ! empty( $data['color_tag'] ) && ! in_array( $data['color_tag'], $valid_colors ) ) {
+            return new WP_Error( 'invalid_color', __( 'Invalid color tag', 'loungenie-portal' ), array( 'status' => 400 ) );
+        }
+        
+        // Validate lock brand
+        $valid_locks = array( 'MAKE', 'L&F', 'other' );
+        if ( ! empty( $data['lock_brand'] ) && ! in_array( $data['lock_brand'], $valid_locks ) ) {
+            return new WP_Error( 'invalid_lock', __( 'Invalid lock brand', 'loungenie-portal' ), array( 'status' => 400 ) );
+        }
         
         $updated = $wpdb->update( $table, $data, array( 'id' => $id ) );
         

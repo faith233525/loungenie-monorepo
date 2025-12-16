@@ -28,17 +28,27 @@ class LGP_Database {
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             name varchar(255) NOT NULL,
             address text,
+            city varchar(255),
             state varchar(50),
+            zip varchar(20),
+            country varchar(100) DEFAULT 'USA',
             venue_type varchar(50),
             contact_name varchar(255),
             contact_email varchar(255),
             contact_phone varchar(50),
+            secondary_contact_name varchar(255),
+            secondary_contact_email varchar(255),
+            secondary_contact_phone varchar(50),
             management_company_id bigint(20) UNSIGNED,
+            contract_type varchar(50),
+            contract_start_date date,
+            contract_end_date date,
             created_at datetime DEFAULT CURRENT_TIMESTAMP,
             updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
             KEY management_company_id (management_company_id),
-            KEY venue_type (venue_type)
+            KEY venue_type (venue_type),
+            KEY contract_type (contract_type)
         ) $charset_collate;";
         
         // Management Companies table
@@ -65,11 +75,14 @@ class LGP_Database {
             lock_type varchar(100),
             lock_brand varchar(50),
             color_tag varchar(50),
-            season varchar(20) DEFAULT 'year-round',
+            serial_number varchar(100),
+            warranty_date date,
+            seasonality varchar(20) DEFAULT 'year-round',
+            assigned_technician varchar(255),
             venue_type varchar(50),
             status varchar(50) DEFAULT 'active',
             install_date date,
-            service_history text,
+            service_history longtext,
             created_at datetime DEFAULT CURRENT_TIMESTAMP,
             updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
@@ -77,9 +90,10 @@ class LGP_Database {
             KEY management_company_id (management_company_id),
             KEY status (status),
             KEY color_tag (color_tag),
-            KEY season (season),
+            KEY seasonality (seasonality),
             KEY venue_type (venue_type),
-            KEY lock_brand (lock_brand)
+            KEY lock_brand (lock_brand),
+            KEY serial_number (serial_number)
         ) $charset_collate;";
         
         // Service Requests table
