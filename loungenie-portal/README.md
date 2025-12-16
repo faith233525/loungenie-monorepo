@@ -115,6 +115,18 @@ Base URL: `/wp-json/lgp/v1/`
 - `PUT /tickets/{id}` - Update ticket (Support only)
 - `POST /tickets/{id}/reply` - Add reply to thread
 
+## Tests
+
+The **LounGenie Portal** plugin includes a full PHPUnit + Brain Monkey test suite covering:
+
+- Router success-path tests (Support & Partner dashboards, map view)
+- SSO error-path tests (Microsoft 365 OAuth scenarios)
+- REST API mock tests (companies, units, tickets)
+
+CI workflow runs automatically on the `main` branch and pull requests, generating a coverage artifact.
+
+![CI](https://github.com/faith233525/Pool-Safe-Portal/actions/workflows/loungenie-portal-ci.yml/badge.svg)
+
 ## Design System
 
 **Color Palette:**

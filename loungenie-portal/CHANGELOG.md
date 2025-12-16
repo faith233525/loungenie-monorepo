@@ -2,6 +2,17 @@
 
 All notable changes to LounGenie Portal will be documented in this file.
 
+## [v1.1.0-tests-hardening] - 2025-12-16
+
+### Added
+- Router success-path tests for Support & Partner dashboards
+- SSO error-path tests for Microsoft 365 OAuth scenarios
+- Full PHPUnit + Brain Monkey suite integrated into CI
+
+### Fixed / Improved
+- CI coverage artifact generation
+- Minimal WP stubs for safe, isolated unit tests
+
 ## [1.0.0] - 2024-12-15
 
 ### Added - Initial Release
