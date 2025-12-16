@@ -2,6 +2,36 @@
 
 All notable changes to LounGenie Portal will be documented in this file.
 
+## [v1.3.1-offline-development-suite] - 2025-12-16
+
+### Added
+- **Offline Development Suite** for fully offline testing and validation
+  - New CLI entry `scripts/offline-run.php` with 6 commands: `help`, `seed`, `test`, `dashboard`, `validate`, `export`, `report`
+  - Mock WordPress environment (`scripts/OfflineBootstrap.php`) with 180+ functions and in-memory data store
+  - Data seeding engine (`scripts/OfflineDataSeeder.php`) generating 30 realistic records:
+    - Users (3), Companies (3), Units (5), Gateways (4), Tickets (4), Ticket Attachments (3), Training Videos (4), Audit Logs (4)
+  - Utilities and renderers (`scripts/OfflineHelpers.php`):
+    - Support dashboard (system-wide view) and Partner dashboard (company-scoped, read-only)
+    - Validation tests for attachments, companies, audit logs, geocoding cache
+    - Exporters for JSON and CSV; comprehensive report generator
+  - Generated artifacts stored under `scripts/offline-data/` with timestamped reports and `seeded_data.json`
+
+### Documentation
+- `OFFLINE_DEVELOPMENT.md`: Complete guide with installation, commands, and examples
+- `OFFLINE_SUITE_SUMMARY.md`: Quick reference overview
+- `OFFLINE_COMPLETION_SUMMARY.md`: Delivery summary and next steps
+
+### Verified
+- Seeded data: 30 records
+- Jest simulation: 5/5 map rendering tests passed
+- Validation: All checks passing (attachments, companies, audit logs, geocoding)
+- Dashboards: Support and Partner views rendering correctly
+- Features: 8/8 verified (attachments, company profile, audit logging, notifications, map/geolocation, contracts, training videos, gateways)
+
+### Notes
+- PHPUnit is optional in offline mode; run `composer install` to enable local PHPUnit execution
+- Offline suite requires only PHP; no WordPress or database needed
+
 ## [v1.3.0-autonomous-enhancements] - 2025-12-16
 
 ### Added
