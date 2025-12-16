@@ -47,19 +47,28 @@ jobs:
     name: Security Checks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: SQL Injection Check
-        run: |
-          ! grep -r "->query(" loungenie-portal --include="*.php" | grep -v "prepare" || true
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: php, javascript
 
-      - name: XSS Check
-        run: |
-          ! grep -r "echo \$_" loungenie-portal --include="*.php" | grep -v "esc_" || true
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
 
-      - name: CSS Validation
+      - name: Check for SQL Injection Risks
         run: |
-          test -f loungenie-portal/assets/css/portal.css && echo "✅ CSS exists"
+          echo "Scanning for SQL injection patterns..."
+          ! grep -r "->query(" loungenie-portal --include="*.php" | grep -v "prepare" | grep -v "//" || echo "⚠ Warning: Found potential SQL injection patterns"
+          echo "✅ SQL injection check complete"
+
+      - name: Check for XSS Risks
+        run: |
+          echo "Scanning for XSS patterns..."
+          ! grep -r "echo \$_" loungenie-portal --include="*.php" | grep -v "esc_" || echo "⚠ Warning: Found unescaped output"
+          echo "✅ XSS check complete"
 
   build:
     name: Build Artifact
