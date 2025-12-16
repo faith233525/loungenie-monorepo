@@ -89,11 +89,3 @@ jobs:
           name: loungenie-portal-plugin
           path: loungenie-portal-plugin.zip
           retention-days: 30
-          ls -lh loungenie-portal-plugin.zip
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: loungenie-portal-plugin
-          path: loungenie-portal-plugin.zip
-          retention-days: 30
