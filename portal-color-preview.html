@@ -40,7 +40,10 @@
             --teal-hover: #169BA0;
             --teal-active: #137B7F;
             --gold-hover: #D9A404;
+            --gold-light: #FFB300;
             --blue-hover: #0D3349;
+            --error-hover: #B91C1C;
+            --success-hover: #15803D;
             
             /* Borders & Dividers */
             --border-light: #E5E7EB;
@@ -134,7 +137,7 @@
         
         .nav-link {
             padding: 0.75rem 1.25rem;
-            color: var(--text-secondary);
+            color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
             border-radius: 6px;
             transition: all 0.2s;
@@ -462,7 +465,7 @@
         }
         
         .btn-danger:hover {
-            background-color: #B91C1C;
+            background-color: var(--error-hover);
         }
         
         /* Success */
@@ -472,7 +475,7 @@
         }
         
         .btn-success:hover {
-            background-color: #15803D;
+            background-color: var(--success-hover);
         }
         
         /* Disabled State */
@@ -721,7 +724,7 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background: linear-gradient(135deg, var(--brand-gold), #FFB300);
+            background: linear-gradient(135deg, var(--brand-gold), var(--gold-light));
             color: var(--brand-dark-blue);
             padding: 0.375rem 0.875rem;
             border-radius: 16px;
