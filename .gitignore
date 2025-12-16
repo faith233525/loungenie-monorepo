@@ -37,8 +37,3 @@ wp-content/uploads/
 *.map
 .cache/
 .sass-cache/
-
-# Design previews (not production code)
-docs/design/
-design/
-*-preview.html

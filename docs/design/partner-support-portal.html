@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner & Support Portal - LounGenie + PoolSafe</title>
+    <style>
+        /* ============================================
+           PARTNER & SUPPORT PORTAL
+           Standalone HTML Preview
+           No frameworks, no WordPress dependencies
+           ============================================ */
+        
+        :root {
+            /* Brand Colors (15-25% usage) */
+            --primary: #1BB3B8;           /* LounGenie Teal - Primary actions */
+            --secondary: #F2B705;         /* Warm Gold - Priority highlights */
+            --authority: #0B2D4F;         /* PoolSafe Blue - Trust/Authority */
+            --authority-alt: #0F3A5F;     /* Alternative dark blue */
+            
+            /* Neutral Backgrounds (70-80% usage) */
+            --bg-primary: #F7F9FB;        /* Page background */
+            --bg-secondary: #F5F7FA;      /* Secondary background */
+            --bg-white: #FFFFFF;          /* Cards, panels, tables */
+            
+            /* Text Colors (Never pure black) */
+            --text-primary: #1F2933;      /* Dark charcoal */
+            --text-secondary: #6B7280;    /* Muted gray */
+            --text-disabled: #9CA3AF;     /* Disabled text */
+            --text-white: #FFFFFF;
+            
+            /* Status Colors (5% usage - Attention) */
+            --success: #16A34A;           /* Soft green */
+            --warning: #F59E0B;           /* Gold */
+            --error: #DC2626;             /* Red */
+            --info: #1BB3B8;              /* Teal */
+            
+            /* Hover States */
+            --primary-hover: #169BA0;
+            --primary-active: #137B7F;
+            --secondary-hover: #D9A404;
+            --authority-hover: #0D3349;
+            --error-hover: #B91C1C;
+            --success-hover: #15803D;
+            
+            /* Borders & Dividers */
+            --border-light: #E5E7EB;
+            --border-medium: #D1D5DB;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            
+            /* Typography */
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        /* ============================================
+           RESET & BASE STYLES
+           ============================================ */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* ============================================
+           NAVIGATION BAR
+           ============================================ */
+        
+        .nav-header {
+            background-color: var(--authority);
+            color: var(--text-white);
+            padding: 0;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+        }
+        
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .nav-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.25rem;
+            color: white;
+        }
+        
+        .nav-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-white);
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 0.5rem;
+            list-style: none;
+            align-items: center;
+        }
+        
+        .nav-link {
+            padding: 0.75rem 1.25rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        
+        .nav-link:hover {
+            background-color: var(--authority-hover);
+            color: var(--text-white);
+        }
+        
+        .nav-link.active {
+            background-color: var(--primary);
+            color: var(--text-white);
+        }
+        
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .nav-icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-white);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+        
+        .nav-icon-btn:hover {
+            background-color: var(--authority-hover);
+        }
+        
+        .badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background-color: var(--error);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.125rem 0.375rem;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        
+        /* ============================================
+           MAIN CONTAINER
+           ============================================ */
+        
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, var(--authority), var(--authority-alt));
+            color: var(--text-white);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* ============================================
+           DASHBOARD CARDS
+           ============================================ */
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: var(--bg-white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            transition: all 0.2s;
+        }
+        
+        .stat-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .stat-icon.primary { background-color: rgba(27, 179, 184, 0.1); color: var(--primary); }
+        .stat-icon.secondary { background-color: rgba(242, 183, 5, 0.1); color: var(--secondary); }
+        .stat-icon.success { background-color: rgba(22, 163, 74, 0.1); color: var(--success); }
+        .stat-icon.authority { background-color: rgba(11, 45, 79, 0.1); color: var(--authority); }
+        
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-change {
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .stat-change.positive { color: var(--success); }
+        .stat-change.negative { color: var(--error); }
+        
+        /* ============================================
+           BUTTONS
+           ============================================ */
+        
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--text-white);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+        
+        .btn-secondary {
+            background-color: var(--bg-white);
+            color: var(--text-primary);
+            border: 1px solid var(--border-medium);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--bg-secondary);
+        }
+        
+        .btn:disabled {
+            background-color: var(--bg-secondary);
+            color: var(--text-disabled);
+            cursor: not-allowed;
+        }
+        
+        /* ============================================
+           CARDS & SECTIONS
+           ============================================ */
+        
+        .section {
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--authority);
+        }
+        
+        .card {
+            background-color: var(--bg-white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+        }
+        
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        
+        /* ============================================
+           FILTERS
+           ============================================ */
+        
+        .filters-bar {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: var(--bg-white);
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .filter-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .filter-select {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border-medium);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            background-color: var(--bg-white);
+            cursor: pointer;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(27, 179, 184, 0.1);
+        }
+        
+        /* ============================================
+           TABLES
+           ============================================ */
+        
+        .table-container {
+            background-color: var(--bg-white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background-color: var(--bg-secondary);
+        }
+        
+        th {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--authority);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        th:hover {
+            background-color: var(--border-light);
+        }
+        
+        td {
+            padding: 1rem 1.5rem;
+            color: var(--text-primary);
+            border-top: 1px solid var(--border-light);
+        }
+        
+        tbody tr {
+            transition: background-color 0.2s;
+        }
+        
+        tbody tr:hover {
+            background-color: var(--bg-secondary);
+        }
+        
+        /* ============================================
+           STATUS BADGES
+           ============================================ */
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-badge.success {
+            background-color: rgba(22, 163, 74, 0.1);
+            color: var(--success);
+        }
+        
+        .status-badge.warning {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+        
+        .status-badge.error {
+            background-color: rgba(220, 38, 38, 0.1);
+            color: var(--error);
+        }
+        
+        .status-badge.info {
+            background-color: rgba(27, 179, 184, 0.1);
+            color: var(--info);
+        }
+        
+        /* ============================================
+           MODAL
+           ============================================ */
+        
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal {
+            background-color: var(--bg-white);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+        
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+        
+        /* ============================================
+           FORMS
+           ============================================ */
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-medium);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            background-color: var(--bg-white);
+            transition: all 0.2s;
+        }
+        
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(27, 179, 184, 0.1);
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        /* ============================================
+           UTILITY CLASSES
+           ============================================ */
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        
+        /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
+        
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-menu {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .nav-link {
+                width: 100%;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .filters-bar {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+            
+            table {
+                font-size: 0.875rem;
+            }
+            
+            th, td {
+                padding: 0.75rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================
+         NAVIGATION BAR
+         ============================================ -->
+    <nav class="nav-header">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="nav-logo">LP</div>
+                <h1 class="nav-title">Partner & Support Portal</h1>
+            </div>
+            
+            <ul class="nav-menu">
+                <li>
+                    <button class="nav-link active" data-view="dashboard">
+                        📊 Dashboard
+                    </button>
+                </li>
+                <li>
+                    <button class="nav-link" data-view="units">
+                        🔧 Units
+                    </button>
+                </li>
+                <li>
+                    <button class="nav-link" data-view="tickets">
+                        🎫 Tickets
+                    </button>
+                </li>
+                <li>
+                    <button class="nav-link" data-view="analytics">
+                        📈 Analytics
+                    </button>
+                </li>
+            </ul>
+            
+            <div class="nav-actions">
+                <button class="nav-icon-btn" title="Notifications">
+                    <span style="font-size: 1.25rem;">🔔</span>
+                    <span class="badge">3</span>
+                </button>
+                <button class="nav-icon-btn" title="Help">
+                    <span style="font-size: 1.25rem;">❓</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- ============================================
+         MAIN CONTENT
+         ============================================ -->
+    <main class="main-container">
+        <!-- DASHBOARD VIEW -->
+        <div id="dashboard-view" class="view-content">
+            <div class="page-header">
+                <h2 class="page-title">Partner & Support Dashboard 👋</h2>
+                <p class="page-subtitle">Manage your properties, support tickets, and compliance status</p>
+            </div>
+            
+            <!-- Dashboard Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Active Tickets</span>
+                        <div class="stat-icon primary">🎫</div>
+                    </div>
+                    <div class="stat-value" id="active-tickets-count">0</div>
+                    <div class="stat-change positive">
+                        <span>↓</span> <span>6 fewer than last week</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Service Requests</span>
+                        <div class="stat-icon authority">📋</div>
+                    </div>
+                    <div class="stat-value" id="service-requests-count">0</div>
+                    <div class="stat-change positive">
+                        <span>↑</span> <span>12 new this week</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Compliance Rate</span>
+                        <div class="stat-icon success">✓</div>
+                    </div>
+                    <div class="stat-value">98.4%</div>
+                    <div class="stat-change positive">
+                        <span>↑</span> <span>2.1% improvement</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Active Units</span>
+                        <div class="stat-icon authority">🔧</div>
+                    </div>
+                    <div class="stat-value" id="active-units-count">0</div>
+                    <div class="stat-change negative">
+                        <span>↓</span> <span>3 need attention</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Top 5 Analytics -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Top 5 Support Analytics</h2>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <div class="card">
+                        <h3 class="card-title">Most Active Properties</h3>
+                        <div id="top-properties"></div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">Common Service Requests</h3>
+                        <div id="top-services"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- UNITS VIEW -->
+        <div id="units-view" class="view-content hidden">
+            <div class="page-header">
+                <h2 class="page-title">Units Management</h2>
+                <p class="page-subtitle">Track and manage all deployed units</p>
+            </div>
+            
+            <!-- Filters -->
+            <div class="filters-bar">
+                <div class="filter-group">
+                    <label class="filter-label">Status</label>
+                    <select class="filter-select" id="units-status-filter">
+                        <option value="">All Statuses</option>
+                        <option value="Active">Active</option>
+                        <option value="Maintenance">Maintenance</option>
+                        <option value="Offline">Offline</option>
+                        <option value="Deploying">Deploying</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Compliance</label>
+                    <select class="filter-select" id="units-compliance-filter">
+                        <option value="">All</option>
+                        <option value="Passed">Passed</option>
+                        <option value="Due">Due</option>
+                        <option value="Failed">Failed</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group" style="flex-grow: 1;">
+                    <label class="filter-label">Search Property</label>
+                    <input type="text" class="form-input" id="units-search" placeholder="Search by property name...">
+                </div>
+                
+                <div class="filter-group" style="align-self: flex-end;">
+                    <button class="btn btn-secondary" id="clear-units-filters" title="Clear all filters (Ctrl+K)">
+                        Clear Filters
+                    </button>
+                </div>
+                
+                <div class="filter-group" style="align-self: flex-end;">
+                    <button class="btn btn-primary" id="export-units-csv">
+                        📊 Export CSV
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Units Table -->
+            <div class="table-container">
+                <table id="units-table">
+                    <thead>
+                        <tr>
+                            <th data-sort="unitId">Unit ID</th>
+                            <th data-sort="property">Property</th>
+                            <th data-sort="status">Status</th>
+                            <th data-sort="deployed">Deployed</th>
+                            <th data-sort="compliance">Compliance</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="units-tbody">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- TICKETS VIEW -->
+        <div id="tickets-view" class="view-content hidden">
+            <div class="page-header">
+                <h2 class="page-title">Support Tickets</h2>
+                <p class="page-subtitle">Manage customer support requests and issues</p>
+            </div>
+            
+            <!-- Filters -->
+            <div class="filters-bar">
+                <div class="filter-group">
+                    <label class="filter-label">Status</label>
+                    <select class="filter-select" id="tickets-status-filter">
+                        <option value="">All Statuses</option>
+                        <option value="Open">Open</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Resolved">Resolved</option>
+                        <option value="Closed">Closed</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Priority</label>
+                    <select class="filter-select" id="tickets-priority-filter">
+                        <option value="">All</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group" style="flex-grow: 1;">
+                    <label class="filter-label">Search</label>
+                    <input type="text" class="form-input" id="tickets-search" placeholder="Search tickets...">
+                </div>
+                
+                <div class="filter-group" style="align-self: flex-end;">
+                    <button class="btn btn-secondary" id="clear-tickets-filters" title="Clear all filters (Ctrl+K)">
+                        Clear Filters
+                    </button>
+                </div>
+                
+                <div class="filter-group" style="align-self: flex-end;">
+                    <button class="btn btn-primary" id="export-tickets-csv">
+                        📊 Export CSV
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Tickets Table -->
+            <div class="table-container">
+                <table id="tickets-table">
+                    <thead>
+                        <tr>
+                            <th data-sort="ticketId">Ticket ID</th>
+                            <th data-sort="subject">Subject</th>
+                            <th data-sort="status">Status</th>
+                            <th data-sort="priority">Priority</th>
+                            <th data-sort="created">Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tickets-tbody">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- ANALYTICS VIEW -->
+        <div id="analytics-view" class="view-content hidden">
+            <div class="page-header">
+                <h2 class="page-title">Analytics & Reports</h2>
+                <p class="page-subtitle">Detailed insights and performance metrics</p>
+            </div>
+            
+            <div class="card">
+                <h3 class="card-title">Analytics Dashboard</h3>
+                <p style="color: var(--text-secondary);">Advanced analytics and reporting features coming soon...</p>
+            </div>
+        </div>
+    </main>
+    
+    <!-- ============================================
+         MODAL FOR DETAILS
+         ============================================ -->
+    <div class="modal-overlay" id="details-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">Details</h3>
+                <button class="modal-close" id="modal-close">×</button>
+            </div>
+            <div id="modal-content">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- ============================================
+         JAVASCRIPT - VANILLA (NO FRAMEWORKS)
+         ============================================ -->
+    <script>
+        // ============================================
+        // DATA STORAGE
+        // ============================================
+        
+        const unitsData = [
+            { unitId: 'UNIT-2847', property: 'Grand Ocean Resort', status: 'Active', deployed: '2025-12-14', compliance: 'Passed' },
+            { unitId: 'UNIT-2846', property: 'Sunset Bay Hotel', status: 'Active', deployed: '2025-12-12', compliance: 'Passed' },
+            { unitId: 'UNIT-2845', property: 'Paradise Lagoon', status: 'Maintenance', deployed: '2025-12-10', compliance: 'Due' },
+            { unitId: 'UNIT-2844', property: 'Crystal Springs Resort', status: 'Offline', deployed: '2025-12-08', compliance: 'Failed' },
+            { unitId: 'UNIT-2843', property: 'Coastal View Inn', status: 'Deploying', deployed: '2025-12-15', compliance: 'Pending' },
+            { unitId: 'UNIT-2842', property: 'Harbor Lights Hotel', status: 'Active', deployed: '2025-12-05', compliance: 'Passed' },
+            { unitId: 'UNIT-2841', property: 'Seaside Retreat', status: 'Active', deployed: '2025-12-03', compliance: 'Passed' },
+            { unitId: 'UNIT-2840', property: 'Mountain View Lodge', status: 'Maintenance', deployed: '2025-11-28', compliance: 'Due' },
+        ];
+        
+        const ticketsData = [
+            { ticketId: 'TKT-1245', subject: 'Unit sensor malfunction', status: 'Open', priority: 'High', created: '2025-12-15' },
+            { ticketId: 'TKT-1244', subject: 'Routine maintenance request', status: 'In Progress', priority: 'Medium', created: '2025-12-14' },
+            { ticketId: 'TKT-1243', subject: 'Compliance inspection needed', status: 'Open', priority: 'High', created: '2025-12-13' },
+            { ticketId: 'TKT-1242', subject: 'Technical support inquiry', status: 'Resolved', priority: 'Low', created: '2025-12-12' },
+            { ticketId: 'TKT-1241', subject: 'Emergency response required', status: 'Closed', priority: 'High', created: '2025-12-11' },
+            { ticketId: 'TKT-1240', subject: 'Training request for staff', status: 'In Progress', priority: 'Medium', created: '2025-12-10' },
+            { ticketId: 'TKT-1239', subject: 'Battery replacement needed', status: 'Open', priority: 'Medium', created: '2025-12-09' },
+            { ticketId: 'TKT-1238', subject: 'System update inquiry', status: 'Resolved', priority: 'Low', created: '2025-12-08' },
+        ];
+        
+        // ============================================
+        // NAVIGATION
+        // ============================================
+        
+        const navLinks = document.querySelectorAll('.nav-link');
+        const views = {
+            dashboard: document.getElementById('dashboard-view'),
+            units: document.getElementById('units-view'),
+            tickets: document.getElementById('tickets-view'),
+            analytics: document.getElementById('analytics-view')
+        };
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                const viewName = link.dataset.view;
+                
+                // Update active nav link
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Show selected view
+                Object.values(views).forEach(v => v.classList.add('hidden'));
+                views[viewName].classList.remove('hidden');
+                
+                // Save to localStorage
+                localStorage.setItem('activeView', viewName);
+            });
+        });
+        
+        // Restore last view on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedView = localStorage.getItem('activeView') || 'dashboard';
+            const linkToActivate = document.querySelector(`[data-view="${savedView}"]`);
+            if (linkToActivate) {
+                linkToActivate.click();
+            }
+        });
+        
+        // ============================================
+        // DASHBOARD - STATISTICS
+        // ============================================
+        
+        function updateDashboardStats() {
+            document.getElementById('active-tickets-count').textContent = ticketsData.filter(t => t.status === 'Open' || t.status === 'In Progress').length;
+            document.getElementById('service-requests-count').textContent = ticketsData.length;
+            document.getElementById('active-units-count').textContent = unitsData.filter(u => u.status === 'Active').length;
+            
+            // Top properties
+            const propertyTickets = {};
+            ticketsData.forEach(ticket => {
+                const prop = 'Grand Ocean Resort'; // In real app, would link ticket to property
+                propertyTickets[prop] = (propertyTickets[prop] || 0) + 1;
+            });
+            
+            const topProperties = Object.entries(propertyTickets)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+            
+            const topPropertiesHTML = [
+                { name: 'Grand Ocean Resort', count: 48 },
+                { name: 'Sunset Bay Hotel', count: 42 },
+                { name: 'Paradise Lagoon', count: 38 },
+                { name: 'Crystal Springs Resort', count: 35 },
+                { name: 'Coastal View Inn', count: 31 }
+            ].map(item => `
+                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border-light);">
+                    <span style="color: var(--text-primary);">${item.name}</span>
+                    <span class="status-badge info">${item.count} tickets</span>
+                </div>
+            `).join('');
+            
+            document.getElementById('top-properties').innerHTML = topPropertiesHTML;
+            
+            // Top services
+            const topServicesHTML = [
+                { name: 'Routine Maintenance', count: 127 },
+                { name: 'Compliance Inspection', count: 98 },
+                { name: 'Technical Support', count: 84 },
+                { name: 'Emergency Response', count: 12 },
+                { name: 'Training Request', count: 9 }
+            ].map(item => `
+                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border-light);">
+                    <span style="color: var(--text-primary);">${item.name}</span>
+                    <span style="color: var(--text-secondary); font-weight: 600;">${item.count}</span>
+                </div>
+            `).join('');
+            
+            document.getElementById('top-services').innerHTML = topServicesHTML;
+        }
+        
+        // ============================================
+        // UNITS TABLE
+        // ============================================
+        
+        let unitsFiltered = [...unitsData];
+        let unitsSortField = null;
+        let unitsSortDirection = 'asc';
+        
+        function getStatusBadgeClass(status) {
+            const map = {
+                'Active': 'success',
+                'Maintenance': 'warning',
+                'Offline': 'error',
+                'Deploying': 'info'
+            };
+            return map[status] || 'info';
+        }
+        
+        function getComplianceBadgeClass(compliance) {
+            const map = {
+                'Passed': 'success',
+                'Due': 'warning',
+                'Failed': 'error',
+                'Pending': 'info'
+            };
+            return map[compliance] || 'info';
+        }
+        
+        function renderUnitsTable() {
+            const tbody = document.getElementById('units-tbody');
+            
+            if (unitsFiltered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">No units found</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = unitsFiltered.map(unit => `
+                <tr>
+                    <td><strong>${unit.unitId}</strong></td>
+                    <td>${unit.property}</td>
+                    <td><span class="status-badge ${getStatusBadgeClass(unit.status)}">${unit.status}</span></td>
+                    <td>${unit.deployed}</td>
+                    <td><span class="status-badge ${getComplianceBadgeClass(unit.compliance)}">${unit.compliance}</span></td>
+                    <td>
+                        <button class="btn btn-secondary" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;" onclick="showUnitDetails('${unit.unitId}')">View</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        function filterUnits() {
+            const statusFilter = document.getElementById('units-status-filter').value.toLowerCase();
+            const complianceFilter = document.getElementById('units-compliance-filter').value.toLowerCase();
+            const searchTerm = document.getElementById('units-search').value.toLowerCase();
+            
+            unitsFiltered = unitsData.filter(unit => {
+                const matchStatus = !statusFilter || unit.status.toLowerCase() === statusFilter;
+                const matchCompliance = !complianceFilter || unit.compliance.toLowerCase() === complianceFilter;
+                const matchSearch = !searchTerm || unit.property.toLowerCase().includes(searchTerm);
+                return matchStatus && matchCompliance && matchSearch;
+            });
+            
+            renderUnitsTable();
+        }
+        
+        function sortUnits(field) {
+            if (unitsSortField === field) {
+                unitsSortDirection = unitsSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                unitsSortField = field;
+                unitsSortDirection = 'asc';
+            }
+            
+            unitsFiltered.sort((a, b) => {
+                let aVal = a[field];
+                let bVal = b[field];
+                
+                if (unitsSortDirection === 'asc') {
+                    return aVal > bVal ? 1 : -1;
+                } else {
+                    return aVal < bVal ? 1 : -1;
+                }
+            });
+            
+            renderUnitsTable();
+        }
+        
+        function clearUnitsFilters() {
+            document.getElementById('units-status-filter').value = '';
+            document.getElementById('units-compliance-filter').value = '';
+            document.getElementById('units-search').value = '';
+            filterUnits();
+        }
+        
+        function exportUnitsCSV() {
+            const headers = ['Unit ID', 'Property', 'Status', 'Deployed', 'Compliance'];
+            const rows = unitsFiltered.map(u => [u.unitId, u.property, u.status, u.deployed, u.compliance]);
+            
+            let csv = headers.join(',') + '\n';
+            rows.forEach(row => {
+                csv += row.map(cell => `"${cell}"`).join(',') + '\n';
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'units-export.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        // Event listeners for units
+        document.getElementById('units-status-filter').addEventListener('change', filterUnits);
+        document.getElementById('units-compliance-filter').addEventListener('change', filterUnits);
+        document.getElementById('units-search').addEventListener('input', filterUnits);
+        document.getElementById('clear-units-filters').addEventListener('click', clearUnitsFilters);
+        document.getElementById('export-units-csv').addEventListener('click', exportUnitsCSV);
+        
+        // Sort headers
+        document.querySelectorAll('#units-table th[data-sort]').forEach(th => {
+            th.addEventListener('click', () => sortUnits(th.dataset.sort));
+        });
+        
+        // ============================================
+        // TICKETS TABLE
+        // ============================================
+        
+        let ticketsFiltered = [...ticketsData];
+        let ticketsSortField = null;
+        let ticketsSortDirection = 'asc';
+        
+        function getPriorityBadgeClass(priority) {
+            const map = {
+                'High': 'error',
+                'Medium': 'warning',
+                'Low': 'info'
+            };
+            return map[priority] || 'info';
+        }
+        
+        function getTicketStatusBadgeClass(status) {
+            const map = {
+                'Open': 'warning',
+                'In Progress': 'info',
+                'Resolved': 'success',
+                'Closed': 'success'
+            };
+            return map[status] || 'info';
+        }
+        
+        function renderTicketsTable() {
+            const tbody = document.getElementById('tickets-tbody');
+            
+            if (ticketsFiltered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">No tickets found</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = ticketsFiltered.map(ticket => `
+                <tr>
+                    <td><strong>${ticket.ticketId}</strong></td>
+                    <td>${ticket.subject}</td>
+                    <td><span class="status-badge ${getTicketStatusBadgeClass(ticket.status)}">${ticket.status}</span></td>
+                    <td><span class="status-badge ${getPriorityBadgeClass(ticket.priority)}">${ticket.priority}</span></td>
+                    <td>${ticket.created}</td>
+                    <td>
+                        <button class="btn btn-secondary" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;" onclick="showTicketDetails('${ticket.ticketId}')">View</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        function filterTickets() {
+            const statusFilter = document.getElementById('tickets-status-filter').value.toLowerCase();
+            const priorityFilter = document.getElementById('tickets-priority-filter').value.toLowerCase();
+            const searchTerm = document.getElementById('tickets-search').value.toLowerCase();
+            
+            ticketsFiltered = ticketsData.filter(ticket => {
+                const matchStatus = !statusFilter || ticket.status.toLowerCase() === statusFilter;
+                const matchPriority = !priorityFilter || ticket.priority.toLowerCase() === priorityFilter;
+                const matchSearch = !searchTerm || ticket.subject.toLowerCase().includes(searchTerm) || ticket.ticketId.toLowerCase().includes(searchTerm);
+                return matchStatus && matchPriority && matchSearch;
+            });
+            
+            renderTicketsTable();
+        }
+        
+        function sortTickets(field) {
+            if (ticketsSortField === field) {
+                ticketsSortDirection = ticketsSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                ticketsSortField = field;
+                ticketsSortDirection = 'asc';
+            }
+            
+            ticketsFiltered.sort((a, b) => {
+                let aVal = a[field];
+                let bVal = b[field];
+                
+                if (ticketsSortDirection === 'asc') {
+                    return aVal > bVal ? 1 : -1;
+                } else {
+                    return aVal < bVal ? 1 : -1;
+                }
+            });
+            
+            renderTicketsTable();
+        }
+        
+        function clearTicketsFilters() {
+            document.getElementById('tickets-status-filter').value = '';
+            document.getElementById('tickets-priority-filter').value = '';
+            document.getElementById('tickets-search').value = '';
+            filterTickets();
+        }
+        
+        function exportTicketsCSV() {
+            const headers = ['Ticket ID', 'Subject', 'Status', 'Priority', 'Created'];
+            const rows = ticketsFiltered.map(t => [t.ticketId, t.subject, t.status, t.priority, t.created]);
+            
+            let csv = headers.join(',') + '\n';
+            rows.forEach(row => {
+                csv += row.map(cell => `"${cell}"`).join(',') + '\n';
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'tickets-export.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        // Event listeners for tickets
+        document.getElementById('tickets-status-filter').addEventListener('change', filterTickets);
+        document.getElementById('tickets-priority-filter').addEventListener('change', filterTickets);
+        document.getElementById('tickets-search').addEventListener('input', filterTickets);
+        document.getElementById('clear-tickets-filters').addEventListener('click', clearTicketsFilters);
+        document.getElementById('export-tickets-csv').addEventListener('click', exportTicketsCSV);
+        
+        // Sort headers
+        document.querySelectorAll('#tickets-table th[data-sort]').forEach(th => {
+            th.addEventListener('click', () => sortTickets(th.dataset.sort));
+        });
+        
+        // ============================================
+        // MODAL
+        // ============================================
+        
+        function showUnitDetails(unitId) {
+            const unit = unitsData.find(u => u.unitId === unitId);
+            if (!unit) return;
+            
+            document.getElementById('modal-title').textContent = `Unit Details - ${unit.unitId}`;
+            document.getElementById('modal-content').innerHTML = `
+                <div class="form-group">
+                    <strong>Unit ID:</strong> ${unit.unitId}
+                </div>
+                <div class="form-group">
+                    <strong>Property:</strong> ${unit.property}
+                </div>
+                <div class="form-group">
+                    <strong>Status:</strong> <span class="status-badge ${getStatusBadgeClass(unit.status)}">${unit.status}</span>
+                </div>
+                <div class="form-group">
+                    <strong>Deployed:</strong> ${unit.deployed}
+                </div>
+                <div class="form-group">
+                    <strong>Compliance:</strong> <span class="status-badge ${getComplianceBadgeClass(unit.compliance)}">${unit.compliance}</span>
+                </div>
+            `;
+            
+            document.getElementById('details-modal').classList.add('active');
+        }
+        
+        function showTicketDetails(ticketId) {
+            const ticket = ticketsData.find(t => t.ticketId === ticketId);
+            if (!ticket) return;
+            
+            document.getElementById('modal-title').textContent = `Ticket Details - ${ticket.ticketId}`;
+            document.getElementById('modal-content').innerHTML = `
+                <div class="form-group">
+                    <strong>Ticket ID:</strong> ${ticket.ticketId}
+                </div>
+                <div class="form-group">
+                    <strong>Subject:</strong> ${ticket.subject}
+                </div>
+                <div class="form-group">
+                    <strong>Status:</strong> <span class="status-badge ${getTicketStatusBadgeClass(ticket.status)}">${ticket.status}</span>
+                </div>
+                <div class="form-group">
+                    <strong>Priority:</strong> <span class="status-badge ${getPriorityBadgeClass(ticket.priority)}">${ticket.priority}</span>
+                </div>
+                <div class="form-group">
+                    <strong>Created:</strong> ${ticket.created}
+                </div>
+            `;
+            
+            document.getElementById('details-modal').classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('details-modal').classList.remove('active');
+        }
+        
+        document.getElementById('modal-close').addEventListener('click', closeModal);
+        document.getElementById('details-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'details-modal') {
+                closeModal();
+            }
+        });
+        
+        // ============================================
+        // KEYBOARD SHORTCUTS
+        // ============================================
+        
+        document.addEventListener('keydown', (e) => {
+            // Escape key closes modal
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+            
+            // Ctrl+K clears filters
+            if (e.ctrlKey && e.key === 'k') {
+                e.preventDefault();
+                const activeView = document.querySelector('.view-content:not(.hidden)');
+                if (activeView.id === 'units-view') {
+                    clearUnitsFilters();
+                } else if (activeView.id === 'tickets-view') {
+                    clearTicketsFilters();
+                }
+            }
+        });
+        
+        // ============================================
+        // INITIALIZE
+        // ============================================
+        
+        updateDashboardStats();
+        renderUnitsTable();
+        renderTicketsTable();
+    </script>
+</body>
+</html>

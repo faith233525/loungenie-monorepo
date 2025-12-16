@@ -1,0 +1,3 @@
+# Exclude design preview files from CodeQL and language detection
+docs/design/*.html linguist-documentation
+docs/design/*.html -linguist-detectable
