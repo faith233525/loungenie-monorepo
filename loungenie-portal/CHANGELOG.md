@@ -159,8 +159,8 @@ All notable changes to LounGenie Portal will be documented in this file.
 
 ## Future Enhancements (Planned)
 
-### Version 1.1.0 (Planned)
-- [ ] Google Maps integration for partner locations
+### Version 1.1.0 (Completed)
+- [x] Company location map (implemented with Leaflet + OpenStreetMap, support-only)
 - [ ] Email notifications for ticket updates
 - [ ] Export functionality (CSV/PDF)
 - [ ] Advanced filtering and saved searches
