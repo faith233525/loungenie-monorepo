@@ -35,8 +35,9 @@ class LGPGeocodeTest extends WPTestCase {
         Functions\when( 'add_query_arg' )->alias( function( $args, $url ) {
             return $url . '?' . http_build_query( $args );
         });
-        Functions\when( 'wp_remote_get' )->justReturn( array( 'body' => json_encode( array( array( 'lat' => '10.1', 'lon' => '20.2' ) ) ) ) );
-        Functions\when( 'wp_remote_retrieve_body' )->justReturnUsing( function( $resp ) { return $resp['body']; } );
+        $fake_response = array( 'body' => json_encode( array( array( 'lat' => '10.1', 'lon' => '20.2' ) ) ) );
+        Functions\when( 'wp_remote_get' )->justReturn( $fake_response );
+        Functions\when( 'wp_remote_retrieve_body' )->alias( function( $resp ) { return $resp['body']; } );
         Functions\when( 'is_wp_error' )->justReturn( false );
         Functions\when( 'current_time' )->justReturn( '2024-01-01 00:00:00' );
 
