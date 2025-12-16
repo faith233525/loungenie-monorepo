@@ -87,6 +87,12 @@ class LGP_Router {
             return;
         }
         
+        // If company profile section, load company profile view
+        if ( $section === 'company-profile' || strpos( $section, 'company-profile/' ) === 0 ) {
+            self::load_company_profile_view();
+            return;
+        }
+        
         // Otherwise load portal shell (which includes dashboards)
         require_once LGP_PLUGIN_DIR . 'templates/portal-shell.php';
     }
@@ -111,6 +117,14 @@ class LGP_Router {
      */
     private static function load_training_view() {
         wp_enqueue_script( 'lgp-training-view', LGP_ASSETS_URL . 'js/training-view.js', array( 'lgp-portal' ), LGP_VERSION, true );
+        require_once LGP_PLUGIN_DIR . 'templates/portal-shell.php';
+    }
+    
+    /**
+     * Load company profile view in portal shell
+     */
+    private static function load_company_profile_view() {
+        // Authorization handled in template
         require_once LGP_PLUGIN_DIR . 'templates/portal-shell.php';
     }
 }
