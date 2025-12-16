@@ -151,6 +151,8 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
             $template_file = LGP_PLUGIN_DIR . 'templates/training-view.php';
         } elseif ( $section === 'units' ) {
             $template_file = LGP_PLUGIN_DIR . 'templates/units-view.php';
+        } elseif ( strpos( $section, 'company-profile' ) === 0 ) {
+            $template_file = LGP_PLUGIN_DIR . 'templates/company-profile.php';
         } elseif ( $section === 'dashboard' || empty( $section ) ) {
             $template_file = LGP_PLUGIN_DIR . 'templates/' . $dashboard_template;
         } else {

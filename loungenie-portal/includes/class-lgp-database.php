@@ -28,27 +28,17 @@ class LGP_Database {
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             name varchar(255) NOT NULL,
             address text,
-            city varchar(255),
             state varchar(50),
-            zip varchar(20),
-            country varchar(100) DEFAULT 'USA',
             venue_type varchar(50),
             contact_name varchar(255),
             contact_email varchar(255),
             contact_phone varchar(50),
-            secondary_contact_name varchar(255),
-            secondary_contact_email varchar(255),
-            secondary_contact_phone varchar(50),
             management_company_id bigint(20) UNSIGNED,
-            contract_type varchar(50),
-            contract_start_date date,
-            contract_end_date date,
             created_at datetime DEFAULT CURRENT_TIMESTAMP,
             updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
             KEY management_company_id (management_company_id),
-            KEY venue_type (venue_type),
-            KEY contract_type (contract_type)
+            KEY venue_type (venue_type)
         ) $charset_collate;";
         
         // Management Companies table
@@ -75,14 +65,11 @@ class LGP_Database {
             lock_type varchar(100),
             lock_brand varchar(50),
             color_tag varchar(50),
-            serial_number varchar(100),
-            warranty_date date,
-            seasonality varchar(20) DEFAULT 'year-round',
-            assigned_technician varchar(255),
+            season varchar(20) DEFAULT 'year-round',
             venue_type varchar(50),
             status varchar(50) DEFAULT 'active',
             install_date date,
-            service_history longtext,
+            service_history text,
             created_at datetime DEFAULT CURRENT_TIMESTAMP,
             updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
@@ -90,10 +77,9 @@ class LGP_Database {
             KEY management_company_id (management_company_id),
             KEY status (status),
             KEY color_tag (color_tag),
-            KEY seasonality (seasonality),
+            KEY season (season),
             KEY venue_type (venue_type),
-            KEY lock_brand (lock_brand),
-            KEY serial_number (serial_number)
+            KEY lock_brand (lock_brand)
         ) $charset_collate;";
         
         // Service Requests table
@@ -167,6 +153,22 @@ class LGP_Database {
             KEY created_by (created_by)
         ) $charset_collate;";
         
+        // Ticket Attachments table (secure file storage with metadata)
+        $attachments_table = $wpdb->prefix . 'lgp_ticket_attachments';
+        $sql_attachments = "CREATE TABLE $attachments_table (
+            id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            ticket_id bigint(20) UNSIGNED NOT NULL,
+            file_name varchar(255) NOT NULL,
+            file_type varchar(100),
+            file_size bigint(20),
+            file_path varchar(500),
+            uploaded_by bigint(20) UNSIGNED,
+            created_at datetime DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY ticket_id (ticket_id),
+            KEY uploaded_by (uploaded_by)
+        ) $charset_collate;";
+        
         // Execute table creation
         dbDelta( $sql_companies );
         dbDelta( $sql_mgmt_companies );
@@ -175,6 +177,7 @@ class LGP_Database {
         dbDelta( $sql_tickets );
         dbDelta( $sql_gateways );
         dbDelta( $sql_training_videos );
+        dbDelta( $sql_attachments );
         
         // Store database version
         update_option( 'lgp_db_version', LGP_VERSION );
@@ -193,7 +196,8 @@ class LGP_Database {
             $wpdb->prefix . 'lgp_service_requests',
             $wpdb->prefix . 'lgp_tickets',
             $wpdb->prefix . 'lgp_gateways',
-            $wpdb->prefix . 'lgp_training_videos'
+            $wpdb->prefix . 'lgp_training_videos',
+            $wpdb->prefix . 'lgp_ticket_attachments'
         );
         
         foreach ( $tables as $table ) {

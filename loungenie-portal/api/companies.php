@@ -110,27 +110,12 @@ class LGP_Companies_API {
         $data = array(
             'name' => sanitize_text_field( $request->get_param( 'name' ) ),
             'address' => sanitize_textarea_field( $request->get_param( 'address' ) ),
-            'city' => sanitize_text_field( $request->get_param( 'city' ) ),
             'state' => sanitize_text_field( $request->get_param( 'state' ) ),
-            'zip' => sanitize_text_field( $request->get_param( 'zip' ) ),
-            'country' => sanitize_text_field( $request->get_param( 'country' ) ) ?: 'USA',
-            'venue_type' => sanitize_text_field( $request->get_param( 'venue_type' ) ),
             'contact_name' => sanitize_text_field( $request->get_param( 'contact_name' ) ),
             'contact_email' => sanitize_email( $request->get_param( 'contact_email' ) ),
             'contact_phone' => sanitize_text_field( $request->get_param( 'contact_phone' ) ),
-            'secondary_contact_name' => sanitize_text_field( $request->get_param( 'secondary_contact_name' ) ),
-            'secondary_contact_email' => sanitize_email( $request->get_param( 'secondary_contact_email' ) ),
-            'secondary_contact_phone' => sanitize_text_field( $request->get_param( 'secondary_contact_phone' ) ),
             'management_company_id' => absint( $request->get_param( 'management_company_id' ) ),
-            'contract_type' => sanitize_text_field( $request->get_param( 'contract_type' ) ),
-            'contract_start_date' => sanitize_text_field( $request->get_param( 'contract_start_date' ) ),
-            'contract_end_date' => sanitize_text_field( $request->get_param( 'contract_end_date' ) ),
         );
-        
-        // Validate contract type if provided
-        if ( ! empty( $data['contract_type'] ) && ! in_array( $data['contract_type'], array( 'revenue_share', 'direct_purchase' ) ) ) {
-            return new WP_Error( 'invalid_contract_type', __( 'Invalid contract type. Must be revenue_share or direct_purchase', 'loungenie-portal' ), array( 'status' => 400 ) );
-        }
         
         $inserted = $wpdb->insert( $table, $data );
         
@@ -161,27 +146,12 @@ class LGP_Companies_API {
         $data = array(
             'name' => sanitize_text_field( $request->get_param( 'name' ) ),
             'address' => sanitize_textarea_field( $request->get_param( 'address' ) ),
-            'city' => sanitize_text_field( $request->get_param( 'city' ) ),
             'state' => sanitize_text_field( $request->get_param( 'state' ) ),
-            'zip' => sanitize_text_field( $request->get_param( 'zip' ) ),
-            'country' => sanitize_text_field( $request->get_param( 'country' ) ),
-            'venue_type' => sanitize_text_field( $request->get_param( 'venue_type' ) ),
             'contact_name' => sanitize_text_field( $request->get_param( 'contact_name' ) ),
             'contact_email' => sanitize_email( $request->get_param( 'contact_email' ) ),
             'contact_phone' => sanitize_text_field( $request->get_param( 'contact_phone' ) ),
-            'secondary_contact_name' => sanitize_text_field( $request->get_param( 'secondary_contact_name' ) ),
-            'secondary_contact_email' => sanitize_email( $request->get_param( 'secondary_contact_email' ) ),
-            'secondary_contact_phone' => sanitize_text_field( $request->get_param( 'secondary_contact_phone' ) ),
             'management_company_id' => absint( $request->get_param( 'management_company_id' ) ),
-            'contract_type' => sanitize_text_field( $request->get_param( 'contract_type' ) ),
-            'contract_start_date' => sanitize_text_field( $request->get_param( 'contract_start_date' ) ),
-            'contract_end_date' => sanitize_text_field( $request->get_param( 'contract_end_date' ) ),
         );
-        
-        // Validate contract type if provided
-        if ( ! empty( $data['contract_type'] ) && ! in_array( $data['contract_type'], array( 'revenue_share', 'direct_purchase' ) ) ) {
-            return new WP_Error( 'invalid_contract_type', __( 'Invalid contract type. Must be revenue_share or direct_purchase', 'loungenie-portal' ), array( 'status' => 400 ) );
-        }
         
         $updated = $wpdb->update( $table, $data, array( 'id' => $id ) );
         
