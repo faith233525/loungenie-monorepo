@@ -135,6 +135,24 @@ class LGP_Database {
             KEY channel_number (channel_number)
         ) $charset_collate;";
         
+        // Training Videos table (support uploads, partners view assigned)
+        $training_videos_table = $wpdb->prefix . 'lgp_training_videos';
+        $sql_training_videos = "CREATE TABLE $training_videos_table (
+            id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            title varchar(255) NOT NULL,
+            description text,
+            video_url varchar(500) NOT NULL,
+            category varchar(100) DEFAULT 'general',
+            target_companies longtext,
+            duration int(11),
+            created_by bigint(20) UNSIGNED,
+            created_at datetime DEFAULT CURRENT_TIMESTAMP,
+            updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY category (category),
+            KEY created_by (created_by)
+        ) $charset_collate;";
+        
         // Execute table creation
         dbDelta( $sql_companies );
         dbDelta( $sql_mgmt_companies );
@@ -142,6 +160,7 @@ class LGP_Database {
         dbDelta( $sql_service_requests );
         dbDelta( $sql_tickets );
         dbDelta( $sql_gateways );
+        dbDelta( $sql_training_videos );
         
         // Store database version
         update_option( 'lgp_db_version', LGP_VERSION );
@@ -159,7 +178,8 @@ class LGP_Database {
             $wpdb->prefix . 'lgp_units',
             $wpdb->prefix . 'lgp_service_requests',
             $wpdb->prefix . 'lgp_tickets',
-            $wpdb->prefix . 'lgp_gateways'
+            $wpdb->prefix . 'lgp_gateways',
+            $wpdb->prefix . 'lgp_training_videos'
         );
         
         foreach ( $tables as $table ) {

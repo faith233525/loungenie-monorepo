@@ -81,6 +81,12 @@ class LGP_Router {
             return;
         }
         
+        // If training section, load training videos view
+        if ( $section === 'training' ) {
+            self::load_training_view();
+            return;
+        }
+        
         // Otherwise load portal shell (which includes dashboards)
         require_once LGP_PLUGIN_DIR . 'templates/portal-shell.php';
     }
@@ -97,6 +103,14 @@ class LGP_Router {
      */
     private static function load_gateway_view() {
         wp_enqueue_script( 'lgp-gateway-view', LGP_ASSETS_URL . 'js/gateway-view.js', array( 'lgp-portal' ), LGP_VERSION, true );
+        require_once LGP_PLUGIN_DIR . 'templates/portal-shell.php';
+    }
+    
+    /**
+     * Load training videos view in portal shell
+     */
+    private static function load_training_view() {
+        wp_enqueue_script( 'lgp-training-view', LGP_ASSETS_URL . 'js/training-view.js', array( 'lgp-portal' ), LGP_VERSION, true );
         require_once LGP_PLUGIN_DIR . 'templates/portal-shell.php';
     }
 }

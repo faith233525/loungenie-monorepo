@@ -97,6 +97,12 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
                             <?php esc_html_e( 'Gateways', 'loungenie-portal' ); ?>
                         </a>
                     </li>
+                    <li class="lgp-nav-item">
+                        <a href="<?php echo esc_url( home_url( '/portal/training' ) ); ?>" class="lgp-nav-link <?php echo $section === 'training' ? 'active' : ''; ?>">
+                            <span class="lgp-nav-icon">🎓</span>
+                            <?php esc_html_e( 'Training Videos', 'loungenie-portal' ); ?>
+                        </a>
+                    </li>
                 <?php else : ?>
                     <li class="lgp-nav-item">
                         <a href="<?php echo esc_url( home_url( '/portal' ) ); ?>" class="lgp-nav-link <?php echo $section === 'dashboard' ? 'active' : ''; ?>">
@@ -122,6 +128,12 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
                             <?php esc_html_e( 'Request History', 'loungenie-portal' ); ?>
                         </a>
                     </li>
+                    <li class="lgp-nav-item">
+                        <a href="<?php echo esc_url( home_url( '/portal/training' ) ); ?>" class="lgp-nav-link <?php echo $section === 'training' ? 'active' : ''; ?>">
+                            <span class="lgp-nav-icon">🎓</span>
+                            <?php esc_html_e( 'Training Videos', 'loungenie-portal' ); ?>
+                        </a>
+                    </li>
                 <?php endif; ?>
             </ul>
         </nav>
@@ -135,6 +147,8 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
             $template_file = LGP_PLUGIN_DIR . 'templates/map-view.php';
         } elseif ( $section === 'gateways' && $is_support ) {
             $template_file = LGP_PLUGIN_DIR . 'templates/gateway-view.php';
+        } elseif ( $section === 'training' ) {
+            $template_file = LGP_PLUGIN_DIR . 'templates/training-view.php';
         } elseif ( $section === 'units' ) {
             $template_file = LGP_PLUGIN_DIR . 'templates/units-view.php';
         } elseif ( $section === 'dashboard' || empty( $section ) ) {

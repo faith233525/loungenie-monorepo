@@ -2,6 +2,34 @@
 
 All notable changes to LounGenie Portal will be documented in this file.
 
+## [v1.1.0-training-videos] - 2025-01-20
+
+### Added
+- **Training Videos System** with role-based access control
+  - Database table `lgp_training_videos` with columns: id, title, description, video_url, category, target_companies (JSON), duration, created_by, created_at, updated_at
+  - Backend class (`LGP_Training_Video`) with full CRUD operations and partner filtering
+  - REST API (`/wp-json/lgp/v1/training-videos`) with 6 endpoints: GET all (filtered), GET single, POST create, PUT update, DELETE, GET categories
+  - Training Videos view (`/portal/training`) accessible to both Support and Partner roles
+  - Video grid layout with responsive cards (auto-fill minmax 300px)
+  - Search and category filter functionality
+  - Support-only features: Add/Edit/Delete videos, assign to specific companies or all companies
+  - Partner access: View only videos with empty `target_companies` or their company_id included
+  - Video player modal with YouTube/Vimeo embed support
+  - 5 predefined categories: general, installation, troubleshooting, maintenance, product-overview
+  - JavaScript (`training-view.js`) handling video loading, search/filter, CRUD via REST API, modal interactions
+  - CSS styling for video cards, thumbnails, hover effects, modals, forms, badges
+  - PHPUnit tests (3 tests) for validation, categories, and API permission callbacks
+  - Audit logging for all video create/update/delete actions
+
+### Technical Notes
+- Support-only: Create, update, delete operations require `manage_options` capability
+- Partner filtering: Videos shown based on `target_companies` JSON array (empty = all companies)
+- Schema change: added `lgp_training_videos` table in `class-lgp-database.php`
+- Router integration: added `/portal/training` route for all authenticated portal users
+- Navigation: added "Training Videos" link (🎓) to both Support and Partner sidebar menus
+- Video embeds: automatic YouTube/Vimeo detection and iframe generation, fallback to HTML5 video
+- Company selector: "All Companies" checkbox toggles company-specific assignment list
+
 ## [v1.1.0-gateway-management] - 2025-12-16
 
 ### Added

@@ -137,6 +137,7 @@ function lgp_init() {
     require_once LGP_PLUGIN_DIR . 'includes/class-lgp-notifications.php';
     require_once LGP_PLUGIN_DIR . 'includes/class-lgp-geocode.php';
     require_once LGP_PLUGIN_DIR . 'includes/class-lgp-gateway.php';
+    require_once LGP_PLUGIN_DIR . 'includes/class-lgp-training-video.php';
     
     // Load integration classes
     require_once LGP_PLUGIN_DIR . 'includes/class-lgp-hubspot.php';
@@ -147,6 +148,7 @@ function lgp_init() {
     require_once LGP_PLUGIN_DIR . 'api/units.php';
     require_once LGP_PLUGIN_DIR . 'api/tickets.php';
     require_once LGP_PLUGIN_DIR . 'api/gateways.php';
+    require_once LGP_PLUGIN_DIR . 'api/training-videos.php';
     
     // Load role definitions
     require_once LGP_PLUGIN_DIR . 'roles/support.php';
