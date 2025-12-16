@@ -136,6 +136,7 @@ function lgp_init() {
     require_once LGP_PLUGIN_DIR . 'includes/class-lgp-logger.php';
     require_once LGP_PLUGIN_DIR . 'includes/class-lgp-notifications.php';
     require_once LGP_PLUGIN_DIR . 'includes/class-lgp-geocode.php';
+    require_once LGP_PLUGIN_DIR . 'includes/class-lgp-gateway.php';
     
     // Load integration classes
     require_once LGP_PLUGIN_DIR . 'includes/class-lgp-hubspot.php';
@@ -145,6 +146,7 @@ function lgp_init() {
     require_once LGP_PLUGIN_DIR . 'api/companies.php';
     require_once LGP_PLUGIN_DIR . 'api/units.php';
     require_once LGP_PLUGIN_DIR . 'api/tickets.php';
+    require_once LGP_PLUGIN_DIR . 'api/gateways.php';
     
     // Load role definitions
     require_once LGP_PLUGIN_DIR . 'roles/support.php';
@@ -171,6 +173,7 @@ function lgp_init() {
     LGP_Companies_API::init();
     LGP_Units_API::init();
     LGP_Tickets_API::init();
+    LGP_Gateways_API::init();
 }
 
 add_action( 'plugins_loaded', 'lgp_init' );

@@ -75,6 +75,12 @@ class LGP_Router {
             return;
         }
         
+        // If gateways section and user is support, load gateway view
+        if ( $section === 'gateways' && LGP_Auth::is_support() ) {
+            self::load_gateway_view();
+            return;
+        }
+        
         // Otherwise load portal shell (which includes dashboards)
         require_once LGP_PLUGIN_DIR . 'templates/portal-shell.php';
     }
@@ -83,6 +89,14 @@ class LGP_Router {
      * Load map view in portal shell
      */
     private static function load_map_view() {
+        require_once LGP_PLUGIN_DIR . 'templates/portal-shell.php';
+    }
+    
+    /**
+     * Load gateway view in portal shell (support-only)
+     */
+    private static function load_gateway_view() {
+        wp_enqueue_script( 'lgp-gateway-view', LGP_ASSETS_URL . 'js/gateway-view.js', array( 'lgp-portal' ), LGP_VERSION, true );
         require_once LGP_PLUGIN_DIR . 'templates/portal-shell.php';
     }
 }

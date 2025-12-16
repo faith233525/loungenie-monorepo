@@ -116,12 +116,32 @@ class LGP_Database {
             KEY status (status)
         ) $charset_collate;";
         
+        // Gateways table (support-only management)
+        $gateways_table = $wpdb->prefix . 'lgp_gateways';
+        $sql_gateways = "CREATE TABLE $gateways_table (
+            id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            company_id bigint(20) UNSIGNED NOT NULL,
+            channel_number varchar(50),
+            gateway_address varchar(255),
+            unit_capacity int(11) DEFAULT 0,
+            call_button tinyint(1) DEFAULT 0,
+            included_equipment text,
+            admin_password varchar(255),
+            created_at datetime DEFAULT CURRENT_TIMESTAMP,
+            updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY company_id (company_id),
+            KEY call_button (call_button),
+            KEY channel_number (channel_number)
+        ) $charset_collate;";
+        
         // Execute table creation
         dbDelta( $sql_companies );
         dbDelta( $sql_mgmt_companies );
         dbDelta( $sql_units );
         dbDelta( $sql_service_requests );
         dbDelta( $sql_tickets );
+        dbDelta( $sql_gateways );
         
         // Store database version
         update_option( 'lgp_db_version', LGP_VERSION );
@@ -138,7 +158,8 @@ class LGP_Database {
             $wpdb->prefix . 'lgp_management_companies',
             $wpdb->prefix . 'lgp_units',
             $wpdb->prefix . 'lgp_service_requests',
-            $wpdb->prefix . 'lgp_tickets'
+            $wpdb->prefix . 'lgp_tickets',
+            $wpdb->prefix . 'lgp_gateways'
         );
         
         foreach ( $tables as $table ) {

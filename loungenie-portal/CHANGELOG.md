@@ -2,6 +2,27 @@
 
 All notable changes to LounGenie Portal will be documented in this file.
 
+## [v1.1.0-gateway-management] - 2025-12-16
+
+### Added
+- **Gateway Management (Support-Only)** complete CRUD system for LounGenie gateways
+  - Database table `lgp_gateways` with columns: id, company_id, channel_number, gateway_address, unit_capacity, call_button, included_equipment, admin_password, timestamps
+  - Backend class (`LGP_Gateway`) with full CRUD operations, audit logging via `LGP_Logger::log()`
+  - REST API (`/wp-json/lgp/v1/gateways`) with support-only endpoints: GET, POST, PUT, DELETE, test-signal, get-units
+  - Support dashboard view grouped by partner with search/filter capabilities
+  - Gateway rows with call button enabled are highlighted (yellow background)
+  - Actions: View Units (modal), Audit Logs (modal), Test Signal (simulated F&B call button test)
+  - CSS styles for gateway table, modals, badges, filters, and call-button highlighting
+  - PHPUnit tests (9 tests) for gateway CRUD, access control, and API permissions
+  - JavaScript handlers for search, filtering, AJAX actions, and modal interactions
+
+### Technical Notes
+- Support-gated: all gateway operations require `manage_options` capability
+- Schema change: added `lgp_gateways` table in `class-lgp-database.php`
+- Router integration: added `/portal/gateways` route for support users
+- Audit logging: all gateway CRUD and test-signal actions logged with user, company, timestamp
+- Call button gateways highlighted with `.has-call-button` CSS class
+
 ## [v1.1.0-map-feature] - 2025-12-16
 
 ### Added

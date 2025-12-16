@@ -943,3 +943,210 @@ a:hover {
     border-radius: 50%;
     animation: spin 0.6s linear infinite;
 }
+
+/* ============================================================================
+   GATEWAY MANAGEMENT
+   ============================================================================ */
+
+/* Gateway Filters */
+.lgp-gateway-filters {
+    display: flex;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+}
+
+.lgp-gateway-filters input[type="search"],
+.lgp-gateway-filters select {
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--soft);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    font-family: var(--font-family);
+}
+
+.lgp-gateway-filters input[type="search"] {
+    flex: 1;
+    min-width: 250px;
+}
+
+.lgp-gateway-filters select {
+    min-width: 150px;
+}
+
+/* Gateway Table */
+.lgp-gateway-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.lgp-gateway-table thead {
+    background-color: var(--dark);
+    color: var(--white);
+}
+
+.lgp-gateway-table th {
+    padding: var(--space-md);
+    text-align: left;
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+}
+
+.lgp-gateway-table td {
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--background);
+}
+
+.lgp-gateway-table tbody tr:hover {
+    background-color: var(--background);
+}
+
+/* Highlight rows with call button enabled */
+.lgp-gateway-table tbody tr.has-call-button {
+    background-color: rgba(255, 193, 7, 0.1);
+    border-left: 3px solid var(--warning);
+}
+
+.lgp-gateway-table tbody tr.has-call-button:hover {
+    background-color: rgba(255, 193, 7, 0.2);
+}
+
+/* Gateway Badge */
+.lgp-badge {
+    display: inline-block;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.lgp-badge.badge-success {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: var(--success);
+}
+
+.lgp-badge.badge-warning {
+    background-color: rgba(255, 193, 7, 0.1);
+    color: var(--warning);
+}
+
+.lgp-badge.badge-error {
+    background-color: rgba(244, 67, 54, 0.1);
+    color: var(--error);
+}
+
+.lgp-badge.badge-info {
+    background-color: rgba(37, 208, 238, 0.1);
+    color: var(--info);
+}
+
+/* Gateway Actions */
+.lgp-gateway-actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.lgp-gateway-actions .lgp-button {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-sm);
+}
+
+/* Modal Overlay */
+.lgp-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(4, 16, 47, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.lgp-modal-overlay.hidden {
+    display: none;
+}
+
+/* Modal Container */
+.lgp-modal {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    max-width: 800px;
+    width: 90%;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Modal Header */
+.lgp-modal-header {
+    padding: var(--space-lg);
+    border-bottom: 1px solid var(--background);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.lgp-modal-header h3 {
+    margin: 0;
+    color: var(--dark);
+    font-size: var(--font-size-lg);
+}
+
+.lgp-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--neutral);
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+}
+
+.lgp-modal-close:hover {
+    background-color: var(--background);
+    color: var(--dark);
+}
+
+/* Modal Body */
+.lgp-modal-body {
+    padding: var(--space-lg);
+    overflow-y: auto;
+}
+
+/* Modal Footer */
+.lgp-modal-footer {
+    padding: var(--space-lg);
+    border-top: 1px solid var(--background);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-sm);
+}
+
+/* Gateway Group Header */
+.lgp-gateway-group {
+    margin-bottom: var(--space-2xl);
+}
+
+.lgp-gateway-group-header {
+    background: var(--dark);
+    color: var(--white);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-md);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+}
