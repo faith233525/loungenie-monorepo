@@ -369,8 +369,8 @@
             color: var(--status-error);
         }
         
-        /* Revenue Indicator - Gold Accent */
-        .revenue-badge {
+        /* Priority Indicator - Gold Accent (for high-priority tickets/requests) */
+        .priority-badge {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
@@ -874,8 +874,8 @@
     <main class="main-container">
         <!-- Welcome Banner -->
         <div class="welcome-banner">
-            <h2 class="welcome-title">Welcome to Your Portal Dashboard 👋</h2>
-            <p class="welcome-subtitle">Here's an overview of your properties and compliance status</p>
+            <h2 class="welcome-title">Partner & Support Portal 👋</h2>
+            <p class="welcome-subtitle">Manage your properties, support tickets, and compliance status</p>
         </div>
         
         <!-- ============================================
@@ -884,26 +884,23 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-label">Total Properties</span>
-                    <div class="stat-icon blue">🏨</div>
+                    <span class="stat-label">Active Tickets</span>
+                    <div class="stat-icon teal">🎫</div>
                 </div>
-                <div class="stat-value">127</div>
+                <div class="stat-value">24</div>
                 <div class="stat-change positive">
-                    <span>↑</span> <span>12% from last month</span>
+                    <span>↓</span> <span>6 fewer than last week</span>
                 </div>
             </div>
             
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-label">Monthly Revenue</span>
-                    <div class="stat-icon gold">💰</div>
+                    <span class="stat-label">Service Requests</span>
+                    <div class="stat-icon blue">📋</div>
                 </div>
-                <div class="stat-value">$47,892</div>
+                <div class="stat-value">47</div>
                 <div class="stat-change positive">
-                    <span>↑</span> <span>23% from last month</span>
-                </div>
-                <div style="margin-top: 0.5rem;">
-                    <span class="revenue-badge">💎 Premium Growth</span>
+                    <span>↑</span> <span>12 new this week</span>
                 </div>
             </div>
             
@@ -921,7 +918,7 @@
             <div class="stat-card">
                 <div class="stat-header">
                     <span class="stat-label">Active Units</span>
-                    <div class="stat-icon teal">🔧</div>
+                    <div class="stat-icon blue">🔧</div>
                 </div>
                 <div class="stat-value">1,247</div>
                 <div class="stat-change negative">
@@ -1057,6 +1054,72 @@
         </section>
         
         <!-- ============================================
+             TOP 5 ANALYTICS - Support Metrics
+             ============================================ -->
+        <section style="margin-top: 2rem;">
+            <div class="section-header">
+                <h2 class="section-title">Top 5 Support Analytics</h2>
+                <button class="btn btn-secondary">
+                    <span>📊</span> View All Reports
+                </button>
+            </div>
+            
+            <div class="two-column-grid">
+                <div class="card">
+                    <h4 style="font-size: 1rem; margin-bottom: 1rem; color: var(--brand-dark-blue); font-weight: 600;">Most Active Properties</h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border-light);">
+                            <span style="color: var(--text-primary);">Grand Ocean Resort</span>
+                            <span class="status-badge info">48 tickets</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border-light);">
+                            <span style="color: var(--text-primary);">Sunset Bay Hotel</span>
+                            <span class="status-badge info">42 tickets</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border-light);">
+                            <span style="color: var(--text-primary);">Paradise Lagoon</span>
+                            <span class="status-badge info">38 tickets</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border-light);">
+                            <span style="color: var(--text-primary);">Crystal Springs Resort</span>
+                            <span class="status-badge info">35 tickets</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0;">
+                            <span style="color: var(--text-primary);">Coastal View Inn</span>
+                            <span class="status-badge info">31 tickets</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h4 style="font-size: 1rem; margin-bottom: 1rem; color: var(--brand-dark-blue); font-weight: 600;">Common Service Requests</h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border-light);">
+                            <span style="color: var(--text-primary);">Routine Maintenance</span>
+                            <span style="color: var(--text-secondary); font-weight: 600;">127</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border-light);">
+                            <span style="color: var(--text-primary);">Compliance Inspection</span>
+                            <span style="color: var(--text-secondary); font-weight: 600;">98</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border-light);">
+                            <span style="color: var(--text-primary);">Technical Support</span>
+                            <span style="color: var(--text-secondary); font-weight: 600;">84</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border-light);">
+                            <span style="color: var(--text-primary);">Emergency Response</span>
+                            <span style="color: var(--text-secondary); font-weight: 600;">12</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0;">
+                            <span style="color: var(--text-primary);">Training Request</span>
+                            <span style="color: var(--text-secondary); font-weight: 600;">9</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ============================================
              FORMS - Accessible Design
              ============================================ -->
         <section style="margin-top: 2rem;">
@@ -1133,24 +1196,24 @@
                         </div>
                     </div>
                     
-                    <h4 style="font-size: 1rem; margin-bottom: 1rem; color: var(--text-primary);">Premium Features</h4>
+                    <h4 style="font-size: 1rem; margin-bottom: 1rem; color: var(--text-primary);">Available Features</h4>
                     <div style="display: flex; flex-direction: column; gap: 0.75rem;">
                         <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <span class="premium-badge">⭐ PREMIUM</span>
-                            <span style="font-size: 0.9rem; color: var(--text-secondary);">Advanced Analytics</span>
+                            <span style="color: var(--status-success); font-size: 1.1rem;">✓</span>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);">Advanced Analytics Dashboard</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <span class="premium-badge">⭐ PREMIUM</span>
-                            <span style="font-size: 0.9rem; color: var(--text-secondary);">24/7 Priority Support</span>
+                            <span style="color: var(--status-success); font-size: 1.1rem;">✓</span>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);">24/7 Priority Support Access</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <span class="premium-badge">⭐ PREMIUM</span>
+                            <span style="color: var(--status-success); font-size: 1.1rem;">✓</span>
                             <span style="font-size: 0.9rem; color: var(--text-secondary);">Automated Compliance Reports</span>
                         </div>
                     </div>
                     
-                    <button class="btn btn-success" style="width: 100%; margin-top: 1.5rem;">
-                        <span>🚀</span> Upgrade to Premium
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">
+                        <span>📊</span> View Full Analytics
                     </button>
                 </div>
             </div>
@@ -1210,7 +1273,7 @@
                         <div class="color-box" style="background-color: #F2B705;"></div>
                         <div class="color-name">Warm Gold</div>
                         <div class="color-code">#F2B705</div>
-                        <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Revenue, premium features</div>
+                        <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Priority items, highlights</div>
                     </div>
                     <div class="color-swatch">
                         <div class="color-box" style="background-color: #0B2D4F;"></div>
