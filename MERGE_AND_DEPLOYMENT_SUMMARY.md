@@ -495,7 +495,7 @@ If issues occur during deployment:
 
 Deployment is considered successful when:
 
-- [x] PR #2 merged into main branch
+- [ ] PR #2 merged into main branch
 - [ ] GitHub Actions workflow passed all jobs
 - [ ] Deployment artifact downloaded successfully
 - [ ] Azure AD configured correctly

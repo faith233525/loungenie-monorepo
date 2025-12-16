@@ -457,7 +457,7 @@ dependency-scan:
   runs-on: ubuntu-latest
   steps:
     - name: Run Snyk security scan
-      uses: snyk/actions/php@master
+      uses: snyk/actions/php@v1.0.0  # Use specific version, not @master
       with:
         args: --severity-threshold=high
 ```

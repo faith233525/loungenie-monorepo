@@ -114,12 +114,14 @@ Located at the top of the interface, shows:
 
 #### 4. Units Table
 
-**Column Headers**:
+**Note**: The preview HTML may reference LounGenie-specific fields. Actual column structure depends on your implementation.
+
+**Typical Column Headers**:
 - Unit ID
 - Company Name
 - Address
-- Lock Brand
-- Color Tag
+- Lock Brand (LounGenie-specific)
+- Color Tag (LounGenie-specific)
 - Status
 - Install Date
 

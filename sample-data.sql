@@ -26,6 +26,8 @@ INSERT INTO `wp_psp_companies` (`id`, `username`, `password_hash`, `company_name
 (5, 'crystalclear', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Crystal Clear Pools', '654 Valley Road', 'Las Vegas', 'NV', '89101', '(555) 567-8901', 'info@crystalclear.com', 'active', NOW(), NOW());
 
 -- Password for all sample companies: "password123" (for testing only)
+-- NOTE: All companies use the same bcrypt hash for simplicity in testing.
+--       In production, each company should have a unique password and hash.
 
 -- ============================================================================
 -- COMPANY CONTACTS
