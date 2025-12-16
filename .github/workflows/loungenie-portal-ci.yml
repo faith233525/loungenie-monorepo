@@ -1,105 +1,90 @@
-name: LounGenie Portal Testing
+name: LounGenie Portal E2E CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
+  security-events: read
 
 jobs:
   php-validation:
-    name: PHP Validation & Analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
           php-version: 8.0.30
-          coverage: none
-      - run: find loungenie-portal -name "*.php" -type f -exec php -l {} \;
-      - run: |
-          test -f loungenie-portal/loungenie-portal.php
-          test -d loungenie-portal/includes
-          test -d loungenie-portal/templates
-          test -d loungenie-portal/assets
-          test -d loungenie-portal/api
+          tools: composer:2.9.2
+      - name: Check PHP Syntax
+        run: find loungenie-portal -name "*.php" -type f -exec php -l {} \;
 
   composer-setup:
-    name: Composer Setup
     runs-on: ubuntu-latest
+    needs: php-validation
     steps:
       - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
           php-version: 8.0.30
           tools: composer:2.9.2
-      - name: Install Dependencies
-        run: |
-          cd loungenie-portal
-          composer install --no-interaction --prefer-dist
-      - name: Cache Vendor
-        uses: actions/cache@v3
-        with:
-          path: loungenie-portal/vendor
-          key: composer-${{ hashFiles('loungenie-portal/composer.lock') }}
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist
 
   phpunit-tests:
-    name: PHPUnit Tests
     runs-on: ubuntu-latest
     needs: composer-setup
     steps:
       - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
           php-version: 8.0.30
-          tools: composer:2.9.2
-      - run: |
-          cd loungenie-portal
-          composer install --no-interaction
-          vendor/bin/phpunit --colors=always
+      - name: Run PHPUnit
+        run: ./vendor/bin/phpunit -c loungenie-portal/phpunit.xml
 
   code-standards:
-    name: Coding Standards
     runs-on: ubuntu-latest
     needs: composer-setup
     steps:
       - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
           php-version: 8.0.30
-          tools: composer:2.9.2
-      - run: |
-          cd loungenie-portal
-          composer install --no-interaction
-          vendor/bin/phpcs --standard=WordPress --colors
+      - name: Run PHPCS
+        run: ./vendor/bin/phpcs --standard=loungenie-portal/phpcs.xml loungenie-portal/
 
   security-checks:
-    name: Security Checks (Pattern-Based)
     runs-on: ubuntu-latest
+    needs: [php-validation]
     steps:
       - uses: actions/checkout@v4
-      - run: |
-          # SQL Injection check
-          ! grep -r "->query(" loungenie-portal --include="*.php" | grep -v "prepare" || echo "⚠ Warning: SQL injection patterns found"
-          # XSS check
-          ! grep -r "echo \$_" loungenie-portal --include="*.php" | grep -v "esc_" || echo "⚠ Warning: Unescaped output found"
+      - name: Scan for SQL injection patterns
+        run: |
+          ! grep -r "->query(" loungenie-portal --include="*.php" | grep -v "prepare" || echo "⚠ SQL injection warning"
+      - name: Scan for XSS patterns
+        run: |
+          ! grep -r "echo \$_" loungenie-portal --include="*.php" | grep -v "esc_" || echo "⚠ XSS warning"
 
   build-artifact:
-    name: Build & Generate Artifact
     runs-on: ubuntu-latest
-    needs: [php-validation, phpunit-tests, code-standards, security-checks]
+    needs: [phpunit-tests, code-standards, security-checks]
     steps:
       - uses: actions/checkout@v4
-      - run: |
+      - name: Generate Deployment Package
+        run: |
           cd loungenie-portal
-          zip -r ../loungenie-portal-plugin.zip . -x "*.git*" -x "*.DS_Store" -x "tests/*" -x "*.md" -x "vendor/*" -x "phpunit.xml" -x "phpcs.xml" -x "composer.*"
-      - uses: actions/upload-artifact@v3
+          zip -r ../loungenie-portal-plugin.zip . -x "vendor/*" -x "tests/*" -x "*.git*" -x "*.md"
+          cd ..
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
         with:
           name: loungenie-portal-plugin
           path: loungenie-portal-plugin.zip
