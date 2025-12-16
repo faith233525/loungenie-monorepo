@@ -1,8 +1,15 @@
 <?xml version="1.0"?>
 <ruleset name="LounGenie Portal Standards">
-    <description>PHP Coding Standards for LounGenie Portal</description>
+    <description>PHP Coding Standards for LounGenie Portal - Enterprise-ready, WordPress-safe</description>
+
+    <!-- Base standard -->
     <rule ref="PSR12"/>
-    <!-- Exclude test files and vendor -->
+
+    <!-- Exclude vendor and test files -->
     <exclude-pattern>*/vendor/*</exclude-pattern>
     <exclude-pattern>*/tests/*</exclude-pattern>
+
+    <!-- Note: Spelling checks require a spellcheck sniff (not installed by default).
+         If we add a spellcheck package (e.g., sirbrillig/phpcs-spellcheck),
+         we can whitelist product/WordPress terms to avoid false positives. -->
 </ruleset>

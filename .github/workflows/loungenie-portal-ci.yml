@@ -52,13 +52,19 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.0.30
+          coverage: xdebug
           tools: composer:2.9.2
       - name: Install Composer dependencies
         working-directory: loungenie-portal
         run: composer install --no-interaction --no-progress
-      - name: Run PHPUnit
+      - name: Run PHPUnit with coverage
         working-directory: loungenie-portal
-        run: ./vendor/bin/phpunit --configuration phpunit.xml
+        run: ./vendor/bin/phpunit --configuration phpunit.xml --coverage-clover=coverage.xml
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: php-coverage
+          path: loungenie-portal/coverage.xml
 
   code-standards:
     name: PHPCS Lint
@@ -85,6 +91,13 @@ jobs:
     needs: [php-validation, composer-setup]
     steps:
       - uses: actions/checkout@v4
+      - name: Ensure no Twilio references
+        run: |
+          # Fail the build if any 'twilio' references exist in the plugin
+          if grep -Rni "twilio" loungenie-portal --exclude-dir=vendor --exclude-dir=tests --include="*.php" --include="*.json" --include="*.md"; then
+            echo "❌ Found disallowed Twilio reference(s). Remove all Twilio usage." >&2
+            exit 1
+          fi
       - name: Scan for SQL injection patterns
         run: |
           ! grep -r "->query(" loungenie-portal --include="*.php" | grep -v "prepare" | grep -v "//" || echo "⚠ SQL injection pattern found"
