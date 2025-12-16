@@ -11,43 +11,46 @@
            ============================================ */
         
         :root {
-            /* Primary Background - Neutral Light Gray / Off-White (70-80% usage) */
-            --bg-primary: #F7F9FB;
-            --bg-secondary: #F5F7FA;
+            /* Core Brand Colors - Modern SaaS Palette (NO GOLD) */
+            --primary-navy: #04102F;      /* Structure, trust, sidebar, headers */
+            --primary-teal: #3AA6B9;      /* Interaction, buttons, links, active states */
+            --soft-aqua: #25D0EE;         /* Hover, focus, highlights (minimal usage) */
             
-            /* Card & Panel Backgrounds - Pure White */
-            --bg-white: #FFFFFF;
+            /* Neutrals (70-80% usage) - Modern depth without heavy color */
+            --charcoal: #222222;          /* Main text */
+            --slate-gray: #454F5E;        /* Secondary text, labels */
+            --cool-gray: #CAE6E8;         /* Borders, dividers */
+            --surface-light: #E9F8F9;     /* Card backgrounds */
+            --white: #FFFFFF;             /* Primary surface */
+            --bg-primary: #F5F7FA;        /* Page background */
+            --bg-secondary: #E9F8F9;      /* Secondary background */
+            --bg-white: #FFFFFF;          /* Cards, panels, tables */
             
-            /* Brand Colors (15-25% usage) */
-            --brand-teal: #1BB3B8;        /* LounGenie Teal - Primary actions */
-            --brand-gold: #F2B705;        /* Warm Yellow/Gold - Highlights */
-            --brand-dark-blue: #0B2D4F;  /* PoolSafe Blue - Authority/Trust */
-            --brand-dark-blue-alt: #0F3A5F; /* Alternative dark blue */
-            
-            /* Text Colors - Never pure black */
-            --text-primary: #1F2933;      /* Dark charcoal */
-            --text-secondary: #6B7280;    /* Muted gray */
-            --text-disabled: #9CA3AF;     /* Disabled text */
+            /* Legacy compatibility mappings */
+            --brand-teal: #3AA6B9;
+            --brand-dark-blue: #04102F;
+            --brand-dark-blue-alt: #0D1B33;
+            --text-primary: #222222;
+            --text-secondary: #454F5E;
+            --text-disabled: #9CA3AF;
             --text-white: #FFFFFF;
             
-            /* Status Colors (5% usage - Attention colors) */
-            --status-success: #16A34A;    /* Soft green */
-            --status-warning: #F59E0B;    /* Gold */
-            --status-error: #DC2626;      /* Red */
-            --status-info: #1BB3B8;       /* Teal */
+            /* Status Colors (5% usage - Muted, low saturation) */
+            --status-success: #3AA6B9;    /* Muted Teal for success */
+            --status-warning: #D97706;    /* Soft Amber (desaturated) */
+            --status-error: #DC2626;      /* Muted Red */
+            --status-info: #6B7280;       /* Slate Blue */
             
             /* Hover & Active States */
-            --teal-hover: #169BA0;
-            --teal-active: #137B7F;
-            --gold-hover: #D9A404;
-            --gold-light: #FFB300;
-            --blue-hover: #0D3349;
+            --teal-hover: #2A8999;
+            --teal-active: #1A6979;
+            --blue-hover: #0D1B33;
             --error-hover: #B91C1C;
-            --success-hover: #15803D;
+            --success-hover: #2A8999;
             
             /* Borders & Dividers */
-            --border-light: #E5E7EB;
-            --border-medium: #D1D5DB;
+            --border-light: #CAE6E8;
+            --border-medium: #9CA3AF;
             
             /* Shadows */
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -332,13 +335,13 @@
             color: var(--brand-teal);
         }
         
-        .stat-icon.gold {
-            background-color: rgba(242, 183, 5, 0.1);
-            color: var(--brand-gold);
+        .stat-icon.teal {
+            background-color: rgba(58, 166, 185, 0.1);
+            color: var(--primary-teal);
         }
         
         .stat-icon.success {
-            background-color: rgba(22, 163, 74, 0.1);
+            background-color: rgba(58, 166, 185, 0.1);
             color: var(--status-success);
         }
         
@@ -1261,57 +1264,69 @@
                     Following enterprise best practices: 70-80% neutrals, 15-25% brand colors, 5% attention colors
                 </p>
                 
-                <h4 style="font-size: 1rem; margin-bottom: 1rem; color: var(--brand-dark-blue);">Brand Colors (15-25% usage)</h4>
+                <h4 style="font-size: 1rem; margin-bottom: 1rem; color: var(--brand-dark-blue);">Core Brand Colors - Modern SaaS Palette (NO GOLD)</h4>
                 <div class="color-palette">
                     <div class="color-swatch">
-                        <div class="color-box" style="background-color: #1BB3B8;"></div>
-                        <div class="color-name">LounGenie Teal</div>
-                        <div class="color-code">#1BB3B8</div>
-                        <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Primary actions, links</div>
+                        <div class="color-box" style="background-color: #04102F;"></div>
+                        <div class="color-name">Primary Navy</div>
+                        <div class="color-code">#04102F</div>
+                        <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Structure, trust, sidebar, headers</div>
                     </div>
                     <div class="color-swatch">
-                        <div class="color-box" style="background-color: #F2B705;"></div>
-                        <div class="color-name">Warm Gold</div>
-                        <div class="color-code">#F2B705</div>
-                        <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Priority items, highlights</div>
+                        <div class="color-box" style="background-color: #3AA6B9;"></div>
+                        <div class="color-name">Primary Teal</div>
+                        <div class="color-code">#3AA6B9</div>
+                        <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Buttons, links, interaction, active states</div>
                     </div>
                     <div class="color-swatch">
-                        <div class="color-box" style="background-color: #0B2D4F;"></div>
-                        <div class="color-name">PoolSafe Blue</div>
-                        <div class="color-code">#0B2D4F</div>
-                        <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Trust, authority, nav</div>
+                        <div class="color-box" style="background-color: #25D0EE;"></div>
+                        <div class="color-name">Soft Aqua</div>
+                        <div class="color-code">#25D0EE</div>
+                        <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Hover, focus, highlights (minimal)</div>
                     </div>
                 </div>
                 
-                <h4 style="font-size: 1rem; margin: 1.5rem 0 1rem; color: var(--brand-dark-blue);">Neutral Backgrounds (70-80% usage)</h4>
+                <h4 style="font-size: 1rem; margin: 1.5rem 0 1rem; color: var(--brand-dark-blue);">Neutrals (70-80% usage) - Depth without color</h4>
                 <div class="color-palette">
                     <div class="color-swatch">
-                        <div class="color-box" style="background-color: #F7F9FB; border: 1px solid #E5E7EB;"></div>
-                        <div class="color-name">Light Gray</div>
-                        <div class="color-code">#F7F9FB</div>
-                        <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Page background</div>
+                        <div class="color-box" style="background-color: #F5F7FA; border: 1px solid #CAE6E8;"></div>
+                        <div class="color-name">Page Background</div>
+                        <div class="color-code">#F5F7FA</div>
+                        <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Main page surface</div>
                     </div>
                     <div class="color-swatch">
-                        <div class="color-box" style="background-color: #FFFFFF; border: 1px solid #E5E7EB;"></div>
+                        <div class="color-box" style="background-color: #E9F8F9; border: 1px solid #CAE6E8;"></div>
+                        <div class="color-name">Surface Light</div>
+                        <div class="color-code">#E9F8F9</div>
+                        <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Card backgrounds</div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-box" style="background-color: #FFFFFF; border: 1px solid #CAE6E8;"></div>
                         <div class="color-name">Pure White</div>
                         <div class="color-code">#FFFFFF</div>
-                        <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Cards, panels, tables</div>
+                        <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Primary surface, modals</div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-box" style="background-color: #CAE6E8; border: 1px solid #9CA3AF;"></div>
+                        <div class="color-name">Cool Gray</div>
+                        <div class="color-code">#CAE6E8</div>
+                        <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Borders, dividers</div>
                     </div>
                 </div>
                 
-                <h4 style="font-size: 1rem; margin: 1.5rem 0 1rem; color: var(--brand-dark-blue);">Text Colors</h4>
+                <h4 style="font-size: 1rem; margin: 1.5rem 0 1rem; color: var(--brand-dark-blue);">Text Colors (Never pure black)</h4>
                 <div class="color-palette">
                     <div class="color-swatch">
-                        <div class="color-box" style="background-color: #1F2933;"></div>
-                        <div class="color-name">Primary Text</div>
-                        <div class="color-code">#1F2933</div>
+                        <div class="color-box" style="background-color: #222222;"></div>
+                        <div class="color-name">Charcoal</div>
+                        <div class="color-code">#222222</div>
                         <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Main content</div>
                     </div>
                     <div class="color-swatch">
-                        <div class="color-box" style="background-color: #6B7280;"></div>
-                        <div class="color-name">Secondary Text</div>
-                        <div class="color-code">#6B7280</div>
-                        <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Supporting text</div>
+                        <div class="color-box" style="background-color: #454F5E;"></div>
+                        <div class="color-name">Slate Gray</div>
+                        <div class="color-code">#454F5E</div>
+                        <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Labels, secondary text</div>
                     </div>
                     <div class="color-swatch">
                         <div class="color-box" style="background-color: #9CA3AF;"></div>
@@ -1321,18 +1336,18 @@
                     </div>
                 </div>
                 
-                <h4 style="font-size: 1rem; margin: 1.5rem 0 1rem; color: var(--brand-dark-blue);">Status Colors (5% usage - Attention)</h4>
+                <h4 style="font-size: 1rem; margin: 1.5rem 0 1rem; color: var(--brand-dark-blue);">Status Colors (5% usage - Muted, low saturation)</h4>
                 <div class="color-palette">
                     <div class="color-swatch">
-                        <div class="color-box" style="background-color: #16A34A;"></div>
-                        <div class="color-name">Success</div>
-                        <div class="color-code">#16A34A</div>
-                        <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Positive states</div>
+                        <div class="color-box" style="background-color: #3AA6B9;"></div>
+                        <div class="color-name">Success (Muted Teal)</div>
+                        <div class="color-code">#3AA6B9</div>
+                        <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Success, positive states</div>
                     </div>
                     <div class="color-swatch">
-                        <div class="color-box" style="background-color: #F59E0B;"></div>
-                        <div class="color-name">Warning</div>
-                        <div class="color-code">#F59E0B</div>
+                        <div class="color-box" style="background-color: #D97706;"></div>
+                        <div class="color-name">Warning (Soft Amber)</div>
+                        <div class="color-code">#D97706</div>
                         <div style="font-size: 0.7rem; color: var(--text-disabled); margin-top: 0.25rem;">Caution states</div>
                     </div>
                     <div class="color-swatch">
@@ -1344,14 +1359,41 @@
                 </div>
                 
                 <div style="margin-top: 2rem; padding: 1.5rem; background-color: var(--bg-secondary); border-radius: 8px;">
-                    <h4 style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--brand-dark-blue);">✓ Accessibility Standards</h4>
+                    <h4 style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--brand-dark-blue);">✓ Modern SaaS Design Strategy</h4>
                     <ul style="list-style: none; padding: 0; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
-                        <li style="margin-bottom: 0.5rem;">✓ Minimum 4.5:1 contrast ratio for all text</li>
-                        <li style="margin-bottom: 0.5rem;">✓ No pure black (#000000) - using #1F2933 instead</li>
-                        <li style="margin-bottom: 0.5rem;">✓ No yellow text on white backgrounds</li>
-                        <li style="margin-bottom: 0.5rem;">✓ Hover and active states for all interactive elements</li>
-                        <li style="margin-bottom: 0.5rem;">✓ Focus indicators for keyboard navigation</li>
+                        <li style="margin-bottom: 0.5rem;">✓ Navy + Teal core palette (NO GOLD)</li>
+                        <li style="margin-bottom: 0.5rem;">✓ Depth through elevation, not color</li>
+                        <li style="margin-bottom: 0.5rem;">✓ Typography weight for hierarchy</li>
+                        <li style="margin-bottom: 0.5rem;">✓ Subtle motion and transitions</li>
+                        <li style="margin-bottom: 0.5rem;">✓ Minimum 4.5:1 contrast ratio (WCAG 2.1 AA)</li>
+                        <li style="margin-bottom: 0.5rem;">✓ No pure black (#000000) - using #222222</li>
+                        <li style="margin-bottom: 0.5rem;">✓ Muted status colors (low saturation)</li>
+                        <li style="margin-bottom: 0.5rem;">✓ Clean, professional, enterprise-ready</li>
                     </ul>
+                </div>
+                
+                <div style="margin-top: 1.5rem; padding: 1.5rem; background-color: rgba(58, 166, 185, 0.05); border-left: 4px solid #3AA6B9; border-radius: 8px;">
+                    <h4 style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--brand-dark-blue);">🎯 Role-Based Visual Difference (Same Palette)</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                        <div>
+                            <strong style="color: var(--brand-dark-blue);">Support View</strong>
+                            <ul style="list-style: none; padding: 0; margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6;">
+                                <li>• Darker surfaces</li>
+                                <li>• Higher data density</li>
+                                <li>• More tables, less padding</li>
+                                <li>• Navy dominant</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <strong style="color: var(--primary-teal);">Partner View</strong>
+                            <ul style="list-style: none; padding: 0; margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6;">
+                                <li>• Lighter surfaces</li>
+                                <li>• More whitespace</li>
+                                <li>• Larger cards</li>
+                                <li>• Teal dominant</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

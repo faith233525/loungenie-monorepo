@@ -53,27 +53,40 @@ A comprehensive design system reference showing:
 - Tracking compliance and deployments
 - **NO financial or revenue UI**
 
-## Design System Rules
+## Design System Rules - Modern SaaS Palette
 
-### Brand Colors (15-25% usage)
-- **Teal** `#1BB3B8` - Primary actions, links, active states
-- **Gold** `#F2B705` - Priority highlights (NOT revenue)
-- **Dark Blue** `#0B2D4F` - Navigation, headers, trust/authority
+### Core Brand Colors (NO GOLD - Clean & Professional)
+- **Primary Navy** `#04102F` - Structure, trust, sidebar, headers
+- **Primary Teal** `#3AA6B9` - Interaction, buttons, links, active states
+- **Soft Aqua** `#25D0EE` - Hover, focus, highlights (minimal usage)
 
-### Neutrals (70-80% usage)
-- **Background** `#F7F9FB` - Page background
-- **Cards** `#FFFFFF` - Card/panel backgrounds
+### Neutrals (70-80% usage) - Depth through elevation, not color
+- **Page Background** `#F5F7FA` - Main page surface
+- **Surface Light** `#E9F8F9` - Card backgrounds
+- **Pure White** `#FFFFFF` - Primary surface, modals
+- **Cool Gray** `#CAE6E8` - Borders, dividers
 
-### Status Colors (5% usage)
-- **Success** `#16A34A`
-- **Warning** `#F59E0B`
-- **Error** `#DC2626`
-- **Info** `#1BB3B8`
+### Status Colors (5% usage - Muted, low saturation)
+- **Success (Muted Teal)** `#3AA6B9` - Positive states
+- **Warning (Soft Amber)** `#D97706` - Caution states (desaturated)
+- **Error** `#DC2626` - Critical issues (muted red)
+- **Info (Slate Blue)** `#6B7280` - Informational
 
 ### Text Colors (Never pure black)
-- **Primary** `#1F2933` - Main content
-- **Secondary** `#6B7280` - Supporting text
+- **Charcoal** `#222222` - Main content
+- **Slate Gray** `#454F5E` - Labels, secondary text
 - **Disabled** `#9CA3AF` - Disabled states
+
+### Modern SaaS Design Strategy
+✓ Navy + Teal core palette (NO GOLD)  
+✓ Depth through elevation, shadows, and layering  
+✓ Typography weight for visual hierarchy  
+✓ Subtle motion and transitions  
+✓ Clean, professional, enterprise-ready  
+
+### Role-Based Visual Difference (Same Palette)
+**Support View** - Darker surfaces, higher data density, more tables, Navy dominant  
+**Partner View** - Lighter surfaces, more whitespace, larger cards, Teal dominant
 
 ## Technical Constraints
 
