@@ -33,6 +33,23 @@ class LGP_Assets {
             'all'
         );
         
+        // Leaflet assets for support-only map
+        if ( LGP_Auth::is_support() ) {
+            wp_enqueue_style(
+                'leaflet',
+                'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+                array(),
+                '1.9.4'
+            );
+            wp_enqueue_script(
+                'leaflet',
+                'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+                array(),
+                '1.9.4',
+                true
+            );
+        }
+
         // Enqueue portal JS
         wp_enqueue_script(
             'lgp-portal',
@@ -41,6 +58,16 @@ class LGP_Assets {
             LGP_VERSION,
             true
         );
+
+        if ( LGP_Auth::is_support() ) {
+            wp_enqueue_script(
+                'lgp-company-map',
+                LGP_ASSETS_URL . 'js/lgp-map.js',
+                array( 'leaflet' ),
+                LGP_VERSION,
+                true
+            );
+        }
         
         // Localize script with AJAX data
         wp_localize_script(
@@ -54,5 +81,19 @@ class LGP_Assets {
                 'isPartner' => LGP_Auth::is_partner(),
             )
         );
+
+        // Support-only map data
+        if ( LGP_Auth::is_support() ) {
+            $markers = class_exists( 'LGP_Geocode' ) ? LGP_Geocode::get_company_markers_for_map() : array();
+            wp_localize_script(
+                'lgp-company-map',
+                'lgpCompanyMap',
+                array(
+                    'markers' => $markers,
+                    'tileUrl' => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    'tileAttribution' => '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                )
+            );
+        }
     }
 }

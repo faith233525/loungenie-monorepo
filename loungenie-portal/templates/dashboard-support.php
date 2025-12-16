@@ -91,6 +91,16 @@ $yearround_units = $wpdb->get_var( "SELECT COUNT(*) FROM $units_table WHERE seas
     <p><?php esc_html_e( 'Overview of all companies, units, and support tickets', 'loungenie-portal' ); ?></p>
 </div>
 
+<div class="lgp-card">
+    <div class="lgp-card-header">
+        <h2 class="lgp-card-title"><?php esc_html_e( 'Company Map', 'loungenie-portal' ); ?></h2>
+        <p class="lgp-card-subtitle"><?php esc_html_e( 'Support-only view powered by OpenStreetMap', 'loungenie-portal' ); ?></p>
+    </div>
+    <div class="lgp-card-body">
+        <div id="lgp-company-map" style="height: 480px;"></div>
+    </div>
+</div>
+
 <!-- Statistics Grid -->
 <div class="lgp-stats-grid">
     <div class="lgp-stat-card">

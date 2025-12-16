@@ -2,6 +2,27 @@
 
 All notable changes to LounGenie Portal will be documented in this file.
 
+## [v1.1.0-map-feature] - 2025-12-16
+
+### Added
+- **Support-only Company Map** powered by Leaflet.js and OpenStreetMap (free, no API keys)
+  - Geocoding helper (`LGP_Geocode`) using free Nominatim API with coordinate caching
+  - Map renderer with markers for all companies (`assets/js/lgp-map.js`)
+  - Leaflet assets enqueued only for support users
+  - Map card integrated into support dashboard (`templates/dashboard-support.php`)
+  - Coordinates cached per company in `wp_options` (`lgp_geocode_{id}`)
+  - WP-CLI backfill script for batch geocoding (`wp-cli/lgp-backfill-geocode.php`)
+- **Test Coverage**
+  - PHPUnit test for geocode helper with Brain Monkey stubs (`tests/LGPGeocodeTest.php`)
+  - Jest test for Leaflet map renderer (`assets/tests/lgp-map.test.js`)
+  - Access control validation: partners receive empty marker set
+
+### Technical Notes
+- No schema changes; geocode cache stored in `wp_options`
+- Throttling: 1 request/sec to respect Nominatim usage policy
+- Support-gated: `LGP_Geocode::get_company_markers_for_map()` returns empty array for partners
+- Shared-hosting compatible; no Docker, Node build, or paid APIs
+
 ## [v1.1.0-tests-hardening] - 2025-12-16
 
 ### Added
@@ -10,6 +31,7 @@ All notable changes to LounGenie Portal will be documented in this file.
 - Full PHPUnit + Brain Monkey suite integrated into CI
 
 ### Fixed / Improved
+
 - CI coverage artifact generation
 - Minimal WP stubs for safe, isolated unit tests
 
