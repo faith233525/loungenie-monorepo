@@ -76,7 +76,7 @@ jobs:
         run: composer install --no-interaction --no-progress
       - name: Run PHPCS
         working-directory: loungenie-portal
-        run: ./vendor/bin/phpcs --standard=phpcs.xml . --exclude=vendor,tests
+        run: ./vendor/bin/phpcs --standard=phpcs.xml . --ignore=vendor,tests
 
   security-checks:
     name: Security Checks
