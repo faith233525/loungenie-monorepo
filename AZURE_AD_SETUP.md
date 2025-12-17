@@ -91,29 +91,50 @@ You will need these values for WordPress configuration.
    - **Privacy statement URL**: Your privacy policy URL
 3. Click **Save**
 
-## Redirect URI Formats
+## Redirect URI Rules & Examples
 
-The redirect URI must exactly match the WordPress configuration:
+Azure AD has strict rules for Redirect URIs:
 
-### Production
-```
-https://portal.loungenie.com/wp-admin/admin-ajax.php?action=psp_support_callback
-```
+- Must be unique per app registration entry
+- Must be a valid URL (no wildcards like `*`)
+- Must be less than 256 characters
+- Must start with `https://` for real sites OR `http://localhost` for local development
+- Must match EXACTLY what your app sends to Azure (scheme, host, path, and query)
 
-### Staging
-```
-https://staging.yourdomain.com/wp-admin/admin-ajax.php?action=psp_support_callback
-```
+Recommended Redirect URIs for LounGenie v1.6 (you can register all):
 
-### Development
+1) Admin Ajax Endpoint (recommended for production)
 ```
-https://dev.yourdomain.com/wp-admin/admin-ajax.php?action=psp_support_callback
+https://portal.loungenie.com/wp-admin/admin-ajax.php?action=lgp_outlook_oauth_callback
 ```
 
-⚠️ **Important**: 
-- The URI must use HTTPS (not HTTP) in production
-- The action parameter must be exactly `psp_support_callback`
-- The URI must match exactly (case-sensitive)
+2) Pretty URL (use if your WAF/SSO restricts wp-admin)
+```
+https://portal.loungenie.com/psp-azure-callback
+```
+
+3) Admin Settings Page (fine for staging or when already in wp-admin)
+```
+https://portal.loungenie.com/wp-admin/options-general.php?page=lgp-outlook-settings&oauth_callback=1
+```
+
+Staging/Dev Examples (register exact hostnames you use):
+```
+https://staging.yourdomain.com/wp-admin/admin-ajax.php?action=lgp_outlook_oauth_callback
+https://staging.yourdomain.com/psp-azure-callback
+https://staging.yourdomain.com/wp-admin/options-general.php?page=lgp-outlook-settings&oauth_callback=1
+```
+
+Local Development (Azure permits http only for localhost):
+```
+http://localhost/wp-admin/admin-ajax.php?action=lgp_outlook_oauth_callback
+http://localhost:8888/psp-azure-callback
+```
+
+⚠️ **Important**:
+- Use HTTPS in production and staging.
+- Do not add wildcards or trailing slashes unless they are part of the actual URL your app uses.
+- The URI must match exactly (case-sensitive and includes query string when present).
 
 ## Security Considerations
 
