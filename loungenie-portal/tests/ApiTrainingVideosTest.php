@@ -61,8 +61,13 @@ class ApiTrainingVideosTest extends WPTestCase {
     public function test_check_portal_access_allows_logged_in_users() {
         Functions\expect('is_user_logged_in')->andReturn(true);
         Functions\expect('wp_get_current_user')->andReturnUsing(function() {
-            return (object) ['ID' => 1, 'user_login' => 'testuser'];
+            return (object) [
+                'ID' => 1,
+                'user_login' => 'testuser',
+                'roles' => ['lgp_partner']
+            ];
         });
+        Functions\expect('current_user_can')->with('manage_options')->andReturn(false);
         
         $result = $this->api->check_portal_access();
         
@@ -71,11 +76,13 @@ class ApiTrainingVideosTest extends WPTestCase {
     
     public function test_check_portal_access_denies_logged_out_users() {
         Functions\expect('is_user_logged_in')->andReturn(false);
+        Functions\expect('wp_get_current_user')->andReturnUsing(function() {
+            return (object) ['ID' => 0, 'roles' => []];
+        });
         
         $result = $this->api->check_portal_access();
         
-        $this->assertInstanceOf('WP_Error', $result);
-        $this->assertEquals('rest_forbidden', $result->get_error_code());
+        $this->assertFalse($result);
     }
     
     public function test_support_only_permission_allows_support_users() {
@@ -93,7 +100,6 @@ class ApiTrainingVideosTest extends WPTestCase {
         
         $result = $this->api->support_only_permission();
         
-        $this->assertInstanceOf('WP_Error', $result);
-        $this->assertEquals('rest_forbidden', $result->get_error_code());
+        $this->assertFalse($result);
     }
 }

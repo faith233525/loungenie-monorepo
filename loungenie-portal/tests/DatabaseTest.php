@@ -16,7 +16,7 @@ final class DatabaseTest extends WPTestCase
 
         $captured = [];
         when('update_option')->justReturn(true);
-        expect('dbDelta')->times(5)->andReturnUsing(function($sql) use (&$captured) {
+        expect('dbDelta')->times(10)->andReturnUsing(function($sql) use (&$captured) {
             $captured[] = $sql;
             return true;
         });
@@ -25,7 +25,7 @@ final class DatabaseTest extends WPTestCase
         require_once __DIR__ . '/../includes/class-lgp-database.php';
         LGP_Database::create_tables();
 
-        $this->assertCount(5, $captured);
+        $this->assertCount(10, $captured);
         $joined = implode("\n\n", $captured);
         $this->assertStringContainsString('CREATE TABLE wp_lgp_companies', $joined);
         $this->assertStringContainsString('CREATE TABLE wp_lgp_management_companies', $joined);

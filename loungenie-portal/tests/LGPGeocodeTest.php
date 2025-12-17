@@ -30,7 +30,9 @@ class LGPGeocodeTest extends WPTestCase {
             }
         };
 
-        LGP_Auth::$support = true;
+        Functions\expect('current_user_can')->with('manage_options')->andReturn(true);
+        Functions\expect('is_user_logged_in')->andReturn(true);
+        Functions\expect('wp_get_current_user')->andReturn((object)['ID' => 1, 'roles' => ['lgp_support']]);
 
         Functions\when( 'add_query_arg' )->alias( function( $args, $url ) {
             return $url . '?' . http_build_query( $args );
@@ -62,7 +64,9 @@ class LGPGeocodeTest extends WPTestCase {
     }
 
     public function test_partner_users_do_not_receive_markers() {
-        LGP_Auth::$support = false;
+        Functions\expect('current_user_can')->with('manage_options')->andReturn(false);
+        Functions\expect('is_user_logged_in')->andReturn(true);
+        Functions\expect('wp_get_current_user')->andReturn((object)['ID' => 1, 'roles' => ['lgp_partner']]);
         $this->assertSame( array(), LGP_Geocode::get_company_markers_for_map() );
     }
 }

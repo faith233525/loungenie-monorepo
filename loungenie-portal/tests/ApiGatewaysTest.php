@@ -40,8 +40,11 @@ class ApiGatewaysTest extends TestCase {
      */
     public function test_partners_denied_gateway_access() {
         Functions\expect('current_user_can')->with('manage_options')->andReturn(false);
+        Functions\expect('is_user_logged_in')->andReturn(true);
+        Functions\expect('wp_get_current_user')->andReturn((object)['ID' => 1, 'roles' => ['lgp_partner']]);
         $api = new LGP_Gateways_API();
-        $this->assertTrue(method_exists($api, 'check_support_permission'));
+        $result = $api->support_only_permission();
+        $this->assertFalse($result);
     }
 
     /**
@@ -103,8 +106,11 @@ class ApiGatewaysTest extends TestCase {
      */
     public function test_filter_gateways_by_call_button() {
         Functions\expect('current_user_can')->with('manage_options')->andReturn(true);
+        Functions\expect('is_user_logged_in')->andReturn(true);
+        Functions\expect('wp_get_current_user')->andReturn((object)['ID' => 1, 'roles' => ['lgp_support']]);
         $api = new LGP_Gateways_API();
-        $this->assertTrue(method_exists($api, 'check_support_permission'));
+        $result = $api->support_only_permission();
+        $this->assertTrue($result);
     }
 
     /**
