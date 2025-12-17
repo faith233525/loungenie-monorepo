@@ -8,7 +8,7 @@
 
 // Exit if accessed directly or not uninstalling
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-    exit;
+	exit;
 }
 
 // Load database class
