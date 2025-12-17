@@ -1346,3 +1346,195 @@ a:hover {
     background-color: #D4EDDA;
     color: #155724;
 }
+
+/* ============================================================================
+   PHASE 4: PARTNER VIEW POLISH & COLLAPSIBLE SECTIONS
+   ============================================================================ */
+
+/* Collapsible Section Headers */
+.lgp-card-header.collapsible {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background-color 0.2s ease;
+}
+
+.lgp-card-header.collapsible:hover {
+    background-color: rgba(58, 166, 185, 0.05);
+}
+
+.collapse-toggle {
+    background: none;
+    border: none;
+    padding: var(--space-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.collapse-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.collapse-icon {
+    font-size: var(--font-size-sm);
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+/* Collapsible Card Body Animation */
+.lgp-card-body {
+    transition: max-height 0.3s ease, overflow 0.3s ease;
+    overflow: hidden;
+}
+
+.lgp-card.collapsed .lgp-card-body {
+    max-height: 0 !important;
+    overflow: hidden;
+}
+
+/* Read-Only Badges */
+.badge-read-only {
+    display: inline-block;
+    background-color: var(--warning);
+    color: var(--dark);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: auto;
+    margin-right: var(--space-sm);
+}
+
+/* Support-Only Sections */
+[data-support-only="true"] {
+    position: relative;
+}
+
+[data-support-only="true"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+}
+
+/* Partner Read-Only Views */
+.is-read-only {
+    opacity: 0.95;
+}
+
+.is-read-only .lgp-card-header {
+    background-color: rgba(233, 248, 249, 0.3);
+}
+
+.partner-read-only [data-action="edit"],
+.partner-read-only [data-action="delete"] {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.partner-view-primary {
+    border-left: 4px solid var(--primary);
+}
+
+.partner-view-primary .lgp-card-header {
+    background: linear-gradient(to right, rgba(58, 166, 185, 0.08), transparent);
+}
+
+/* Disabled Button States */
+.lgp-btn:disabled,
+.lgp-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Bulk Toggle Controls */
+.bulk-toggle-controls {
+    display: flex;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+    padding: var(--space-md);
+    background-color: rgba(58, 166, 185, 0.05);
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--primary);
+}
+
+.bulk-toggle-controls .lgp-btn {
+    flex: 1;
+}
+
+/* Responsive Collapsible Behavior */
+@media (max-width: 768px) {
+    .lgp-card-header.collapsible {
+        flex-wrap: wrap;
+    }
+
+    .collapse-toggle {
+        order: -1;
+    }
+
+    .badge-read-only {
+        margin-left: var(--space-sm);
+    }
+
+    .bulk-toggle-controls {
+        flex-direction: column;
+    }
+
+    .bulk-toggle-controls .lgp-btn {
+        margin: 0;
+    }
+}
+
+/* Expanded State Indicators */
+.lgp-card.collapsed .lgp-card-header.collapsible::after {
+    content: '(Collapsed)';
+    font-size: var(--font-size-sm);
+    color: var(--neutral);
+    margin-left: auto;
+    font-weight: normal;
+}
+
+/* Smooth Transitions for Collapsible Content */
+.lgp-card-body {
+    will-change: max-height;
+}
+
+/* Partner-Specific Section Indicators */
+.partner-view-restricted {
+    opacity: 0.7;
+    position: relative;
+}
+
+.partner-view-restricted::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 193, 7, 0.03) 10px,
+        rgba(255, 193, 7, 0.03) 20px
+    );
+    pointer-events: none;
+    border-radius: var(--radius-lg);
+}

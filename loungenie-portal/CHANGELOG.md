@@ -2,6 +2,54 @@
 
 All notable changes to LounGenie Portal will be documented in this file.
 
+## [v1.5.0-partner-view-polish] - 2025-12-17
+
+### Added
+- **Partner View Polish** - Enhanced UI for collapsible sections and partner-specific styling
+  - Collapsible section headers for all company profile cards (company info, units, tickets, gateways, audit log, service notes)
+  - localStorage persistence: Collapse/expand state saved per section per user
+  - Expand/Collapse All buttons for bulk section management
+  - Smooth animations: 0.3s max-height transitions for collapse/expand
+  - Icon indicators: ▼ (expanded) / ▶ (collapsed) with animated updates
+
+- **Partner Read-Only Indicators**
+  - "Support Only" badges on support-only sections (visible only to partners)
+  - Visual border indicator on support-only sections (golden accent border)
+  - Disabled edit/delete buttons for partners on restricted operations
+  - CSS class `is-read-only` for read-only card styling
+  - Partner view primary sections: Company info + Units highlighted with primary color border
+
+- **Responsive Collapsible Behavior**
+  - Mobile-friendly collapse/expand buttons on all card headers
+  - Bulk toggle controls above cards on desktop (hidden on mobile)
+  - Responsive padding/layout adjustments for screens < 768px
+  - maxHeight recalculated on window resize for smooth animations
+
+- **Support-Only Section Filtering**
+  - Audit log section hidden for partners (controlled by JavaScript)
+  - Service notes section hidden for partners
+  - Support users see full interface with all sections
+  - Partners see only company info, units, tickets, gateways
+
+- **JavaScript & CSS**
+  - New script: `assets/js/company-profile-partner-polish.js` (320 lines, IIFE)
+  - New CSS: Extended `assets/css/portal.css` with ~150 lines of collapsible + partner styling
+  - Script enqueued in `class-lgp-assets.php` as `lgp-company-profile-partner-polish`
+  - All functionality exposed via window.LGPPartnerPolish for testing/debugging
+
+- **Test Coverage (Phase 4)**
+  - PartnerViewPolishTest.php: 20 tests verifying collapsible structure, badges, CSS, animations
+  - Coverage: localStorage keys, toggle buttons, read-only attributes, responsive behavior
+  - All 20 tests passing ✅
+
+### Technical Notes
+- Collapsible headers use `data-section` attribute for localStorage identification
+- Support-only sections marked with `data-support-only="true"`
+- All animations use CSS transitions (no JavaScript animations for performance)
+- Bulk toggle controls added only if 2+ collapsible sections exist
+- localStorage key format: `lgp-profile-sections-{section_id}`
+- Partner view: Maintains full read-only access to all non-support-only sections
+
 ## [v1.4.0-company-profile-enhancements] - 2025-12-17
 
 ### Added

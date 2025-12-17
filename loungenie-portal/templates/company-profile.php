@@ -131,8 +131,8 @@ if ( $company->management_company_id ) {
 </div>
 
 <!-- Company Information Card -->
-<div class="lgp-card">
-    <div class="lgp-card-header">
+<div class="lgp-card" data-section="company-info">
+    <div class="lgp-card-header collapsible" data-section="company-info">
         <h2 class="lgp-card-title"><?php esc_html_e( 'Company Information', 'loungenie-portal' ); ?></h2>
     </div>
     <div class="lgp-card-body">
@@ -199,8 +199,8 @@ if ( $company->management_company_id ) {
 </div>
 
 <!-- Units Section -->
-<div class="lgp-card">
-    <div class="lgp-card-header">
+<div class="lgp-card" data-section="units">
+    <div class="lgp-card-header collapsible" data-section="units">
         <h2 class="lgp-card-title"><?php esc_html_e( 'LounGenie Units', 'loungenie-portal' ); ?> (<?php echo esc_html( count( $units ) ); ?>)</h2>
     </div>
     <div class="lgp-card-body">
