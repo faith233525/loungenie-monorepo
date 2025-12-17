@@ -140,8 +140,24 @@ class LGP_Units_API {
             return new WP_Error( 'db_error', __( 'Failed to create unit', 'loungenie-portal' ), array( 'status' => 500 ) );
         }
         
+        $unit_id = $wpdb->insert_id;
+        
+        // Audit logging
+        $user = wp_get_current_user();
+        LGP_Logger::log_event(
+            $user->ID,
+            'unit_created',
+            $data['company_id'],
+            array(
+                'unit_id' => $unit_id,
+                'address' => $data['address'],
+                'color_tag' => $data['color_tag'],
+                'status' => $data['status'],
+            )
+        );
+        
         return rest_ensure_response( array(
-            'id' => $wpdb->insert_id,
+            'id' => $unit_id,
             'message' => __( 'Unit created successfully', 'loungenie-portal' ),
         ) );
     }
@@ -171,6 +187,19 @@ class LGP_Units_API {
         if ( $updated === false ) {
             return new WP_Error( 'db_error', __( 'Failed to update unit', 'loungenie-portal' ), array( 'status' => 500 ) );
         }
+        
+        // Audit logging
+        $user = wp_get_current_user();
+        LGP_Logger::log_event(
+            $user->ID,
+            'unit_updated',
+            $data['company_id'],
+            array(
+                'unit_id' => $id,
+                'fields_updated' => array_keys( $data ),
+                'status' => $data['status'],
+            )
+        );
         
         return rest_ensure_response( array(
             'message' => __( 'Unit updated successfully', 'loungenie-portal' ),

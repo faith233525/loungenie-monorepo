@@ -58,6 +58,9 @@ if (!function_exists('wp_remote_retrieve_response_code')) {
 // Load base WPTestCase class used by our tests
 require_once __DIR__ . '/Util/WPTestCase.php';
 
+// Load the real LGP_Logger class so all tests use consistent logging
+require_once __DIR__ . '/../includes/class-lgp-logger.php';
+
 // Create a minimal stub for wp-admin/includes/upgrade.php to satisfy require_once
 $upgradeDir = ABSPATH . 'wp-admin/includes/';
 if (!is_dir($upgradeDir)) {

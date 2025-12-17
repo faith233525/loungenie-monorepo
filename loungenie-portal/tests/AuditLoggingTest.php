@@ -3,6 +3,11 @@
 use function Brain\Monkey\Functions\when;
 use function Brain\Monkey\Functions\expect;
 
+/**
+ * Tests to ensure that audit logging works across critical actions.
+ *
+ * @author Loungenie Team
+ */
 final class AuditLoggingTest extends WPTestCase
 {
     public array $auditRows = [];
@@ -39,8 +44,6 @@ final class AuditLoggingTest extends WPTestCase
                 return true;
             }
         };
-
-        require_once __DIR__ . '/../includes/class-lgp-logger.php';
     }
 
     public function test_logs_login_success_and_failure(): void
@@ -83,5 +86,149 @@ final class AuditLoggingTest extends WPTestCase
         $this->assertSame('email', $this->notificationRows[0]['data']['channel']);
         $this->assertSame('urgent', $this->notificationRows[0]['data']['priority']);
         $this->assertSame(9, $this->notificationRows[0]['data']['company_id']);
+    }
+    
+    public function test_logs_company_crud_operations(): void
+    {
+        // Create company
+        LGP_Logger::log_event(101, 'company_created', 10, [
+            'company_name' => 'Acme Corp',
+            'state' => 'CA',
+        ]);
+        
+        // Update company
+        LGP_Logger::log_event(101, 'company_updated', 10, [
+            'company_name' => 'Acme Corporation',
+            'fields_updated' => ['name', 'address', 'contact_email'],
+        ]);
+        
+        $this->assertCount(2, $this->auditRows);
+        $this->assertSame('company_created', $this->auditRows[0]['data']['action']);
+        $this->assertSame('company_updated', $this->auditRows[1]['data']['action']);
+        $this->assertSame(10, $this->auditRows[0]['data']['company_id']);
+    }
+    
+    public function test_logs_unit_crud_operations(): void
+    {
+        // Create unit
+        LGP_Logger::log_event(102, 'unit_created', 15, [
+            'unit_id' => 42,
+            'address' => '123 Main St',
+            'color_tag' => 'classic-blue',
+            'status' => 'active',
+        ]);
+        
+        // Update unit
+        LGP_Logger::log_event(102, 'unit_updated', 15, [
+            'unit_id' => 42,
+            'fields_updated' => ['status', 'service_history'],
+            'status' => 'maintenance',
+        ]);
+        
+        $this->assertCount(2, $this->auditRows);
+        $this->assertSame('unit_created', $this->auditRows[0]['data']['action']);
+        $this->assertSame('unit_updated', $this->auditRows[1]['data']['action']);
+        $this->assertSame(15, $this->auditRows[0]['data']['company_id']);
+    }
+    
+    public function test_logs_authentication_events(): void
+    {
+        // Login success
+        LGP_Logger::log_event(201, 'login_success', 20, [
+            'user_login' => 'testuser',
+            'user_email' => 'test@example.com',
+            'role' => 'lgp_support',
+            'ip_address' => '192.168.1.1',
+        ]);
+        
+        // Login failed
+        LGP_Logger::log_event(0, 'login_failed', null, [
+            'username_attempted' => 'hacker',
+            'error_code' => 'invalid_username',
+            'ip_address' => '192.168.1.100',
+        ]);
+        
+        // Logout
+        LGP_Logger::log_event(201, 'logout', 20, [
+            'user_login' => 'testuser',
+            'role' => 'lgp_support',
+        ]);
+        
+        // Password reset
+        LGP_Logger::log_event(201, 'password_reset', 20, [
+            'user_login' => 'testuser',
+            'reset_method' => 'email_link',
+        ]);
+        
+        // Password changed
+        LGP_Logger::log_event(201, 'password_changed', 20, [
+            'user_login' => 'testuser',
+            'change_method' => 'profile_update',
+        ]);
+        
+        $this->assertCount(5, $this->auditRows);
+        $actions = array_column(array_column($this->auditRows, 'data'), 'action');
+        $this->assertSame([
+            'login_success',
+            'login_failed',
+            'logout',
+            'password_reset',
+            'password_changed'
+        ], $actions);
+    }
+    
+    public function test_logs_attachment_operations(): void
+    {
+        // Upload attachment
+        LGP_Logger::log_event(103, 'attachment_uploaded', 25, [
+            'ticket_id' => 5,
+            'file_name' => 'invoice.pdf',
+            'file_size' => 1024000,
+            'file_type' => 'application/pdf',
+        ]);
+        
+        // Download attachment
+        LGP_Logger::log_event(104, 'attachment_downloaded', 25, [
+            'attachment_id' => 10,
+            'file_name' => 'invoice.pdf',
+        ]);
+        
+        // Delete attachment
+        LGP_Logger::log_event(103, 'attachment_deleted', 25, [
+            'attachment_id' => 10,
+            'file_name' => 'invoice.pdf',
+        ]);
+        
+        $this->assertCount(3, $this->auditRows);
+        $actions = array_column(array_column($this->auditRows, 'data'), 'action');
+        $this->assertContains('attachment_uploaded', $actions);
+        $this->assertContains('attachment_downloaded', $actions);
+        $this->assertContains('attachment_deleted', $actions);
+    }
+    
+    public function test_audit_log_includes_timestamps(): void
+    {
+        LGP_Logger::log_event(105, 'test_action', 30, ['test' => 'data']);
+        
+        $this->assertCount(1, $this->auditRows);
+        $this->assertArrayHasKey('created_at', $this->auditRows[0]['data']);
+        $this->assertSame('2025-12-16 00:00:00', $this->auditRows[0]['data']['created_at']);
+    }
+    
+    public function test_audit_log_stores_metadata_as_json(): void
+    {
+        $metadata = [
+            'old_value' => 'pending',
+            'new_value' => 'resolved',
+            'reason' => 'Issue fixed',
+        ];
+        
+        LGP_Logger::log_event(106, 'status_change', 35, $metadata);
+        
+        $this->assertCount(1, $this->auditRows);
+        $storedMeta = $this->auditRows[0]['data']['meta'];
+        $this->assertIsString($storedMeta);
+        $decoded = json_decode($storedMeta, true);
+        $this->assertSame($metadata, $decoded);
     }
 }

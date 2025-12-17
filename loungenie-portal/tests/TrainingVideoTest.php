@@ -19,12 +19,6 @@ if (!class_exists('LGP_Auth')) {
     }
 }
 
-if (!class_exists('LGP_Logger')) {
-    class LGP_Logger {
-        public static function log($action, $details, $user_email) {}
-    }
-}
-
 require_once __DIR__ . '/../includes/class-lgp-training-video.php';
 
 class TrainingVideoTest extends WPTestCase {

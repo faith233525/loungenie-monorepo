@@ -29,12 +29,6 @@ if (!class_exists('LGP_Auth')) {
     }
 }
 
-if (!class_exists('LGP_Logger')) {
-    class LGP_Logger {
-        public static function log($action, $details, $user_email) {}
-    }
-}
-
 if (!class_exists('LGP_Training_Video')) {
     class LGP_Training_Video {
         public static function get_all($filters = array()) { return []; }

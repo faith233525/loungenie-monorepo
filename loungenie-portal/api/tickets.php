@@ -182,6 +182,21 @@ class LGP_Tickets_API {
         $wpdb->insert( $tickets_table, $ticket_data );
         $ticket_id = $wpdb->insert_id;
         
+        // Audit logging
+        $user = wp_get_current_user();
+        LGP_Logger::log_event(
+            $user->ID,
+            'ticket_created',
+            $company_id,
+            array(
+                'ticket_id' => $ticket_id,
+                'service_request_id' => $service_request_id,
+                'request_type' => $request_data['request_type'],
+                'priority' => $request_data['priority'],
+                'unit_id' => $request_data['unit_id'],
+            )
+        );
+        
         // Fire action for integrations
         do_action( 'lgp_ticket_created', $ticket_id, (object) array_merge( (array) $ticket_data, (array) $request_data ) );
         
@@ -209,6 +224,25 @@ class LGP_Tickets_API {
         
         if ( $updated === false ) {
             return new WP_Error( 'db_error', __( 'Failed to update ticket', 'loungenie-portal' ), array( 'status' => 500 ) );
+        }
+        
+        // Audit logging
+        $user = wp_get_current_user();
+        $ticket = $wpdb->get_row( $wpdb->prepare( "SELECT service_request_id FROM $table WHERE id = %d", $id ) );
+        if ( $ticket ) {
+            $requests_table = $wpdb->prefix . 'lgp_service_requests';
+            $service_request = $wpdb->get_row( $wpdb->prepare( "SELECT company_id FROM $requests_table WHERE id = %d", $ticket->service_request_id ) );
+            if ( $service_request ) {
+                LGP_Logger::log_event(
+                    $user->ID,
+                    'ticket_updated',
+                    $service_request->company_id,
+                    array(
+                        'ticket_id' => $id,
+                        'new_status' => $data['status'],
+                    )
+                );
+            }
         }
         
         // Fire action for integrations

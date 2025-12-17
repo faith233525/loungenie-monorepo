@@ -18,6 +18,13 @@ class LGP_Auth {
     public static function init() {
         // Redirect after login to /portal if user has portal role
         add_filter( 'login_redirect', array( __CLASS__, 'redirect_after_login' ), 10, 3 );
+        
+        // Audit logging for authentication events
+        add_action( 'wp_login', array( __CLASS__, 'log_login_success' ), 10, 2 );
+        add_action( 'wp_login_failed', array( __CLASS__, 'log_login_failed' ), 10, 2 );
+        add_action( 'wp_logout', array( __CLASS__, 'log_logout' ) );
+        add_action( 'password_reset', array( __CLASS__, 'log_password_reset' ), 10, 2 );
+        add_action( 'profile_update', array( __CLASS__, 'log_password_change' ), 10, 2 );
     }
     
     /**
@@ -82,5 +89,111 @@ class LGP_Auth {
         
         $current_user = wp_get_current_user();
         return get_user_meta( $current_user->ID, 'lgp_company_id', true );
+    }
+    
+    /**
+     * Log successful login
+     *
+     * @param string $user_login Username
+     * @param WP_User $user User object
+     */
+    public static function log_login_success( $user_login, $user ) {
+        $company_id = self::get_user_company_id();
+        
+        LGP_Logger::log_event(
+            $user->ID,
+            'login_success',
+            $company_id,
+            array(
+                'user_login' => $user_login,
+                'user_email' => $user->user_email,
+                'role' => implode( ', ', $user->roles ),
+                'ip_address' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+            )
+        );
+    }
+    
+    /**
+     * Log failed login attempt
+     *
+     * @param string $username Username attempted
+     * @param WP_Error $error Error object
+     */
+    public static function log_login_failed( $username, $error ) {
+        LGP_Logger::log_event(
+            0,
+            'login_failed',
+            null,
+            array(
+                'username_attempted' => $username,
+                'error_code' => $error->get_error_code(),
+                'ip_address' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+            )
+        );
+    }
+    
+    /**
+     * Log user logout
+     */
+    public static function log_logout() {
+        $user = wp_get_current_user();
+        if ( $user->ID ) {
+            $company_id = get_user_meta( $user->ID, 'lgp_company_id', true );
+            
+            LGP_Logger::log_event(
+                $user->ID,
+                'logout',
+                $company_id,
+                array(
+                    'user_login' => $user->user_login,
+                    'role' => implode( ', ', $user->roles ),
+                )
+            );
+        }
+    }
+    
+    /**
+     * Log password reset
+     *
+     * @param WP_User $user User object
+     * @param string $new_pass New password
+     */
+    public static function log_password_reset( $user, $new_pass ) {
+        $company_id = get_user_meta( $user->ID, 'lgp_company_id', true );
+        
+        LGP_Logger::log_event(
+            $user->ID,
+            'password_reset',
+            $company_id,
+            array(
+                'user_login' => $user->user_login,
+                'reset_method' => 'email_link',
+            )
+        );
+    }
+    
+    /**
+     * Log password change (on profile update)
+     *
+     * @param int $user_id User ID
+     * @param WP_User $old_user_data Old user data
+     */
+    public static function log_password_change( $user_id, $old_user_data ) {
+        $user = get_userdata( $user_id );
+        
+        // Check if password changed
+        if ( $user && $user->user_pass !== $old_user_data->user_pass ) {
+            $company_id = get_user_meta( $user_id, 'lgp_company_id', true );
+            
+            LGP_Logger::log_event(
+                $user_id,
+                'password_changed',
+                $company_id,
+                array(
+                    'user_login' => $user->user_login,
+                    'change_method' => 'profile_update',
+                )
+            );
+        }
     }
 }

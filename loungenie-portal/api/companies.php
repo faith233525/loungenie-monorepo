@@ -125,6 +125,18 @@ class LGP_Companies_API {
         
         $company_id = $wpdb->insert_id;
         
+        // Audit logging
+        $user = wp_get_current_user();
+        LGP_Logger::log_event(
+            $user->ID,
+            'company_created',
+            $company_id,
+            array(
+                'company_name' => $data['name'],
+                'state' => $data['state'],
+            )
+        );
+        
         // Fire action for integrations
         do_action( 'lgp_company_created', $company_id );
         
@@ -158,6 +170,18 @@ class LGP_Companies_API {
         if ( $updated === false ) {
             return new WP_Error( 'db_error', __( 'Failed to update company', 'loungenie-portal' ), array( 'status' => 500 ) );
         }
+        
+        // Audit logging
+        $user = wp_get_current_user();
+        LGP_Logger::log_event(
+            $user->ID,
+            'company_updated',
+            $id,
+            array(
+                'company_name' => $data['name'],
+                'fields_updated' => array_keys( $data ),
+            )
+        );
         
         return rest_ensure_response( array(
             'message' => __( 'Company updated successfully', 'loungenie-portal' ),

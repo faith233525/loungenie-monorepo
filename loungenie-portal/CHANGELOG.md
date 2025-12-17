@@ -2,6 +2,43 @@
 
 All notable changes to LounGenie Portal will be documented in this file.
 
+## [v1.3.2-audit-logging-completion] - 2025-12-16
+
+### Added
+- **Comprehensive Audit Logging** across all critical operations
+  - Companies API: `create_company()` and `update_company()` now log all changes
+  - Units API: `create_unit()` and `update_unit()` now log all changes
+  - Tickets API: `create_ticket()` and `update_ticket()` now log all changes
+  - Authentication: 5 new event hooks in LGP_Auth class:
+    - `wp_login` → `log_login_success()` - Logs user, company, email, role, IP
+    - `wp_login_failed` → `log_login_failed()` - Logs username, error code, IP
+    - `wp_logout` → `log_logout()` - Logs user, company, role
+    - `password_reset` → `log_password_reset()` - Logs reset method
+    - `profile_update` → `log_password_change()` - Logs if password changed
+  - Real LGP_Logger class now loaded in bootstrap.php for consistency across all tests
+
+### Testing
+- Expanded AuditLoggingTest from 4 to 10 tests
+- All new tests passing (10/10):
+  - test_logs_company_crud_operations
+  - test_logs_unit_crud_operations
+  - test_logs_authentication_events
+  - test_logs_attachment_operations
+  - test_audit_log_includes_timestamps
+  - test_audit_log_stores_metadata_as_json
+- Total test suite: 71 tests (65 existing + 6 new audit logging tests)
+
+### Fixed
+- PHPUnit test infrastructure: Resolved class_exists() guard conflicts by loading LGP_Logger in bootstrap
+- ApiTrainingVideosTest and TrainingVideoTest: Removed LGP_Logger stubs, now use real class from bootstrap
+- AuditLoggingTest: Fixed metadata field name (meta vs metadata) in test assertions
+
+### Details
+- Event logging: user_id, action type, company_id, metadata (JSON encoded)
+- IP tracking: Added for security-relevant events (login, logout, login failed)
+- Timestamp: All events include created_at timestamp via current_time()
+- Metadata: Captured as JSON for flexible schema evolution
+
 ## [v1.3.1-offline-development-suite] - 2025-12-16
 
 ### Added
