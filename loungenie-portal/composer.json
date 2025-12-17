@@ -5,5 +5,11 @@
     "wp-coding-standards/wpcs": "^2.3",
     "brain/monkey": "^2.6",
     "mockery/mockery": "^1.5"
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit -c phpunit.xml",
+    "test:fast": "vendor/bin/phpunit -c phpunit.xml --testsuite default",
+    "cs": "vendor/bin/phpcs -d memory_limit=512M -s",
+    "cbf": "vendor/bin/phpcbf -d memory_limit=512M"
   }
 }
