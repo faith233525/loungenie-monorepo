@@ -23,10 +23,10 @@ This guide provides step-by-step instructions for configuring Azure Active Direc
 3. Configure the application:
    - **Name**: `PoolSafe Portal` (or your preferred name)
    - **Supported account types**: Select `Accounts in this organizational directory only (Single tenant)`
-   - **Redirect URI**: 
-     - Platform: `Web`
-     - URI: `https://your-site.com/wp-admin/admin-ajax.php?action=psp_support_callback`
-     - Replace `your-site.com` with your actual WordPress site domain
+    - **Redirect URI**: 
+       - Platform: `Web`
+       - URI: `https://your-site.com/psp-azure-callback`
+       - Replace `your-site.com` with your actual WordPress site domain
 4. Click **Register**
 
 ### 3. Note Application IDs
@@ -93,48 +93,40 @@ You will need these values for WordPress configuration.
 
 ## Redirect URI Rules & Examples
 
-Azure AD has strict rules for Redirect URIs:
+Azure AD has strict rules for Redirect URIs on the Web platform:
 
 - Must be unique per app registration entry
 - Must be a valid URL (no wildcards like `*`)
 - Must be less than 256 characters
 - Must start with `https://` for real sites OR `http://localhost` for local development
-- Must match EXACTLY what your app sends to Azure (scheme, host, path, and query)
+- Must match EXACTLY what your app sends to Azure (scheme, host, path)
+- Query strings are not allowed for Web redirect URIs (Azure will reject URIs containing `?`)
 
-Recommended Redirect URIs for LounGenie v1.6 (you can register all):
+Recommended Redirect URIs for LounGenie v1.6:
 
-1) Admin Ajax Endpoint (recommended for production)
-```
-https://portal.loungenie.com/wp-admin/admin-ajax.php?action=lgp_outlook_oauth_callback
-```
-
-2) Pretty URL (use if your WAF/SSO restricts wp-admin)
+1) Pretty URL (recommended for production)
 ```
 https://portal.loungenie.com/psp-azure-callback
 ```
 
-3) Admin Settings Page (fine for staging or when already in wp-admin)
-```
-https://portal.loungenie.com/wp-admin/options-general.php?page=lgp-outlook-settings&oauth_callback=1
-```
-
 Staging/Dev Examples (register exact hostnames you use):
 ```
-https://staging.yourdomain.com/wp-admin/admin-ajax.php?action=lgp_outlook_oauth_callback
 https://staging.yourdomain.com/psp-azure-callback
-https://staging.yourdomain.com/wp-admin/options-general.php?page=lgp-outlook-settings&oauth_callback=1
 ```
 
 Local Development (Azure permits http only for localhost):
 ```
-http://localhost/wp-admin/admin-ajax.php?action=lgp_outlook_oauth_callback
+http://localhost/psp-azure-callback
 http://localhost:8888/psp-azure-callback
 ```
 
 ⚠️ **Important**:
 - Use HTTPS in production and staging.
 - Do not add wildcards or trailing slashes unless they are part of the actual URL your app uses.
-- The URI must match exactly (case-sensitive and includes query string when present).
+- The URI must match exactly (case-sensitive). Do not include query strings; use application state instead.
+
+Notes on other modes:
+- Admin Ajax and Admin Settings page endpoints include query parameters and are not valid as Azure Web redirect URIs. If your application currently initiates OAuth via those pages, use the Pretty URL callback for the redirect target and handle state within the plugin.
 
 ## Security Considerations
 
