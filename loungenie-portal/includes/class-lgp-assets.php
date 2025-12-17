@@ -24,11 +24,20 @@ class LGP_Assets {
 	 * Called by router when loading portal
 	 */
 	public static function enqueue_portal_assets() {
+		// Enqueue FontAwesome for consistent iconography
+		wp_enqueue_style(
+			'font-awesome',
+			'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
+			array(),
+			'6.5.1',
+			'all'
+		);
+
 		// Enqueue design tokens first (CSS variables and component styles)
 		wp_enqueue_style(
 			'lgp-design-tokens',
 			LGP_ASSETS_URL . 'css/design-tokens.css',
-			array(),
+			array( 'font-awesome' ),
 			LGP_VERSION,
 			'all'
 		);
