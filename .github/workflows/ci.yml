@@ -1,5 +1,13 @@
 name: LounGenie Portal CI
 
+# This workflow enforces critical code quality standards:
+# - PHPUnit tests MUST pass (gating)
+# - PHP syntax MUST be valid (linting, gating)
+# - WordPress Coding Standards (PHPCS) reports as artifact (advisory)
+# 
+# Developers should fix WPCS violations locally before pushing.
+# Use: composer run cs (check) and composer run cbf (auto-fix)
+
 on:
   push:
     branches: [ main ]
@@ -34,7 +42,9 @@ jobs:
         run: composer install --no-progress --prefer-dist --no-interaction
       - name: Run tests
         working-directory: loungenie-portal
-        run: composer run test
+        run: |
+          echo "Running PHPUnit suite (required to pass)..."
+          composer run test
 
   quality:
     runs-on: ubuntu-latest
@@ -49,8 +59,11 @@ jobs:
       - name: Install dependencies
         working-directory: loungenie-portal
         run: composer install --no-progress --prefer-dist --no-interaction
-      - name: Run PHPCS (non-blocking)
+      - name: Run PHPCS (advisory)
         working-directory: loungenie-portal
+        # PHPCS runs but does not gate the build.
+        # Developers should resolve violations locally before push.
+        # This job reports findings as an artifact for awareness.
         run: |
           vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs
           composer run cs || true
