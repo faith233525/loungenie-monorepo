@@ -35,6 +35,26 @@ if (!isset($wpdb)) {
 fwrite(STDOUT, "LounGenie Portal Test Bootstrap\n");
 fwrite(STDOUT, "PHP Version: " . PHP_VERSION . "\n");
 
+// ===== IMPORTANT: DO NOT DEFINE WordPress FUNCTIONS HERE =====
+// Brain Monkey uses Patchwork to intercept function calls,
+// and Patchwork requires functions to be defined AFTER it loads.
+// Each test file will mock the functions it needs via Monkey\Functions\expect()
+// 
+// STUB FUNCTIONS: Only define stub functions that tests cannot mock (those not intercepted by Patchwork)
+// These are typically functions used at file-load time (not in test methods)
+
+if (!function_exists('register_rest_route')) {
+	function register_rest_route($namespace, $route, $args) {
+		return true;
+	}
+}
+
+if (!function_exists('wp_remote_retrieve_response_code')) {
+	function wp_remote_retrieve_response_code($response) {
+		return isset($response['response']['code']) ? $response['response']['code'] : 200;
+	}
+}
+
 // Load base WPTestCase class used by our tests
 require_once __DIR__ . '/Util/WPTestCase.php';
 

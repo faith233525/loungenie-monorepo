@@ -11,6 +11,16 @@ use Brain\Monkey\Functions;
 
 require_once __DIR__ . '/Util/WPTestCase.php';
 
+// Define WordPress stub functions BEFORE including API files
+// These are used at file load time and will be mocked later
+if (!function_exists('add_action')) {
+    function add_action($hook, $function, $priority = 10, $args = 1) { return true; }
+}
+
+if (!function_exists('register_rest_route')) {
+    function register_rest_route($namespace, $route, $args) { return true; }
+}
+
 // Mock classes
 if (!class_exists('LGP_Auth')) {
     class LGP_Auth {
@@ -45,11 +55,20 @@ class ApiTrainingVideosTest extends WPTestCase {
     
     protected function setUp(): void {
         parent::setUp();
+        Monkey\setUp();
         $this->api = new LGP_Training_Videos_API();
+    }
+    
+    protected function tearDown(): void {
+        Monkey\tearDown();
+        parent::tearDown();
     }
     
     public function test_check_portal_access_allows_logged_in_users() {
         Functions\expect('is_user_logged_in')->andReturn(true);
+        Functions\expect('wp_get_current_user')->andReturnUsing(function() {
+            return (object) ['ID' => 1, 'user_login' => 'testuser'];
+        });
         
         $result = $this->api->check_portal_access();
         

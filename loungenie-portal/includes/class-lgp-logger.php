@@ -8,7 +8,8 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class LGP_Logger {
+if ( ! class_exists( 'LGP_Logger' ) ) {
+    class LGP_Logger {
     /**
      * Log a generic audit event.
      *
@@ -105,5 +106,6 @@ class LGP_Logger {
         }
 
         return false;
+    }
     }
 }

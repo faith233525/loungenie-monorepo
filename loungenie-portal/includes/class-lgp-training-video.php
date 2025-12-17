@@ -10,7 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class LGP_Training_Video {
+if ( ! class_exists( 'LGP_Training_Video' ) ) {
+    class LGP_Training_Video {
     
     /**
      * Get all videos (filtered by role)
@@ -295,5 +296,6 @@ class LGP_Training_Video {
             ),
             $user->ID
         );
+    }
     }
 }

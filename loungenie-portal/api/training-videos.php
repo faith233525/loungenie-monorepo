@@ -230,8 +230,10 @@ class LGP_Training_Videos_API {
     }
 }
 
-// Register API routes
-add_action( 'rest_api_init', function() {
-    $api = new LGP_Training_Videos_API();
-    $api->register_routes();
-} );
+// Register API routes (only in WordPress context)
+if ( function_exists( 'add_action' ) ) {
+    add_action( 'rest_api_init', function() {
+        $api = new LGP_Training_Videos_API();
+        $api->register_routes();
+    } );
+}
