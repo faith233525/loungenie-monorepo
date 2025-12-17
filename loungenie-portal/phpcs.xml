@@ -2,14 +2,34 @@
 <ruleset name="LounGenie Portal Standards">
     <description>PHP Coding Standards for LounGenie Portal - Enterprise-ready, WordPress-safe</description>
 
-    <!-- Base standard -->
+    <!-- Ensure WPCS is available from Composer vendor path -->
+    <config name="installed_paths" value="vendor/wp-coding-standards/wpcs"/>
+
+    <!-- Base standards: WordPress (includes Core + Docs) and PSR12 formatting where compatible -->
+    <rule ref="WordPress"/>
     <rule ref="PSR12"/>
 
     <!-- Exclude vendor and test files -->
     <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
     <exclude-pattern>*/tests/*</exclude-pattern>
+    <exclude-pattern>*/assets/*</exclude-pattern>
 
     <!-- Note: Spelling checks require a spellcheck sniff (not installed by default).
          If we add a spellcheck package (e.g., sirbrillig/phpcs-spellcheck),
          we can whitelist product/WordPress terms to avoid false positives. -->
+    <!-- WordPress project-specific settings -->
+    <config name="minimum_supported_wp_version" value="5.8"/>
+    <config name="text_domain" value="loungenie-portal"/>
+
+    <!-- Optional: Custom prefix for project globals -->
+    <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+        <properties>
+            <property name="prefixes" type="array">
+                <element value="lgp"/>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- Notes: Spellchecking can be added via sirbrillig/phpcs-spellcheck if desired -->
 </ruleset>
