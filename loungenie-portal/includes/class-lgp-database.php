@@ -7,24 +7,24 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 
 class LGP_Database {
-    
-    /**
-     * Create all database tables
-     */
-    public static function create_tables() {
-        global $wpdb;
-        
-        $charset_collate = $wpdb->get_charset_collate();
-        
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        
-        // Companies table
-        $companies_table = $wpdb->prefix . 'lgp_companies';
-        $sql_companies = "CREATE TABLE $companies_table (
+
+	/**
+	 * Create all database tables
+	 */
+	public static function create_tables() {
+		global $wpdb;
+
+		$charset_collate = $wpdb->get_charset_collate();
+
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+		// Companies table
+		$companies_table = $wpdb->prefix . 'lgp_companies';
+		$sql_companies   = "CREATE TABLE $companies_table (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             name varchar(255) NOT NULL,
             address text,
@@ -40,10 +40,10 @@ class LGP_Database {
             KEY management_company_id (management_company_id),
             KEY venue_type (venue_type)
         ) $charset_collate;";
-        
-        // Management Companies table
-        $mgmt_companies_table = $wpdb->prefix . 'lgp_management_companies';
-        $sql_mgmt_companies = "CREATE TABLE $mgmt_companies_table (
+
+		// Management Companies table
+		$mgmt_companies_table = $wpdb->prefix . 'lgp_management_companies';
+		$sql_mgmt_companies   = "CREATE TABLE $mgmt_companies_table (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             name varchar(255) NOT NULL,
             address text,
@@ -54,10 +54,10 @@ class LGP_Database {
             updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id)
         ) $charset_collate;";
-        
-        // LounGenie Units table
-        $units_table = $wpdb->prefix . 'lgp_units';
-        $sql_units = "CREATE TABLE $units_table (
+
+		// LounGenie Units table
+		$units_table = $wpdb->prefix . 'lgp_units';
+		$sql_units   = "CREATE TABLE $units_table (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             company_id bigint(20) UNSIGNED NOT NULL,
             management_company_id bigint(20) UNSIGNED,
@@ -81,10 +81,10 @@ class LGP_Database {
             KEY venue_type (venue_type),
             KEY lock_brand (lock_brand)
         ) $charset_collate;";
-        
-        // Service Requests table
-        $service_requests_table = $wpdb->prefix . 'lgp_service_requests';
-        $sql_service_requests = "CREATE TABLE $service_requests_table (
+
+		// Service Requests table
+		$service_requests_table = $wpdb->prefix . 'lgp_service_requests';
+		$sql_service_requests   = "CREATE TABLE $service_requests_table (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             company_id bigint(20) UNSIGNED NOT NULL,
             unit_id bigint(20) UNSIGNED,
@@ -100,10 +100,10 @@ class LGP_Database {
             KEY status (status),
             KEY request_type (request_type)
         ) $charset_collate;";
-        
-        // Tickets table
-        $tickets_table = $wpdb->prefix . 'lgp_tickets';
-        $sql_tickets = "CREATE TABLE $tickets_table (
+
+		// Tickets table
+		$tickets_table = $wpdb->prefix . 'lgp_tickets';
+		$sql_tickets   = "CREATE TABLE $tickets_table (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             service_request_id bigint(20) UNSIGNED NOT NULL,
             status varchar(50) DEFAULT 'open',
@@ -115,10 +115,10 @@ class LGP_Database {
             KEY service_request_id (service_request_id),
             KEY status (status)
         ) $charset_collate;";
-        
-        // Gateways table (support-only management)
-        $gateways_table = $wpdb->prefix . 'lgp_gateways';
-        $sql_gateways = "CREATE TABLE $gateways_table (
+
+		// Gateways table (support-only management)
+		$gateways_table = $wpdb->prefix . 'lgp_gateways';
+		$sql_gateways   = "CREATE TABLE $gateways_table (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             company_id bigint(20) UNSIGNED NOT NULL,
             channel_number varchar(50),
@@ -134,10 +134,10 @@ class LGP_Database {
             KEY call_button (call_button),
             KEY channel_number (channel_number)
         ) $charset_collate;";
-        
-        // Training Videos table (support uploads, partners view assigned)
-        $training_videos_table = $wpdb->prefix . 'lgp_training_videos';
-        $sql_training_videos = "CREATE TABLE $training_videos_table (
+
+		// Training Videos table (support uploads, partners view assigned)
+		$training_videos_table = $wpdb->prefix . 'lgp_training_videos';
+		$sql_training_videos   = "CREATE TABLE $training_videos_table (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             title varchar(255) NOT NULL,
             description text,
@@ -152,10 +152,10 @@ class LGP_Database {
             KEY category (category),
             KEY created_by (created_by)
         ) $charset_collate;";
-        
-        // Ticket Attachments table (secure file storage with metadata)
-        $attachments_table = $wpdb->prefix . 'lgp_ticket_attachments';
-        $sql_attachments = "CREATE TABLE $attachments_table (
+
+		// Ticket Attachments table (secure file storage with metadata)
+		$attachments_table = $wpdb->prefix . 'lgp_ticket_attachments';
+		$sql_attachments   = "CREATE TABLE $attachments_table (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             ticket_id bigint(20) UNSIGNED NOT NULL,
             file_name varchar(255) NOT NULL,
@@ -168,10 +168,10 @@ class LGP_Database {
             KEY ticket_id (ticket_id),
             KEY uploaded_by (uploaded_by)
         ) $charset_collate;";
-        
-        // Service Notes table (technician field notes for service work)
-        $service_notes_table = $wpdb->prefix . 'lgp_service_notes';
-        $sql_service_notes = "CREATE TABLE $service_notes_table (
+
+		// Service Notes table (technician field notes for service work)
+		$service_notes_table = $wpdb->prefix . 'lgp_service_notes';
+		$sql_service_notes   = "CREATE TABLE $service_notes_table (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             company_id bigint(20) UNSIGNED NOT NULL,
             unit_id bigint(20) UNSIGNED,
@@ -190,10 +190,10 @@ class LGP_Database {
             KEY service_date (service_date),
             KEY service_type (service_type)
         ) $charset_collate;";
-        
-        // Audit Log table (comprehensive event logging for compliance)
-        $audit_log_table = $wpdb->prefix . 'lgp_audit_log';
-        $sql_audit_log = "CREATE TABLE $audit_log_table (
+
+		// Audit Log table (comprehensive event logging for compliance)
+		$audit_log_table = $wpdb->prefix . 'lgp_audit_log';
+		$sql_audit_log   = "CREATE TABLE $audit_log_table (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             user_id bigint(20) UNSIGNED,
             action varchar(100) NOT NULL,
@@ -206,46 +206,46 @@ class LGP_Database {
             KEY company_id (company_id),
             KEY created_at (created_at)
         ) $charset_collate;";
-        
-        // Execute table creation
-        dbDelta( $sql_companies );
-        dbDelta( $sql_mgmt_companies );
-        dbDelta( $sql_units );
-        dbDelta( $sql_service_requests );
-        dbDelta( $sql_tickets );
-        dbDelta( $sql_gateways );
-        dbDelta( $sql_training_videos );
-        dbDelta( $sql_attachments );
-        dbDelta( $sql_service_notes );
-        dbDelta( $sql_audit_log );
-        
-        // Store database version
-        update_option( 'lgp_db_version', LGP_VERSION );
-    }
-    
-    /**
-     * Drop all plugin tables (used on uninstall)
-     */
-    public static function drop_tables() {
-        global $wpdb;
-        
-        $tables = array(
-            $wpdb->prefix . 'lgp_companies',
-            $wpdb->prefix . 'lgp_management_companies',
-            $wpdb->prefix . 'lgp_units',
-            $wpdb->prefix . 'lgp_service_requests',
-            $wpdb->prefix . 'lgp_tickets',
-            $wpdb->prefix . 'lgp_gateways',
-            $wpdb->prefix . 'lgp_training_videos',
-            $wpdb->prefix . 'lgp_ticket_attachments',
-            $wpdb->prefix . 'lgp_service_notes',
-            $wpdb->prefix . 'lgp_audit_log'
-        );
-        
-        foreach ( $tables as $table ) {
-            $wpdb->query( "DROP TABLE IF EXISTS $table" );
-        }
-        
-        delete_option( 'lgp_db_version' );
-    }
+
+		// Execute table creation
+		dbDelta( $sql_companies );
+		dbDelta( $sql_mgmt_companies );
+		dbDelta( $sql_units );
+		dbDelta( $sql_service_requests );
+		dbDelta( $sql_tickets );
+		dbDelta( $sql_gateways );
+		dbDelta( $sql_training_videos );
+		dbDelta( $sql_attachments );
+		dbDelta( $sql_service_notes );
+		dbDelta( $sql_audit_log );
+
+		// Store database version
+		update_option( 'lgp_db_version', LGP_VERSION );
+	}
+
+	/**
+	 * Drop all plugin tables (used on uninstall)
+	 */
+	public static function drop_tables() {
+		global $wpdb;
+
+		$tables = array(
+			$wpdb->prefix . 'lgp_companies',
+			$wpdb->prefix . 'lgp_management_companies',
+			$wpdb->prefix . 'lgp_units',
+			$wpdb->prefix . 'lgp_service_requests',
+			$wpdb->prefix . 'lgp_tickets',
+			$wpdb->prefix . 'lgp_gateways',
+			$wpdb->prefix . 'lgp_training_videos',
+			$wpdb->prefix . 'lgp_ticket_attachments',
+			$wpdb->prefix . 'lgp_service_notes',
+			$wpdb->prefix . 'lgp_audit_log',
+		);
+
+		foreach ( $tables as $table ) {
+			$wpdb->query( "DROP TABLE IF EXISTS $table" );
+		}
+
+		delete_option( 'lgp_db_version' );
+	}
 }
