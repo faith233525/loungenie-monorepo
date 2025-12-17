@@ -1,23 +1,30 @@
 /**
- * LounGenie Portal - Design System
+ * LounGenie Portal - Design System (LEGACY)
  * Enterprise SaaS styling using CSS variables
  * No external dependencies, semantic HTML only
+ * 
+ * NOTE: This file contains LEGACY styles for backward compatibility.
+ * New components should use design-tokens.css exclusively.
+ * 
+ * ALIASES: Old variable names mapped to new design tokens for compatibility.
  */
 
 /* ============================================================================
-   COLOR SYSTEM
+   LEGACY VARIABLE ALIASES (Compatibility Layer)
+   Maps old variable names to new design-tokens.css variables
    ============================================================================ */
 
 :root {
-    --primary: #3AA6B9;
-    --secondary: #25D0EE;
-    --dark: #04102F;
-    --neutral: #454F5E;
-    --background: #E9F8F9;
-    --white: #FFFFFF;
-    --soft: #CAE6E8;
-    --accent: #C8A75A;
-    --text: #222222;
+    /* LEGACY COLOR ALIASES - Map to new design token names */
+    --primary: var(--lgp-color-brand, #14B8A6);
+    --secondary: var(--lgp-color-accent, #25D0EE);
+    --dark: var(--lgp-color-text-primary, #1F2937);
+    --neutral: var(--lgp-color-text-secondary, #6B7280);
+    --background: var(--lgp-color-surface, #F8FAFC);
+    --white: var(--lgp-color-background, #FFFFFF);
+    --soft: var(--lgp-color-border, #E5E7EB);
+    --accent: var(--lgp-color-premium, #C5A059);
+    --text: var(--lgp-color-text-primary, #334155);
     
     /* Semantic colors */
     --success: #4CAF50;
@@ -152,8 +159,8 @@ a:hover {
 /* Sidebar */
 .lgp-sidebar {
     grid-area: sidebar;
-    background-color: var(--white);
-    border-right: 1px solid var(--soft);
+    background-color: #0F172A; /* Midnight Navy */
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
     padding: var(--space-lg) 0;
     margin-top: var(--header-height);
     position: fixed;
@@ -164,22 +171,22 @@ a:hover {
     overflow-y: auto;
 }
 
-.lgp-nav {
-    list-style: none;
-}
-
-.lgp-nav-item {
-    margin-bottom: var(--space-xs);
-}
-
 .lgp-nav-link {
     display: flex;
     align-items: center;
     padding: var(--space-md) var(--space-lg);
-    color: var(--neutral);
+    color: rgba(255, 255, 255, 0.85);
     transition: all 0.2s;
 }
-
+.lgp-nav-link:hover {
+    background-color: rgba(20, 184, 166, 0.08); /* Teal wash */
+    color: #14B8A6; /* Resort Teal */
+}
+.lgp-nav-link.active {
+    background-color: rgba(20, 184, 166, 0.12);
+    color: #14B8A6;
+    border-right: 3px solid #14B8A6;
+}
 .lgp-nav-link:hover {
     background-color: var(--background);
     color: var(--primary);
@@ -206,18 +213,13 @@ a:hover {
 }
 
 /* ============================================================================
-   COMPONENTS
+   COMPONENTS (LEGACY - Use design-tokens.css for new components)
+   NOTE: Core components .lgp-card, .lgp-btn, .lgp-table, .lgp-badge moved to design-tokens.css
    ============================================================================ */
 
-/* Cards */
-.lgp-card {
-    background-color: var(--white);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-md);
-    padding: var(--space-lg);
-    margin-bottom: var(--space-lg);
-}
+/* REMOVED: .lgp-card definition - now in design-tokens.css */
 
+/* Keep legacy card sub-components for backward compatibility */
 .lgp-card-header {
     margin-bottom: var(--space-md);
     padding-bottom: var(--space-md);
@@ -234,90 +236,18 @@ a:hover {
     padding: var(--space-md) 0;
 }
 
-/* Buttons */
-.lgp-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-sm) var(--space-lg);
-    font-size: var(--font-size-base);
-    font-weight: 500;
-    border: none;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
-}
-
-.lgp-btn-primary {
-    background-color: var(--primary);
-    color: var(--white);
-}
-
-.lgp-btn-primary:hover {
-    background-color: var(--secondary);
-    color: var(--white);
-}
-
-.lgp-btn-secondary {
-    background-color: var(--soft);
-    color: var(--dark);
-}
-
-.lgp-btn-secondary:hover {
-    background-color: var(--neutral);
-    color: var(--white);
-}
-
-.lgp-btn-danger {
-    background-color: var(--error);
-    color: var(--white);
-}
+/* REMOVED: .lgp-btn definitions - now in design-tokens.css with full variant system */
 
 .lgp-btn-danger:hover {
     opacity: 0.9;
 }
 
-/* Tables */
+/* REMOVED: .lgp-table definitions - now in design-tokens.css */
+
+/* Keep legacy table container if needed */
 .lgp-table-container {
     overflow-x: auto;
     margin: var(--space-lg) 0;
-}
-
-.lgp-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: var(--white);
-}
-
-.lgp-table thead {
-    background-color: var(--background);
-}
-
-.lgp-table th {
-    padding: var(--space-md);
-    text-align: left;
-    font-weight: 600;
-    color: var(--dark);
-    border-bottom: 2px solid var(--soft);
-}
-
-.lgp-table th.sortable {
-    cursor: pointer;
-    user-select: none;
-}
-
-.lgp-table th.sortable:hover {
-    background-color: var(--soft);
-}
-
-.lgp-table td {
-    padding: var(--space-md);
-    border-bottom: 1px solid var(--soft);
-}
-
-.lgp-table tr:hover {
-    background-color: var(--background);
 }
 
 /* Forms */
@@ -386,34 +316,7 @@ a:hover {
     color: var(--primary);
 }
 
-/* Badges */
-.lgp-badge {
-    display: inline-block;
-    padding: var(--space-xs) var(--space-md);
-    font-size: var(--font-size-sm);
-    font-weight: 500;
-    border-radius: var(--radius-lg);
-}
-
-.lgp-badge-success {
-    background-color: var(--success);
-    color: var(--white);
-}
-
-.lgp-badge-warning {
-    background-color: var(--warning);
-    color: var(--dark);
-}
-
-.lgp-badge-error {
-    background-color: var(--error);
-    color: var(--white);
-}
-
-.lgp-badge-info {
-    background-color: var(--info);
-    color: var(--white);
-}
+/* REMOVED: .lgp-badge definitions - now in design-tokens.css */
 
 /* Pagination */
 .lgp-pagination {
@@ -604,19 +507,7 @@ a:hover {
     padding: var(--space-2xl);
 }
 
-.lgp-spinner {
-    width: 48px;
-    height: 48px;
-    border: 4px solid var(--soft);
-    border-top: 4px solid var(--primary);
-    border-radius: 50%;
-    animation: lgp-spin 1s linear infinite;
-}
-
-@keyframes lgp-spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+/* REMOVED: .lgp-spinner definition - now in design-tokens.css */
 
 /* Empty States */
 .lgp-empty-state {
@@ -1015,35 +906,7 @@ a:hover {
     background-color: rgba(255, 193, 7, 0.2);
 }
 
-/* Gateway Badge */
-.lgp-badge {
-    display: inline-block;
-    padding: var(--space-xs) var(--space-sm);
-    border-radius: var(--radius-sm);
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.lgp-badge.badge-success {
-    background-color: rgba(76, 175, 80, 0.1);
-    color: var(--success);
-}
-
-.lgp-badge.badge-warning {
-    background-color: rgba(255, 193, 7, 0.1);
-    color: var(--warning);
-}
-
-.lgp-badge.badge-error {
-    background-color: rgba(244, 67, 54, 0.1);
-    color: var(--error);
-}
-
-.lgp-badge.badge-info {
-    background-color: rgba(37, 208, 238, 0.1);
-    color: var(--info);
-}
+/* REMOVED: Duplicate .lgp-badge definition - now in design-tokens.css */
 
 /* Gateway Actions */
 .lgp-gateway-actions {
@@ -1287,65 +1150,14 @@ a:hover {
 }
 
 /* Table Enhancements */
+/* REMOVED: Duplicate .lgp-table definitions - now in design-tokens.css */
+
+/* Keep container if specific to legacy templates */
 .lgp-table-container {
     overflow-x: auto;
 }
 
-.lgp-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.lgp-table thead {
-    background-color: var(--background);
-}
-
-.lgp-table th {
-    padding: var(--space-md);
-    text-align: left;
-    font-weight: 600;
-    color: var(--dark);
-    border-bottom: 2px solid var(--soft);
-}
-
-.lgp-table td {
-    padding: var(--space-md);
-    border-bottom: 1px solid var(--soft);
-}
-
-.lgp-table tbody tr:hover {
-    background-color: rgba(233, 248, 249, 0.5);
-}
-
-/* Badge Styles */
-.lgp-badge {
-    display: inline-block;
-    padding: var(--space-xs) var(--space-sm);
-    border-radius: 12px;
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.lgp-badge-info {
-    background-color: #D1ECF1;
-    color: #0C5460;
-}
-
-.lgp-badge-warning {
-    background-color: #FFF3CD;
-    color: #856404;
-}
-
-.lgp-badge-error {
-    background-color: #F8D7DA;
-    color: #721C24;
-}
-
-.lgp-badge-success {
-    background-color: #D4EDDA;
-    color: #155724;
-}
+/* REMOVED: Third duplicate .lgp-badge definition - now in design-tokens.css */
 
 /* ============================================================================
    PHASE 4: PARTNER VIEW POLISH & COLLAPSIBLE SECTIONS

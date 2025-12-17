@@ -15,33 +15,31 @@
 	 * ========================================================================== */
 
     /* Neutral surfaces */
-    --lgp-color-background: #FFFFFF;
-    --lgp-color-surface: #F7F8FA;
-    --lgp-color-surface-raised: #FFFFFF;
+    --lgp-color-background: #FFFFFF;              /* Base background */
+    --lgp-color-surface: #F8FAFC;                 /* Soft Slate background */
+    --lgp-color-surface-raised: #FFFFFF;          /* Cards/Shell surfaces */
     --lgp-color-border: #E5E7EB;
     --lgp-color-border-hover: #D1D5DB;
 
     /* Text hierarchy */
-    --lgp-color-text-primary: #111827;
-    --lgp-color-text-secondary: #6B7280;
-    --lgp-color-text-tertiary: #9CA3AF;
+    --lgp-color-text-primary: #334155;            /* Slate 700 */
+    --lgp-color-text-secondary: #64748B;          /* Slate 500 */
+    --lgp-color-text-tertiary: #94A3B8;           /* Slate 400 */
     --lgp-color-text-inverse: #FFFFFF;
 
-    /* Brand accent - Primary Teal for Actions */
-    --lgp-color-brand: #0D9488;
-    /* Primary Teal (actions, buttons, CTAs) */
-    --lgp-color-brand-hover: #0F766E;
-    /* Darker Teal on hover */
-    --lgp-color-brand-light: #CCFBF1;
-    /* Light Teal background */
+    /* Brand accent - Resort Teal for Actions */
+    --lgp-color-brand: #14B8A6;                   /* Resort Teal */
+    --lgp-color-brand-hover: #0D9488;             /* Darker Teal on hover */
+    --lgp-color-brand-light: #CCFBF1;             /* Light Teal background */
 
-    /* Secondary accent - Soft Cyan for Hover/Secondary Highlights */
-    --lgp-color-accent: #25D0EE;
-    /* Soft Cyan (secondary highlights) */
-    --lgp-color-accent-hover: #1CB5D1;
-    /* Darker Cyan on hover */
-    --lgp-color-accent-light: #CFFAFE;
-    /* Light Cyan background */
+    /* Secondary accent - Soft Cyan for subtle highlights (kept) */
+    --lgp-color-accent: #22D3EE;                  /* Soft Cyan */
+    --lgp-color-accent-hover: #06B6D4;            /* Darker Cyan on hover */
+    --lgp-color-accent-light: #CFFAFE;            /* Light Cyan background */
+
+    /* Premium accent - Brushed Gold (limited use) */
+    --lgp-color-premium: #C5A059;                 /* Brushed Gold */
+    --lgp-color-premium-light: #F5EEDC;           /* Soft gold tint */
 
     /* Status colors (WCAG AA compliant) */
     --lgp-color-success: #16A34A;
@@ -50,10 +48,8 @@
     --lgp-color-warning-light: #FEF3C7;
     --lgp-color-danger: #DC2626;
     --lgp-color-danger-light: #FEE2E2;
-    --lgp-color-info: #0D9488;
-    /* Teal for info */
-    --lgp-color-info-light: #CCFBF1;
-    /* Light Teal bg */
+    --lgp-color-info: #0D9488;                    /* Teal for info */
+    --lgp-color-info-light: #CCFBF1;              /* Light Teal bg */
 
     /* ============================================================================
 	 * TYPOGRAPHY
@@ -168,9 +164,11 @@
         --lgp-color-brand: #14B8A6;
         /* Lighter Teal for dark mode */
         --lgp-color-brand-hover: #5EEAD4;
+        /* Teal hover for dark mode */
         --lgp-color-accent: #22D3EE;
         /* Bright Cyan for dark mode */
-        --lgp-color-brand-hover: #3B82F6;
+        --lgp-color-accent-hover: #3B82F6;
+        /* Blue accent hover */
         --lgp-color-brand-light: #1E3A8A;
 
         /* Status colors remain accessible in dark mode */
@@ -365,9 +363,9 @@
 }
 
 .lgp-table tbody tr:hover {
-    background-color: var(--lgp-color-accent-light);
-    /* Soft Cyan for hover */
-    border-color: var(--lgp-color-accent);
+    /* Subtle slate hover for luxury feel */
+    background-color: var(--lgp-color-surface);
+    border-color: var(--lgp-color-border-hover);
 }
 
 .lgp-table tbody tr:last-child {
@@ -379,8 +377,7 @@
 }
 
 .lgp-table tbody tr:nth-child(even):hover {
-    background-color: var(--lgp-color-accent-light);
-    /* Soft Cyan for hover */
+    background-color: var(--lgp-color-surface);
 }
 
 .lgp-table td {
@@ -455,6 +452,15 @@
 .lgp-badge-info {
     background-color: var(--lgp-color-info-light);
     color: var(--lgp-color-info);
+}
+
+/* Premium/certification badges - limited Brushed Gold usage */
+.lgp-badge-premium,
+.lgp-badge-certified,
+.lgp-badge-vip {
+    background-color: var(--lgp-color-premium-light);
+    color: var(--lgp-color-premium);
+    border: 1px solid rgba(197, 160, 89, 0.35);
 }
 
 /* ============================================================================

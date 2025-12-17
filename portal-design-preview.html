@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LounGenie Portal - Design Preview</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Design Tokens */
+        :root {
+            /* Primary Brand - Teal */
+            --color-primary: #0D9488;
+            --color-primary-dark: #0F766E;
+            --color-primary-light: #14B8A6;
+            
+            /* Accent - Cyan */
+            --color-accent: #25D0EE;
+            --color-accent-dark: #0EA5E9;
+            --color-accent-light: #38BDF8;
+            
+            /* Neutrals */
+            --color-bg: #F8FAFC;
+            --color-surface: #FFFFFF;
+            --color-border: #E2E8F0;
+            --color-text: #1E293B;
+            --color-text-muted: #64748B;
+            
+            /* Status Colors */
+            --color-success: #10B981;
+            --color-warning: #F59E0B;
+            --color-danger: #EF4444;
+            --color-info: #3B82F6;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+        
+        /* Header */
+        .portal-header {
+            background: var(--color-primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .portal-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .portal-nav {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+        
+        .nav-link:hover {
+            opacity: 0.8;
+        }
+        
+        /* Main Container */
+        .portal-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .lgp-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .lgp-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+        
+        .card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin: 0.5rem 0;
+        }
+        
+        .card-label {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+        }
+        
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+        
+        .lgp-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .lgp-btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .lgp-btn-primary:hover {
+            background: var(--color-primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        .lgp-btn-accent {
+            background: var(--color-accent);
+            color: white;
+        }
+        
+        .lgp-btn-accent:hover {
+            background: var(--color-accent-dark);
+        }
+        
+        .lgp-btn-outline {
+            background: transparent;
+            border: 2px solid var(--color-primary);
+            color: var(--color-primary);
+        }
+        
+        .lgp-btn-outline:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        /* Table */
+        .lgp-table {
+            width: 100%;
+            background: var(--color-surface);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            margin: 2rem 0;
+        }
+        
+        .lgp-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .lgp-table thead {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .lgp-table th,
+        .lgp-table td {
+            padding: 1rem;
+            text-align: left;
+        }
+        
+        .lgp-table tbody tr {
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .lgp-table tbody tr:hover {
+            background: #F1F5F9;
+        }
+        
+        /* Badges */
+        .lgp-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .lgp-badge-success {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+        
+        .lgp-badge-warning {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+        
+        .lgp-badge-danger {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+        
+        .lgp-badge-info {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+        
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--color-border);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+        
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Dark Mode */
+        body.dark-mode {
+            --color-bg: #0F172A;
+            --color-surface: #1E293B;
+            --color-border: #334155;
+            --color-text: #F1F5F9;
+            --color-text-muted: #94A3B8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="portal-header">
+        <div class="portal-logo">
+            <i class="fas fa-water"></i>
+            <span>LounGenie Portal</span>
+        </div>
+        <nav class="portal-nav">
+            <a href="#" class="nav-link"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="#" class="nav-link"><i class="fas fa-network-wired"></i> Gateways</a>
+            <a href="#" class="nav-link"><i class="fas fa-map-marked-alt"></i> Map</a>
+            <a href="#" class="nav-link"><i class="fas fa-video"></i> Training</a>
+            <a href="#" class="nav-link"><i class="fas fa-user-circle"></i> Profile</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="portal-container">
+        <!-- Stats Cards -->
+        <div class="card-grid">
+            <div class="lgp-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Active Gateways</div>
+                    </div>
+                </div>
+                <div class="card-value">247</div>
+                <div class="card-label">Online & Reporting</div>
+            </div>
+
+            <div class="lgp-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Open Tickets</div>
+                    </div>
+                </div>
+                <div class="card-value">12</div>
+                <div class="card-label">Pending Response</div>
+            </div>
+
+            <div class="lgp-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Companies</div>
+                    </div>
+                </div>
+                <div class="card-value">89</div>
+                <div class="card-label">Active Partners</div>
+            </div>
+
+            <div class="lgp-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Uptime</div>
+                    </div>
+                </div>
+                <div class="card-value">99.8%</div>
+                <div class="card-label">Last 30 Days</div>
+            </div>
+        </div>
+
+        <!-- Buttons Section -->
+        <div class="section-header">
+            <h2 class="section-title">Actions</h2>
+        </div>
+        <div class="button-group">
+            <button class="lgp-btn lgp-btn-primary">
+                <i class="fas fa-plus"></i> Create Ticket
+            </button>
+            <button class="lgp-btn lgp-btn-accent">
+                <i class="fas fa-paper-plane"></i> Send Email
+            </button>
+            <button class="lgp-btn lgp-btn-outline">
+                <i class="fas fa-download"></i> Export Data
+            </button>
+        </div>
+
+        <!-- Table Section -->
+        <div class="section-header">
+            <h2 class="section-title">Recent Gateways</h2>
+        </div>
+        <div class="lgp-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Gateway ID</th>
+                        <th>Location</th>
+                        <th>Company</th>
+                        <th>Status</th>
+                        <th>Last Report</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>GW-001234</strong></td>
+                        <td>Miami, FL</td>
+                        <td>Sunshine Pools</td>
+                        <td><span class="lgp-badge lgp-badge-success">Online</span></td>
+                        <td>2 mins ago</td>
+                        <td>
+                            <button class="lgp-btn lgp-btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>GW-001235</strong></td>
+                        <td>Orlando, FL</td>
+                        <td>Crystal Clear Pool Service</td>
+                        <td><span class="lgp-badge lgp-badge-success">Online</span></td>
+                        <td>5 mins ago</td>
+                        <td>
+                            <button class="lgp-btn lgp-btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>GW-001236</strong></td>
+                        <td>Tampa, FL</td>
+                        <td>Bay Area Pool Tech</td>
+                        <td><span class="lgp-badge lgp-badge-warning">Warning</span></td>
+                        <td>15 mins ago</td>
+                        <td>
+                            <button class="lgp-btn lgp-btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>GW-001237</strong></td>
+                        <td>Jacksonville, FL</td>
+                        <td>Northeast Pool Solutions</td>
+                        <td><span class="lgp-badge lgp-badge-danger">Offline</span></td>
+                        <td>2 hours ago</td>
+                        <td>
+                            <button class="lgp-btn lgp-btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Additional Cards -->
+        <div class="section-header">
+            <h2 class="section-title">Quick Stats</h2>
+        </div>
+        <div class="card-grid">
+            <div class="lgp-card">
+                <div class="card-label">Average Response Time</div>
+                <div class="card-value" style="font-size: 1.5rem;">2.3 hrs</div>
+                <div class="lgp-badge lgp-badge-success">↓ 15% improvement</div>
+            </div>
+
+            <div class="lgp-card">
+                <div class="card-label">Customer Satisfaction</div>
+                <div class="card-value" style="font-size: 1.5rem;">4.8/5.0</div>
+                <div class="lgp-badge lgp-badge-success">Excellent</div>
+            </div>
+
+            <div class="lgp-card">
+                <div class="card-label">Pending Approvals</div>
+                <div class="card-value" style="font-size: 1.5rem;">3</div>
+                <div class="lgp-badge lgp-badge-warning">Needs attention</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.querySelector('.theme-toggle i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.className = 'fas fa-sun';
+            } else {
+                icon.className = 'fas fa-moon';
+            }
+        }
+    </script>
+</body>
+</html>

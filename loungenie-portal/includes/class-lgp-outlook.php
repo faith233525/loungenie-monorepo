@@ -51,6 +51,9 @@ class LGP_Outlook {
 
 		// Add reply button to portal
 		add_action( 'wp_ajax_lgp_send_outlook_reply', array( __CLASS__, 'ajax_send_reply' ) );
+		
+		// Clear error log handler
+		add_action( 'admin_post_lgp_clear_outlook_errors', array( __CLASS__, 'clear_error_log' ) );
 	}
 
 	/**
@@ -400,15 +403,30 @@ class LGP_Outlook {
 		try {
 			$request_path = isset( $wp->request ) ? trim( (string) $wp->request, '/' ) : '';
 			if ( $request_path === self::FRONT_CALLBACK_PATH ) {
+				$success = false;
 				if ( isset( $_GET['code'] ) ) {
-					$code = sanitize_text_field( $_GET['code'] );
-					self::exchange_code_for_token( $code );
+					$code    = sanitize_text_field( $_GET['code'] );
+					$success = self::exchange_code_for_token( $code );
 				}
-				wp_redirect( admin_url( 'options-general.php?page=lgp-outlook-settings&auth=success' ) );
+				
+				// Check for OAuth errors
+				if ( isset( $_GET['error'] ) ) {
+					$error_desc = isset( $_GET['error_description'] ) ? $_GET['error_description'] : $_GET['error'];
+					self::log_error( 'OAuth callback error: ' . sanitize_text_field( $error_desc ) );
+					wp_redirect( admin_url( 'options-general.php?page=lgp-outlook-settings&auth=error' ) );
+					exit;
+				}
+				
+				// Redirect based on success
+				if ( $success ) {
+					wp_redirect( admin_url( 'options-general.php?page=lgp-outlook-settings&auth=success' ) );
+				} else {
+					wp_redirect( admin_url( 'options-general.php?page=lgp-outlook-settings&auth=error' ) );
+				}
 				exit;
 			}
 		} catch ( \Throwable $e ) {
-			// Fail closed to admin with error for visibility
+			self::log_error( 'Callback exception: ' . $e->getMessage() );
 			wp_redirect( admin_url( 'options-general.php?page=lgp-outlook-settings&auth=error' ) );
 			exit;
 		}
@@ -446,14 +464,29 @@ class LGP_Outlook {
 
 		$body = json_decode( wp_remote_retrieve_body( $response ), true );
 
+		// Log detailed error if present
+		if ( isset( $body['error'] ) ) {
+			$error_desc = isset( $body['error_description'] ) ? $body['error_description'] : $body['error'];
+			self::log_error( 'OAuth error: ' . $error_desc );
+			self::log_error( 'Full response: ' . wp_json_encode( $body ) );
+			return false;
+		}
+
 		if ( isset( $body['access_token'] ) ) {
 			update_option( 'lgp_outlook_access_token', $body['access_token'] );
 			update_option( 'lgp_outlook_token_expires', time() + $body['expires_in'] );
-			update_option( 'lgp_outlook_refresh_token', $body['refresh_token'] );
+			
+			if ( isset( $body['refresh_token'] ) ) {
+				update_option( 'lgp_outlook_refresh_token', $body['refresh_token'] );
+			}
 
+			// Log success for debugging
+			self::log_error( 'Token exchange successful. Token expires in ' . $body['expires_in'] . ' seconds.' );
+			
 			return true;
 		}
 
+		self::log_error( 'Token exchange failed: No access token in response. Response: ' . wp_json_encode( $body ) );
 		return false;
 	}
 
@@ -510,6 +543,9 @@ class LGP_Outlook {
 			return;
 		}
 
+		// Clear any caches before checking authentication
+		wp_cache_delete( 'lgp_outlook_access_token', 'options' );
+		
 		$is_authenticated = ! empty( get_option( 'lgp_outlook_access_token' ) );
 		$redirect_mode   = get_option( 'lgp_outlook_redirect_mode', 'front' );
 		$current_redirect = self::get_redirect_uri();
@@ -520,6 +556,12 @@ class LGP_Outlook {
 			<?php if ( isset( $_GET['auth'] ) && $_GET['auth'] === 'success' ) : ?>
 				<div class="notice notice-success">
 					<p><?php esc_html_e( 'Successfully authenticated with Microsoft!', 'loungenie-portal' ); ?></p>
+				</div>
+			<?php endif; ?>
+			
+			<?php if ( isset( $_GET['auth'] ) && $_GET['auth'] === 'error' ) : ?>
+				<div class="notice notice-error">
+					<p><?php esc_html_e( 'Authentication failed. Please check your Azure AD configuration and try again.', 'loungenie-portal' ); ?></p>
 				</div>
 			<?php endif; ?>
 			
@@ -604,6 +646,37 @@ class LGP_Outlook {
 					<span style="color: red;">✗ <?php esc_html_e( 'Not authenticated', 'loungenie-portal' ); ?></span>
 				<?php endif; ?>
 			</p>
+
+			<?php
+				// Lightweight debug: indicate if access token exists and when it expires.
+				$__lgp_token   = get_option( 'lgp_outlook_access_token' );
+				$__lgp_expires = intval( get_option( 'lgp_outlook_token_expires' ) );
+				$__lgp_now     = time();
+				$__lgp_ttl     = $__lgp_expires > 0 ? max( 0, $__lgp_expires - $__lgp_now ) : 0;
+			?>
+			<p>
+				<strong><?php esc_html_e( 'Token:', 'loungenie-portal' ); ?></strong>
+				<?php if ( ! empty( $__lgp_token ) ) : ?>
+					<span style="color: #0B5;">■ <?php esc_html_e( 'Present', 'loungenie-portal' ); ?></span>
+					<?php if ( $__lgp_expires ) : ?>
+						<em style="margin-left:8px; color:#555;">
+							<?php
+								printf(
+									/* translators: 1: human readable time remaining */
+									esc_html__( 'expires in %s', 'loungenie-portal' ),
+									human_time_diff( $__lgp_now, $__lgp_expires )
+								);
+							?>
+						</em>
+					<?php endif; ?>
+				<?php else : ?>
+					<span style="color: #B00;">■ <?php esc_html_e( 'Not found', 'loungenie-portal' ); ?></span>
+				<?php endif; ?>
+			</p>
+
+			<p class="description" style="margin-top:-8px;">
+				<?php esc_html_e( 'If you see "Successfully authenticated" after consent but status does not update, refresh this page once. Ensure you saved Client ID/Secret before authenticating.', 'loungenie-portal' ); ?>
+			</p>
 			
 			<?php if ( self::is_enabled() && ! $is_authenticated ) : ?>
 				<p>
@@ -623,6 +696,29 @@ class LGP_Outlook {
 				<li><?php esc_html_e( 'Enter Client ID and Client Secret above and save', 'loungenie-portal' ); ?></li>
 				<li><?php esc_html_e( 'Click "Authenticate with Microsoft" to authorize', 'loungenie-portal' ); ?></li>
 			</ol>
+			
+			<?php
+			// Show recent errors for troubleshooting
+			$recent_errors = get_option( 'lgp_outlook_errors', array() );
+			if ( ! empty( $recent_errors ) ) :
+				$recent_errors = array_slice( $recent_errors, -5 ); // Last 5 errors
+				?>
+				<hr>
+				<h3><?php esc_html_e( 'Recent Errors (Debug)', 'loungenie-portal' ); ?></h3>
+				<div style="background: #FEF3C7; border: 1px solid #F59E0B; padding: 1rem; border-radius: 4px; max-height: 300px; overflow-y: auto;">
+					<?php foreach ( array_reverse( $recent_errors ) as $error ) : ?>
+						<p style="margin: 0.5rem 0; font-family: monospace; font-size: 0.875rem;">
+							<strong><?php echo esc_html( $error['timestamp'] ); ?>:</strong><br>
+							<?php echo esc_html( $error['message'] ); ?>
+						</p>
+					<?php endforeach; ?>
+				</div>
+				<p>
+					<button type="button" onclick="if(confirm('Clear error log?')){window.location.href='<?php echo esc_url( admin_url( 'admin-post.php?action=lgp_clear_outlook_errors' ) ); ?>';}" class="button">
+						<?php esc_html_e( 'Clear Error Log', 'loungenie-portal' ); ?>
+					</button>
+				</p>
+			<?php endif; ?>
 		</div>
 		<?php
 	}
@@ -653,5 +749,18 @@ class LGP_Outlook {
 		}
 
 		return $url;
+	}
+
+	/**
+	 * Clear error log
+	 */
+	public static function clear_error_log() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( __( 'Unauthorized', 'loungenie-portal' ) );
+		}
+		
+		delete_option( 'lgp_outlook_errors' );
+		wp_safe_redirect( admin_url( 'options-general.php?page=lgp-outlook-settings' ) );
+		exit;
 	}
 }

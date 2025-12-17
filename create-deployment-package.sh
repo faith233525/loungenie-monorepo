@@ -25,7 +25,7 @@ mkdir -p "${TEMP_DIR}/${PLUGIN_DIR}"
 
 # Copy only production files
 echo "📦 Copying production files..."
-rsync -av --progress \
+rsync -av \
   --exclude='tests/' \
   --exclude='vendor/' \
   --exclude='node_modules/' \

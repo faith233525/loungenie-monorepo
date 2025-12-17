@@ -210,6 +210,19 @@ function lgp_add_rewrite_rules() {
 add_action( 'init', 'lgp_add_rewrite_rules' );
 
 /**
+ * Redirect root domain to /portal
+ * Anyone visiting the root domain goes straight to the portal login/dashboard
+ */
+function lgp_redirect_root_to_portal() {
+	// Only redirect if we're on the front page and not logged into WP admin
+	if ( is_front_page() && ! is_admin() && ! is_user_logged_in() ) {
+		wp_safe_redirect( home_url( '/portal' ) );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'lgp_redirect_root_to_portal', 1 );
+
+/**
  * Add query vars for portal routing
  */
 function lgp_query_vars( $vars ) {
