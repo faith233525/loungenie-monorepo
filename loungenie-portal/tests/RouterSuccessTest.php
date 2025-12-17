@@ -11,7 +11,8 @@ use function Brain\Monkey\Functions\expect;
  * Router functionality is verified working in production environment.
  * 
  * @group router
- * @group skip
+ * @runTestsInSeparateProcesses
+ * @preserveGlobalState disabled
  */
 final class RouterSuccessTest extends WPTestCase
 {
@@ -67,12 +68,8 @@ final class RouterSuccessTest extends WPTestCase
         when('plugins_url')->alias(fn($p)=>$p);
     }
 
-    /**
-     * @skip Patchwork conflict with add_action() redefinition
-     */
     public function test_support_user_loads_portal_shell_and_support_dashboard(): void
     {
-        $this->markTestSkipped('Patchwork/Brain Monkey conflict - functionality verified in production');
         $this->commonStubs();
 
         // Route vars: /portal (dashboard default)
@@ -108,12 +105,8 @@ final class RouterSuccessTest extends WPTestCase
         $this->assertStringContainsString('LounGenie Portal', $out);
     }
 
-    /**
-     * @skip Patchwork conflict with add_action() redefinition
-     */
     public function test_partner_user_loads_portal_shell_and_partner_dashboard(): void
     {
-        $this->markTestSkipped('Patchwork/Brain Monkey conflict - functionality verified in production');
         $this->commonStubs();
 
         when('get_query_var')->alias(function($k){
@@ -151,12 +144,8 @@ final class RouterSuccessTest extends WPTestCase
         $this->assertStringContainsString('Acme', $out);
     }
 
-    /**
-     * @skip Patchwork conflict with add_action() redefinition
-     */
     public function test_support_user_can_access_map_view(): void
     {
-        $this->markTestSkipped('Patchwork/Brain Monkey conflict - functionality verified in production');
         $this->commonStubs();
 
         when('get_query_var')->alias(function($k){
@@ -188,12 +177,8 @@ final class RouterSuccessTest extends WPTestCase
         $this->assertStringContainsString('Partner Map View', $out);
     }
 
-    /**
-     * @skip Patchwork conflict with add_action() redefinition
-     */
     public function test_partner_user_denied_map_view(): void
     {
-        $this->markTestSkipped('Patchwork/Brain Monkey conflict - functionality verified in production');
         $this->commonStubs();
 
         when('get_query_var')->alias(function($k){

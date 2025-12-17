@@ -21,6 +21,10 @@ if (!class_exists('LGP_Auth')) {
 
 require_once __DIR__ . '/../includes/class-lgp-training-video.php';
 
+/**
+ * @runTestsInSeparateProcesses
+ * @preserveGlobalState disabled
+ */
 class TrainingVideoTest extends WPTestCase {
     
     protected function setUp(): void {
@@ -63,11 +67,7 @@ class TrainingVideoTest extends WPTestCase {
         $this->assertTrue($hasExpectedCategory);
     }
     
-    /**
-     * @skip Test pollution issue - passes in isolation, fails in full suite
-     */
     public function test_create_requires_title() {
-        $this->markTestSkipped('Test passes in isolation but has pollution issues in full suite - validation logic verified');
         $data = [
             'video_url' => 'https://youtube.com/watch?v=xyz',
             'category' => 'general'
@@ -78,11 +78,7 @@ class TrainingVideoTest extends WPTestCase {
         $this->assertFalse($result);
     }
     
-    /**
-     * @skip Test pollution issue - passes in isolation, fails in full suite
-     */
     public function test_create_requires_video_url() {
-        $this->markTestSkipped('Test passes in isolation but has pollution issues in full suite - validation logic verified');
         $data = [
             'title' => 'New Video',
             'category' => 'general'
