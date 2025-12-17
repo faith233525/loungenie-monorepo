@@ -24,11 +24,20 @@ class LGP_Assets {
 	 * Called by router when loading portal
 	 */
 	public static function enqueue_portal_assets() {
+		// Enqueue design tokens first (CSS variables and component styles)
+		wp_enqueue_style(
+			'lgp-design-tokens',
+			LGP_ASSETS_URL . 'css/design-tokens.css',
+			array(),
+			LGP_VERSION,
+			'all'
+		);
+
 		// Enqueue portal CSS
 		wp_enqueue_style(
 			'lgp-portal',
 			LGP_ASSETS_URL . 'css/portal.css',
-			array(),
+			array( 'lgp-design-tokens' ),
 			LGP_VERSION,
 			'all'
 		);
