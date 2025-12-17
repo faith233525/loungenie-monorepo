@@ -149,9 +149,6 @@ function lgp_init() {
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-hubspot.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-outlook.php';
 
-	// Load monitoring/admin classes
-	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-system-health.php';
-
 	// Load API endpoints
 	require_once LGP_PLUGIN_DIR . 'api/companies.php';
 	require_once LGP_PLUGIN_DIR . 'api/units.php';
@@ -182,9 +179,6 @@ function lgp_init() {
 	// Initialize integrations
 	LGP_HubSpot::init();
 	LGP_Outlook::init();
-
-	// Initialize monitoring/admin
-	LGP_System_Health::init();
 
 	// Initialize REST API endpoints
 	LGP_Companies_API::init();
