@@ -2,6 +2,75 @@
 
 All notable changes to LounGenie Portal will be documented in this file.
 
+## [v1.6.0-notification-coverage] - 2025-12-17
+
+### Added
+- **Notification Coverage Verification** - Comprehensive test suite for all system notifications
+  - NotificationCoverageTest.php: 26 tests covering all notification events
+  - Event coverage: 17+ event types (company, unit, ticket, service note, auth events)
+  - Notification channels: Email (primary), Portal alerts (secondary), SMS (future)
+  - Priority levels: low, medium, high, urgent (based on event type)
+
+- **Ticket Event Notifications**
+  - Events: created, updated, replied, closed
+  - Support receives all ticket event notifications
+  - Partners receive notifications for their own company tickets only
+  - Email subject includes event type and priority: "Ticket created [high]"
+  - Email message includes company ID for context
+
+- **Audit Log Events**
+  - Company events: created, updated, deleted
+  - Unit events: created, updated, deleted
+  - Ticket events: created, updated, replied, closed
+  - Service note events: created, updated (logged to audit trail)
+  - Attachment events: uploaded, deleted (with file metadata)
+  - Auth events: user_login, user_logout, login_failed, password_changed
+  - Role management: role_changed
+
+- **Critical Event Logging**
+  - Login failures: urgent priority + IP tracking
+  - Password changes: high priority + user notification
+  - Role changes: high priority + audit trail
+  - All critical events logged with timestamp and user context
+
+- **Notification Routing**
+  - Support: Receives all notifications (all events, all companies)
+  - Partners: Receive only own-company notifications
+  - Metadata included: event context, user ID, company ID, change summary
+  - Non-blocking: Notification failures don't prevent main operation
+
+- **Test Coverage (Phase 5)**
+  - NotificationCoverageTest.php: 26 tests (26/26 passing ✅)
+  - Coverage: Event structure, channels, priorities, routing, metadata, permissions
+  - All 77 Phase 2-5 tests passing ✅
+
+### Technical Notes
+- Notification events logged via LGP_Logger::log_event() (user_id, action, company_id, meta)
+- Portal alerts via lgp_portal_alert() supplementing email notifications
+- Metadata stored as JSON in audit trail for audit log queries
+- Company ID always tracked for partner-based filtering
+- User ID always logged for action attribution
+- Email sending via wp_mail() with error handling
+- Role-based permissions: Support sees all, partners see own company
+
+### Notification Event Matrix
+
+| Event | Support | Partner | Channel | Priority | Logged |
+|-------|---------|---------|---------|----------|--------|
+| ticket_created | Yes | Own Company | Email + Portal | Medium | Yes |
+| ticket_updated | Yes | Own Company | Email + Portal | Medium | Yes |
+| ticket_replied | Yes | Own Company | Email + Portal | Medium | Yes |
+| ticket_closed | Yes | Own Company | Email | Low | Yes |
+| service_note_created | Yes | No | Portal | Low | Yes |
+| attachment_uploaded | Yes | Own Company | Portal | Low | Yes |
+| company_created | Yes | No | Email | Medium | Yes |
+| unit_created | Yes | Own Company | Portal | Low | Yes |
+| user_login | All | N/A | Audit Log | Low | Yes |
+| login_failed | All | N/A | Audit Log | Urgent | Yes |
+| password_changed | User + Support | N/A | Email | High | Yes |
+| role_changed | Support | N/A | Email | High | Yes |
+
+@@## [v1.5.0-partner-view-polish] - 2025-12-17
 ## [v1.5.0-partner-view-polish] - 2025-12-17
 
 ### Added
