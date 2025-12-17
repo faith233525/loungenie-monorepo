@@ -33,7 +33,10 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 	<!-- Header -->
 	<header class="lgp-header">
 		<div class="lgp-logo">
-			LounGenie Portal
+			<span class="lgp-logo-loungenie">LounGenie</span>
+			<span class="lgp-logo-separator">×</span>
+			<span class="lgp-logo-poolsafe">MyPOOLSAFE</span>
+			<span class="lgp-logo-suffix">Inc.</span>
 		</div>
 		
 		<div class="lgp-header-actions">

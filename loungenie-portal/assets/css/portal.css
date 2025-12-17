@@ -15,16 +15,24 @@
    ============================================================================ */
 
 :root {
-    /* LEGACY COLOR ALIASES - Map to new design token names */
-    --primary: var(--lgp-color-brand, #14B8A6);
-    --secondary: var(--lgp-color-accent, #25D0EE);
-    --dark: var(--lgp-color-text-primary, #1F2937);
-    --neutral: var(--lgp-color-text-secondary, #6B7280);
-    --background: var(--lgp-color-surface, #F8FAFC);
-    --white: var(--lgp-color-background, #FFFFFF);
-    --soft: var(--lgp-color-border, #E5E7EB);
-    --accent: var(--lgp-color-premium, #C5A059);
-    --text: var(--lgp-color-text-primary, #334155);
+    /* BRAND COLOR SYSTEM (LounGenie - STRICT) */
+    --primary: #3AA6B9;
+    /* Primary Teal */
+    --secondary: #25D0EE;
+    /* Accent Cyan */
+    --dark: #222222;
+    /* Main text */
+    --neutral: #454F5E;
+    /* Slate Gray labels */
+    --background: #E9F8F9;
+    /* Soft white/cyan background */
+    --white: #FFFFFF;
+    /* Surfaces */
+    --soft: #D8E9EC;
+    /* Soft borders */
+    --accent: #25D0EE;
+    /* Highlights */
+    --text: var(--dark);
 
     /* Semantic colors */
     --success: #4CAF50;
@@ -41,7 +49,7 @@
     --space-2xl: 48px;
 
     /* Typography */
-    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     --font-size-sm: 14px;
     --font-size-base: 16px;
     --font-size-lg: 18px;
@@ -122,9 +130,39 @@ a:hover {
 }
 
 .lgp-logo {
-    font-size: var(--font-size-xl);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
     font-weight: 700;
-    color: var(--primary);
+}
+
+.lgp-logo-loungenie {
+    background: linear-gradient(135deg, #12B5B0, #0FA19C);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.3px;
+}
+
+.lgp-logo-separator {
+    color: #CBD5E1;
+    font-weight: 300;
+    font-size: 20px;
+}
+
+.lgp-logo-poolsafe {
+    background: linear-gradient(135deg, #334155, #1E293B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.3px;
+}
+
+.lgp-logo-suffix {
+    color: #64748B;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .lgp-header-actions {
@@ -160,6 +198,7 @@ a:hover {
 .lgp-sidebar {
     grid-area: sidebar;
     background-color: #0F172A;
+    /* Dark Navy */
     /* Midnight Navy */
     border-right: 1px solid rgba(255, 255, 255, 0.08);
     padding: var(--space-lg) 0;
@@ -181,25 +220,12 @@ a:hover {
 }
 
 .lgp-nav-link:hover {
-    background-color: rgba(20, 184, 166, 0.08);
-    /* Teal wash */
-    color: #14B8A6;
-    /* Resort Teal */
-}
-
-.lgp-nav-link.active {
-    background-color: rgba(20, 184, 166, 0.12);
-    color: #14B8A6;
-    border-right: 3px solid #14B8A6;
-}
-
-.lgp-nav-link:hover {
-    background-color: var(--background);
+    background-color: rgba(58, 166, 185, 0.10);
     color: var(--primary);
 }
 
 .lgp-nav-link.active {
-    background-color: var(--background);
+    background-color: rgba(58, 166, 185, 0.15);
     color: var(--primary);
     border-right: 3px solid var(--primary);
 }
@@ -293,33 +319,12 @@ a:hover {
     min-height: 100px;
 }
 
-/* Dashboard Stats */
+/* Dashboard Stats (layout only, component styles in design-tokens.css) */
 .lgp-stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: var(--space-lg);
     margin-bottom: var(--space-2xl);
-}
-
-.lgp-stat-card {
-    background-color: var(--white);
-    padding: var(--space-lg);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-md);
-}
-
-.lgp-stat-label {
-    font-size: var(--font-size-sm);
-    color: var(--neutral);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: var(--space-sm);
-}
-
-.lgp-stat-value {
-    font-size: var(--font-size-2xl);
-    font-weight: 700;
-    color: var(--primary);
 }
 
 /* REMOVED: .lgp-badge definitions - now in design-tokens.css */
@@ -515,34 +520,7 @@ a:hover {
 
 /* REMOVED: .lgp-spinner definition - now in design-tokens.css */
 
-/* Empty States */
-.lgp-empty-state {
-    color: var(--neutral);
-    font-style: italic;
-    padding: var(--space-md);
-    text-align: center;
-}
-
-.lgp-empty-state-card {
-    text-align: center;
-    padding: var(--space-2xl);
-}
-
-.lgp-empty-state-icon {
-    font-size: 64px;
-    margin-bottom: var(--space-md);
-}
-
-.lgp-empty-state-title {
-    font-size: var(--font-size-xl);
-    color: var(--dark);
-    margin-bottom: var(--space-sm);
-}
-
-.lgp-empty-state-text {
-    color: var(--neutral);
-    font-size: var(--font-size-base);
-}
+/* Empty States are defined in design-tokens.css */
 
 .lgp-empty-value {
     color: var(--neutral);

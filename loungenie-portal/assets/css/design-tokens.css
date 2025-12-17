@@ -14,40 +14,38 @@
 	 * COLOR PALETTE
 	 * ========================================================================== */
 
-    /* Neutral surfaces */
-    --lgp-color-background: #FFFFFF;
-    /* Base background */
-    --lgp-color-surface: #F8FAFC;
-    /* Soft Slate background */
+    /* Neutral surfaces - LounGenie brand */
+    --lgp-color-background: #E9F8F9;
+    /* Soft White / Cyan */
+    --lgp-color-surface: #E9F8F9;
+    /* Page background */
     --lgp-color-surface-raised: #FFFFFF;
-    /* Cards/Shell surfaces */
-    --lgp-color-border: #E5E7EB;
-    --lgp-color-border-hover: #D1D5DB;
+    /* Cards */
+    --lgp-color-border: #D8E9EC;
+    /* Soft border */
+    --lgp-color-border-hover: #CFE3E6;
 
     /* Text hierarchy */
-    --lgp-color-text-primary: #334155;
-    /* Slate 700 */
-    --lgp-color-text-secondary: #64748B;
-    /* Slate 500 */
-    --lgp-color-text-tertiary: #94A3B8;
-    /* Slate 400 */
+    --lgp-color-text-primary: #222222;
+    /* Dark Text */
+    --lgp-color-text-secondary: #454F5E;
+    /* Slate Gray */
+    --lgp-color-text-tertiary: #7A8699;
+    /* Muted */
     --lgp-color-text-inverse: #FFFFFF;
 
-    /* Brand accent - Resort Teal for Actions */
-    --lgp-color-brand: #14B8A6;
-    /* Resort Teal */
-    --lgp-color-brand-hover: #0D9488;
-    /* Darker Teal on hover */
-    --lgp-color-brand-light: #CCFBF1;
-    /* Light Teal background */
+    /* Brand colors (STRICT) */
+    --lgp-color-brand: #3AA6B9;
+    /* Primary Teal */
+    --lgp-color-brand-hover: #3393A3;
+    /* Slightly darker teal */
+    --lgp-color-brand-light: #D8EFF3;
+    /* Teal tint for badges */
 
-    /* Secondary accent - Soft Cyan for subtle highlights (kept) */
-    --lgp-color-accent: #22D3EE;
-    /* Soft Cyan */
-    --lgp-color-accent-hover: #06B6D4;
-    /* Darker Cyan on hover */
-    --lgp-color-accent-light: #CFFAFE;
-    /* Light Cyan background */
+    /* Accent Cyan */
+    --lgp-color-accent: #25D0EE;
+    --lgp-color-accent-hover: #1AB9D4;
+    --lgp-color-accent-light: #D6F6FC;
 
     /* Premium accent - Brushed Gold (limited use) */
     --lgp-color-premium: #C5A059;
@@ -72,7 +70,7 @@
 	 * ========================================================================== */
 
     /* Font families */
-    --lgp-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --lgp-font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     --lgp-font-family-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
 
     /* Font sizes */
@@ -135,14 +133,14 @@
     /* 4px */
     --lgp-radius-md: 0.5rem;
     /* 8px */
-    --lgp-radius-lg: 0.75rem;
-    /* 12px */
+    --lgp-radius-lg: 1rem;
+    /* 16px */
     --lgp-radius-full: 9999px;
 
     /* Shadows */
-    --lgp-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --lgp-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --lgp-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --lgp-shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.06);
+    --lgp-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+    --lgp-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.10);
 
     /* Focus ring */
     --lgp-focus-ring: 0 0 0 3px var(--lgp-color-brand-light);
@@ -219,7 +217,8 @@
 
 .lgp-card {
     background-color: var(--lgp-color-surface-raised);
-    border: 1px solid var(--lgp-color-border);
+    border: none;
+    /* No hard borders */
     border-radius: var(--lgp-radius-lg);
     padding: var(--lgp-space-6);
     box-shadow: var(--lgp-shadow-sm);
@@ -228,7 +227,6 @@
 }
 
 .lgp-card:hover {
-    border-color: var(--lgp-color-brand);
     box-shadow: var(--lgp-shadow-md);
     transform: translateY(-2px);
 }
@@ -339,7 +337,8 @@
 
 .lgp-table-wrapper {
     background-color: var(--lgp-color-surface-raised);
-    border: 1px solid var(--lgp-color-border);
+    border: none;
+    /* Softer look */
     border-radius: var(--lgp-radius-lg);
     overflow: hidden;
     box-shadow: var(--lgp-shadow-sm);

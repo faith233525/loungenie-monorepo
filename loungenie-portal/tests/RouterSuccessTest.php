@@ -102,7 +102,8 @@ final class RouterSuccessTest extends WPTestCase
         });
 
         $this->assertStringContainsString('Support Dashboard', $out);
-        $this->assertStringContainsString('LounGenie Portal', $out);
+        $this->assertStringContainsString('LounGenie', $out);
+        $this->assertStringContainsString('MyPOOLSAFE', $out);
     }
 
     public function test_partner_user_loads_portal_shell_and_partner_dashboard(): void

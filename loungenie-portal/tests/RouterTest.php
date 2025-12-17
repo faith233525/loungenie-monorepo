@@ -13,8 +13,7 @@ final class RouterTest extends WPTestCase
         });
         when('is_user_logged_in')->justReturn(false);
         when('home_url')->alias(function($path){ return $path; });
-        expect('wp_login_url')->once()->with('/portal')->andReturn('login_url');
-        expect('wp_redirect')->once()->with('login_url')->andReturnUsing(function(){
+        expect('wp_safe_redirect')->once()->with('/portal/login')->andReturnUsing(function(){
             throw new Exception('redirected');
         });
 

@@ -3,14 +3,14 @@
  * LounGenie Portal - Enterprise SaaS Partner Management System
  *
  * @package   LounGenie Portal
- * @version   1.0.0
+ * @version   1.6.0
  * @author    LounGenie Team
  * @license   GPL-2.0-or-later
  *
  * Plugin Name: LounGenie Portal
  * Plugin URI: https://loungenie.com/portal
  * Description: Commercial enterprise SaaS portal for LounGenie partner and support management
- * Version: 1.0.0
+ * Version: 1.6.0
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: LounGenie Team
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // PLUGIN CONSTANTS
 // ============================================================================
 
-define( 'LGP_VERSION', '1.0.0' );
+define( 'LGP_VERSION', '1.6.0' );
 define( 'LGP_PLUGIN_FILE', __FILE__ );
 define( 'LGP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'LGP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -205,6 +205,9 @@ add_action( 'plugins_loaded', 'lgp_init' );
 function lgp_add_rewrite_rules() {
 	add_rewrite_rule( '^portal/?$', 'index.php?lgp_portal=1', 'top' );
 	add_rewrite_rule( '^portal/(.+)/?$', 'index.php?lgp_portal=1&lgp_section=$matches[1]', 'top' );
+	add_rewrite_rule( '^portal/login/?$', 'index.php?lgp_portal_login=1', 'top' );
+	add_rewrite_rule( '^support-login/?$', 'index.php?lgp_support_login=1', 'top' );
+	add_rewrite_rule( '^partner-login/?$', 'index.php?lgp_partner_login=1', 'top' );
 }
 
 add_action( 'init', 'lgp_add_rewrite_rules' );
@@ -264,6 +267,9 @@ add_action( 'template_redirect', 'lgp_redirect_root_to_portal', 0 );
 function lgp_query_vars( $vars ) {
 	$vars[] = 'lgp_portal';
 	$vars[] = 'lgp_section';
+	$vars[] = 'lgp_portal_login';
+	$vars[] = 'lgp_support_login';
+	$vars[] = 'lgp_partner_login';
 	return $vars;
 }
 

@@ -24,11 +24,37 @@ class LGP_Assets {
 	 * Called by router when loading portal
 	 */
 	public static function enqueue_portal_assets() {
+		// Resource hints for faster connections to external CDNs used by the portal
+		add_filter(
+			'wp_resource_hints',
+			function ( $hints, $relation_type ) {
+				$domains = array(
+					'fonts.googleapis.com',
+					'fonts.gstatic.com',
+					'cdnjs.cloudflare.com',
+					'unpkg.com',
+				);
+				if ( 'preconnect' === $relation_type || 'dns-prefetch' === $relation_type ) {
+					$hints = array_unique( array_merge( $hints, $domains ) );
+				}
+				return $hints;
+			},
+			10,
+			2
+		);
+		// Enqueue Montserrat font (brand typography)
+		wp_enqueue_style(
+			'lgp-font-montserrat',
+			'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap',
+			array(),
+			null,
+			'all'
+		);
 		// Enqueue FontAwesome for consistent iconography
 		wp_enqueue_style(
 			'font-awesome',
 			'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
-			array(),
+			array('lgp-font-montserrat'),
 			'6.5.1',
 			'all'
 		);

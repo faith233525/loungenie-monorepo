@@ -63,6 +63,54 @@ $recent_requests = $wpdb->get_results(
 	<p><?php echo esc_html( $company->name ); ?></p>
 </div>
 
+<!-- KPI Cards -->
+<div class="lgp-card-grid" style="margin-top: var(--lgp-space-4);">
+	<div class="lgp-stat-card">
+		<div class="lgp-stat-card-header">
+			<div class="lgp-stat-card-icon"><i class="fa-solid fa-tower-cell" aria-hidden="true"></i></div>
+			<div>
+				<div class="lgp-stat-card-value"><?php echo esc_html( $unit_count ?: '0' ); ?></div>
+				<div class="lgp-stat-card-label"><?php esc_html_e( 'Active Gateways', 'loungenie-portal' ); ?></div>
+			</div>
+		</div>
+	</div>
+	<div class="lgp-stat-card">
+		<div class="lgp-stat-card-header">
+			<div class="lgp-stat-card-icon"><i class="fa-solid fa-ticket" aria-hidden="true"></i></div>
+			<div>
+				<div class="lgp-stat-card-value"><?php echo esc_html( $open_requests ?: '0' ); ?></div>
+				<div class="lgp-stat-card-label"><?php esc_html_e( 'Open Tickets', 'loungenie-portal' ); ?></div>
+			</div>
+		</div>
+	</div>
+	<div class="lgp-stat-card">
+		<div class="lgp-stat-card-header">
+			<div class="lgp-stat-card-icon"><i class="fa-solid fa-heart-pulse" aria-hidden="true"></i></div>
+			<div>
+				<div class="lgp-stat-card-value">99.98%</div>
+				<div class="lgp-stat-card-label"><?php esc_html_e( 'System Uptime', 'loungenie-portal' ); ?></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Primary Actions -->
+<div class="lgp-card" style="display: flex; align-items: center; justify-content: space-between;">
+	<div class="lgp-card-header" style="border-bottom: none; padding-bottom: 0; margin-bottom: 0;">
+		<h2 class="lgp-card-title"><?php esc_html_e( 'Quick Actions', 'loungenie-portal' ); ?></h2>
+	</div>
+	<div class="lgp-card-footer" style="border-top: none; padding-top: 0;">
+		<a href="<?php echo esc_url( home_url( '/portal/requests' ) ); ?>" class="lgp-btn lgp-btn-primary">
+			<i class="fa-solid fa-plus" aria-hidden="true"></i>
+			<?php esc_html_e( 'Create Ticket', 'loungenie-portal' ); ?>
+		</a>
+		<a href="<?php echo esc_url( home_url( '/portal/gateways' ) ); ?>" class="lgp-btn lgp-btn-secondary">
+			<i class="fa-solid fa-router" aria-hidden="true"></i>
+			<?php esc_html_e( 'Add New Gateway', 'loungenie-portal' ); ?>
+		</a>
+	</div>
+</div>
+
 <!-- Company Information -->
 <div class="lgp-card">
 	<div class="lgp-card-header">
