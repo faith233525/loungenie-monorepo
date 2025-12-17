@@ -24,6 +24,11 @@ class LGP_Outlook {
 	const OAUTH_TOKEN_URL     = 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
 
 	/**
+	 * Pretty front-end callback path (no trailing slash)
+	 */
+	const FRONT_CALLBACK_PATH = 'psp-azure-callback';
+
+	/**
 	 * Initialize Outlook integration
 	 */
 	public static function init() {
@@ -36,6 +41,13 @@ class LGP_Outlook {
 
 		// Handle OAuth callback
 		add_action( 'admin_init', array( __CLASS__, 'handle_oauth_callback' ) );
+
+		// OAuth callback via admin-ajax (supports logged-in and non-logged-in)
+		add_action( 'wp_ajax_lgp_outlook_oauth_callback', array( __CLASS__, 'handle_oauth_ajax_callback' ) );
+		add_action( 'wp_ajax_nopriv_lgp_outlook_oauth_callback', array( __CLASS__, 'handle_oauth_ajax_callback' ) );
+
+		// Pretty front-end callback handler
+		add_action( 'parse_request', array( __CLASS__, 'maybe_handle_front_callback' ) );
 
 		// Add reply button to portal
 		add_action( 'wp_ajax_lgp_send_outlook_reply', array( __CLASS__, 'ajax_send_reply' ) );
@@ -329,7 +341,7 @@ class LGP_Outlook {
 	 */
 	public static function get_auth_url() {
 		$client_id    = get_option( 'lgp_outlook_client_id' );
-		$redirect_uri = admin_url( 'options-general.php?page=lgp-outlook-settings&oauth_callback=1' );
+		$redirect_uri = self::get_redirect_uri();
 
 		$params = array(
 			'client_id'     => $client_id,
@@ -365,6 +377,44 @@ class LGP_Outlook {
 	}
 
 	/**
+	 * Handle OAuth callback via admin-ajax.php
+	 */
+	public static function handle_oauth_ajax_callback() {
+		if ( isset( $_GET['code'] ) ) {
+			$code = sanitize_text_field( $_GET['code'] );
+			self::exchange_code_for_token( $code );
+			wp_redirect( admin_url( 'options-general.php?page=lgp-outlook-settings&auth=success' ) );
+			exit;
+		}
+
+		wp_redirect( admin_url( 'options-general.php?page=lgp-outlook-settings&auth=error' ) );
+		exit;
+	}
+
+	/**
+	 * Handle pretty front-end callback at /psp-azure-callback
+	 *
+	 * @param WP $wp
+	 */
+	public static function maybe_handle_front_callback( $wp ) {
+		try {
+			$request_path = isset( $wp->request ) ? trim( (string) $wp->request, '/' ) : '';
+			if ( $request_path === self::FRONT_CALLBACK_PATH ) {
+				if ( isset( $_GET['code'] ) ) {
+					$code = sanitize_text_field( $_GET['code'] );
+					self::exchange_code_for_token( $code );
+				}
+				wp_redirect( admin_url( 'options-general.php?page=lgp-outlook-settings&auth=success' ) );
+				exit;
+			}
+		} catch ( \Throwable $e ) {
+			// Fail closed to admin with error for visibility
+			wp_redirect( admin_url( 'options-general.php?page=lgp-outlook-settings&auth=error' ) );
+			exit;
+		}
+	}
+
+	/**
 	 * Exchange authorization code for access token
 	 *
 	 * @param string $code Authorization code
@@ -373,7 +423,7 @@ class LGP_Outlook {
 	private static function exchange_code_for_token( $code ) {
 		$client_id     = get_option( 'lgp_outlook_client_id' );
 		$client_secret = get_option( 'lgp_outlook_client_secret' );
-		$redirect_uri  = admin_url( 'options-general.php?page=lgp-outlook-settings&oauth_callback=1' );
+		$redirect_uri  = self::get_redirect_uri();
 
 		$response = wp_remote_post(
 			self::OAUTH_TOKEN_URL,
@@ -449,6 +499,7 @@ class LGP_Outlook {
 	public static function register_settings() {
 		register_setting( 'lgp_outlook_settings', 'lgp_outlook_client_id' );
 		register_setting( 'lgp_outlook_settings', 'lgp_outlook_client_secret' );
+		register_setting( 'lgp_outlook_settings', 'lgp_outlook_redirect_mode' );
 	}
 
 	/**
@@ -460,6 +511,8 @@ class LGP_Outlook {
 		}
 
 		$is_authenticated = ! empty( get_option( 'lgp_outlook_access_token' ) );
+		$redirect_mode   = get_option( 'lgp_outlook_redirect_mode', 'front' );
+		$current_redirect = self::get_redirect_uri();
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Outlook Integration Settings', 'loungenie-portal' ); ?></h1>
@@ -508,6 +561,34 @@ class LGP_Outlook {
 						</td>
 					</tr>
 				</table>
+
+				<h2><?php esc_html_e( 'Redirect URI Mode', 'loungenie-portal' ); ?></h2>
+				<table class="form-table">
+					<tr>
+						<th scope="row">
+							<label for="lgp_outlook_redirect_mode"><?php esc_html_e( 'Mode', 'loungenie-portal' ); ?></label>
+						</th>
+						<td>
+							<select id="lgp_outlook_redirect_mode" name="lgp_outlook_redirect_mode">
+								<option value="front" <?php selected( $redirect_mode, 'front' ); ?>><?php esc_html_e( 'Pretty URL (/psp-azure-callback)', 'loungenie-portal' ); ?></option>
+								<option value="ajax" <?php selected( $redirect_mode, 'ajax' ); ?>><?php esc_html_e( 'Admin Ajax (admin-ajax.php)', 'loungenie-portal' ); ?></option>
+								<option value="admin" <?php selected( $redirect_mode, 'admin' ); ?>><?php esc_html_e( 'Admin Settings Page', 'loungenie-portal' ); ?></option>
+							</select>
+							<p class="description">
+								<?php esc_html_e( 'Use Pretty URL for Azure Web redirect URIs (no query string). Admin Ajax and Admin Settings modes may not be accepted by Azure.', 'loungenie-portal' ); ?>
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Current Redirect URI', 'loungenie-portal' ); ?></th>
+						<td>
+							<code><?php echo esc_html( $current_redirect ); ?></code>
+							<p class="description">
+								<?php esc_html_e( 'Register this URI in Azure → App Registration → Authentication → Web.', 'loungenie-portal' ); ?>
+							</p>
+						</td>
+					</tr>
+				</table>
 				
 				<?php submit_button(); ?>
 			</form>
@@ -536,9 +617,7 @@ class LGP_Outlook {
 			<ol>
 				<li><?php esc_html_e( 'Go to Azure Portal → App Registrations', 'loungenie-portal' ); ?></li>
 				<li><?php esc_html_e( 'Create a new app registration', 'loungenie-portal' ); ?></li>
-				<li><?php esc_html_e( 'Set redirect URI to:', 'loungenie-portal' ); ?> 
-					<code><?php echo esc_html( admin_url( 'options-general.php?page=lgp-outlook-settings&oauth_callback=1' ) ); ?></code>
-				</li>
+				<li><?php esc_html_e( 'Set redirect URI to the Current Redirect URI shown above.', 'loungenie-portal' ); ?></li>
 				<li><?php esc_html_e( 'Add API permissions: Mail.Send, Mail.ReadWrite', 'loungenie-portal' ); ?></li>
 				<li><?php esc_html_e( 'Create a client secret', 'loungenie-portal' ); ?></li>
 				<li><?php esc_html_e( 'Enter Client ID and Client Secret above and save', 'loungenie-portal' ); ?></li>
@@ -546,5 +625,33 @@ class LGP_Outlook {
 			</ol>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Compute the redirect URI based on selected mode
+	 *
+	 * @return string
+	 */
+	private static function get_redirect_uri() {
+		$mode = get_option( 'lgp_outlook_redirect_mode', 'front' );
+		switch ( $mode ) {
+			case 'ajax':
+				$url = admin_url( 'admin-ajax.php?action=lgp_outlook_oauth_callback' );
+				break;
+			case 'front':
+				$url = home_url( '/' . self::FRONT_CALLBACK_PATH );
+				break;
+			case 'admin':
+			default:
+				$url = admin_url( 'options-general.php?page=lgp-outlook-settings&oauth_callback=1' );
+		}
+
+		// If site runs on HTTPS, force https scheme for consistency with Azure registration
+		$home_scheme = parse_url( home_url(), PHP_URL_SCHEME );
+		if ( 'https' === $home_scheme && function_exists( 'set_url_scheme' ) ) {
+			$url = set_url_scheme( $url, 'https' );
+		}
+
+		return $url;
 	}
 }
