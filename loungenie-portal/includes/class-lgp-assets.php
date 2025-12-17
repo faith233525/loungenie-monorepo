@@ -63,15 +63,15 @@ class LGP_Assets {
         wp_enqueue_script(
             'lgp-company-profile-enhancements',
             LGP_ASSETS_URL . 'js/company-profile-enhancements.js',
+            array(),
+            LGP_VERSION,
+            true
+        );
 
-                    // Enqueue company profile partner polish (for collapsible sections, read-only badges)
-                    wp_enqueue_script(
-                        'lgp-company-profile-partner-polish',
-                        LGP_ASSETS_URL . 'js/company-profile-partner-polish.js',
-                        array(),
-                        LGP_VERSION,
-                        true
-                    );
+        // Enqueue company profile partner polish (for collapsible sections, read-only badges)
+        wp_enqueue_script(
+            'lgp-company-profile-partner-polish',
+            LGP_ASSETS_URL . 'js/company-profile-partner-polish.js',
             array(),
             LGP_VERSION,
             true
