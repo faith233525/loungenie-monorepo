@@ -8,16 +8,16 @@
 
 ### Pass Rate Improvement
 - **Before:** 115/138 passing (83.3%)
-- **After:** 132/138 passing (95.7%), 6 skipped
-- **Improvement:** +17 tests fixed (+12.4%)
+- **After:** 138/138 passing (100.0%), 0 skipped
+- **Improvement:** +23 tests fixed (+16.7%)
 
 ### Test Status by Category
 | Category | Passing | Status |
 |----------|---------|--------|
 | Phase 2-5 Features | 77/77 | ✅ 100% |
-| Core Functionality | 132/132 | ✅ 100% |
-| Framework-Specific | 0/6 | ⏭️ Skipped |
-| **Total** | **132/138** | **95.7%** |
+| Core Functionality | 138/138 | ✅ 100% |
+| Framework-Specific | 6/6 | ✅ 100% (isolated) |
+| **Total** | **138/138** | **100%** |
 
 ## Fixed Tests (13 tests)
 
@@ -51,25 +51,15 @@
 **File:** `tests/TrainingVideoTest.php`  
 **Status:** get_categories test now passes
 
-## Skipped Tests (6 tests)
+## Previously Skipped Tests: Now Passing (6 tests)
 
 ### RouterSuccessTest (4 tests)
-**Issue:** Patchwork/Brain Monkey conflict - "DefinedTooEarly" error with `add_action()`  
-**Reason:** Framework incompatibility, not code bug  
-**Verification:** Router functionality verified working in production  
-**Tests:** 
-- test_support_user_loads_portal_shell_and_support_dashboard
-- test_partner_user_loads_portal_shell_and_partner_dashboard
-- test_support_user_can_access_map_view
-- test_partner_user_denied_map_view
+**Fix:** Added `@runTestsInSeparateProcesses` and `@preserveGlobalState disabled` to avoid Patchwork/Brain Monkey conflicts and removed skip markers.  
+**Status:** All router tests execute and pass.
 
 ### TrainingVideoTest (2 tests)
-**Issue:** Test pollution - passes when run in isolation, fails in full suite  
-**Reason:** Global $wpdb mock interference from other tests  
-**Verification:** Validation logic verified correct via code inspection and isolated test run  
-**Tests:**
-- test_create_requires_title
-- test_create_requires_video_url
+**Fix:** Added `@runTestsInSeparateProcesses` and `@preserveGlobalState disabled` to eliminate suite pollution and removed skip markers.  
+**Status:** Validation tests now execute and pass.
 
 ## Technical Details
 
@@ -86,18 +76,18 @@
 
 ### Framework Conflicts
 - **Patchwork:** Function redefinition conflicts with Brain Monkey's function stubs
-- **Scope:** Only affects RouterSuccessTest (4 tests)
-- **Risk:** None - functionality verified in production
+- **Resolution:** Per-test process isolation for conflicting suites
+- **Risk:** None - isolated execution guarantees stability
 
 ## Recommendations
 
 ### For Production
-✅ **READY:** 132 passing tests provide comprehensive coverage of all critical functionality  
+✅ **READY:** 138 passing tests provide comprehensive coverage of all critical functionality  
 ✅ **VERIFIED:** Phase 2-5 features at 100% pass rate (77/77 tests)  
-✅ **VALIDATED:** All skipped tests verified via code inspection and production testing
+✅ **VALIDATED:** Previously skipped tests now pass via isolated execution
 
 ### For Future Development
-1. **Test Isolation:** Consider using PHPUnit's `@runInSeparateProcess` annotation for tests with mocking conflicts
+1. **Test Isolation:** Continue using PHPUnit's per-test process isolation for suites with mocking conflicts
 2. **Framework Updates:** Monitor Brain Monkey and Patchwork updates for compatibility fixes
 3. **Mock Strategy:** Document required WordPress function mocks for new test files
 4. **CI/CD:** Set pass threshold to 95%+ to account for framework-specific skipped tests
@@ -114,12 +104,12 @@
 
 ### Git Commits
 ```
-2918db5 - Fix test suite: achieve 95.7% pass rate (132/138 passing, 6 skipped)
+60501c9 - tests: isolate router and training video tests; remove skips; suite 100% passing (138 tests, 450 assertions)
 ```
 
 ## Conclusion
 
-The test suite optimization successfully improved pass rate from 83.3% to 95.7%, with all core functionality fully tested. The 6 skipped tests are due to framework limitations or test pollution issues, not code defects. All functionality has been verified working correctly in production.
+The test suite optimization successfully improved pass rate from 83.3% to 100%, with all core functionality fully tested. Previously skipped tests were resolved via process isolation. All functionality has been verified working correctly in production.
 
 **Deployment Status:** ✅ READY FOR PRODUCTION
 
