@@ -59,6 +59,15 @@ class LGP_Assets {
             true
         );
 
+        // Enqueue company profile enhancements (for inline modals, audit log, service notes)
+        wp_enqueue_script(
+            'lgp-company-profile-enhancements',
+            LGP_ASSETS_URL . 'js/company-profile-enhancements.js',
+            array(),
+            LGP_VERSION,
+            true
+        );
+
         if ( LGP_Auth::is_support() ) {
             wp_enqueue_script(
                 'lgp-company-map',

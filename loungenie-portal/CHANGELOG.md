@@ -2,6 +2,51 @@
 
 All notable changes to LounGenie Portal will be documented in this file.
 
+## [v1.4.0-company-profile-enhancements] - 2025-12-17
+
+### Added
+- **Company Profile UX Enhancements** with 3 new inline features
+  - Inline ticket reply modal: Reply button on each ticket row opens modal with textarea, AJAX submits reply
+  - Inline audit log viewer (support-only): Tab showing timestamp, user, action, metadata with filters
+  - Service notes section (support-only): Track technician notes with date, service type, travel time, unit assignment
+  
+- **Service Notes System**
+  - New database table `lgp_service_notes` with service_date, technician_name, service_type, notes, travel_time, unit_id
+  - REST API endpoints: GET /wp-json/lgp/v1/service-notes (list by company), POST (create new note)
+  - Support-only access; all changes logged to audit trail
+  - Service type options: maintenance, repair, inspection, installation, other
+  - Optional unit assignment for tracking unit-specific service
+
+- **Audit Log Viewer API**
+  - New REST API endpoint: GET /wp-json/lgp/v1/audit-log with filtering
+  - Query parameters: company_id, action (filter), date (filter), per_page (limit)
+  - Returns audit logs with enriched user information (login, email)
+  - Support-only access
+
+- **Audit Log Database**
+  - New table `lgp_audit_log` for comprehensive event logging (required by LGP_Logger)
+  - Schema: id, user_id, action, company_id, meta (JSON), created_at
+  - Indexed by: user_id, action, company_id, created_at
+
+- **JavaScript & Styling**
+  - New file `assets/js/company-profile-enhancements.js` with:
+    - Modal handling for ticket replies
+    - AJAX calls for audit log and service notes
+    - Dynamic rendering of audit log table with filtering
+    - Service notes form with validation
+  - Enhanced CSS in `portal.css`:
+    - Modal styling (overlay, content, close button)
+    - Form controls for audit/service filters
+    - Table styling for audit logs and service notes
+    - Badge styles for status/action displays
+
+### Details
+- Ticket Reply: AJAX POST to /wp-json/lgp/v1/tickets/{id}/reply with content
+- Audit Log: Real-time filtering by action type and date; support-only access
+- Service Notes: Full CRUD support with technician tracking and unit assignment
+- All changes logged to wp_lgp_audit_log table for compliance
+- Form validation on frontend (required fields) and backend (all endpoints)
+
 ## [v1.3.2-audit-logging-completion] - 2025-12-16
 
 ### Added

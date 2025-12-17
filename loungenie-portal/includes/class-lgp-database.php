@@ -169,6 +169,44 @@ class LGP_Database {
             KEY uploaded_by (uploaded_by)
         ) $charset_collate;";
         
+        // Service Notes table (technician field notes for service work)
+        $service_notes_table = $wpdb->prefix . 'lgp_service_notes';
+        $sql_service_notes = "CREATE TABLE $service_notes_table (
+            id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            company_id bigint(20) UNSIGNED NOT NULL,
+            unit_id bigint(20) UNSIGNED,
+            user_id bigint(20) UNSIGNED,
+            service_type varchar(50) NOT NULL,
+            technician_name varchar(255),
+            notes text,
+            travel_time int(11) DEFAULT 0,
+            service_date date NOT NULL,
+            created_at datetime DEFAULT CURRENT_TIMESTAMP,
+            updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY company_id (company_id),
+            KEY unit_id (unit_id),
+            KEY user_id (user_id),
+            KEY service_date (service_date),
+            KEY service_type (service_type)
+        ) $charset_collate;";
+        
+        // Audit Log table (comprehensive event logging for compliance)
+        $audit_log_table = $wpdb->prefix . 'lgp_audit_log';
+        $sql_audit_log = "CREATE TABLE $audit_log_table (
+            id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id bigint(20) UNSIGNED,
+            action varchar(100) NOT NULL,
+            company_id bigint(20) UNSIGNED,
+            meta longtext,
+            created_at datetime DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY user_id (user_id),
+            KEY action (action),
+            KEY company_id (company_id),
+            KEY created_at (created_at)
+        ) $charset_collate;";
+        
         // Execute table creation
         dbDelta( $sql_companies );
         dbDelta( $sql_mgmt_companies );
@@ -178,6 +216,8 @@ class LGP_Database {
         dbDelta( $sql_gateways );
         dbDelta( $sql_training_videos );
         dbDelta( $sql_attachments );
+        dbDelta( $sql_service_notes );
+        dbDelta( $sql_audit_log );
         
         // Store database version
         update_option( 'lgp_db_version', LGP_VERSION );
@@ -197,7 +237,9 @@ class LGP_Database {
             $wpdb->prefix . 'lgp_tickets',
             $wpdb->prefix . 'lgp_gateways',
             $wpdb->prefix . 'lgp_training_videos',
-            $wpdb->prefix . 'lgp_ticket_attachments'
+            $wpdb->prefix . 'lgp_ticket_attachments',
+            $wpdb->prefix . 'lgp_service_notes',
+            $wpdb->prefix . 'lgp_audit_log'
         );
         
         foreach ( $tables as $table ) {

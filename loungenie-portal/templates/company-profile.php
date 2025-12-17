@@ -290,6 +290,7 @@ if ( $company->management_company_id ) {
                             <th><?php esc_html_e( 'Priority', 'loungenie-portal' ); ?></th>
                             <th><?php esc_html_e( 'Status', 'loungenie-portal' ); ?></th>
                             <th><?php esc_html_e( 'Created', 'loungenie-portal' ); ?></th>
+                            <th><?php esc_html_e( 'Actions', 'loungenie-portal' ); ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -324,6 +325,13 @@ if ( $company->management_company_id ) {
                                     </span>
                                 </td>
                                 <td><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $ticket->created_at ) ) ); ?></td>
+                                <td>
+                                    <button class="lgp-btn lgp-btn-small lgp-btn-secondary reply-ticket-btn" 
+                                            data-ticket-id="<?php echo esc_attr( $ticket->id ); ?>"
+                                            data-ticket-status="<?php echo esc_attr( $ticket->status ?? 'open' ); ?>">
+                                        <?php esc_html_e( 'Reply', 'loungenie-portal' ); ?>
+                                    </button>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -334,4 +342,143 @@ if ( $company->management_company_id ) {
         <?php endif; ?>
     </div>
 </div>
+
+<!-- Audit Log Viewer (Support Only) -->
+<?php if ( $is_support ) : ?>
+<div class="lgp-card">
+    <div class="lgp-card-header">
+        <h2 class="lgp-card-title"><?php esc_html_e( 'Audit Log', 'loungenie-portal' ); ?></h2>
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+            <input type="text" id="audit-filter-action" placeholder="<?php esc_attr_e( 'Filter by action...', 'loungenie-portal' ); ?>" 
+                   style="padding: 5px; border-radius: 4px; border: 1px solid #ccc; flex: 1;">
+            <input type="date" id="audit-filter-date" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
+        </div>
+    </div>
+    <div class="lgp-card-body">
+        <div id="audit-log-container" class="lgp-table-container" style="max-height: 400px; overflow-y: auto;">
+            <table class="lgp-table">
+                <thead>
+                    <tr>
+                        <th><?php esc_html_e( 'Timestamp', 'loungenie-portal' ); ?></th>
+                        <th><?php esc_html_e( 'User', 'loungenie-portal' ); ?></th>
+                        <th><?php esc_html_e( 'Action', 'loungenie-portal' ); ?></th>
+                        <th><?php esc_html_e( 'Details', 'loungenie-portal' ); ?></th>
+                    </tr>
+                </thead>
+                <tbody id="audit-log-body">
+                    <tr><td colspan="4"><?php esc_html_e( 'Loading audit log...', 'loungenie-portal' ); ?></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
+<!-- Service Notes Section (Support Only) -->
+<?php if ( $is_support ) : ?>
+<div class="lgp-card">
+    <div class="lgp-card-header">
+        <h2 class="lgp-card-title"><?php esc_html_e( 'Service Notes', 'loungenie-portal' ); ?></h2>
+        <button class="lgp-btn lgp-btn-primary" id="add-service-note-btn" style="margin-top: 10px;">
+            <?php esc_html_e( '+ Add Service Note', 'loungenie-portal' ); ?>
+        </button>
+    </div>
+    <div class="lgp-card-body">
+        <!-- Service Notes Form (hidden by default) -->
+        <div id="service-note-form" style="display: none; margin-bottom: 20px; padding: 15px; background: #f5f5f5; border-radius: 4px;">
+            <h3><?php esc_html_e( 'New Service Note', 'loungenie-portal' ); ?></h3>
+            <form id="add-service-note-form">
+                <div style="margin-bottom: 10px;">
+                    <label><?php esc_html_e( 'Date', 'loungenie-portal' ); ?></label>
+                    <input type="date" id="service-note-date" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label><?php esc_html_e( 'Technician', 'loungenie-portal' ); ?></label>
+                    <input type="text" id="service-note-technician" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label><?php esc_html_e( 'Service Type', 'loungenie-portal' ); ?></label>
+                    <select id="service-note-type" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                        <option value=""><?php esc_html_e( 'Select service type...', 'loungenie-portal' ); ?></option>
+                        <option value="maintenance"><?php esc_html_e( 'Maintenance', 'loungenie-portal' ); ?></option>
+                        <option value="repair"><?php esc_html_e( 'Repair', 'loungenie-portal' ); ?></option>
+                        <option value="inspection"><?php esc_html_e( 'Inspection', 'loungenie-portal' ); ?></option>
+                        <option value="installation"><?php esc_html_e( 'Installation', 'loungenie-portal' ); ?></option>
+                        <option value="other"><?php esc_html_e( 'Other', 'loungenie-portal' ); ?></option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label><?php esc_html_e( 'Unit (optional)', 'loungenie-portal' ); ?></label>
+                    <select id="service-note-unit" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                        <option value="">-- <?php esc_html_e( 'Select unit...', 'loungenie-portal' ); ?> --</option>
+                        <?php foreach ( $units as $unit ) : ?>
+                            <option value="<?php echo esc_attr( $unit->id ); ?>">#<?php echo esc_html( $unit->id ); ?> - <?php echo esc_html( substr( $unit->address ?? '', 0, 40 ) ); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label><?php esc_html_e( 'Notes', 'loungenie-portal' ); ?></label>
+                    <textarea id="service-note-notes" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; min-height: 100px;"></textarea>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label><?php esc_html_e( 'Travel Time (minutes)', 'loungenie-portal' ); ?></label>
+                    <input type="number" id="service-note-travel-time" min="0" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="lgp-btn lgp-btn-primary"><?php esc_html_e( 'Save Service Note', 'loungenie-portal' ); ?></button>
+                    <button type="button" id="cancel-service-note-btn" class="lgp-btn lgp-btn-secondary"><?php esc_html_e( 'Cancel', 'loungenie-portal' ); ?></button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Service Notes Table -->
+        <div id="service-notes-table-container" class="lgp-table-container" style="max-height: 400px; overflow-y: auto;">
+            <table class="lgp-table">
+                <thead>
+                    <tr>
+                        <th><?php esc_html_e( 'Date', 'loungenie-portal' ); ?></th>
+                        <th><?php esc_html_e( 'Technician', 'loungenie-portal' ); ?></th>
+                        <th><?php esc_html_e( 'Type', 'loungenie-portal' ); ?></th>
+                        <th><?php esc_html_e( 'Unit', 'loungenie-portal' ); ?></th>
+                        <th><?php esc_html_e( 'Travel Time', 'loungenie-portal' ); ?></th>
+                        <th><?php esc_html_e( 'Notes', 'loungenie-portal' ); ?></th>
+                    </tr>
+                </thead>
+                <tbody id="service-notes-body">
+                    <tr><td colspan="6"><?php esc_html_e( 'Loading service notes...', 'loungenie-portal' ); ?></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
+<!-- Modal: Ticket Reply -->
+<div id="reply-modal" class="lgp-modal" style="display: none;">
+    <div class="lgp-modal-content">
+        <div class="lgp-modal-header">
+            <h2><?php esc_html_e( 'Reply to Ticket', 'loungenie-portal' ); ?></h2>
+            <button class="lgp-modal-close" onclick="document.getElementById('reply-modal').style.display='none';">&times;</button>
+        </div>
+        <div class="lgp-modal-body">
+            <form id="reply-form">
+                <input type="hidden" id="reply-ticket-id" value="">
+                <div style="margin-bottom: 15px;">
+                    <label><?php esc_html_e( 'Your Reply', 'loungenie-portal' ); ?></label>
+                    <textarea id="reply-content" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; min-height: 150px;"></textarea>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="lgp-btn lgp-btn-primary"><?php esc_html_e( 'Send Reply', 'loungenie-portal' ); ?></button>
+                    <button type="button" class="lgp-btn lgp-btn-secondary" onclick="document.getElementById('reply-modal').style.display='none';"><?php esc_html_e( 'Cancel', 'loungenie-portal' ); ?></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// Pass company ID to JavaScript
+window.lgpCompanyId = <?php echo (int) $company_id; ?>;
+window.lgpIsSupport = <?php echo $is_support ? 'true' : 'false'; ?>;
+</script>
 

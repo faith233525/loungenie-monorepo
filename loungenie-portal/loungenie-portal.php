@@ -150,6 +150,8 @@ function lgp_init() {
     require_once LGP_PLUGIN_DIR . 'api/gateways.php';
     require_once LGP_PLUGIN_DIR . 'api/training-videos.php';
     require_once LGP_PLUGIN_DIR . 'api/attachments.php';
+    require_once LGP_PLUGIN_DIR . 'api/service-notes.php';
+    require_once LGP_PLUGIN_DIR . 'api/audit-log.php';
     
     // Load role definitions
     require_once LGP_PLUGIN_DIR . 'roles/support.php';
