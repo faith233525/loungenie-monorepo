@@ -211,16 +211,52 @@ add_action( 'init', 'lgp_add_rewrite_rules' );
 
 /**
  * Redirect root domain to /portal
- * Anyone visiting the root domain goes straight to the portal login/dashboard
+ * - Applies to any request hitting the site root ('/') on the frontend
+ * - Skips admin, login, REST, callback, sitemap/robots, and existing portal paths
  */
 function lgp_redirect_root_to_portal() {
-	// Only redirect if we're on the front page and not logged into WP admin
-	if ( is_front_page() && ! is_admin() && ! is_user_logged_in() ) {
-		wp_safe_redirect( home_url( '/portal' ) );
-		exit;
+	if ( is_admin() ) {
+		return; // never redirect wp-admin
+	}
+
+	// Current request path (no query string)
+	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? strtok( $_SERVER['REQUEST_URI'], '?' ) : '/';
+	$request_uri = trailingslashit( $request_uri );
+
+	// Exclusions: don't interfere with these paths
+	$excluded_prefixes = array(
+		'/portal/',
+		'/wp-login.php/',
+		'/wp-json/',
+		'/psp-azure-callback/',
+		'/xmlrpc.php/',
+		'/feed/',
+		'/sitemap', // includes variations
+	);
+
+	foreach ( $excluded_prefixes as $prefix ) {
+		if ( 0 === strpos( $request_uri, $prefix ) ) {
+			return;
+		}
+	}
+
+	// Also skip robots and favicon
+	if ( '/robots.txt/' === $request_uri || '/favicon.ico/' === $request_uri ) {
+		return;
+	}
+
+	// If this is the root/front request, always redirect to /portal (regardless of login state)
+	if ( '/' === $request_uri || is_front_page() || is_home() ) {
+		// Avoid redirect loop if home_url already ends with /portal
+		$target = home_url( '/portal' );
+		$current = home_url( $request_uri );
+		if ( trailingslashit( $current ) !== trailingslashit( $target ) ) {
+			wp_safe_redirect( $target, 301 );
+			exit;
+		}
 	}
 }
-add_action( 'template_redirect', 'lgp_redirect_root_to_portal', 1 );
+add_action( 'template_redirect', 'lgp_redirect_root_to_portal', 0 );
 
 /**
  * Add query vars for portal routing

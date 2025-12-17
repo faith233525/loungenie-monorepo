@@ -15,31 +15,45 @@
 	 * ========================================================================== */
 
     /* Neutral surfaces */
-    --lgp-color-background: #FFFFFF;              /* Base background */
-    --lgp-color-surface: #F8FAFC;                 /* Soft Slate background */
-    --lgp-color-surface-raised: #FFFFFF;          /* Cards/Shell surfaces */
+    --lgp-color-background: #FFFFFF;
+    /* Base background */
+    --lgp-color-surface: #F8FAFC;
+    /* Soft Slate background */
+    --lgp-color-surface-raised: #FFFFFF;
+    /* Cards/Shell surfaces */
     --lgp-color-border: #E5E7EB;
     --lgp-color-border-hover: #D1D5DB;
 
     /* Text hierarchy */
-    --lgp-color-text-primary: #334155;            /* Slate 700 */
-    --lgp-color-text-secondary: #64748B;          /* Slate 500 */
-    --lgp-color-text-tertiary: #94A3B8;           /* Slate 400 */
+    --lgp-color-text-primary: #334155;
+    /* Slate 700 */
+    --lgp-color-text-secondary: #64748B;
+    /* Slate 500 */
+    --lgp-color-text-tertiary: #94A3B8;
+    /* Slate 400 */
     --lgp-color-text-inverse: #FFFFFF;
 
     /* Brand accent - Resort Teal for Actions */
-    --lgp-color-brand: #14B8A6;                   /* Resort Teal */
-    --lgp-color-brand-hover: #0D9488;             /* Darker Teal on hover */
-    --lgp-color-brand-light: #CCFBF1;             /* Light Teal background */
+    --lgp-color-brand: #14B8A6;
+    /* Resort Teal */
+    --lgp-color-brand-hover: #0D9488;
+    /* Darker Teal on hover */
+    --lgp-color-brand-light: #CCFBF1;
+    /* Light Teal background */
 
     /* Secondary accent - Soft Cyan for subtle highlights (kept) */
-    --lgp-color-accent: #22D3EE;                  /* Soft Cyan */
-    --lgp-color-accent-hover: #06B6D4;            /* Darker Cyan on hover */
-    --lgp-color-accent-light: #CFFAFE;            /* Light Cyan background */
+    --lgp-color-accent: #22D3EE;
+    /* Soft Cyan */
+    --lgp-color-accent-hover: #06B6D4;
+    /* Darker Cyan on hover */
+    --lgp-color-accent-light: #CFFAFE;
+    /* Light Cyan background */
 
     /* Premium accent - Brushed Gold (limited use) */
-    --lgp-color-premium: #C5A059;                 /* Brushed Gold */
-    --lgp-color-premium-light: #F5EEDC;           /* Soft gold tint */
+    --lgp-color-premium: #C5A059;
+    /* Brushed Gold */
+    --lgp-color-premium-light: #F5EEDC;
+    /* Soft gold tint */
 
     /* Status colors (WCAG AA compliant) */
     --lgp-color-success: #16A34A;
@@ -48,8 +62,10 @@
     --lgp-color-warning-light: #FEF3C7;
     --lgp-color-danger: #DC2626;
     --lgp-color-danger-light: #FEE2E2;
-    --lgp-color-info: #0D9488;                    /* Teal for info */
-    --lgp-color-info-light: #CCFBF1;              /* Light Teal bg */
+    --lgp-color-info: #0D9488;
+    /* Teal for info */
+    --lgp-color-info-light: #CCFBF1;
+    /* Light Teal bg */
 
     /* ============================================================================
 	 * TYPOGRAPHY
@@ -296,18 +312,20 @@
 @media (max-width: 768px) {
     .lgp-card-grid {
         grid-template-columns: 1fr;
-        gap: var(--lgp-space-4);  /* Reduce gap on mobile */
+        gap: var(--lgp-space-4);
+        /* Reduce gap on mobile */
     }
-    
+
     .lgp-card {
-        padding: var(--lgp-space-4);  /* Reduce padding on mobile */
+        padding: var(--lgp-space-4);
+        /* Reduce padding on mobile */
     }
-    
+
     .lgp-card-header {
         flex-direction: column;
         align-items: flex-start;
     }
-    
+
     .lgp-card-footer {
         flex-direction: column;
         align-items: flex-start;
@@ -990,74 +1008,84 @@
  * ========================================================================== */
 
 @media (max-width: 768px) {
+
     /* Table responsive behavior */
     .lgp-table-wrapper {
         overflow-x: auto;
-        -webkit-overflow-scrolling: touch;  /* Smooth scrolling on iOS */
+        -webkit-overflow-scrolling: touch;
+        /* Smooth scrolling on iOS */
     }
-    
+
     .lgp-table {
-        min-width: 600px;  /* Prevent table from collapsing too much */
-        font-size: var(--lgp-font-size-xs);  /* Smaller text on mobile */
+        min-width: 600px;
+        /* Prevent table from collapsing too much */
+        font-size: var(--lgp-font-size-xs);
+        /* Smaller text on mobile */
     }
-    
+
     .lgp-table th,
     .lgp-table td {
-        padding: var(--lgp-space-2) var(--lgp-space-3);  /* Reduce padding */
-        white-space: nowrap;  /* Prevent text wrapping */
+        padding: var(--lgp-space-2) var(--lgp-space-3);
+        /* Reduce padding */
+        white-space: nowrap;
+        /* Prevent text wrapping */
     }
-    
+
     .lgp-table-actions {
         gap: var(--lgp-space-1);
     }
-    
+
     .lgp-table-actions a,
     .lgp-table-actions button {
         font-size: var(--lgp-font-size-xs);
         padding: var(--lgp-space-1);
     }
-    
+
     /* Button responsive behavior */
     .lgp-btn {
-        min-height: 40px;  /* Slightly smaller on mobile */
+        min-height: 40px;
+        /* Slightly smaller on mobile */
         padding: var(--lgp-space-2) var(--lgp-space-4);
     }
-    
+
     .lgp-btn-lg {
         min-height: 48px;
         padding: var(--lgp-space-3) var(--lgp-space-5);
     }
-    
+
     /* Stat card responsive */
     .lgp-stat-card {
         padding: var(--lgp-space-4);
     }
-    
+
     .lgp-stat-card-value {
-        font-size: var(--lgp-font-size-xl);  /* Smaller on mobile */
+        font-size: var(--lgp-font-size-xl);
+        /* Smaller on mobile */
     }
-    
+
     /* Empty state responsive */
     .lgp-empty-state {
         padding: var(--lgp-space-8);
     }
-    
+
     .lgp-empty-state-icon {
         width: 48px;
         height: 48px;
     }
-    
+
     /* Spacing adjustments for mobile */
     .lgp-portal {
-        font-size: var(--lgp-font-size-sm);  /* Slightly smaller base text */
+        font-size: var(--lgp-font-size-sm);
+        /* Slightly smaller base text */
     }
-    
+
     /* Badge responsive */
     .lgp-badge {
-        font-size: 0.7rem;  /* Slightly smaller badges */
+        font-size: 0.7rem;
+        /* Slightly smaller badges */
         padding: 0.125rem var(--lgp-space-2);
     }
-    
+
     /* Avatar group on mobile */
     .lgp-avatar {
         width: 36px;
@@ -1094,6 +1122,7 @@
 
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
+
     *,
     *::before,
     *::after {
