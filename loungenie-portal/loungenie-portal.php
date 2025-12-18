@@ -163,6 +163,8 @@ function lgp_init() {
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-cache.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-security.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-microsoft-sso.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-microsoft-sso-handler.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-login-handler.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-logger.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-notifications.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-geocode.php';
