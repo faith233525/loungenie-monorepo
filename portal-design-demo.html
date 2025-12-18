@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LounGenie Portal v1.8.0 - Interactive Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        /* ============================================================================
+         * DESIGN TOKENS & VARIABLES
+         * ============================================================================ */
+        :root {
+            /* ====================================================================
+             * 60-30-10 COLOR RULE - NUANCED IMPLEMENTATION
+             * ==================================================================== */
+            
+            /* 60% ATMOSPHERE: Soft Cyan & White (Backgrounds & Large Surfaces) */
+            --lgp-atmosphere-primary: #E9F8F9;      /* Main background */
+            --lgp-atmosphere-white: #FFFFFF;        /* Cards, modals */
+            --lgp-atmosphere-alt: #F5FBFC;          /* Alternating card bg */
+            --lgp-atmosphere-border: #D8E9EC;       /* Subtle borders */
+            --lgp-atmosphere-hover: #EEF7F9;        /* Hover surfaces */
+            
+            /* 30% STRUCTURE: Deep Navy (Text, Headers, Navigation) */
+            --lgp-structure-navy: #0F172A;          /* Primary text, sidebar bg */
+            --lgp-structure-headline: #0F172A;      /* Headings (h1-h6) */
+            --lgp-structure-body: #454F5E;          /* Body text */
+            --lgp-structure-secondary: #7A8699;     /* Secondary text */
+            --lgp-structure-tertiary: #94A3B8;      /* Tertiary text, hints */
+            --lgp-structure-border: #CFE3E6;        /* Borders, separators */
+            
+            /* 10% ACTION: Teal & Cyan (Interactive Elements Only) */
+            --lgp-action-teal: #3AA6B9;             /* Primary action */
+            --lgp-action-teal-dark: #2A8A9A;        /* Hover state */
+            --lgp-action-teal-light: #D8EFF3;       /* Badge/light background */
+            --lgp-action-cyan: #25D0EE;             /* Secondary action */
+            --lgp-action-cyan-dark: #1AB9D4;        /* Hover state */
+            --lgp-action-cyan-light: #D6F6FC;       /* Badge/light background */
+            
+            /* FEEDBACK COLORS (Status, Sparingly) */
+            --lgp-success: #16A34A;
+            --lgp-success-light: #DCFCE7;
+            --lgp-warning: #D97706;
+            --lgp-warning-light: #FEF3C7;
+            --lgp-danger: #DC2626;
+            --lgp-danger-light: #FEE2E2;
+            --lgp-info: #0D9488;
+            --lgp-info-light: #CCFBF1;
+            
+            /* TYPOGRAPHY */
+            --lgp-font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --lgp-text-xs: 0.75rem;
+            --lgp-text-sm: 0.875rem;
+            --lgp-text-base: 1rem;
+            --lgp-text-lg: 1.125rem;
+            --lgp-text-xl: 1.25rem;
+            --lgp-text-2xl: 1.5rem;
+            --lgp-text-3xl: 1.875rem;
+            
+            /* SPACING */
+            --lgp-space-2: 0.5rem;
+            --lgp-space-3: 0.75rem;
+            --lgp-space-4: 1rem;
+            --lgp-space-6: 1.5rem;
+            --lgp-space-8: 2rem;
+            
+            /* LAYOUT */
+            --lgp-sidebar-width: 280px;
+            --lgp-header-height: 80px;
+            --lgp-radius: 6px;
+            --lgp-radius-md: 8px;
+            --lgp-shadow: 0 2px 4px rgba(15, 23, 42, 0.1);
+            --lgp-shadow-md: 0 4px 8px rgba(15, 23, 42, 0.12);
+            --lgp-transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Legacy mapping for compatibility */
+            --lgp-brand-teal: #3AA6B9;
+            --lgp-brand-teal-dark: #2A8A9A;
+            --lgp-brand-teal-light: #D8EFF3;
+            --lgp-brand-cyan: #25D0EE;
+            --lgp-brand-cyan-dark: #1AB9D4;
+            --lgp-brand-cyan-light: #D6F6FC;
+            --lgp-white: #FFFFFF;
+            --lgp-background: #E9F8F9;
+            --lgp-surface: #FFFFFF;
+            --lgp-border: #D8E9EC;
+            --lgp-text-primary: #0F172A;
+            --lgp-text-secondary: #454F5E;
+            --lgp-text-tertiary: #7A8699;
+            --lgp-text-muted: #94A3B8;
+            
+            /* ROLE-SPECIFIC ACCENTS (Unified but Different) */
+            --lgp-role-accent: var(--lgp-action-teal);           /* Default to Partner (Teal) */
+            --lgp-role-accent-dark: var(--lgp-action-teal-dark);
+            --lgp-role-accent-light: var(--lgp-action-teal-light);
+        }
+        
+        /* ============================================================================
+         * ROLE-SPECIFIC THEMING
+         * Partner: Professional, trustworthy, calm (Teal)
+         * Support: Energetic, responsive, helpful (Cyan)
+         * ============================================================================ */
+        body[data-role="partner"] {
+            --lgp-role-accent: var(--lgp-action-teal);
+            --lgp-role-accent-dark: var(--lgp-action-teal-dark);
+            --lgp-role-accent-light: var(--lgp-action-teal-light);
+        }
+        
+        body[data-role="support"] {
+            --lgp-role-accent: var(--lgp-action-cyan);
+            --lgp-role-accent-dark: var(--lgp-action-cyan-dark);
+            --lgp-role-accent-light: var(--lgp-action-cyan-light);
+        }
+        
+        /* Smooth transitions for role switching */
+        .lgp-sidebar,
+        .lgp-nav-link,
+        .lgp-nav-icon,
+        .lgp-btn-primary,
+        .lgp-btn-outline,
+        .lgp-stat-number,
+        .lgp-stat-icon,
+        .lgp-stat-card::before,
+        .lgp-tab,
+        .lgp-card,
+        .lgp-user-role,
+        .demo-controls {
+            transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--lgp-font-family);
+            font-size: var(--lgp-text-base);
+            line-height: 1.5;
+            color: var(--lgp-structure-body);
+            background: var(--lgp-atmosphere-primary);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ============================================================================
+         * LAYOUT STRUCTURE
+         * ============================================================================ */
+        .lgp-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .lgp-sidebar {
+            width: var(--lgp-sidebar-width);
+            background: var(--lgp-structure-navy);
+            padding: var(--lgp-space-6) var(--lgp-space-4);
+            overflow-y: auto;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            z-index: 100;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--lgp-role-accent);
+        }
+
+        .lgp-main-content {
+            margin-left: var(--lgp-sidebar-width);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lgp-header {
+            background: var(--lgp-atmosphere-white);
+            padding: var(--lgp-space-4) var(--lgp-space-8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--lgp-atmosphere-border);
+            box-shadow: var(--lgp-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .lgp-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--lgp-space-8);
+            background: var(--lgp-atmosphere-primary);
+        }
+
+        /* ============================================================================
+         * LOGO & BRANDING
+         * ============================================================================ */
+        .lgp-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--lgp-space-2);
+            cursor: pointer;
+            transition: transform var(--lgp-transition);
+            font-weight: 700;
+            font-size: var(--lgp-text-2xl);
+        }
+
+        .lgp-logo:hover {
+            transform: scale(1.02);
+        }
+
+        .lgp-logo-loungenie {
+            color: var(--lgp-atmosphere-white);
+        }
+
+        .lgp-logo-separator {
+            color: var(--lgp-action-cyan);
+            margin: 0 var(--lgp-space-2);
+        }
+
+        .lgp-logo-poolsafe {
+            color: var(--lgp-action-cyan);
+        }
+
+        .lgp-logo-suffix {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: var(--lgp-text-base);
+            font-weight: 500;
+        }
+
+        /* ============================================================================
+         * SIDEBAR NAVIGATION
+         * ============================================================================ */
+        .lgp-nav {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .lgp-nav-item {
+            margin-bottom: var(--lgp-space-4);
+        }
+
+        .lgp-nav-link {
+            display: flex;
+            align-items: center;
+            gap: var(--lgp-space-3);
+            padding: var(--lgp-space-3) var(--lgp-space-4);
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            border-radius: var(--lgp-radius);
+            transition: all var(--lgp-transition);
+            font-size: var(--lgp-text-sm);
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .lgp-nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--lgp-atmosphere-white);
+            transform: translateX(4px);
+        }
+
+        .lgp-nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--lgp-role-accent);
+            border-left: 4px solid var(--lgp-role-accent);
+            padding-left: calc(var(--lgp-space-4) - 4px);
+        }
+
+        .lgp-nav-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            font-size: var(--lgp-text-base);
+            background: transparent;
+            border-radius: 8px;
+            transition: all var(--lgp-transition);
+        }
+        
+        .lgp-nav-link.active .lgp-nav-icon {
+            background: var(--lgp-role-accent-light);
+        }
+        
+        .lgp-nav-link:hover .lgp-nav-icon {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        /* Optional: Gradient icon effect for extra polish */
+        .icon-gradient {
+            background: linear-gradient(135deg, var(--lgp-role-accent), var(--lgp-role-accent-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+
+        /* ============================================================================
+         * HEADER ELEMENTS
+         * ============================================================================ */
+        .lgp-header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--lgp-space-6);
+        }
+
+        .lgp-header-right {
+            display: flex;
+            align-items: center;
+            gap: var(--lgp-space-6);
+        }
+
+        .lgp-notification-icon {
+            position: relative;
+            font-size: var(--lgp-text-xl);
+            cursor: pointer;
+            transition: all var(--lgp-transition);
+        }
+
+        .lgp-notification-icon:hover {
+            transform: scale(1.1);
+            color: var(--lgp-role-accent);
+        }
+
+        .lgp-notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--lgp-danger);
+            color: var(--lgp-white);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--lgp-text-xs);
+            font-weight: 700;
+        }
+
+        .lgp-user-menu {
+            display: flex;
+            align-items: center;
+            gap: var(--lgp-space-3);
+        }
+
+        .lgp-user-name {
+            font-weight: 600;
+            color: var(--lgp-structure-headline);
+        }
+
+        .lgp-user-role {
+            font-size: var(--lgp-text-xs);
+            color: var(--lgp-structure-secondary);
+            background: var(--lgp-role-accent-light);
+            padding: 4px 12px;
+            border-radius: 12px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        /* ============================================================================
+         * BUTTONS
+         * ============================================================================ */
+        .lgp-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--lgp-space-2);
+            padding: var(--lgp-space-3) var(--lgp-space-6);
+            font-size: var(--lgp-text-base);
+            font-weight: 600;
+            border-radius: var(--lgp-radius);
+            border: none;
+            cursor: pointer;
+            transition: all var(--lgp-transition);
+            text-decoration: none;
+            font-family: var(--lgp-font-family);
+        }
+
+        .lgp-btn-primary {
+            background: var(--lgp-role-accent);
+            color: var(--lgp-atmosphere-white);
+        }
+
+        .lgp-btn-primary:hover {
+            background: var(--lgp-role-accent-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--lgp-shadow-md);
+        }
+
+        .lgp-btn-secondary {
+            background: var(--lgp-atmosphere-alt);
+            color: var(--lgp-role-accent);
+            border: 1px solid var(--lgp-role-accent-light);
+        }
+
+        .lgp-btn-secondary:hover {
+            background: var(--lgp-role-accent-light);
+            border-color: var(--lgp-role-accent);
+            color: var(--lgp-role-accent-dark);
+        }
+
+        .lgp-btn-outline {
+            background: transparent;
+            border: 2px solid var(--lgp-role-accent);
+            color: var(--lgp-role-accent);
+        }
+
+        .lgp-btn-outline:hover {
+            background: var(--lgp-role-accent);
+            color: var(--lgp-atmosphere-white);
+        }
+
+        .lgp-btn-small {
+            padding: var(--lgp-space-2) var(--lgp-space-4);
+            font-size: var(--lgp-text-sm);
+        }
+
+        /* Links */
+        a:not(.lgp-nav-link):not(.lgp-btn):not(.lgp-tab) {
+            color: var(--lgp-role-accent);
+            text-decoration: none;
+            transition: all var(--lgp-transition);
+            border-bottom: 1px solid transparent;
+        }
+        
+        a:not(.lgp-nav-link):not(.lgp-btn):not(.lgp-tab):hover {
+            color: var(--lgp-role-accent-dark);
+            border-bottom-color: var(--lgp-role-accent);
+        }
+        
+        /* ============================================================================
+         * CARDS & PANELS
+         * ============================================================================ */
+        .lgp-card {
+            background: var(--lgp-atmosphere-white);
+            border-radius: var(--lgp-radius-md);
+            padding: var(--lgp-space-6);
+            box-shadow: var(--lgp-shadow);
+            transition: all var(--lgp-transition);
+            margin-bottom: var(--lgp-space-6);
+        }
+
+        .lgp-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--lgp-shadow-md);
+            background: var(--lgp-atmosphere-alt);
+            border-left: 3px solid var(--lgp-role-accent);
+        }
+
+        .lgp-card-compact {
+            padding: var(--lgp-space-4);
+        }
+
+        .lgp-card-title {
+            font-size: var(--lgp-text-xl);
+            font-weight: 700;
+            margin: 0 0 var(--lgp-space-4) 0;
+            color: var(--lgp-structure-headline);
+        }
+
+        /* ============================================================================
+         * TABS
+         * ============================================================================ */
+        .lgp-tabs {
+            display: flex;
+            gap: var(--lgp-space-4);
+            border-bottom: 2px solid var(--lgp-border);
+            margin-bottom: var(--lgp-space-6);
+            flex-wrap: wrap;
+        }
+
+        .lgp-tab {
+            padding: var(--lgp-space-4) var(--lgp-space-6);
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--lgp-text-tertiary);
+            transition: all var(--lgp-transition);
+            font-family: var(--lgp-font-family);
+            font-size: var(--lgp-text-sm);
+        }
+
+        .lgp-tab:hover {
+            color: var(--lgp-structure-navy);
+        }
+
+        .lgp-tab.active {
+            color: var(--lgp-role-accent);
+            border-bottom-color: var(--lgp-role-accent);
+        }
+
+        .lgp-tab-content {
+            display: none;
+        }
+
+        .lgp-tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ============================================================================
+         * GRID LAYOUTS
+         * ============================================================================ */
+        .lgp-grid {
+            display: grid;
+            gap: var(--lgp-space-6);
+            margin-bottom: var(--lgp-space-6);
+        }
+
+        .lgp-grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .lgp-grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        .lgp-grid-4 {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+
+        /* ============================================================================
+         * BADGES & LABELS
+         * ============================================================================ */
+        .lgp-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: var(--lgp-space-2) var(--lgp-space-4);
+            font-size: var(--lgp-text-xs);
+            font-weight: 600;
+            border-radius: 9999px;
+        }
+
+        .lgp-badge-success {
+            background: var(--lgp-success-light);
+            color: var(--lgp-success);
+        }
+
+        .lgp-badge-warning {
+            background: var(--lgp-warning-light);
+            color: var(--lgp-warning);
+        }
+
+        .lgp-badge-danger {
+            background: var(--lgp-danger-light);
+            color: var(--lgp-danger);
+        }
+
+        .lgp-badge-info {
+            background: var(--lgp-info-light);
+            color: var(--lgp-info);
+        }
+
+        .lgp-badge-brand {
+            background: var(--lgp-role-accent-light);
+            color: var(--lgp-role-accent);
+        }
+        
+        .lgp-badge-role {
+            background: var(--lgp-role-accent);
+            color: var(--lgp-atmosphere-white);
+            font-weight: 600;
+        }
+
+        /* ============================================================================
+         * TABLES
+         * ============================================================================ */
+        .lgp-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--lgp-atmosphere-white);
+            border-radius: var(--lgp-radius-md);
+            overflow: hidden;
+        }
+
+        .lgp-table th {
+            background: var(--lgp-atmosphere-alt);
+            padding: var(--lgp-space-4);
+            text-align: left;
+            font-weight: 600;
+            color: var(--lgp-structure-headline);
+            border-bottom: 2px solid var(--lgp-atmosphere-border);
+        }
+
+        .lgp-table td {
+            padding: var(--lgp-space-4);
+            color: var(--lgp-structure-body);
+            border-bottom: 1px solid var(--lgp-atmosphere-border);
+        }
+
+        .lgp-table tbody tr {
+            transition: all var(--lgp-transition);
+        }
+        
+        .lgp-table tbody tr:hover {
+            background: var(--lgp-atmosphere-hover);
+            border-left: 3px solid var(--lgp-role-accent);
+        }
+
+        /* ============================================================================
+         * STAT CARDS
+         * ============================================================================ */
+        .lgp-stat-card {
+            background: var(--lgp-atmosphere-white);
+            border-radius: var(--lgp-radius-md);
+            padding: var(--lgp-space-6);
+            text-align: center;
+            box-shadow: var(--lgp-shadow);
+            transition: all var(--lgp-transition);
+        }
+
+        .lgp-stat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .lgp-stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--lgp-space-3);
+        }
+
+        .lgp-stat-number {
+            font-size: var(--lgp-text-3xl);
+            font-weight: 700;
+            color: var(--lgp-role-accent);
+            margin-bottom: var(--lgp-space-2);
+        }
+
+        .lgp-stat-label {
+            font-size: var(--lgp-text-sm);
+            color: var(--lgp-text-tertiary);
+        }
+
+        /* ============================================================================
+         * FORMS
+         * ============================================================================ */
+        .lgp-form-group {
+            margin-bottom: var(--lgp-space-6);
+        }
+
+        .lgp-label {
+            display: block;
+            margin-bottom: var(--lgp-space-2);
+            font-weight: 600;
+            color: var(--lgp-structure-headline);
+            font-size: var(--lgp-text-sm);
+        }
+
+        .lgp-input,
+        .lgp-select,
+        .lgp-textarea {
+            width: 100%;
+            padding: var(--lgp-space-3) var(--lgp-space-4);
+            font-size: var(--lgp-text-base);
+            border: 1px solid var(--lgp-atmosphere-border);
+            border-radius: var(--lgp-radius);
+            font-family: var(--lgp-font-family);
+            transition: all var(--lgp-transition);
+            background: var(--lgp-atmosphere-white);
+            color: var(--lgp-structure-body);
+        }
+
+        .lgp-input::placeholder,
+        .lgp-select::placeholder,
+        .lgp-textarea::placeholder {
+            color: var(--lgp-structure-tertiary);
+        }
+
+        .lgp-input:focus,
+        .lgp-select:focus,
+        .lgp-textarea:focus {
+            outline: none;
+            border-color: var(--lgp-role-accent);
+            box-shadow: 0 0 0 3px var(--lgp-role-accent-light);
+        }
+
+        .lgp-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* ============================================================================
+         * RESPONSIVE DESIGN
+         * ============================================================================ */
+        @media (max-width: 1024px) {
+            .lgp-sidebar {
+                width: 240px;
+            }
+
+            .lgp-main-content {
+                margin-left: 240px;
+            }
+
+            .lgp-grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .lgp-sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height var(--lgp-transition);
+            }
+
+            .lgp-sidebar.mobile-open {
+                max-height: 500px;
+            }
+
+            .lgp-main-content {
+                margin-left: 0;
+            }
+
+            .lgp-header {
+                padding: var(--lgp-space-4);
+            }
+
+            .lgp-content {
+                padding: var(--lgp-space-4);
+            }
+
+            .lgp-card {
+                padding: var(--lgp-space-4);
+            }
+
+            .lgp-grid-2,
+            .lgp-grid-3,
+            .lgp-grid-4 {
+                grid-template-columns: 1fr;
+            }
+
+            .lgp-tabs {
+                gap: var(--lgp-space-2);
+            }
+
+            .lgp-tab {
+                padding: var(--lgp-space-3) var(--lgp-space-4);
+                font-size: var(--lgp-text-xs);
+            }
+        }
+
+        /* ============================================================================
+         * DEMO-SPECIFIC STYLES
+         * ============================================================================ */
+        .demo-controls {
+            background: var(--lgp-atmosphere-white);
+            border-radius: var(--lgp-radius-md);
+            padding: var(--lgp-space-6);
+            margin-bottom: var(--lgp-space-6);
+            box-shadow: var(--lgp-shadow);
+            border-left: 4px solid var(--lgp-role-accent);
+        }
+
+        .demo-controls h3 {
+            margin: 0 0 var(--lgp-space-4) 0;
+            color: var(--lgp-structure-headline);
+            padding-bottom: var(--lgp-space-3);
+            border-bottom: 2px solid var(--lgp-role-accent-light);
+        }
+        
+        .demo-controls .control-group {
+            display: flex;
+            gap: var(--lgp-space-3);
+            margin-top: var(--lgp-space-4);
+        }
+
+        .demo-controls p {
+            margin: 0 0 var(--lgp-space-4) 0;
+            color: var(--lgp-structure-secondary);
+            font-size: var(--lgp-text-sm);
+        }
+
+        .demo-mode-selector {
+            display: flex;
+            gap: var(--lgp-space-4);
+            margin-top: var(--lgp-space-4);
+            flex-wrap: wrap;
+        }
+
+        .role-indicator {
+            font-size: var(--lgp-text-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .feature-section {
+            margin-top: var(--lgp-space-8);
+        }
+
+        .feature-section-title {
+            font-size: var(--lgp-text-2xl);
+            font-weight: 700;
+            margin-bottom: var(--lgp-space-6);
+            color: var(--lgp-structure-headline);
+            border-bottom: 3px solid var(--lgp-role-accent);
+            padding-bottom: var(--lgp-space-3);
+        }
+
+        .feature-section h2 {
+            font-size: var(--lgp-text-2xl);
+            font-weight: 700;
+            margin-bottom: var(--lgp-space-6);
+            color: var(--lgp-structure-headline);
+        }
+
+        .feature-section h3 {
+            font-size: var(--lgp-text-lg);
+            font-weight: 600;
+            color: var(--lgp-structure-headline);
+        }
+
+        .feature-section h4 {
+            font-size: var(--lgp-text-base);
+            font-weight: 600;
+            color: var(--lgp-structure-body);
+        }
+
+        .feature-section p {
+            color: var(--lgp-structure-secondary);
+            font-size: var(--lgp-text-sm);
+        }
+
+        .attachment-zone {
+            border: 2px dashed var(--lgp-border);
+            border-radius: var(--lgp-radius-md);
+            padding: var(--lgp-space-8);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--lgp-transition);
+            background: var(--lgp-background);
+        }
+
+        .attachment-zone:hover {
+            border-color: var(--lgp-brand-teal);
+            background: var(--lgp-brand-teal-light);
+        }
+
+        .attachment-zone.drag-over {
+            border-color: var(--lgp-brand-cyan);
+            background: var(--lgp-brand-cyan-light);
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            font-size: var(--lgp-text-xl);
+            cursor: pointer;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .toggle-btn {
+                display: block;
+            }
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--lgp-border);
+            border-top-color: var(--lgp-brand-teal);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body data-role="partner">
+    <!-- Main Container -->
+    <div class="lgp-container">
+        <!-- Sidebar Navigation -->
+        <aside class="lgp-sidebar">
+            <div class="lgp-logo">
+                <span class="lgp-logo-loungenie">LounGenie</span>
+                <span class="lgp-logo-separator">×</span>
+                <span class="lgp-logo-poolsafe">POOL</span>
+                <span class="lgp-logo-suffix">SAFE</span>
+            </div>
+
+            <nav style="margin-top: var(--lgp-space-8);">
+                <ul class="lgp-nav">
+                    <li class="lgp-nav-item">
+                        <a href="#" class="lgp-nav-link active" onclick="switchTab(event, 'dashboard')">
+                            <span class="lgp-nav-icon">📊</span>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="lgp-nav-item">
+                        <a href="#" class="lgp-nav-link" onclick="switchTab(event, 'units')">
+                            <span class="lgp-nav-icon">📦</span>
+                            Units & Assets
+                        </a>
+                    </li>
+                    <li class="lgp-nav-item">
+                        <a href="#" class="lgp-nav-link" onclick="switchTab(event, 'tickets')">
+                            <span class="lgp-nav-icon">🎫</span>
+                            Service Tickets
+                        </a>
+                    </li>
+                    <li class="lgp-nav-item">
+                        <a href="#" class="lgp-nav-link" onclick="switchTab(event, 'companies')">
+                            <span class="lgp-nav-icon">🏢</span>
+                            Companies
+                        </a>
+                    </li>
+                    <li class="lgp-nav-item">
+                        <a href="#" class="lgp-nav-link" onclick="switchTab(event, 'training')">
+                            <span class="lgp-nav-icon">🎓</span>
+                            Training
+                        </a>
+                    </li>
+                    <li class="lgp-nav-item">
+                        <a href="#" class="lgp-nav-link" onclick="switchTab(event, 'map')">
+                            <span class="lgp-nav-icon">🗺️</span>
+                            Map View
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="lgp-main-content">
+            <!-- Header -->
+            <header class="lgp-header">
+                <div class="lgp-header-left">
+                    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+                    <h1 style="margin: 0; font-size: var(--lgp-text-xl); font-weight: 700; color: var(--lgp-brand-teal);">LounGenie Portal</h1>
+                </div>
+                <div class="lgp-header-right">
+                    <div class="lgp-notification-icon" onclick="alert('3 new notifications')">
+                        🔔
+                        <span class="lgp-notification-badge">3</span>
+                    </div>
+                    <div class="lgp-user-menu">
+                        <div>
+                            <div class="lgp-user-name">John Partner</div>
+                            <div class="lgp-user-role" id="roleIndicator">Partner</div>
+                        </div>
+                        <button class="lgp-btn lgp-btn-secondary lgp-btn-small">Logout</button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="lgp-content">
+                <!-- Demo Controls -->
+                <div class="demo-controls">
+                    <h3 style="margin: 0 0 var(--lgp-space-4) 0; color: var(--lgp-structure-headline); padding-bottom: var(--lgp-space-3); border-bottom: 2px solid var(--lgp-role-accent-light);">🎛️ Demo Mode Controls</h3>
+                    <p style="margin: 0 0 var(--lgp-space-4) 0; color: var(--lgp-text-tertiary); font-size: var(--lgp-text-sm);">
+                        Switch roles to see smooth accent color transitions. Watch navigation borders, stat icons, buttons, and badges all update in real-time!
+                    </p>
+                    <div class="control-group">
+                        <button class="lgp-btn lgp-btn-primary" onclick="switchRole('partner')">🏢 Partner Mode</button>
+                        <button class="lgp-btn lgp-btn-primary" onclick="switchRole('support')">⚡ Support Mode</button>
+                        <button class="lgp-btn lgp-btn-outline" onclick="location.reload()">🔄 Reset</button>
+                    </div>
+                    <div style="margin-top: var(--lgp-space-4); padding: var(--lgp-space-4); background: var(--lgp-role-accent-light); border-radius: var(--lgp-radius); border-left: 3px solid var(--lgp-role-accent);">
+                        <strong style="color: var(--lgp-role-accent);">✨ Enhanced Features:</strong>
+                        <ul style="margin: var(--lgp-space-2) 0 0 var(--lgp-space-4); color: var(--lgp-structure-secondary); font-size: var(--lgp-text-sm);">
+                            <li>Sidebar accent bar (left edge in role color)</li>
+                            <li>Dual-tone navigation icons with colored backgrounds</li>
+                            <li>Card hover effects with role-colored left border</li>
+                            <li>Stat card icons inside colored circles</li>
+                            <li>Table row hover with subtle role accents</li>
+                            <li>Smooth 400ms color transitions on role switch</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Dashboard Tab -->
+                <div id="dashboard" class="lgp-tab-content active">
+                    <h2 style="font-size: var(--lgp-text-2xl); font-weight: 700; margin-bottom: var(--lgp-space-6);">Welcome Back! 👋</h2>
+
+                    <!-- Stats Grid -->
+                    <div class="lgp-grid lgp-grid-4">
+                        <div class="lgp-stat-card">
+                            <div class="lgp-stat-icon">📦</div>
+                            <div class="lgp-stat-number">12</div>
+                            <div class="lgp-stat-label">Active Units</div>
+                        </div>
+                        <div class="lgp-stat-card">
+                            <div class="lgp-stat-icon">🎫</div>
+                            <div class="lgp-stat-number">5</div>
+                            <div class="lgp-stat-label">Open Tickets</div>
+                        </div>
+                        <div class="lgp-stat-card">
+                            <div class="lgp-stat-icon">✅</div>
+                            <div class="lgp-stat-number">28</div>
+                            <div class="lgp-stat-label">Resolved</div>
+                        </div>
+                        <div class="lgp-stat-card">
+                            <div class="lgp-stat-icon">📊</div>
+                            <div class="lgp-stat-number">94%</div>
+                            <div class="lgp-stat-label">Satisfaction</div>
+                        </div>
+                    </div>
+
+                    <!-- Role Features Showcase -->
+                    <div class="lgp-card" style="margin-bottom: var(--lgp-space-6);">
+                        <h3 class="lgp-card-title">Role Features</h3>
+                        <div style="display: flex; gap: var(--lgp-space-3); flex-wrap: wrap; margin-top: var(--lgp-space-4);">
+                            <span class="lgp-badge lgp-badge-role">Active Role</span>
+                            <span class="lgp-badge lgp-badge-brand">Primary Accent</span>
+                            <span class="lgp-badge lgp-badge-success">System Healthy</span>
+                            <span class="lgp-badge lgp-badge-info">3 Updates</span>
+                        </div>
+                        <p style="margin-top: var(--lgp-space-4); color: var(--lgp-structure-secondary); font-size: var(--lgp-text-sm);">
+                            Notice how the Primary Accent badge and Active Role badge change color when you switch between Partner (Teal) and Support (Cyan) modes.
+                        </p>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="lgp-card">
+                        <h3 class="lgp-card-title">Quick Actions</h3>
+                        <div class="lgp-grid lgp-grid-2">
+                            <button class="lgp-btn lgp-btn-primary" style="width: 100%;">
+                                <i class="fas fa-plus"></i> New Service Request
+                            </button>
+                            <button class="lgp-btn lgp-btn-secondary" style="width: 100%;">
+                                <i class="fas fa-file-upload"></i> Upload Document
+                            </button>
+                            <button class="lgp-btn lgp-btn-outline" style="width: 100%;">
+                                <i class="fas fa-calendar"></i> Schedule Appointment
+                            </button>
+                            <button class="lgp-btn lgp-btn-outline" style="width: 100%;">
+                                <i class="fas fa-phone"></i> Contact Support
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="lgp-card">
+                        <h3 class="lgp-card-title">Recent Activity</h3>
+                        <table class="lgp-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Activity</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Dec 18, 2024</td>
+                                    <td>Ticket #1234 Created</td>
+                                    <td><span class="lgp-badge lgp-badge-warning">Pending</span></td>
+                                    <td><a href="#" style="color: var(--lgp-brand-teal); text-decoration: none;">View →</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Dec 17, 2024</td>
+                                    <td>Unit Maintenance Completed</td>
+                                    <td><span class="lgp-badge lgp-badge-success">Completed</span></td>
+                                    <td><a href="#" style="color: var(--lgp-brand-teal); text-decoration: none;">View →</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Dec 16, 2024</td>
+                                    <td>Document Upload: System Report</td>
+                                    <td><span class="lgp-badge lgp-badge-info">Archived</span></td>
+                                    <td><a href="#" style="color: var(--lgp-brand-teal); text-decoration: none;">View →</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Dec 15, 2024</td>
+                                    <td>Support Ticket #1233 Resolved</td>
+                                    <td><span class="lgp-badge lgp-badge-success">Resolved</span></td>
+                                    <td><a href="#" style="color: var(--lgp-brand-teal); text-decoration: none;">View →</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Units Tab -->
+                <div id="units" class="lgp-tab-content">
+                    <h2 style="font-size: var(--lgp-text-2xl); font-weight: 700; margin-bottom: var(--lgp-space-6);">Your Units & Assets 📦</h2>
+
+                    <!-- Filter Controls -->
+                    <div class="lgp-card" style="margin-bottom: var(--lgp-space-6); border-left: 4px solid var(--lgp-role-accent);">
+                        <div style="display: flex; align-items: center; gap: var(--lgp-space-4); flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 200px;">
+                                <label class="lgp-label" style="margin-bottom: var(--lgp-space-2);">Filter by Company</label>
+                                <select class="lgp-select" id="unitsCompanyFilter">
+                                    <option value="all">All Companies</option>
+                                    <option value="abc">ABC Hotels Group</option>
+                                    <option value="resort">Resort Chains Inc.</option>
+                                    <option value="luxury">Luxury Pools Co.</option>
+                                </select>
+                            </div>
+                            <div style="flex: 1; min-width: 200px;">
+                                <label class="lgp-label" style="margin-bottom: var(--lgp-space-2);">Filter by Status</label>
+                                <select class="lgp-select" id="unitsStatusFilter">
+                                    <option value="all">All Statuses</option>
+                                    <option value="active">Active</option>
+                                    <option value="maintenance">Maintenance</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
+                            <div style="flex: 1; min-width: 200px;">
+                                <label class="lgp-label" style="margin-bottom: var(--lgp-space-2);">Search Units</label>
+                                <input type="text" class="lgp-input" placeholder="Search by name or ID..." id="unitsSearchInput">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lgp-card" style="margin-bottom: var(--lgp-space-6);">
+                        <h3 class="lgp-card-title">Company Unit Overview</h3>
+                        <p style="margin: 0 0 var(--lgp-space-4) 0; color: var(--lgp-structure-secondary); font-size: var(--lgp-text-sm);">
+                            Track how many units belong to each company. Use this to assign tickets to the right company and unit.
+                        </p>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--lgp-space-4);">
+                            <div class="lgp-card lgp-card-compact" style="margin:0;">
+                                <h4 style="margin: 0 0 var(--lgp-space-2) 0; color: var(--lgp-structure-headline);">ABC Hotels Group</h4>
+                                <p style="margin: 0 0 var(--lgp-space-2) 0; color: var(--lgp-structure-secondary); font-size: var(--lgp-text-sm);">5 Properties • 24 Units</p>
+                                <span class="lgp-badge lgp-badge-info">Hospitality</span>
+                            </div>
+                            <div class="lgp-card lgp-card-compact" style="margin:0;">
+                                <h4 style="margin: 0 0 var(--lgp-space-2) 0; color: var(--lgp-structure-headline);">Resort Chains Inc.</h4>
+                                <p style="margin: 0 0 var(--lgp-space-2) 0; color: var(--lgp-structure-secondary); font-size: var(--lgp-text-sm);">3 Properties • 18 Units</p>
+                                <span class="lgp-badge lgp-badge-info">Resort</span>
+                            </div>
+                            <div class="lgp-card lgp-card-compact" style="margin:0;">
+                                <h4 style="margin: 0 0 var(--lgp-space-2) 0; color: var(--lgp-structure-headline);">Luxury Pools Co.</h4>
+                                <p style="margin: 0 0 var(--lgp-space-2) 0; color: var(--lgp-structure-secondary); font-size: var(--lgp-text-sm);">2 Properties • 9 Units</p>
+                                <span class="lgp-badge lgp-badge-info">Premium</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lgp-grid lgp-grid-3">
+                        <div class="lgp-card lgp-card-compact" onclick="openUnitDrawer('A-101')" style="cursor: pointer; transition: all var(--lgp-transition);" onmouseover="this.style.borderColor='var(--lgp-role-accent)'" onmouseout="this.style.borderColor='var(--lgp-atmosphere-border)'">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--lgp-space-2);">
+                                <h4 style="margin: 0; color: var(--lgp-structure-headline);">Unit A-101</h4>
+                                <span class="lgp-badge lgp-badge-info" style="font-size: var(--lgp-text-xs);">3 tickets</span>
+                            </div>
+                            <p style="margin: 0 0 var(--lgp-space-2) 0; color: var(--lgp-text-tertiary); font-size: var(--lgp-text-sm);">Pool Safety Unit</p>
+                            <span class="lgp-badge lgp-badge-brand" style="margin-bottom: var(--lgp-space-2); display: inline-block;">ABC Hotels Group</span>
+                            <span class="lgp-badge lgp-badge-success">Active</span>
+                            <div style="margin-top: var(--lgp-space-3); padding-top: var(--lgp-space-3); border-top: 1px solid var(--lgp-atmosphere-border); font-size: var(--lgp-text-xs); color: var(--lgp-text-tertiary);">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>🔴 1 High</span>
+                                    <span>🟡 2 Medium</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lgp-card lgp-card-compact" onclick="openUnitDrawer('B-205')" style="cursor: pointer; transition: all var(--lgp-transition);" onmouseover="this.style.borderColor='var(--lgp-role-accent)'" onmouseout="this.style.borderColor='var(--lgp-atmosphere-border)'">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--lgp-space-2);">
+                                <h4 style="margin: 0; color: var(--lgp-structure-headline);">Unit B-205</h4>
+                                <span class="lgp-badge lgp-badge-warning" style="font-size: var(--lgp-text-xs);">5 tickets</span>
+                            </div>
+                            <p style="margin: 0 0 var(--lgp-space-2) 0; color: var(--lgp-text-tertiary); font-size: var(--lgp-text-sm);">Gateway System</p>
+                            <span class="lgp-badge lgp-badge-brand" style="margin-bottom: var(--lgp-space-2); display: inline-block;">Resort Chains Inc.</span>
+                            <span class="lgp-badge lgp-badge-warning">Maintenance</span>
+                            <div style="margin-top: var(--lgp-space-3); padding-top: var(--lgp-space-3); border-top: 1px solid var(--lgp-atmosphere-border); font-size: var(--lgp-text-xs); color: var(--lgp-text-tertiary);">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>🔴 2 High</span>
+                                    <span>🟡 3 Medium</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lgp-card lgp-card-compact" onclick="openUnitDrawer('C-312')" style="cursor: pointer; transition: all var(--lgp-transition);" onmouseover="this.style.borderColor='var(--lgp-role-accent)'" onmouseout="this.style.borderColor='var(--lgp-atmosphere-border)'">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--lgp-space-2);">
+                                <h4 style="margin: 0; color: var(--lgp-structure-headline);">Unit C-312</h4>
+                                <span class="lgp-badge lgp-badge-success" style="font-size: var(--lgp-text-xs);">1 ticket</span>
+                            </div>
+                            <p style="margin: 0 0 var(--lgp-space-2) 0; color: var(--lgp-text-tertiary); font-size: var(--lgp-text-sm);">Monitoring Device</p>
+                            <span class="lgp-badge lgp-badge-brand" style="margin-bottom: var(--lgp-space-2); display: inline-block;">Luxury Pools Co.</span>
+                            <span class="lgp-badge lgp-badge-success">Active</span>
+                            <div style="margin-top: var(--lgp-space-3); padding-top: var(--lgp-space-3); border-top: 1px solid var(--lgp-atmosphere-border); font-size: var(--lgp-text-xs); color: var(--lgp-text-tertiary);">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>🟢 1 Low</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lgp-card">
+                        <h3 class="lgp-card-title">Add New Unit</h3>
+                        <form>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--lgp-space-6);">
+                                <div class="lgp-form-group">
+                                    <label class="lgp-label">Company</label>
+                                    <select class="lgp-select" id="newUnitCompany">
+                                        <option value="">Select Company</option>
+                                        <option value="abc">ABC Hotels Group</option>
+                                        <option value="resort">Resort Chains Inc.</option>
+                                        <option value="luxury">Luxury Pools Co.</option>
+                                    </select>
+                                </div>
+                                <div class="lgp-form-group">
+                                    <label class="lgp-label">Unit Name</label>
+                                    <input type="text" class="lgp-input" placeholder="e.g., Unit A-101">
+                                </div>
+                                <div class="lgp-form-group">
+                                    <label class="lgp-label">Unit Type</label>
+                                    <select class="lgp-select">
+                                        <option>Pool Safety</option>
+                                        <option>Gateway</option>
+                                        <option>Monitoring</option>
+                                    </select>
+                                </div>
+                                <div class="lgp-form-group">
+                                    <label class="lgp-label">Location</label>
+                                    <input type="text" class="lgp-input" placeholder="Building, Room">
+                                </div>
+                            </div>
+                            <button type="submit" class="lgp-btn lgp-btn-primary">Add Unit</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Tickets Tab -->
+                <div id="tickets" class="lgp-tab-content">
+                    <h2 style="font-size: var(--lgp-text-2xl); font-weight: 700; margin-bottom: var(--lgp-space-6);">Service Tickets 🎫</h2>
+
+                    <!-- Ticket Filter Controls -->
+                    <div class="lgp-card" style="margin-bottom: var(--lgp-space-6); border-left: 4px solid var(--lgp-role-accent);">
+                        <div style="display: flex; align-items: center; gap: var(--lgp-space-4); flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 180px;">
+                                <label class="lgp-label" style="margin-bottom: var(--lgp-space-2);">Filter by Company</label>
+                                <select class="lgp-select" id="ticketsCompanyFilter">
+                                    <option value="all">All Companies</option>
+                                    <option value="abc">ABC Hotels Group</option>
+                                    <option value="resort">Resort Chains Inc.</option>
+                                    <option value="luxury">Luxury Pools Co.</option>
+                                </select>
+                            </div>
+                            <div style="flex: 1; min-width: 180px;">
+                                <label class="lgp-label" style="margin-bottom: var(--lgp-space-2);">Filter by Unit</label>
+                                <select class="lgp-select" id="ticketsUnitFilter">
+                                    <option value="all">All Units</option>
+                                    <option value="a101">Unit A-101</option>
+                                    <option value="b205">Unit B-205</option>
+                                    <option value="c312">Unit C-312</option>
+                                </select>
+                            </div>
+                            <div style="flex: 1; min-width: 180px;">
+                                <label class="lgp-label" style="margin-bottom: var(--lgp-space-2);">Filter by Status</label>
+                                <select class="lgp-select" id="ticketsStatusFilter">
+                                    <option value="all">All Statuses</option>
+                                    <option value="open">Open</option>
+                                    <option value="inprogress">In Progress</option>
+                                    <option value="resolved">Resolved</option>
+                                </select>
+                            </div>
+                            <div style="flex: 1; min-width: 180px;">
+                                <label class="lgp-label" style="margin-bottom: var(--lgp-space-2);">Filter by Priority</label>
+                                <select class="lgp-select" id="ticketsPriorityFilter">
+                                    <option value="all">All Priorities</option>
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                    <option value="critical">Critical</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lgp-card">
+                        <h3 class="lgp-card-title">Submit New Ticket</h3>
+                        <form>
+                            <div class="lgp-form-group">
+                                <label class="lgp-label">Issue Title</label>
+                                <input type="text" class="lgp-input" placeholder="Describe your issue...">
+                            </div>
+                            <div class="lgp-form-group">
+                                <label class="lgp-label">Description</label>
+                                <textarea class="lgp-textarea" placeholder="Provide detailed information..."></textarea>
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--lgp-space-6); margin-bottom: var(--lgp-space-6);">
+                                <div class="lgp-form-group">
+                                    <label class="lgp-label">Company</label>
+                                    <select class="lgp-select" id="ticketCompanySelect" onchange="updateUnitOptions(this.value)">
+                                        <option value="">Select Company First</option>
+                                        <option value="abc">ABC Hotels Group</option>
+                                        <option value="resort">Resort Chains Inc.</option>
+                                        <option value="luxury">Luxury Pools Co.</option>
+                                    </select>
+                                </div>
+                                <div class="lgp-form-group">
+                                    <label class="lgp-label">Related Unit</label>
+                                    <select class="lgp-select" id="ticketUnitSelect" disabled>
+                                        <option value="">Select Company First</option>
+                                    </select>
+                                </div>
+                                <div class="lgp-form-group">
+                                    <label class="lgp-label">Priority</label>
+                                    <select class="lgp-select">
+                                        <option>Low</option>
+                                        <option>Medium</option>
+                                        <option>High</option>
+                                        <option>Critical</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="lgp-form-group">
+                                <label class="lgp-label">Attachments</label>
+                                <div class="attachment-zone" id="attachmentZone">
+                                    <div style="font-size: 2rem; margin-bottom: var(--lgp-space-2);">📎</div>
+                                    <p style="margin: 0; font-weight: 600; color: var(--lgp-structure-secondary);">Drag files here or click to upload</p>
+                                    <p style="margin: 0; font-size: var(--lgp-text-sm); color: var(--lgp-text-tertiary);">Supported: PDF, DOC, Images (Max 10MB)</p>
+                                    <input type="file" style="display: none;">
+                                </div>
+                            </div>
+                            <button type="submit" class="lgp-btn lgp-btn-primary">Submit Ticket</button>
+                        </form>
+                    </div>
+
+                    <div class="lgp-card" style="margin-top: var(--lgp-space-6);">
+                        <h3 class="lgp-card-title">Your Tickets</h3>
+                        <table class="lgp-table">
+                            <thead>
+                                <tr>
+                                    <th>#ID</th>
+                                    <th>Title</th>
+                                    <th>Company / Unit</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#1234</td>
+                                    <td>Pump Not Working</td>
+                                    <td>
+                                        <div style="font-size: var(--lgp-text-xs);">
+                                            <div style="color: var(--lgp-structure-secondary); font-weight: 600;">ABC Hotels Group</div>
+                                            <div style="color: var(--lgp-text-tertiary);">Unit A-101</div>
+                                        </div>
+                                    </td>
+                                    <td><span class="lgp-badge lgp-badge-danger">High</span></td>
+                                    <td><span class="lgp-badge lgp-badge-warning">In Progress</span></td>
+                                    <td>2 hours ago</td>
+                                </tr>
+                                <tr>
+                                    <td>#1233</td>
+                                    <td>Sensor Calibration</td>
+                                    <td>
+                                        <div style="font-size: var(--lgp-text-xs);">
+                                            <div style="color: var(--lgp-structure-secondary); font-weight: 600;">Resort Chains Inc.</div>
+                                            <div style="color: var(--lgp-text-tertiary);">Unit B-205</div>
+                                        </div>
+                                    </td>
+                                    <td><span class="lgp-badge lgp-badge-warning">Medium</span></td>
+                                    <td><span class="lgp-badge lgp-badge-success">Resolved</span></td>
+                                    <td>1 day ago</td>
+                                </tr>
+                                <tr>
+                                    <td>#1232</td>
+                                    <td>Connection Issues</td>
+                                    <td>
+                                        <div style="font-size: var(--lgp-text-xs);">
+                                            <div style="color: var(--lgp-structure-secondary); font-weight: 600;">Luxury Pools Co.</div>
+                                            <div style="color: var(--lgp-text-tertiary);">Unit C-312</div>
+                                        </div>
+                                    </td>
+                                    <td><span class="lgp-badge lgp-badge-info">Low</span></td>
+                                    <td><span class="lgp-badge lgp-badge-success">Resolved</span></td>
+                                    <td>3 days ago</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Companies Tab -->
+                <div id="companies" class="lgp-tab-content">
+                    <h2 style="font-size: var(--lgp-text-2xl); font-weight: 700; margin-bottom: var(--lgp-space-6);">Companies 🏢</h2>
+
+                    <div class="lgp-grid lgp-grid-2">
+                        <div class="lgp-card">
+                            <h4 style="margin: 0 0 var(--lgp-space-3) 0; color: var(--lgp-structure-headline);">ABC Hotels Group</h4>
+                            <p style="margin: 0 0 var(--lgp-space-3) 0; color: var(--lgp-text-tertiary); font-size: var(--lgp-text-sm);">5 Properties | 24 Units</p>
+                            <div style="display: flex; gap: var(--lgp-space-2);">
+                                <span class="lgp-badge lgp-badge-success">Active</span>
+                                <span class="lgp-badge lgp-badge-brand">Premium</span>
+                            </div>
+                            <button class="lgp-btn lgp-btn-primary lgp-btn-small" style="width: 100%; margin-top: var(--lgp-space-3);">View Profile</button>
+                        </div>
+                        <div class="lgp-card">
+                            <h4 style="margin: 0 0 var(--lgp-space-3) 0; color: var(--lgp-structure-headline);">Resort Chains Inc.</h4>
+                            <p style="margin: 0 0 var(--lgp-space-3) 0; color: var(--lgp-text-tertiary); font-size: var(--lgp-text-sm);">3 Properties | 18 Units</p>
+                            <div style="display: flex; gap: var(--lgp-space-2);">
+                                <span class="lgp-badge lgp-badge-success">Active</span>
+                                <span class="lgp-badge lgp-badge-brand">Standard</span>
+                            </div>
+                            <button class="lgp-btn lgp-btn-primary lgp-btn-small" style="width: 100%; margin-top: var(--lgp-space-3);">View Profile</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Training Tab -->
+                <div id="training" class="lgp-tab-content">
+                    <h2 style="font-size: var(--lgp-text-2xl); font-weight: 700; margin-bottom: var(--lgp-space-6);">Training Resources 🎓</h2>
+
+                    <div class="lgp-grid lgp-grid-2">
+                        <div class="lgp-card">
+                            <div style="font-size: 2rem; margin-bottom: var(--lgp-space-3);">🎥</div>
+                            <h4 style="margin: 0 0 var(--lgp-space-2) 0; color: var(--lgp-structure-headline);">Getting Started Guide</h4>
+                            <p style="margin: 0 0 var(--lgp-space-3) 0; color: var(--lgp-text-tertiary); font-size: var(--lgp-text-sm);">Learn the basics of the portal in 5 minutes</p>
+                            <button class="lgp-btn lgp-btn-primary" style="width: 100%;">Watch Video</button>
+                        </div>
+                        <div class="lgp-card">
+                            <div style="font-size: 2rem; margin-bottom: var(--lgp-space-3);">🛠️</div>
+                            <h4 style="margin: 0 0 var(--lgp-space-2) 0; color: var(--lgp-structure-headline);">Advanced Configuration</h4>
+                            <p style="margin: 0 0 var(--lgp-space-3) 0; color: var(--lgp-text-tertiary); font-size: var(--lgp-text-sm);">Master advanced features and settings</p>
+                            <button class="lgp-btn lgp-btn-primary" style="width: 100%;">Watch Video</button>
+                        </div>
+                        <div class="lgp-card">
+                            <div style="font-size: 2rem; margin-bottom: var(--lgp-space-3);">📱</div>
+                            <h4 style="margin: 0 0 var(--lgp-space-2) 0; color: var(--lgp-structure-headline);">Mobile App Tutorial</h4>
+                            <p style="margin: 0 0 var(--lgp-space-3) 0; color: var(--lgp-text-tertiary); font-size: var(--lgp-text-sm);">Access portal on the go with our mobile app</p>
+                            <button class="lgp-btn lgp-btn-primary" style="width: 100%;">Watch Video</button>
+                        </div>
+                        <div class="lgp-card">
+                            <div style="font-size: 2rem; margin-bottom: var(--lgp-space-3);">❓</div>
+                            <h4 style="margin: 0 0 var(--lgp-space-2) 0; color: var(--lgp-structure-headline);">FAQ & Support</h4>
+                            <p style="margin: 0 0 var(--lgp-space-3) 0; color: var(--lgp-text-tertiary); font-size: var(--lgp-text-sm);">Find answers to common questions</p>
+                            <button class="lgp-btn lgp-btn-primary" style="width: 100%;">Browse FAQs</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map Tab -->
+                <div id="map" class="lgp-tab-content">
+                    <h2 style="font-size: var(--lgp-text-2xl); font-weight: 700; margin-bottom: var(--lgp-space-6);">Map View 🗺️</h2>
+
+                    <div class="lgp-card">
+                        <div style="width: 100%; height: 400px; background: linear-gradient(135deg, var(--lgp-brand-teal-light) 0%, var(--lgp-brand-cyan-light) 100%); border-radius: var(--lgp-radius-md); display: flex; align-items: center; justify-content: center;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 3rem; margin-bottom: var(--lgp-space-3);">🗺️</div>
+                                <p style="margin: 0; font-weight: 600; color: var(--lgp-structure-secondary);">Interactive Map Coming Soon</p>
+                                <p style="margin: 0; color: var(--lgp-text-tertiary); font-size: var(--lgp-text-sm);">View all your locations and assets</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unit Detail Drawer (Slide-in Panel) -->
+    <div id="unitDrawer" style="position: fixed; top: 0; right: -500px; width: 500px; height: 100vh; background: var(--lgp-atmosphere-white); box-shadow: -4px 0 16px rgba(0,0,0,0.2); z-index: 9999; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; font-family: var(--lgp-font-family);">
+        <div style="padding: var(--lgp-space-6); border-bottom: 2px solid var(--lgp-atmosphere-border); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, var(--lgp-role-accent-light) 0%, var(--lgp-atmosphere-white) 100%);">
+            <div>
+                <h3 id="drawerUnitTitle" style="margin: 0 0 var(--lgp-space-2) 0; color: var(--lgp-structure-headline); font-size: var(--lgp-text-xl);">Unit A-101</h3>
+                <p id="drawerCompanyName" style="margin: 0; color: var(--lgp-structure-secondary); font-size: var(--lgp-text-sm);">ABC Hotels Group</p>
+            </div>
+            <button onclick="closeUnitDrawer()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--lgp-structure-secondary); padding: var(--lgp-space-2); border-radius: var(--lgp-radius); transition: all var(--lgp-transition);" onmouseover="this.style.background='var(--lgp-atmosphere-hover)'; this.style.color='var(--lgp-structure-headline)'" onmouseout="this.style.background='none'; this.style.color='var(--lgp-structure-secondary)'">×</button>
+        </div>
+
+        <div style="padding: var(--lgp-space-6);">
+            <!-- Unit Status & Quick Stats -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--lgp-space-3); margin-bottom: var(--lgp-space-6);">
+                <div style="text-align: center; padding: var(--lgp-space-4); background: var(--lgp-atmosphere-alt); border-radius: var(--lgp-radius); border-left: 3px solid var(--lgp-success);">
+                    <div style="font-size: var(--lgp-text-2xl); font-weight: 700; color: var(--lgp-success);">3</div>
+                    <div style="font-size: var(--lgp-text-xs); color: var(--lgp-text-tertiary); margin-top: var(--lgp-space-2);">Open Tickets</div>
+                </div>
+                <div style="text-align: center; padding: var(--lgp-space-4); background: var(--lgp-atmosphere-alt); border-radius: var(--lgp-radius); border-left: 3px solid var(--lgp-role-accent);">
+                    <div style="font-size: var(--lgp-text-2xl); font-weight: 700; color: var(--lgp-role-accent);">12</div>
+                    <div style="font-size: var(--lgp-text-xs); color: var(--lgp-text-tertiary); margin-top: var(--lgp-space-2);">Total Events</div>
+                </div>
+                <div style="text-align: center; padding: var(--lgp-space-4); background: var(--lgp-atmosphere-alt); border-radius: var(--lgp-radius); border-left: 3px solid var(--lgp-info);">
+                    <div style="font-size: var(--lgp-text-2xl); font-weight: 700; color: var(--lgp-info);">98%</div>
+                    <div style="font-size: var(--lgp-text-xs); color: var(--lgp-text-tertiary); margin-top: var(--lgp-space-2);">Uptime</div>
+                </div>
+            </div>
+
+            <!-- Unit Details -->
+            <div style="margin-bottom: var(--lgp-space-6); padding: var(--lgp-space-4); background: var(--lgp-atmosphere-alt); border-radius: var(--lgp-radius);">
+                <h4 style="margin: 0 0 var(--lgp-space-3) 0; color: var(--lgp-structure-headline); font-size: var(--lgp-text-base); border-bottom: 1px solid var(--lgp-atmosphere-border); padding-bottom: var(--lgp-space-2);">Unit Information</h4>
+                <div style="display: grid; gap: var(--lgp-space-3); font-size: var(--lgp-text-sm);">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--lgp-text-tertiary);">Type:</span>
+                        <span style="color: var(--lgp-structure-secondary); font-weight: 600;">Pool Safety Unit</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--lgp-text-tertiary);">Location:</span>
+                        <span style="color: var(--lgp-structure-secondary); font-weight: 600;">Building A, Floor 1</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--lgp-text-tertiary);">Installed:</span>
+                        <span style="color: var(--lgp-structure-secondary); font-weight: 600;">Jan 15, 2024</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--lgp-text-tertiary);">Last Service:</span>
+                        <span style="color: var(--lgp-structure-secondary); font-weight: 600;">Dec 10, 2024</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Timeline -->
+            <div>
+                <h4 style="margin: 0 0 var(--lgp-space-4) 0; color: var(--lgp-structure-headline); font-size: var(--lgp-text-base);">Recent Activity</h4>
+                <div style="position: relative; padding-left: var(--lgp-space-6);">
+                    <!-- Timeline Line -->
+                    <div style="position: absolute; left: 9px; top: 0; bottom: 0; width: 2px; background: var(--lgp-atmosphere-border);"></div>
+
+                    <!-- Timeline Items -->
+                    <div style="position: relative; margin-bottom: var(--lgp-space-4);">
+                        <div style="position: absolute; left: -21px; width: 12px; height: 12px; border-radius: 50%; background: var(--lgp-danger); border: 2px solid white; box-shadow: 0 0 0 2px var(--lgp-danger);"></div>
+                        <div style="padding: var(--lgp-space-3); background: var(--lgp-atmosphere-alt); border-radius: var(--lgp-radius); border-left: 3px solid var(--lgp-danger);">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--lgp-space-2);">
+                                <span style="font-weight: 600; color: var(--lgp-structure-headline); font-size: var(--lgp-text-sm);">Ticket #1234 Created</span>
+                                <span class="lgp-badge lgp-badge-danger" style="font-size: var(--lgp-text-xs);">High</span>
+                            </div>
+                            <p style="margin: 0 0 var(--lgp-space-2) 0; color: var(--lgp-structure-secondary); font-size: var(--lgp-text-xs);">Pump not working - requires immediate attention</p>
+                            <span style="color: var(--lgp-text-tertiary); font-size: var(--lgp-text-xs);">2 hours ago</span>
+                        </div>
+                    </div>
+
+                    <div style="position: relative; margin-bottom: var(--lgp-space-4);">
+                        <div style="position: absolute; left: -21px; width: 12px; height: 12px; border-radius: 50%; background: var(--lgp-success); border: 2px solid white; box-shadow: 0 0 0 2px var(--lgp-success);"></div>
+                        <div style="padding: var(--lgp-space-3); background: var(--lgp-atmosphere-alt); border-radius: var(--lgp-radius); border-left: 3px solid var(--lgp-success);">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--lgp-space-2);">
+                                <span style="font-weight: 600; color: var(--lgp-structure-headline); font-size: var(--lgp-text-sm);">Maintenance Completed</span>
+                                <span class="lgp-badge lgp-badge-success" style="font-size: var(--lgp-text-xs);">Complete</span>
+                            </div>
+                            <p style="margin: 0 0 var(--lgp-space-2) 0; color: var(--lgp-structure-secondary); font-size: var(--lgp-text-xs);">Routine inspection and calibration</p>
+                            <span style="color: var(--lgp-text-tertiary); font-size: var(--lgp-text-xs);">5 days ago</span>
+                        </div>
+                    </div>
+
+                    <div style="position: relative; margin-bottom: var(--lgp-space-4);">
+                        <div style="position: absolute; left: -21px; width: 12px; height: 12px; border-radius: 50%; background: var(--lgp-info); border: 2px solid white; box-shadow: 0 0 0 2px var(--lgp-info);"></div>
+                        <div style="padding: var(--lgp-space-3); background: var(--lgp-atmosphere-alt); border-radius: var(--lgp-radius); border-left: 3px solid var(--lgp-info);">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--lgp-space-2);">
+                                <span style="font-weight: 600; color: var(--lgp-structure-headline); font-size: var(--lgp-text-sm);">Sensor Update</span>
+                                <span class="lgp-badge lgp-badge-info" style="font-size: var(--lgp-text-xs);">Info</span>
+                            </div>
+                            <p style="margin: 0 0 var(--lgp-space-2) 0; color: var(--lgp-structure-secondary); font-size: var(--lgp-text-xs);">Firmware updated to v2.1.4</p>
+                            <span style="color: var(--lgp-text-tertiary); font-size: var(--lgp-text-xs);">1 week ago</span>
+                        </div>
+                    </div>
+
+                    <div style="position: relative; margin-bottom: var(--lgp-space-4);">
+                        <div style="position: absolute; left: -21px; width: 12px; height: 12px; border-radius: 50%; background: var(--lgp-warning); border: 2px solid white; box-shadow: 0 0 0 2px var(--lgp-warning);"></div>
+                        <div style="padding: var(--lgp-space-3); background: var(--lgp-atmosphere-alt); border-radius: var(--lgp-radius); border-left: 3px solid var(--lgp-warning);">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--lgp-space-2);">
+                                <span style="font-weight: 600; color: var(--lgp-structure-headline); font-size: var(--lgp-text-sm);">Alert Triggered</span>
+                                <span class="lgp-badge lgp-badge-warning" style="font-size: var(--lgp-text-xs);">Warning</span>
+                            </div>
+                            <p style="margin: 0 0 var(--lgp-space-2) 0; color: var(--lgp-structure-secondary); font-size: var(--lgp-text-xs);">Water level below threshold - auto-corrected</p>
+                            <span style="color: var(--lgp-text-tertiary); font-size: var(--lgp-text-xs);">2 weeks ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="margin-top: var(--lgp-space-6); display: flex; gap: var(--lgp-space-3);">
+                <button class="lgp-btn lgp-btn-primary" style="flex: 1;">Create Ticket</button>
+                <button class="lgp-btn lgp-btn-outline" style="flex: 1;">View All Activity</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab Switching
+        function switchTab(e, tabName) {
+            e.preventDefault();
+
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.lgp-tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Remove active class from all nav links
+            const navLinks = document.querySelectorAll('.lgp-nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+
+            // Show selected tab content
+            const selectedTab = document.getElementById(tabName);
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
+
+            // Add active class to clicked nav link
+            e.target.closest('.lgp-nav-link').classList.add('active');
+        }
+
+        // Role Switching
+        function switchRole(role) {
+            const roleIndicator = document.getElementById('roleIndicator');
+            const navLinks = document.querySelectorAll('.lgp-nav-link');
+            
+            // Apply role-specific theming via data attribute
+            document.body.setAttribute('data-role', role);
+
+            if (role === 'support') {
+                roleIndicator.textContent = 'Support Agent';
+                // Show support-only sections
+                document.querySelector('[onclick*="map"]').parentElement.style.display = 'block';
+            } else {
+                roleIndicator.textContent = 'Partner';
+                // Partner view
+                document.querySelector('[onclick*="map"]').parentElement.style.display = 'none';
+            }
+
+            alert(`Switched to ${role.toUpperCase()} mode. Notice the accent color and visual identity has changed!`);
+        }
+
+        // Sidebar Toggle (Mobile)
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.lgp-sidebar');
+            sidebar.classList.toggle('mobile-open');
+        }
+
+        // Attachment Zone
+        document.addEventListener('DOMContentLoaded', function() {
+            const zone = document.getElementById('attachmentZone');
+            if (!zone) return;
+
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                zone.classList.add('drag-over');
+            });
+
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('drag-over');
+            });
+
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('drag-over');
+                const files = e.dataTransfer.files;
+                handleFiles(files);
+            });
+
+            zone.addEventListener('click', () => {
+                const input = zone.querySelector('input[type="file"]');
+                input.click();
+            });
+        });
+
+        function handleFiles(files) {
+            let fileList = '';
+            for (let file of files) {
+                fileList += `\n- ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+            }
+            alert(`Files ready to upload:${fileList}`);
+        }
+
+        // Unit Drawer Functions
+        function openUnitDrawer(unitId) {
+            const drawer = document.getElementById('unitDrawer');
+            const titleEl = document.getElementById('drawerUnitTitle');
+            const companyEl = document.getElementById('drawerCompanyName');
+
+            // Set unit-specific data
+            const unitData = {
+                'A-101': { name: 'Unit A-101', company: 'ABC Hotels Group' },
+                'B-205': { name: 'Unit B-205', company: 'Resort Chains Inc.' },
+                'C-312': { name: 'Unit C-312', company: 'Luxury Pools Co.' }
+            };
+
+            const data = unitData[unitId] || { name: unitId, company: 'Unknown' };
+            titleEl.textContent = data.name;
+            companyEl.textContent = data.company;
+
+            // Slide in drawer
+            drawer.style.right = '0';
+        }
+
+        function closeUnitDrawer() {
+            const drawer = document.getElementById('unitDrawer');
+            drawer.style.right = '-500px';
+        }
+
+        // Company → Unit Cascading Selector
+        function updateUnitOptions(companyValue) {
+            const unitSelect = document.getElementById('ticketUnitSelect');
+            
+            const unitsByCompany = {
+                'abc': [
+                    { value: 'a101', label: 'Unit A-101 (Pool Safety)' },
+                    { value: 'a102', label: 'Unit A-102 (Gateway)' },
+                    { value: 'a103', label: 'Unit A-103 (Monitoring)' }
+                ],
+                'resort': [
+                    { value: 'b205', label: 'Unit B-205 (Gateway)' },
+                    { value: 'b206', label: 'Unit B-206 (Pool Safety)' },
+                    { value: 'b207', label: 'Unit B-207 (Monitoring)' }
+                ],
+                'luxury': [
+                    { value: 'c312', label: 'Unit C-312 (Monitoring)' },
+                    { value: 'c313', label: 'Unit C-313 (Pool Safety)' }
+                ]
+            };
+
+            // Clear and populate unit options
+            unitSelect.innerHTML = '<option value="">Select Unit</option>';
+            
+            if (companyValue && unitsByCompany[companyValue]) {
+                unitSelect.disabled = false;
+                unitsByCompany[companyValue].forEach(unit => {
+                    const option = document.createElement('option');
+                    option.value = unit.value;
+                    option.textContent = unit.label;
+                    unitSelect.appendChild(option);
+                });
+            } else {
+                unitSelect.disabled = true;
+                unitSelect.innerHTML = '<option value="">Select Company First</option>';
+            }
+        }
+
+        // Initialize demo
+        window.addEventListener('load', function() {
+            console.log('✅ Portal Demo v1.8.0 loaded');
+            console.log('📱 Resize your browser to see responsive behavior');
+            console.log('🎛️ Use the Demo Mode Controls to switch roles');
+            console.log('🎯 Click on unit cards to see detailed activity timeline');
+        });
+
+        // Close drawer on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeUnitDrawer();
+            }
+        });
+    </script>
+</body>
+</html>
