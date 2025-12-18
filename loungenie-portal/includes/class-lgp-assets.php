@@ -167,6 +167,9 @@ class LGP_Assets {
 			true
 		);
 
+		// Prepare localized data for portal
+		$company_name = method_exists( 'LGP_Auth', 'get_company_name' ) ? LGP_Auth::get_company_name() : '';
+
 		// Localize script with AJAX data
 		wp_localize_script(
 			'lgp-portal',
@@ -177,6 +180,7 @@ class LGP_Assets {
 				'nonce'     => wp_create_nonce( 'lgp_portal_nonce' ),
 				'isSupport' => LGP_Auth::is_support(),
 				'isPartner' => LGP_Auth::is_partner(),
+				'companyName' => $company_name,
 			)
 		);
 

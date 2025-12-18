@@ -1278,49 +1278,35 @@
                     <div class="lgp-card">
                         <h3 class="lgp-card-title">Submit New Ticket</h3>
                         <form>
-                            <div class="lgp-form-group">
-                                <label class="lgp-label">Issue Title</label>
-                                <input type="text" class="lgp-input" placeholder="Describe your issue...">
-                            </div>
-                            <div class="lgp-form-group">
-                                <label class="lgp-label">Description</label>
-                                <textarea class="lgp-textarea" placeholder="Provide detailed information..."></textarea>
-                            </div>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--lgp-space-6); margin-bottom: var(--lgp-space-6);">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--lgp-space-6); margin-bottom: var(--lgp-space-6);">
+                                <div class="lgp-form-group">
+                                    <label class="lgp-label">Full Name</label>
+                                    <input type="text" class="lgp-input" id="ticketFullName" placeholder="e.g., Jane Doe" required>
+                                </div>
+                                <div class="lgp-form-group">
+                                    <label class="lgp-label">Email</label>
+                                    <input type="email" class="lgp-input" id="ticketEmail" placeholder="e.g., jane@example.com" required>
+                                </div>
+                                <div class="lgp-form-group">
+                                    <label class="lgp-label">Phone Number</label>
+                                    <input type="tel" class="lgp-input" id="ticketPhone" placeholder="e.g., +1 555-123-4567" required>
+                                </div>
                                 <div class="lgp-form-group">
                                     <label class="lgp-label">Company</label>
-                                    <select class="lgp-select" id="ticketCompanySelect" onchange="updateUnitOptions(this.value)">
-                                        <option value="">Select Company First</option>
-                                        <option value="abc">ABC Hotels Group</option>
-                                        <option value="resort">Resort Chains Inc.</option>
-                                        <option value="luxury">Luxury Pools Co.</option>
-                                    </select>
-                                </div>
-                                <div class="lgp-form-group">
-                                    <label class="lgp-label">Related Unit</label>
-                                    <select class="lgp-select" id="ticketUnitSelect" disabled>
-                                        <option value="">Select Company First</option>
-                                    </select>
-                                </div>
-                                <div class="lgp-form-group">
-                                    <label class="lgp-label">Priority</label>
-                                    <select class="lgp-select">
-                                        <option>Low</option>
-                                        <option>Medium</option>
-                                        <option>High</option>
-                                        <option>Critical</option>
-                                    </select>
+                                    <input type="text" class="lgp-input" id="ticketCompany" placeholder="Your Company" readonly>
                                 </div>
                             </div>
+
                             <div class="lgp-form-group">
-                                <label class="lgp-label">Attachments</label>
-                                <div class="attachment-zone" id="attachmentZone">
-                                    <div style="font-size: 2rem; margin-bottom: var(--lgp-space-2);">📎</div>
-                                    <p style="margin: 0; font-weight: 600; color: var(--lgp-structure-secondary);">Drag files here or click to upload</p>
-                                    <p style="margin: 0; font-size: var(--lgp-text-sm); color: var(--lgp-text-tertiary);">Supported: PDF, DOC, Images (Max 10MB)</p>
-                                    <input type="file" style="display: none;">
-                                </div>
+                                <label class="lgp-label">Issue Description</label>
+                                <textarea class="lgp-textarea" id="ticketIssueDesc" placeholder="Describe the issue in detail..." required></textarea>
                             </div>
+
+                            <div class="lgp-form-group" style="max-width: 280px;">
+                                <label class="lgp-label">Number of Units Affected</label>
+                                <input type="number" class="lgp-input" id="ticketUnitsAffected" min="1" step="1" placeholder="e.g., 3" required>
+                            </div>
+
                             <button type="submit" class="lgp-btn lgp-btn-primary">Submit Ticket</button>
                         </form>
                     </div>
@@ -1738,6 +1724,13 @@
             } catch (err) {
                 console.warn('Filters init warning:', err);
             }
+
+            // Prefill company in ticket form based on login context
+            try {
+                prefillTicketCompany();
+            } catch (err) {
+                console.warn('Company prefill warning:', err);
+            }
         });
 
         // Close drawer on ESC key
@@ -1746,6 +1739,27 @@
                 closeUnitDrawer();
             }
         });
+
+        function prefillTicketCompany() {
+            const companyInput = document.getElementById('ticketCompany');
+            if (!companyInput) return;
+
+            // Prefer localized plugin data if present (WordPress context)
+            if (typeof lgpData !== 'undefined' && lgpData && lgpData.companyName) {
+                companyInput.value = lgpData.companyName;
+                companyInput.readOnly = true;
+                return;
+            }
+
+            // Fallback: role-based demo default
+            const role = document.body.getAttribute('data-role') || 'partner';
+            if (role === 'partner') {
+                companyInput.value = 'ABC Hotels Group';
+            } else {
+                companyInput.value = 'Support Organization';
+            }
+            companyInput.readOnly = true;
+        }
 
         // ===== Client-side Filters =====
         function initUnitsFilters() {
