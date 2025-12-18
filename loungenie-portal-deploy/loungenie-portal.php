@@ -181,7 +181,10 @@ function lgp_init() {
 	LGP_Loader::init();
 }
 
-add_action( 'plugins_loaded', 'lgp_init' );
+// Initialize after the theme directory is registered to avoid early core calls
+// that may trigger wp_is_block_theme() notices in WordPress >= 6.8.
+// after_setup_theme runs after setup_theme and before init, which is safe for our loaders.
+add_action( 'after_setup_theme', 'lgp_init', 0 );
 
 // ============================================================================
 // CUSTOM REWRITE RULES
