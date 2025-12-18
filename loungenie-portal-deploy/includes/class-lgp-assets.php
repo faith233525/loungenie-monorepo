@@ -24,6 +24,10 @@ class LGP_Assets {
 	 * Called by router when loading portal
 	 */
 	public static function enqueue_portal_assets() {
+		// Safety check: don't enqueue in WordPress admin
+		if ( is_admin() ) {
+			return;
+		}
 		// Resource hints for faster connections to external CDNs used by the portal
 		add_filter(
 			'wp_resource_hints',
@@ -42,7 +46,6 @@ class LGP_Assets {
 			10,
 			2
 		);
-
 		// Enqueue Montserrat font (brand typography)
 		wp_enqueue_style(
 			'lgp-font-montserrat',
@@ -51,7 +54,6 @@ class LGP_Assets {
 			null,
 			'all'
 		);
-
 		// Enqueue FontAwesome for consistent iconography
 		wp_enqueue_style(
 			'font-awesome',
@@ -123,6 +125,15 @@ class LGP_Assets {
 			true
 		);
 
+		// Enqueue portal initialization (sidebar toggle, CSP-compliant)
+		wp_enqueue_script(
+			'lgp-portal-init',
+			LGP_ASSETS_URL . 'js/portal-init.js',
+			array(),
+			LGP_VERSION,
+			true
+		);
+
 		// Enqueue company profile enhancements (for inline modals, audit log, service notes)
 		wp_enqueue_script(
 			'lgp-company-profile-enhancements',
@@ -160,6 +171,20 @@ class LGP_Assets {
 			true
 		);
 
+		// Demo portal enhancements: client-side filters for Units & Tickets
+		wp_enqueue_script(
+			'lgp-portal-demo',
+			LGP_ASSETS_URL . 'js/portal-demo.js',
+			array( 'lgp-portal' ),
+			LGP_VERSION,
+			true
+		);
+
+		// Prepare localized data for portal
+		$company_name = method_exists( 'LGP_Auth', 'get_company_name' ) ? LGP_Auth::get_company_name() : '';
+		$current_user = wp_get_current_user();
+		$rest_nonce   = wp_create_nonce( 'wp_rest' );
+
 		// Localize script with AJAX data
 		wp_localize_script(
 			'lgp-portal',
@@ -168,8 +193,12 @@ class LGP_Assets {
 				'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
 				'restUrl'   => rest_url( 'lgp/v1/' ),
 				'nonce'     => wp_create_nonce( 'lgp_portal_nonce' ),
+				'restNonce' => $rest_nonce,
 				'isSupport' => LGP_Auth::is_support(),
 				'isPartner' => LGP_Auth::is_partner(),
+				'companyName' => $company_name,
+				'userEmail'   => $current_user ? $current_user->user_email : '',
+				'userName'    => $current_user ? $current_user->display_name : '',
 			)
 		);
 

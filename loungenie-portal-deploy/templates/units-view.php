@@ -2,170 +2,69 @@
 /**
  * Units View Template
  * Displays all units with comprehensive filtering options
+ *
+ * @package LounGenie Portal
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Get color hex code for LounGenie color tags
+ *
+ * @param string $color_name Color name
+ * @return string Hex color code
+ */
+if ( ! function_exists( 'lgp_get_color_hex' ) ) {
+	function lgp_get_color_hex( $color_name ) {
+		$color_map   = array(
+			'yellow'       => '#D8EFF3',
+			'red'          => '#DCFCE7',
+			'classic blue' => '#CCF8F1',
+			'ice blue'     => '#D6F6FC',
+		);
+		$color_lower = strtolower( trim( $color_name ) );
+		return isset( $color_map[ $color_lower ] ) ? $color_map[ $color_lower ] : '#E9F8F9';
+	}
+}
+
+global $wpdb;
+
+$units_table     = $wpdb->prefix . 'lgp_units';
+$companies_table = $wpdb->prefix . 'lgp_companies';
+
+// Check user role for data filtering
+$is_support = LGP_Auth::is_support();
+$company_id = LGP_Auth::get_user_company_id();
+
+// Build base query
+$where_clauses = array( '1=1' );
+
+if ( ! $is_support && $company_id ) {
+	$where_clauses[] = $wpdb->prepare( 'u.company_id = %d', $company_id );
+}
+
+$where_sql = implode( ' AND ', $where_clauses );
+
+// Fetch units (table names are from wpdb prefix which is safe)
+$units = $wpdb->get_results(
+	$wpdb->prepare(
+		"SELECT u.*, c.name as company_name 
+        FROM {$units_table} u 
+        LEFT JOIN {$companies_table} c ON u.company_id = c.id 
+        WHERE {$where_sql}
+        ORDER BY u.created_at DESC 
+        LIMIT %d",
+		100
+	)
+);
+
 ?>
 
-<!-- Units Cards View -->
-<?php if ( ! empty( $units ) ) : ?>
-	<div id="units-cards" class="lgp-card-grid" aria-live="polite">
-		<?php foreach ( $units as $unit ) :
-			$gateway_info   = $gateway_summary[ (int) $unit->company_id ] ?? null;
-			$gateway_status = $gateway_info && ( (int) $gateway_info->gateway_count > 0 ) ? 'online' : 'offline';
-			$last_sync      = $gateway_info && $gateway_info->last_sync ? date_i18n( get_option( 'date_format' ), strtotime( $gateway_info->last_sync ) ) : __( 'No sync data', 'loungenie-portal' );
-			?>
-			<div class="lgp-unit-card"
-				data-color="<?php echo esc_attr( $unit->color_tag ?? '' ); ?>"
-				data-season="<?php echo esc_attr( $unit->season ?? '' ); ?>"
-				data-venue="<?php echo esc_attr( $unit->venue_type ?? '' ); ?>"
-				data-lock-brand="<?php echo esc_attr( $unit->lock_brand ?? '' ); ?>"
-				data-status="<?php echo esc_attr( $unit->status ); ?>">
-				<div class="lgp-unit-card-header">
-					<div>
-						<h3 class="lgp-card-title" style="margin: 0;">#<?php echo esc_html( $unit->id ); ?> · <?php echo esc_html( $unit->company_name ); ?></h3>
-						<p class="lgp-text-muted" style="margin-top: 4px;"><?php echo esc_html( $unit->address ?? __( 'No address on file', 'loungenie-portal' ) ); ?></p>
-					</div>
-					<div class="lgp-badges">
-						<span class="lgp-badge <?php echo esc_attr( strtolower( $unit->status ) === 'active' ? 'active' : 'inactive' ); ?>"><?php echo esc_html( ucfirst( $unit->status ) ); ?></span>
-						<span class="lgp-badge <?php echo esc_attr( $gateway_status ); ?>"><?php echo esc_html( $gateway_status === 'online' ? __( 'Gateway Online', 'loungenie-portal' ) : __( 'No Gateway', 'loungenie-portal' ) ); ?></span>
-						<?php if ( $unit->color_tag ) : ?>
-							<span class="lgp-badge" style="background:#f5f3ff;color:#5b21b6;border-color:#ddd6fe;">
-								<?php echo esc_html( $unit->color_tag ); ?>
-							</span>
-						<?php endif; ?>
-					</div>
-				</div>
-
-				<div class="lgp-unit-meta">
-					<div class="lgp-meta-item">
-						<span class="lgp-meta-label"><?php esc_html_e( 'Lock Brand', 'loungenie-portal' ); ?></span>
-						<span><?php echo esc_html( $unit->lock_brand ?? '—' ); ?></span>
-					</div>
-					<div class="lgp-meta-item">
-						<span class="lgp-meta-label"><?php esc_html_e( 'Lock Type', 'loungenie-portal' ); ?></span>
-						<span><?php echo esc_html( $unit->lock_type ?? '—' ); ?></span>
-					</div>
-					<div class="lgp-meta-item">
-						<span class="lgp-meta-label"><?php esc_html_e( 'Venue', 'loungenie-portal' ); ?></span>
-						<span><?php echo esc_html( $unit->venue_type ?? '—' ); ?></span>
-					</div>
-					<div class="lgp-meta-item">
-						<span class="lgp-meta-label"><?php esc_html_e( 'Season', 'loungenie-portal' ); ?></span>
-						<span><?php echo esc_html( $unit->season ?? '—' ); ?></span>
-					</div>
-					<div class="lgp-meta-item">
-						<span class="lgp-meta-label"><?php esc_html_e( 'Gateway Count', 'loungenie-portal' ); ?></span>
-						<span><?php echo esc_html( $gateway_info->gateway_count ?? 0 ); ?></span>
-					</div>
-					<div class="lgp-meta-item">
-						<span class="lgp-meta-label"><?php esc_html_e( 'Last Sync', 'loungenie-portal' ); ?></span>
-						<span><?php echo esc_html( $last_sync ); ?></span>
-					</div>
-				</div>
-
-				<div class="lgp-card-actions">
-					<a class="lgp-btn lgp-btn-secondary" href="<?php echo esc_url( home_url( '/portal/units' ) ); ?>">
-						<?php esc_html_e( 'View Details', 'loungenie-portal' ); ?>
-					</a>
-					<a class="lgp-btn lgp-btn-primary" href="<?php echo esc_url( home_url( '/portal/tickets' ) ); ?>">
-						<?php esc_html_e( 'Service Request', 'loungenie-portal' ); ?>
-					</a>
-				</div>
-			</div>
-		<?php endforeach; ?>
-	</div>
-<?php else : ?>
-	<p><?php esc_html_e( 'No units found.', 'loungenie-portal' ); ?></p>
-<?php endif; ?>
-
-<!-- Units Table with Export -->
-<div class="lgp-card" id="units-table-wrapper" style="display: none;">
-	<div class="lgp-card-header flex justify-between items-center">
-		<h2 class="lgp-card-title"><?php esc_html_e( 'Units List', 'loungenie-portal' ); ?></h2>
-		<button type="button" class="lgp-btn lgp-btn-primary" id="lgp-export-units">
-			📥 <?php esc_html_e( 'Export to CSV', 'loungenie-portal' ); ?>
-		</button>
-	</div>
-	<div class="lgp-card-body">
-		<!-- Loading Spinner -->
-		<div id="lgp-loading-spinner" class="lgp-loading-spinner" style="display: none;">
-			<div class="lgp-spinner"></div>
-			<p><?php esc_html_e( 'Loading...', 'loungenie-portal' ); ?></p>
-		</div>
-
-		<?php if ( ! empty( $units ) ) : ?>
-			<div class="lgp-table-container">
-				<table class="lgp-table" id="units-table">
-					<thead>
-						<tr>
-							<th class="sortable"><?php esc_html_e( 'Unit ID', 'loungenie-portal' ); ?></th>
-							<th class="sortable"><?php esc_html_e( 'Company', 'loungenie-portal' ); ?></th>
-							<th class="sortable" data-sort="color"><?php esc_html_e( 'Color', 'loungenie-portal' ); ?></th>
-							<th class="sortable" data-sort="season"><?php esc_html_e( 'Season', 'loungenie-portal' ); ?></th>
-							<th class="sortable" data-sort="venue"><?php esc_html_e( 'Venue', 'loungenie-portal' ); ?></th>
-							<th class="sortable" data-sort="lock-brand"><?php esc_html_e( 'Lock Brand', 'loungenie-portal' ); ?></th>
-							<th class="sortable" data-sort="status"><?php esc_html_e( 'Status', 'loungenie-portal' ); ?></th>
-							<th><?php esc_html_e( 'Install Date', 'loungenie-portal' ); ?></th>
-							<th><?php esc_html_e( 'Actions', 'loungenie-portal' ); ?></th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php foreach ( $units as $unit ) : ?>
-							<tr data-color="<?php echo esc_attr( $unit->color_tag ?? '' ); ?>"
-								data-season="<?php echo esc_attr( $unit->season ?? '' ); ?>"
-								data-venue="<?php echo esc_attr( $unit->venue_type ?? '' ); ?>"
-								data-lock-brand="<?php echo esc_attr( $unit->lock_brand ?? '' ); ?>"
-								data-status="<?php echo esc_attr( $unit->status ); ?>">
-								<td>#<?php echo esc_html( $unit->id ); ?></td>
-								<td><?php echo esc_html( $unit->company_name ); ?></td>
-								<td>
-									<?php
-									if ( $unit->color_tag ) :
-										$color_hex = lgp_get_color_hex( $unit->color_tag );
-										?>
-										<span class="lgp-color-tag">
-											<span class="lgp-color-indicator" style="background-color: <?php echo esc_attr( $color_hex ); ?>"></span>
-											<?php echo esc_html( $unit->color_tag ); ?>
-										</span>
-									<?php else : ?>
-										<span class="lgp-empty-value">—</span>
-									<?php endif; ?>
-								</td>
-								<td><?php echo esc_html( $unit->season ?? '—' ); ?></td>
-								<td><?php echo esc_html( $unit->venue_type ?? '—' ); ?></td>
-								<td><?php echo esc_html( $unit->lock_brand ?? '—' ); ?></td>
-								<td><?php echo esc_html( $unit->status ); ?></td>
-								<td><?php echo $unit->install_date ? esc_html( date_i18n( get_option( 'date_format' ), strtotime( $unit->install_date ) ) ) : '<span class="lgp-empty-value">—</span>'; ?></td>
-								<td>
-									<div class="lgp-table-actions">
-										<a class="lgp-btn lgp-btn-secondary" href="<?php echo esc_url( home_url( '/portal/units' ) ); ?>">
-											<?php esc_html_e( 'View', 'loungenie-portal' ); ?>
-										</a>
-										<a class="lgp-btn lgp-btn-primary" href="<?php echo esc_url( home_url( '/portal/tickets' ) ); ?>">
-											<?php esc_html_e( 'Service Request', 'loungenie-portal' ); ?>
-										</a>
-									</div>
-								</td>
-							</tr>
-						<?php endforeach; ?>
-					</tbody>
-				</table>
-			</div>
-		<?php else : ?>
-			<p><?php esc_html_e( 'No units found.', 'loungenie-portal' ); ?></p>
-		<?php endif; ?>
-	</div>
-</div>
-<div class="lgp-card lgp-card-ghost" style="margin-top: var(--space-md);">
-	<div class="lgp-card-header" style="justify-content: space-between; align-items: center;">
-		<div>
-			<h3 class="lgp-card-title" style="margin-bottom: 4px;"><?php esc_html_e( 'View Options', 'loungenie-portal' ); ?></h3>
-			<p class="lgp-text-muted">Use cards for a modern overview or switch to table for dense data.</p>
-		</div>
-		<div class="lgp-view-toggle" id="lgp-view-toggle">
-			<button type="button" class="active" data-view="cards"><?php esc_html_e( 'Card View', 'loungenie-portal' ); ?></button>
-			<button type="button" data-view="table"><?php esc_html_e( 'Table View', 'loungenie-portal' ); ?></button>
-		</div>
-	</div>
+<div class="lgp-dashboard-header">
+	<h1><?php esc_html_e( 'LounGenie Units', 'loungenie-portal' ); ?></h1>
+	<p><?php esc_html_e( 'View and filter all LounGenie units', 'loungenie-portal' ); ?></p>
 </div>
 
 <!-- Advanced Filters -->
@@ -242,7 +141,7 @@
 		</div>
 
 		<!-- Active Filters Display -->
-		<div id="active-filters" class="lgp-active-filters" style="display: none;">
+		<div id="active-filters" class="lgp-active-filters lgp-hidden">
 			<strong><?php esc_html_e( 'Active Filters:', 'loungenie-portal' ); ?></strong>
 			<div id="active-filters-list" class="lgp-filter-tags"></div>
 		</div>
@@ -259,7 +158,7 @@
 	</div>
 	<div class="lgp-card-body">
 		<!-- Loading Spinner -->
-		<div id="lgp-loading-spinner" class="lgp-loading-spinner" style="display: none;">
+		<div id="lgp-loading-spinner" class="lgp-loading-spinner lgp-hidden">
 			<div class="lgp-spinner"></div>
 			<p><?php esc_html_e( 'Loading...', 'loungenie-portal' ); ?></p>
 		</div>
@@ -295,7 +194,7 @@
 										$color_hex = lgp_get_color_hex( $unit->color_tag );
 										?>
 										<span class="lgp-color-tag">
-											<span class="lgp-color-indicator" style="background-color: <?php echo esc_attr( $color_hex ); ?>"></span>
+											<span class="lgp-color-indicator" style="--lgp-color-value: <?php echo esc_attr( $color_hex ); ?>;"></span>
 											<?php echo esc_html( $unit->color_tag ); ?>
 										</span>
 									<?php else : ?>

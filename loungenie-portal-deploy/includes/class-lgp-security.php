@@ -239,6 +239,3 @@ class LGP_Security {
 		return bin2hex( random_bytes( $length ) );
 	}
 }
-
-// Initialize security on plugins_loaded
-add_action( 'plugins_loaded', array( 'LGP_Security', 'init' ) );

@@ -10,22 +10,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-add_action(
-	'rest_api_init',
-	function() {
-		register_rest_route(
-			'lgp/v1',
-			'/audit-log',
-			array(
-				'methods'             => 'GET',
-				'callback'            => 'lgp_get_audit_log',
-				'permission_callback' => function() {
-					return LGP_Auth::is_support();
-				},
-			)
-		);
-	}
-);
+/**
+ * Register audit log REST endpoint
+ */
+function lgp_register_audit_log_rest_route() {
+	register_rest_route(
+		'lgp/v1',
+		'/audit-log',
+		array(
+			'methods'             => 'GET',
+			'callback'            => 'lgp_get_audit_log',
+			'permission_callback' => function() {
+				return LGP_Auth::is_support();
+			},
+		)
+	);
+}
+
+add_action( 'rest_api_init', 'lgp_register_audit_log_rest_route' );
 
 /**
  * Get audit log for a company

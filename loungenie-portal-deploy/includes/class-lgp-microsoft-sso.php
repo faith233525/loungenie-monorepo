@@ -40,8 +40,8 @@ class LGP_Microsoft_SSO {
 		add_action( 'admin_menu', array( __CLASS__, 'add_settings_page' ) );
 		add_action( 'admin_init', array( __CLASS__, 'register_settings' ) );
 
-		// Handle OAuth callback
-		add_action( 'init', array( __CLASS__, 'handle_oauth_callback' ) );
+		// Handle OAuth callback via clean URL
+		add_action( 'parse_request', array( __CLASS__, 'handle_oauth_callback' ) );
 
 		// Add SSO button to login page
 		add_action( 'login_form', array( __CLASS__, 'add_sso_button' ) );
@@ -71,6 +71,13 @@ class LGP_Microsoft_SSO {
 		register_setting( 'lgp_m365_settings', self::OPTION_CLIENT_ID );
 		register_setting( 'lgp_m365_settings', self::OPTION_CLIENT_SECRET );
 		register_setting( 'lgp_m365_settings', self::OPTION_TENANT_ID );
+		
+		// Portal branding settings
+		register_setting( 'lgp_m365_settings', 'lgp_custom_logo_url', array(
+			'type'              => 'string',
+			'sanitize_callback' => 'esc_url_raw',
+			'default'           => '',
+		) );
 	}
 
 	/**
@@ -85,17 +92,18 @@ class LGP_Microsoft_SSO {
 		$client_secret = get_option( self::OPTION_CLIENT_SECRET, '' );
 		$tenant_id     = get_option( self::OPTION_TENANT_ID, '' );
 		$is_configured = ! empty( $client_id ) && ! empty( $client_secret ) && ! empty( $tenant_id );
+		$logo_url      = get_option( 'lgp_custom_logo_url', '' );
 
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Microsoft 365 SSO Settings', 'loungenie-portal' ); ?></h1>
+			<h1><?php esc_html_e( 'LounGenie Portal Settings', 'loungenie-portal' ); ?></h1>
 			
 			<div class="notice notice-info">
 				<p><strong><?php esc_html_e( 'Azure AD App Registration', 'loungenie-portal' ); ?></strong></p>
 				<ol>
 					<li><?php esc_html_e( 'Go to Azure Portal → App Registrations', 'loungenie-portal' ); ?></li>
 					<li><?php esc_html_e( 'Create new app: "LounGenie Portal SSO"', 'loungenie-portal' ); ?></li>
-					<li><?php esc_html_e( 'Set redirect URI:', 'loungenie-portal' ); ?> <code><?php echo esc_url( admin_url( 'options-general.php?page=lgp-m365-settings&oauth_callback=1' ) ); ?></code></li>
+					<li><?php esc_html_e( 'Set redirect URI:', 'loungenie-portal' ); ?> <code><?php echo esc_url( home_url( '/m365-sso-callback' ) ); ?></code></li>
 					<li><?php esc_html_e( 'Add API permissions: User.Read, email, profile, openid', 'loungenie-portal' ); ?></li>
 					<li><?php esc_html_e( 'Create client secret and copy the value', 'loungenie-portal' ); ?></li>
 				</ol>
@@ -150,6 +158,36 @@ class LGP_Microsoft_SSO {
 						</td>
 					</tr>
 				</table>
+				
+				<h2 style="margin-top: 40px;"><?php esc_html_e( 'Portal Branding', 'loungenie-portal' ); ?></h2>
+				<table class="form-table">
+					<tr>
+						<th scope="row">
+							<label for="lgp_custom_logo_url">
+								<?php esc_html_e( 'Logo URL', 'loungenie-portal' ); ?>
+							</label>
+						</th>
+						<td>
+							<input type="url" 
+								   name="lgp_custom_logo_url" 
+								   id="lgp_custom_logo_url" 
+								   value="<?php echo esc_attr( $logo_url ); ?>" 
+								   class="regular-text" 
+								   placeholder="https://yourdomain.com/logo.png" />
+							<p class="description">
+								<?php esc_html_e( 'Upload your logo to WordPress Media Library, then paste the URL here. Recommended size: 280x80px (PNG with transparent background).', 'loungenie-portal' ); ?>
+								<br>
+								<a href="<?php echo esc_url( admin_url( 'upload.php' ) ); ?>" target="_blank"><?php esc_html_e( 'Go to Media Library', 'loungenie-portal' ); ?></a>
+							</p>
+							<?php if ( $logo_url ) : ?>
+								<div style="margin-top: 12px; padding: 16px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px;">
+									<strong><?php esc_html_e( 'Preview:', 'loungenie-portal' ); ?></strong><br>
+									<img src="<?php echo esc_url( $logo_url ); ?>" alt="Logo Preview" style="max-width: 280px; height: auto; margin-top: 8px; display: block;" />
+								</div>
+							<?php endif; ?>
+						</td>
+					</tr>
+				</table>
 				<?php submit_button(); ?>
 			</form>
 			
@@ -174,7 +212,7 @@ class LGP_Microsoft_SSO {
 	public static function get_authorization_url() {
 		$client_id    = get_option( self::OPTION_CLIENT_ID );
 		$tenant_id    = get_option( self::OPTION_TENANT_ID );
-		$redirect_uri = admin_url( 'options-general.php?page=lgp-m365-settings&oauth_callback=1' );
+		$redirect_uri = home_url( '/m365-sso-callback' );
 
 		$params = array(
 			'client_id'     => $client_id,
@@ -189,14 +227,13 @@ class LGP_Microsoft_SSO {
 	}
 
 	/**
-	 * Handle OAuth callback
+	 * Handle OAuth callback via parse_request
+	 *
+	 * @param WP $wp WordPress environment object
 	 */
-	public static function handle_oauth_callback() {
-		if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'lgp-m365-settings' ) {
-			return;
-		}
-
-		if ( ! isset( $_GET['oauth_callback'] ) ) {
+	public static function handle_oauth_callback( $wp ) {
+		$request_path = isset( $wp->request ) ? trim( (string) $wp->request, '/' ) : '';
+		if ( $request_path !== 'm365-sso-callback' ) {
 			return;
 		}
 
@@ -256,7 +293,7 @@ class LGP_Microsoft_SSO {
 		$client_id     = get_option( self::OPTION_CLIENT_ID );
 		$client_secret = get_option( self::OPTION_CLIENT_SECRET );
 		$tenant_id     = get_option( self::OPTION_TENANT_ID );
-		$redirect_uri  = admin_url( 'options-general.php?page=lgp-m365-settings&oauth_callback=1' );
+		$redirect_uri  = home_url( '/m365-sso-callback' );
 
 		$token_url = self::AUTH_URL . '/' . $tenant_id . '/oauth2/v2.0/token';
 
@@ -470,6 +507,3 @@ class LGP_Microsoft_SSO {
 		return true;
 	}
 }
-
-// Initialize on plugins_loaded
-add_action( 'plugins_loaded', array( 'LGP_Microsoft_SSO', 'init' ) );

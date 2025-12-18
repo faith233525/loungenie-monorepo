@@ -486,6 +486,3 @@ class LGP_Email_Handler {
         return update_option(self::$option_key, $settings);
     }
 }
-
-// Initialize
-add_action('plugins_loaded', ['LGP_Email_Handler', 'init']);

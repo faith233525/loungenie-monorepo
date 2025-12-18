@@ -24,26 +24,22 @@ class LGP_Partner_Role {
     public static function register() {
         // Remove role if it exists (to update capabilities)
         remove_role( 'lgp_partner' );
-        
+
+        // Build capabilities array from capability infrastructure
+        $caps = array( 'read' => true );
+        foreach ( LGP_Capabilities::get_partner_capabilities() as $cap ) {
+            $caps[ $cap ] = true;
+        }
+
         // Add role with capabilities
         add_role(
             'lgp_partner',
             __( 'LounGenie Partner', 'loungenie-portal' ),
-            array(
-                // WordPress core capabilities (minimal)
-                'read' => true,
-                
-                // Custom portal capabilities
-                'lgp_access_portal' => true,
-                'lgp_view_own_company' => true,
-                'lgp_view_own_units' => true,
-                'lgp_submit_service_request' => true,
-                'lgp_submit_install_request' => true,
-                'lgp_submit_update_request' => true,
-                'lgp_track_own_requests' => true,
-                'lgp_view_request_history' => true,
-            )
+            $caps
         );
+
+        // Grant capabilities to the role
+        LGP_Capabilities::grant_capabilities_to_role( 'lgp_partner', LGP_Capabilities::get_partner_capabilities() );
     }
     
     /**

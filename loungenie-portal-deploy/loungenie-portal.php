@@ -32,9 +32,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'LGP_VERSION', '1.8.0' );
 define( 'LGP_PLUGIN_FILE', __FILE__ );
-define( 'LGP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-define( 'LGP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'LGP_ASSETS_URL', LGP_PLUGIN_URL . 'assets/' );
+
+// Use PHP functions instead of WordPress functions to avoid timing issues during activation
+if ( ! defined( 'LGP_PLUGIN_DIR' ) ) {
+	define( 'LGP_PLUGIN_DIR', trailingslashit( dirname( __FILE__ ) ) );
+}
+if ( ! defined( 'LGP_PLUGIN_URL' ) ) {
+	define( 'LGP_PLUGIN_URL', trailingslashit( plugins_url( '', __FILE__ ) ) );
+}
+if ( ! defined( 'LGP_ASSETS_URL' ) ) {
+	define( 'LGP_ASSETS_URL', LGP_PLUGIN_URL . 'assets/' );
+}
 define( 'LGP_TEXT_DOMAIN', 'loungenie-portal' );
 
 // ============================================================================
@@ -129,16 +137,12 @@ register_deactivation_hook( __FILE__, 'lgp_deactivate' );
  * Initialize all plugin components
  */
 function lgp_init() {
-	// Load core classes
+	// Load all required classes first
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-loader.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-database.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-router.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-auth.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-assets.php';
-	// Feature modules
-	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-attachments.php';
-	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-handler.php';
-
-	// Load enterprise features (backported from PoolSafe Portal v3.3.0)
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-cache.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-security.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-microsoft-sso.php';
@@ -147,10 +151,17 @@ function lgp_init() {
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-geocode.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-gateway.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-training-video.php';
-
-	// Load integration classes
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-hubspot.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-outlook.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-system-health.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-attachments.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-handler.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-capabilities.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-rest-errors.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-file-validator.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-rate-limiter.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-shared-hosting-rules.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-to-ticket.php';
 
 	// Load API endpoints
 	require_once LGP_PLUGIN_DIR . 'api/companies.php';
@@ -166,28 +177,8 @@ function lgp_init() {
 	require_once LGP_PLUGIN_DIR . 'roles/support.php';
 	require_once LGP_PLUGIN_DIR . 'roles/partner.php';
 
-	// Initialize router for /portal route
-	LGP_Router::init();
-
-	// Initialize authentication system
-	LGP_Auth::init();
-
-	// Initialize asset management
-	LGP_Assets::init();
-
-	// Initialize enterprise features
-	// Note: Security headers initialized via plugins_loaded hook in class
-	// Cache and SSO initialized via their own hooks
-
-	// Initialize integrations
-	LGP_HubSpot::init();
-	LGP_Outlook::init();
-
-	// Initialize REST API endpoints
-	LGP_Companies_API::init();
-	LGP_Units_API::init();
-	LGP_Tickets_API::init();
-	LGP_Gateways_API::init();
+	// Initialize all components via centralized loader
+	LGP_Loader::init();
 }
 
 add_action( 'plugins_loaded', 'lgp_init' );
@@ -202,9 +193,72 @@ add_action( 'plugins_loaded', 'lgp_init' );
 function lgp_add_rewrite_rules() {
 	add_rewrite_rule( '^portal/?$', 'index.php?lgp_portal=1', 'top' );
 	add_rewrite_rule( '^portal/(.+)/?$', 'index.php?lgp_portal=1&lgp_section=$matches[1]', 'top' );
+	add_rewrite_rule( '^portal/login/?$', 'index.php?lgp_portal_login=1', 'top' );
+	add_rewrite_rule( '^support-login/?$', 'index.php?lgp_support_login=1', 'top' );
+	add_rewrite_rule( '^partner-login/?$', 'index.php?lgp_partner_login=1', 'top' );
+	add_rewrite_rule( '^psp-azure-callback/?$', 'index.php?lgp_azure_callback=1', 'top' );
+	add_rewrite_rule( '^m365-sso-callback/?$', 'index.php?lgp_m365_callback=1', 'top' );
 }
 
 add_action( 'init', 'lgp_add_rewrite_rules' );
+
+/**
+ * Redirect root domain to /portal
+ * - Applies to any request hitting the site root ('/') on the frontend
+ * - Skips admin, login, REST, callback, sitemap/robots, and existing portal paths
+ */
+function lgp_redirect_root_to_portal() {
+	// Never redirect admin, AJAX, or cron requests
+	if ( is_admin() || wp_doing_ajax() || wp_doing_cron() ) {
+		return;
+	}
+
+	// Explicit check: don't redirect WordPress admin URLs
+	$raw_uri = isset( $_SERVER['REQUEST_URI'] ) ? strtok( $_SERVER['REQUEST_URI'], '?' ) : '/';
+	if ( 0 === strpos( $raw_uri, '/wp-admin' ) || 0 === strpos( $raw_uri, '/wp-login.php' ) ) {
+		return; // Don't interfere with WordPress admin
+	}
+
+	// Current request path (no query string)
+	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? strtok( $_SERVER['REQUEST_URI'], '?' ) : '/';
+	$request_uri = trailingslashit( $request_uri );
+
+	// Exclusions: don't interfere with these paths
+	$excluded_prefixes = array(
+		'/portal/',
+		'/wp-admin/',
+		'/wp-login.php/',
+		'/wp-json/',
+		'/psp-azure-callback/',
+		'/m365-sso-callback/',
+		'/xmlrpc.php/',
+		'/feed/',
+		'/sitemap', // includes variations
+	);
+
+	foreach ( $excluded_prefixes as $prefix ) {
+		if ( 0 === strpos( $request_uri, $prefix ) ) {
+			return;
+		}
+	}
+
+	// Also skip robots and favicon
+	if ( '/robots.txt/' === $request_uri || '/favicon.ico/' === $request_uri ) {
+		return;
+	}
+
+	// If this is the root/front request, always redirect to /portal (regardless of login state)
+	if ( '/' === $request_uri || is_front_page() || is_home() ) {
+		// Avoid redirect loop if home_url already ends with /portal
+		$target = home_url( '/portal' );
+		$current = home_url( $request_uri );
+		if ( trailingslashit( $current ) !== trailingslashit( $target ) ) {
+			wp_safe_redirect( $target, 301 );
+			exit;
+		}
+	}
+}
+add_action( 'template_redirect', 'lgp_redirect_root_to_portal', 0 );
 
 /**
  * Add query vars for portal routing
@@ -212,6 +266,11 @@ add_action( 'init', 'lgp_add_rewrite_rules' );
 function lgp_query_vars( $vars ) {
 	$vars[] = 'lgp_portal';
 	$vars[] = 'lgp_section';
+	$vars[] = 'lgp_portal_login';
+	$vars[] = 'lgp_support_login';
+	$vars[] = 'lgp_partner_login';
+	$vars[] = 'lgp_azure_callback';
+	$vars[] = 'lgp_m365_callback';
 	return $vars;
 }
 

@@ -26,30 +26,22 @@ class LGP_Support_Role {
     public static function register() {
         // Remove role if it exists (to update capabilities)
         remove_role( 'lgp_support' );
-        
+
+        // Build capabilities array from capability infrastructure
+        $caps = array( 'read' => true );
+        foreach ( LGP_Capabilities::get_support_capabilities() as $cap ) {
+            $caps[ $cap ] = true;
+        }
+
         // Add role with capabilities
         add_role(
             'lgp_support',
             __( 'LounGenie Support', 'loungenie-portal' ),
-            array(
-                // WordPress core capabilities (minimal)
-                'read' => true,
-                
-                // Custom portal capabilities
-                'lgp_access_portal' => true,
-                'lgp_view_all_companies' => true,
-                'lgp_view_all_units' => true,
-                'lgp_view_all_tickets' => true,
-                'lgp_manage_tickets' => true,
-                'lgp_view_map' => true,
-                'lgp_track_installs' => true,
-                'lgp_track_service' => true,
-                'lgp_track_maintenance' => true,
-                'lgp_filter_data' => true,
-                'lgp_search_data' => true,
-                'lgp_sort_data' => true,
-            )
+            $caps
         );
+
+        // Grant capabilities to the role
+        LGP_Capabilities::grant_capabilities_to_role( 'lgp_support', LGP_Capabilities::get_support_capabilities() );
     }
     
     /**

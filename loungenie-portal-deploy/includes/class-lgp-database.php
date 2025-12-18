@@ -13,6 +13,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 class LGP_Database {
 
 	/**
+	 * Initialize database management
+	 */
+	public static function init() {
+		// Tables are created on plugin activation via register_activation_hook
+		// This ensures schema exists before any queries run
+		// Migrations happen via LGP_Migrations::check_and_run()
+	}
+
+	/**
 	 * Create all database tables
 	 */
 	public static function create_tables() {

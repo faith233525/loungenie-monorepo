@@ -10,22 +10,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-add_action(
-	'rest_api_init',
-	function() {
-		register_rest_route(
-			'lgp/v1',
-			'/service-notes',
-			array(
-				'methods'             => array( 'GET', 'POST' ),
-				'callback'            => 'lgp_handle_service_notes',
-				'permission_callback' => function() {
-					return LGP_Auth::is_support();
-				},
-			)
-		);
-	}
-);
+/**
+ * Register service notes REST endpoint
+ */
+function lgp_register_service_notes_rest_route() {
+	register_rest_route(
+		'lgp/v1',
+		'/service-notes',
+		array(
+			'methods'             => array( 'GET', 'POST' ),
+			'callback'            => 'lgp_handle_service_notes',
+			'permission_callback' => function() {
+				return LGP_Auth::is_support();
+			},
+		)
+	);
+}
+
+add_action( 'rest_api_init', 'lgp_register_service_notes_rest_route' );
 
 /**
  * Handle service notes requests

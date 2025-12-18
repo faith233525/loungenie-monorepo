@@ -22,7 +22,6 @@
         initFilterPersistence();
         initLoadingOverlay();
         initKeyboardShortcuts();
-        initViewToggle();
     }
     
     /**
@@ -116,24 +115,20 @@
                 const searchTerm = this.value.toLowerCase();
                 const tableId = this.getAttribute('data-table');
                 const table = document.getElementById(tableId);
-                const cards = document.querySelectorAll('#units-cards .lgp-unit-card');
                 
-                if (!table && cards.length === 0) return;
+                if (!table) return;
                 
-                if (table) {
-                    const rows = table.querySelectorAll('tbody tr');
-                    rows.forEach(row => {
-                        const text = row.textContent.toLowerCase();
-                        row.style.display = text.includes(searchTerm) ? '' : 'none';
-                    });
-                }
-
-                if (cards.length > 0) {
-                    cards.forEach(card => {
-                        const text = card.textContent.toLowerCase();
-                        card.style.display = text.includes(searchTerm) ? '' : 'none';
-                    });
-                }
+                const rows = table.querySelectorAll('tbody tr');
+                
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    
+                    if (text.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
             }, 300));
         });
     }
@@ -296,53 +291,41 @@
         const activeFiltersContainer = document.getElementById('active-filters');
         const activeFiltersList = document.getElementById('active-filters-list');
         const table = document.getElementById('units-table');
-        const cards = document.querySelectorAll('#units-cards .lgp-unit-card');
         
-        if (!table && cards.length === 0) return;
-        if (filters.length === 0) return;
+        if (!table || filters.length === 0) return;
         
         const activeFilters = {};
         
         // Apply filters
         function applyFilters() {
+            const rows = table.querySelectorAll('tbody tr');
             let visibleCount = 0;
-
-            if (table) {
-                const rows = table.querySelectorAll('tbody tr');
-                rows.forEach(row => {
-                    let show = true;
-                    for (const [filterType, filterValue] of Object.entries(activeFilters)) {
-                        if (filterValue === '') continue;
-                        const rowValue = (row.getAttribute('data-' + filterType) || '').trim().toLowerCase();
-                        const compareValue = filterValue.trim().toLowerCase();
-                        if (rowValue !== compareValue) {
-                            show = false;
-                            break;
-                        }
+            
+            rows.forEach(row => {
+                let show = true;
+                
+                // Check each active filter
+                for (const [filterType, filterValue] of Object.entries(activeFilters)) {
+                    if (filterValue === '') continue;
+                    
+                    const rowValue = (row.getAttribute('data-' + filterType) || '').trim().toLowerCase();
+                    const compareValue = filterValue.trim().toLowerCase();
+                    
+                    if (rowValue !== compareValue) {
+                        show = false;
+                        break;
                     }
-                    row.style.display = show ? '' : 'none';
-                    if (show) visibleCount++;
-                });
-            }
-
-            if (cards.length > 0) {
-                cards.forEach(card => {
-                    let show = true;
-                    for (const [filterType, filterValue] of Object.entries(activeFilters)) {
-                        if (filterValue === '') continue;
-                        const value = (card.getAttribute('data-' + filterType) || '').trim().toLowerCase();
-                        const compareValue = filterValue.trim().toLowerCase();
-                        if (value !== compareValue) {
-                            show = false;
-                            break;
-                        }
-                    }
-                    card.style.display = show ? '' : 'none';
-                });
-            }
-
+                }
+                
+                row.style.display = show ? '' : 'none';
+                if (show) visibleCount++;
+            });
+            
+            // Update counts
             const visibleCountEl = document.getElementById('visible-count');
             if (visibleCountEl) visibleCountEl.textContent = visibleCount;
+            
+            // Update active filters display
             updateActiveFiltersDisplay();
         }
         
@@ -405,34 +388,6 @@
                 applyFilters();
             });
         }
-    }
-
-    /**
-     * Toggle between card and table views (Units)
-     */
-    function initViewToggle() {
-        const toggle = document.getElementById('lgp-view-toggle');
-        if (!toggle) return;
-
-        const cards = document.getElementById('units-cards');
-        const table = document.getElementById('units-table-wrapper');
-        if (!cards || !table) return;
-
-        toggle.querySelectorAll('button').forEach(btn => {
-            btn.addEventListener('click', () => {
-                toggle.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-
-                const view = btn.getAttribute('data-view');
-                if (view === 'table') {
-                    cards.style.display = 'none';
-                    table.style.display = '';
-                } else {
-                    cards.style.display = '';
-                    table.style.display = 'none';
-                }
-            });
-        });
     }
     
     /**

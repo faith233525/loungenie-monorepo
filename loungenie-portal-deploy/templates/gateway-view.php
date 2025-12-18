@@ -38,7 +38,7 @@ ksort( $grouped );
 		<h2 class="lgp-card-title"><?php esc_html_e( 'Filters & Search', 'loungenie-portal' ); ?></h2>
 	</div>
 	<div class="lgp-card-body">
-		<div class="lgp-gateway-filters" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+		<div class="lgp-gateway-filters lgp-grid-auto-200">
 			<div>
 				<label for="gateway-search"><?php esc_html_e( 'Search', 'loungenie-portal' ); ?></label>
 				<input type="text" id="gateway-search" placeholder="<?php esc_attr_e( 'Channel, address, or company', 'loungenie-portal' ); ?>" />
@@ -118,7 +118,7 @@ ksort( $grouped );
 <?php endif; ?>
 
 <!-- Modal for View Units -->
-<div id="lgp-units-modal" class="lgp-modal" style="display: none;">
+<div id="lgp-units-modal" class="lgp-modal lgp-hidden">
 	<div class="lgp-modal-content">
 		<span class="lgp-modal-close">&times;</span>
 		<h2><?php esc_html_e( 'Connected Units', 'loungenie-portal' ); ?></h2>
@@ -127,7 +127,7 @@ ksort( $grouped );
 </div>
 
 <!-- Modal for Audit Logs -->
-<div id="lgp-audit-logs-modal" class="lgp-modal" style="display: none;">
+<div id="lgp-audit-logs-modal" class="lgp-modal lgp-hidden">
 	<div class="lgp-modal-content">
 		<span class="lgp-modal-close">&times;</span>
 		<h2><?php esc_html_e( 'Gateway Audit Logs', 'loungenie-portal' ); ?></h2>

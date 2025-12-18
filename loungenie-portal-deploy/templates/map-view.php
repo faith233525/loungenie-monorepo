@@ -85,12 +85,12 @@ $companies = $wpdb->get_results(
 		<h2 class="lgp-card-title"><?php esc_html_e( 'Map View', 'loungenie-portal' ); ?></h2>
 	</div>
 	<div class="lgp-card-body">
-		<div id="lgp-map-container" style="height: 500px; background-color: var(--background); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; border: 2px dashed var(--soft);">
-			<div style="text-align: center; padding: var(--space-xl);">
-				<p style="font-size: var(--font-size-lg); color: var(--neutral); margin-bottom: var(--space-md);">
+		<div id="lgp-map-container" class="lgp-h-500 lgp-rounded-md lgp-flex-center lgp-border-2 lgp-border-dashed lgp-border-soft lgp-map-container">
+			<div class="lgp-text-center lgp-p-xl">
+				<p class="lgp-text-lg lgp-text-muted mb-md">
 					🗺️ <?php esc_html_e( 'Map Integration Placeholder', 'loungenie-portal' ); ?>
 				</p>
-				<p style="color: var(--neutral);">
+				<p class="lgp-text-muted">
 					<?php esc_html_e( 'Integrate with Google Maps, OpenStreetMap, or Mapbox to display partner locations', 'loungenie-portal' ); ?>
 				</p>
 			</div>

@@ -9,6 +9,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class LGP_Notifications {
 	/**
+	 * Initialize notifications
+	 */
+	public static function init() {
+		// Notifications are passive - triggered by other components
+		// No hooks needed at init time
+	}
+
+	/**
 	 * Notify support and partner on ticket events.
 	 *
 	 * @param array  $ticket   Expect keys: ticket_id, company_id, partner_user_id, partner_email, support_email
