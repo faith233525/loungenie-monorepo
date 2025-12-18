@@ -6,9 +6,14 @@
  * @package LounGenie Portal
  */
 
+namespace LounGenie\Portal;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+use WP_User;
+use WP_Error;
 
 class LGP_Auth {
 
@@ -25,6 +30,9 @@ class LGP_Auth {
 		add_action( 'wp_logout', array( __CLASS__, 'log_logout' ) );
 		add_action( 'password_reset', array( __CLASS__, 'log_password_reset' ), 10, 2 );
 		add_action( 'profile_update', array( __CLASS__, 'log_password_change' ), 10, 2 );
+
+		// Prevent partners from landing in WordPress admin; send to /portal instead
+		add_action( 'admin_init', array( __CLASS__, 'maybe_redirect_admin_to_portal' ) );
 	}
 
 	/**
@@ -47,6 +55,40 @@ class LGP_Auth {
 		}
 
 		return $redirect_to;
+	}
+
+	/**
+	 * Redirect non-admin portal users away from /wp-admin to /portal
+	 */
+	public static function maybe_redirect_admin_to_portal() {
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			return; // Allow AJAX
+		}
+
+		if ( ! is_user_logged_in() ) {
+			return;
+		}
+
+		// Only act on dashboard/admin pages
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		$current_user = wp_get_current_user();
+		if ( empty( $current_user->ID ) ) {
+			return;
+		}
+
+		// Allow users with management capabilities to access admin
+		if ( user_can( $current_user, 'manage_options' ) ) {
+			return;
+		}
+
+		$portal_roles = array( 'lgp_support', 'lgp_partner' );
+		if ( array_intersect( $portal_roles, (array) $current_user->roles ) ) {
+			wp_safe_redirect( home_url( '/portal' ) );
+			exit;
+		}
 	}
 
 	/**

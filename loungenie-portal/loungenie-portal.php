@@ -131,6 +131,22 @@ function lgp_deactivate() {
 register_deactivation_hook( __FILE__, 'lgp_deactivate' );
 
 // ============================================================================
+// INTERNATIONALIZATION
+// ============================================================================
+
+/**
+ * Load plugin text domain for translations
+ */
+function lgp_load_textdomain() {
+	load_plugin_textdomain(
+		'loungenie-portal',
+		false,
+		dirname( plugin_basename( __FILE__ ) ) . '/languages'
+	);
+}
+add_action( 'plugins_loaded', 'lgp_load_textdomain' );
+
+// ============================================================================
 // INITIALIZE PLUGIN
 // ============================================================================
 

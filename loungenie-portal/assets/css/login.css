@@ -12,14 +12,14 @@
    LOGIN CONTAINER LAYOUT
    ============================================================================ */
 
-body.lgp-portal {
+body.lgp-login-page {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-body.lgp-portal.lgp-screen-center {
+body.lgp-login-page.lgp-screen-center {
     background: linear-gradient(135deg, var(--lgp-color-surface) 0%, #f0fafb 100%);
 }
 
@@ -62,7 +62,7 @@ body.lgp-portal.lgp-screen-center {
 }
 
 .logo-loungenie {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 800;
     letter-spacing: -0.5px;
     color: var(--lgp-color-brand);
@@ -71,13 +71,13 @@ body.lgp-portal.lgp-screen-center {
 
 .logo-divider {
     color: var(--lgp-color-border);
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 400;
     opacity: 0.6;
 }
 
 .logo-poolsafe {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 800;
     color: var(--lgp-color-text-primary);
     letter-spacing: 0.2px;
@@ -94,7 +94,8 @@ body.lgp-portal.lgp-screen-center {
 }
 
 .lgp-login-logo {
-    max-width: 320px;
+    max-width: 380px;
+    max-height: 80px;
     height: auto;
     margin-bottom: var(--lgp-space-4);
     display: block;

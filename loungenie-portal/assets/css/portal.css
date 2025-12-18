@@ -67,7 +67,7 @@
     --shadow-lg: var(--lgp-shadow-lg);
 
     /* Layout - HubSpot Style Spacing */
-    --header-height: 80px;
+    --header-height: 96px;
     --sidebar-width: 280px;
     --sidebar-padding-h: 20px;
     --sidebar-padding-v: 24px;
@@ -79,6 +79,13 @@
     --card-padding: 20px;
     --card-spacing: 20px;
     --section-spacing: 40px;
+}
+
+/* Responsive adjustments for compact screens */
+@media (max-width: 640px) {
+    :root {
+        --header-height: 72px;
+    }
 }
 
 /* ============================================================================
@@ -161,14 +168,14 @@ a:hover {
 }
 
 .lgp-nav-link:hover {
-    background: rgba(58, 166, 185, 0.15) !important;
-    color: rgba(255, 255, 255, 0.95) !important;
+    background: rgba(58, 166, 185, 0.12) !important;
+    color: var(--primary) !important;
     transform: translateX(4px);
 }
 
 .lgp-nav-link.active {
-    background: rgba(58, 166, 185, 0.2) !important;
-    color: #fff !important;
+    background: rgba(58, 166, 185, 0.15) !important;
+    color: var(--primary) !important;
     font-weight: 600;
 }
 
@@ -1307,7 +1314,7 @@ a:hover {
 }
 
 /* Modal Container */
-.lgp-modal {
+.lgp-modal-overlay .lgp-modal {
     background: var(--white);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
@@ -2426,6 +2433,7 @@ html {
         margin-top: 0 !important;
     }
 }
+
 /* ============================================================================
    PORTAL SHELL - CSP COMPLIANT STYLES (No Inline Styles)
    Moved from inline styles to external CSS for Content Security Policy
@@ -2456,7 +2464,7 @@ html {
 }
 
 .lgp-logo-image {
-    max-height: 42px;
+    max-height: 56px;
     width: auto;
     display: block;
 }
@@ -2471,7 +2479,8 @@ html {
 
 .lgp-logo-loungenie {
     color: var(--lgp-color-brand);
-    font-size: 16px;
+    font-size: 18px;
+    font-weight: 800;
 }
 
 .lgp-logo-separator {
@@ -2481,12 +2490,20 @@ html {
 
 .lgp-logo-poolsafe {
     color: var(--lgp-color-text-primary);
-    font-size: 15px;
+    font-size: 17px;
+    font-weight: 700;
 }
 
 .lgp-logo-suffix {
     color: var(--lgp-color-text-tertiary);
-    font-size: 13px;
+    font-size: 14px;
+}
+
+/* Ensure logo image scales down slightly on small screens */
+@media (max-width: 640px) {
+    .lgp-logo-image {
+        max-height: 44px;
+    }
 }
 
 /* Header Actions */
@@ -2633,16 +2650,16 @@ html {
     .lgp-sidebar {
         transform: translateX(-100%);
     }
-    
+
     .lgp-sidebar.lgp-sidebar-open {
         transform: translateX(0);
         box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
     }
-    
+
     .lgp-sidebar-toggle-btn {
         display: block !important;
     }
-    
+
     .lgp-main {
         margin-left: 0;
     }
@@ -2652,21 +2669,21 @@ html {
     .lgp-header {
         padding: 0 16px;
     }
-    
+
     .lgp-logo-poolsafe,
     .lgp-logo-separator,
     .lgp-logo-suffix {
         display: none;
     }
-    
+
     .lgp-user-role {
         display: none;
     }
-    
+
     .lgp-main {
         padding: 16px;
     }
-    
+
     .lgp-header-actions {
         gap: 12px;
     }

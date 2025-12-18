@@ -1,1 +1,0 @@
-[Mock file: gateway_config.txt]

@@ -54,9 +54,8 @@ echo "<!DOCTYPE html>\n";
 	<title><?php esc_html_e( 'Partner Login', 'loungenie-portal' ); ?></title>
 	<link rel="stylesheet" href="<?php echo esc_url( LGP_ASSETS_URL . 'css/design-tokens.css' ); ?>">
 	<link rel="stylesheet" href="<?php echo esc_url( LGP_ASSETS_URL . 'css/login.css' ); ?>">
-	<link rel="stylesheet" href="<?php echo esc_url( LGP_ASSETS_URL . 'css/portal.css' ); ?>">
 </head>
-<body class="lgp-portal lgp-screen-center">
+<body class="lgp-login-page lgp-screen-center">
 	<div class="lgp-card lgp-max-w-520">
 		<div class="logo-section">
 			<?php

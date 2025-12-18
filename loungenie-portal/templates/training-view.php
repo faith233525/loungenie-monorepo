@@ -19,7 +19,7 @@ $categories = LGP_Training_Video::get_categories();
 	<div class="lgp-page-header">
 		<h1><?php esc_html_e( 'Training Videos', 'loungenie-portal' ); ?></h1>
 		<?php if ( $is_support ) : ?>
-			<button id="lgp-add-video-btn" class="lgp-button lgp-button-primary">
+			<button id="lgp-add-video-btn" class="lgp-btn lgp-btn-primary">
 				<?php esc_html_e( '+ Add Video', 'loungenie-portal' ); ?>
 			</button>
 		<?php endif; ?>

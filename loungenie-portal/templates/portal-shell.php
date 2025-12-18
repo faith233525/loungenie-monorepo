@@ -23,12 +23,15 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><?php echo esc_html( get_bloginfo( 'name' ) ); ?> - Portal</title>
+	<title><?php echo esc_html( get_bloginfo( 'name' ) ); ?> - <?php esc_html_e( 'Portal', 'loungenie-portal' ); ?></title>
 	<?php wp_head(); ?>
 </head>
-<body class="lgp-portal-body">
+<body class="lgp-portal-body" data-role="<?php echo $is_support ? 'support' : 'partner'; ?>">
 
-<div class="lgp-portal">
+<!-- Skip to main content for accessibility -->
+<a href="#main-content" class="lgp-skip-link"><?php esc_html_e( 'Skip to main content', 'loungenie-portal' ); ?></a>
+
+<div class="lgp-portal lgp-container" data-role="<?php echo $is_support ? 'support' : 'partner'; ?>">
 	
 	<!-- Header with HubSpot-style spacing -->
 	<header class="lgp-header">
@@ -77,9 +80,9 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 	</header>
 	
 	<!-- Sidebar Navigation with HubSpot Spacing -->
-	<aside class="lgp-sidebar">
+	<aside class="lgp-sidebar" role="navigation" aria-label="<?php esc_attr_e( 'Main Navigation', 'loungenie-portal' ); ?>">
 		<nav>
-			<ul class="lgp-nav">
+			<ul class="lgp-nav" role="menu">
 				<?php if ( $is_support ) : ?>
 					<li class="lgp-nav-item">
 						<a href="<?php echo esc_url( home_url( '/portal' ) ); ?>" class="lgp-nav-link <?php echo $section === 'dashboard' ? 'active' : ''; ?>">
@@ -154,7 +157,7 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 	</aside>
 	
 	<!-- Main Content Area with HubSpot Spacing -->
-	<main class="lgp-main">
+	<main id="main-content" class="lgp-main" role="main" aria-label="<?php esc_attr_e( 'Main Content', 'loungenie-portal' ); ?>">
 		<div class="lgp-content-wrapper">
 			<?php
 			// Load the appropriate template based on section

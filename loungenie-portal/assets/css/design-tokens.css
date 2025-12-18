@@ -11,49 +11,93 @@
 
 :root {
     /* ============================================================================
-	 * COLOR PALETTE
+	 * 60-30-10 COLOR RULE - NUANCED IMPLEMENTATION
 	 * ========================================================================== */
 
-    /* Neutral surfaces - LounGenie brand */
+    /* 60% ATMOSPHERE: Soft Cyan & White (Backgrounds & Large Surfaces) */
+    --lgp-atmosphere-primary: #E9F8F9;
+    /* Main background */
+    --lgp-atmosphere-white: #FFFFFF;
+    /* Cards, modals */
+    --lgp-atmosphere-alt: #F5FBFC;
+    /* Alternating card bg */
+    --lgp-atmosphere-border: #D8E9EC;
+    /* Subtle borders */
+    --lgp-atmosphere-hover: #EEF7F9;
+    /* Hover surfaces */
+
+    /* 30% STRUCTURE: Deep Navy (Text, Headers, Navigation) */
+    --lgp-structure-navy: #0F172A;
+    /* Primary text, sidebar bg */
+    --lgp-structure-headline: #0F172A;
+    /* Headings (h1-h6) */
+    --lgp-structure-body: #454F5E;
+    /* Body text */
+    --lgp-structure-secondary: #7A8699;
+    /* Secondary text */
+    --lgp-structure-tertiary: #94A3B8;
+    /* Tertiary text, hints */
+    --lgp-structure-border: #CFE3E6;
+    /* Borders, separators */
+
+    /* 10% ACTION: Teal & Cyan (Interactive Elements Only) */
+    --lgp-action-teal: #3AA6B9;
+    /* Primary action */
+    --lgp-action-teal-dark: #2A8A9A;
+    /* Hover state */
+    --lgp-action-teal-light: #D8EFF3;
+    /* Badge/light background */
+    --lgp-action-cyan: #25D0EE;
+    /* Secondary action */
+    --lgp-action-cyan-dark: #1AB9D4;
+    /* Hover state */
+    --lgp-action-cyan-light: #D6F6FC;
+    /* Badge/light background */
+
+    /* Legacy mapping for compatibility */
+    --lgp-brand-teal: #3AA6B9;
+    --lgp-brand-teal-dark: #2A8A9A;
+    --lgp-brand-teal-light: #D8EFF3;
+    --lgp-brand-cyan: #25D0EE;
+    --lgp-brand-cyan-dark: #1AB9D4;
+    --lgp-brand-cyan-light: #D6F6FC;
+    --lgp-white: #FFFFFF;
+    --lgp-background: #E9F8F9;
+    --lgp-surface: #FFFFFF;
+    --lgp-border: #D8E9EC;
+    --lgp-text-primary: #0F172A;
+    --lgp-text-secondary: #454F5E;
+    --lgp-text-tertiary: #7A8699;
+    --lgp-text-muted: #94A3B8;
+
+    /* OLD variable compatibility */
     --lgp-color-background: #E9F8F9;
-    /* Soft White / Cyan */
     --lgp-color-surface: #E9F8F9;
-    /* Page background */
     --lgp-color-surface-raised: #FFFFFF;
-    /* Cards */
     --lgp-color-border: #D8E9EC;
-    /* Soft border */
     --lgp-color-border-hover: #CFE3E6;
-
-    /* Text hierarchy */
     --lgp-color-text-primary: #0F172A;
-    /* Deep Navy for primary text */
     --lgp-color-text-secondary: #454F5E;
-    /* Slate Gray */
     --lgp-color-text-tertiary: #7A8699;
-    /* Muted */
     --lgp-color-text-inverse: #FFFFFF;
-
-    /* Brand colors (STRICT) */
     --lgp-color-brand: #3AA6B9;
-    /* Primary Teal */
     --lgp-color-brand-hover: #3393A3;
-    /* Slightly darker teal */
     --lgp-color-brand-light: #D8EFF3;
-    /* Teal tint for badges */
-
-    /* Accent Cyan */
     --lgp-color-accent: #25D0EE;
     --lgp-color-accent-hover: #1AB9D4;
     --lgp-color-accent-light: #D6F6FC;
 
-    /* Premium accent - Brushed Gold (limited use) */
-    --lgp-color-premium: #C5A059;
-    /* Brushed Gold */
-    --lgp-color-premium-light: #F5EEDC;
-    /* Soft gold tint */
+    /* FEEDBACK COLORS (Status, Sparingly) */
+    --lgp-success: #16A34A;
+    --lgp-success-light: #DCFCE7;
+    --lgp-warning: #D97706;
+    --lgp-warning-light: #FEF3C7;
+    --lgp-danger: #DC2626;
+    --lgp-danger-light: #FEE2E2;
+    --lgp-info: #0D9488;
+    --lgp-info-light: #CCFBF1;
 
-    /* Status colors (WCAG AA compliant) */
+    /* OLD variable compatibility */
     --lgp-color-success: #16A34A;
     --lgp-color-success-light: #DCFCE7;
     --lgp-color-warning: #D97706;
@@ -61,15 +105,15 @@
     --lgp-color-danger: #DC2626;
     --lgp-color-danger-light: #FEE2E2;
     --lgp-color-info: #0D9488;
-    /* Teal for info */
     --lgp-color-info-light: #CCFBF1;
-    /* Light Teal bg */
-
-    /* Navigation / overlays */
     --lgp-color-sidebar: #0F172A;
-    /* Dark Navy sidebar */
     --lgp-color-overlay: rgba(4, 16, 47, 0.7);
-    /* Overlay backdrop */
+
+    /* ROLE-SPECIFIC ACCENTS (Unified but Different) */
+    --lgp-role-accent: var(--lgp-action-teal);
+    /* Default to Partner (Teal) */
+    --lgp-role-accent-dark: var(--lgp-action-teal-dark);
+    --lgp-role-accent-light: var(--lgp-action-teal-light);
 
     /* ============================================================================
 	 * TYPOGRAPHY
@@ -92,6 +136,17 @@
     /* 20px */
     --lgp-font-size-2xl: 1.5rem;
     /* 24px */
+    --lgp-font-size-3xl: 1.875rem;
+    /* 30px */
+
+    /* NEW: Matching portal-design-demo.html */
+    --lgp-text-xs: 0.75rem;
+    --lgp-text-sm: 0.875rem;
+    --lgp-text-base: 1rem;
+    --lgp-text-lg: 1.125rem;
+    --lgp-text-xl: 1.25rem;
+    --lgp-text-2xl: 1.5rem;
+    --lgp-text-3xl: 1.875rem;
 
     /* Font weights */
     --lgp-font-weight-regular: 400;
@@ -131,10 +186,18 @@
     /* 64px */
 
     /* ============================================================================
+	 * LAYOUT CONSTANTS (matching portal-design-demo.html)
+	 * ========================================================================== */
+
+    --lgp-sidebar-width: 280px;
+    --lgp-header-height: 80px;
+
+    /* ============================================================================
 	 * COMPONENT TOKENS
 	 * ========================================================================== */
 
     /* Border radius */
+    --lgp-radius: 6px;
     --lgp-radius-sm: 0.25rem;
     /* 4px */
     --lgp-radius-md: 0.5rem;
@@ -144,25 +207,25 @@
     --lgp-radius-full: 9999px;
 
     /* Shadows */
-    --lgp-shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.06);
-    --lgp-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
-    --lgp-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.10);
+    --lgp-shadow: 0 2px 4px rgba(15, 23, 42, 0.1);
+    --lgp-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.08);
+    --lgp-shadow-md: 0 4px 8px rgba(15, 23, 42, 0.12);
+    --lgp-shadow-lg: 0 8px 16px rgba(15, 23, 42, 0.15);
 
     /* ============================================================================
-	 * LAYOUT TOKENS (HubSpot Style)
+	 * LAYOUT TOKENS (matching portal-design-demo.html)
 	 * ========================================================================== */
 
     /* Sidebar */
-    --lgp-sidebar-width: 260px;
     --lgp-sidebar-padding-h: 20px;
-    --lgp-sidebar-padding-v: 20px;
-    --lgp-sidebar-item-spacing: 14px;
+    --lgp-sidebar-padding-v: 24px;
+    --lgp-sidebar-item-spacing: 12px;
 
     /* Main content area */
-    --lgp-content-gap-sidebar: 28px;
-    --lgp-content-padding-h: 28px;
-    --lgp-content-padding-v: 28px;
-    --lgp-content-max-width: 1320px;
+    --lgp-content-gap-sidebar: 32px;
+    --lgp-content-padding-h: 32px;
+    --lgp-content-padding-v: 24px;
+    --lgp-content-max-width: 1200px;
 
     /* Cards */
     --lgp-card-padding: 20px;
@@ -170,8 +233,9 @@
     --lgp-card-spacing-vertical: 36px;
 
     /* Transitions */
-    --lgp-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-    --lgp-transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    --lgp-transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    --lgp-transition-fast: 150ms ease;
+    --lgp-transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
     --lgp-transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
 
     /* Focus ring */
@@ -189,6 +253,41 @@
     --lgp-transition-fast: 150ms ease-in-out;
     --lgp-transition-base: 200ms ease-in-out;
     --lgp-transition-slow: 300ms ease-in-out;
+}
+
+/* ============================================================================
+ * ROLE-SPECIFIC THEMING
+ * Partner: Professional, trustworthy, calm (Teal)
+ * Support: Energetic, responsive, helpful (Cyan)
+ * ========================================================================== */
+
+body[data-role="partner"],
+.lgp-portal[data-role="partner"] {
+    --lgp-role-accent: var(--lgp-action-teal);
+    --lgp-role-accent-dark: var(--lgp-action-teal-dark);
+    --lgp-role-accent-light: var(--lgp-action-teal-light);
+}
+
+body[data-role="support"],
+.lgp-portal[data-role="support"] {
+    --lgp-role-accent: var(--lgp-action-cyan);
+    --lgp-role-accent-dark: var(--lgp-action-cyan-dark);
+    --lgp-role-accent-light: var(--lgp-action-cyan-light);
+}
+
+/* Smooth transitions for role switching */
+.lgp-sidebar,
+.lgp-nav-link,
+.lgp-nav-icon,
+.lgp-btn-primary,
+.lgp-btn-outline,
+.lgp-stat-number,
+.lgp-stat-icon,
+.lgp-stat-card::before,
+.lgp-tab,
+.lgp-card,
+.lgp-user-role {
+    transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ============================================================================
@@ -576,10 +675,10 @@
 }
 
 .lgp-btn-secondary:hover {
-    background-color: var(--lgp-color-accent-light);
-    /* Soft Cyan for hover */
-    border-color: var(--lgp-color-accent);
-    color: var(--lgp-color-accent-hover);
+    background-color: var(--lgp-color-brand-light);
+    /* Increase contrast on hover */
+    border-color: var(--lgp-color-brand-hover);
+    color: var(--lgp-color-text-primary);
     transform: translateY(-2px);
 }
 
@@ -612,8 +711,56 @@
 }
 
 .lgp-btn-ghost:hover {
-    background-color: var(--lgp-color-surface);
+    background-color: var(--lgp-color-brand-light);
     color: var(--lgp-color-text-primary);
+}
+
+/* Button alias classes for legacy markup */
+.lgp-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--lgp-space-2);
+    padding: var(--lgp-space-3) var(--lgp-space-5);
+    border-radius: var(--lgp-radius-md);
+    font-size: var(--lgp-font-size-sm);
+    font-weight: var(--lgp-font-weight-medium);
+    line-height: 1.5;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all var(--lgp-transition-fast);
+    border: 1px solid transparent;
+    min-height: 44px;
+}
+
+.lgp-button-primary {
+    background: linear-gradient(180deg, var(--lgp-color-brand), #2F8FA1);
+    color: var(--lgp-color-text-inverse);
+}
+
+.lgp-button-primary:hover {
+    background: linear-gradient(180deg, #3FB5C3, #2D87A0);
+}
+
+.lgp-button-secondary {
+    background-color: #FFFFFF;
+    color: var(--lgp-color-brand);
+    border: 1.5px solid var(--lgp-color-brand);
+}
+
+.lgp-button-secondary:hover {
+    background-color: var(--lgp-color-brand-light);
+    color: var(--lgp-color-text-primary);
+    border-color: var(--lgp-color-brand-hover);
+}
+
+.lgp-button-danger {
+    background-color: var(--lgp-color-danger);
+    color: var(--lgp-color-text-inverse);
+}
+
+.lgp-button-danger:hover {
+    background-color: #B91C1C;
 }
 
 .lgp-btn-sm {

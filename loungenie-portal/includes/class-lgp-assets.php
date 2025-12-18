@@ -72,11 +72,20 @@ class LGP_Assets {
 			'all'
 		);
 
+		// Enqueue portal components (modern UI matching design demo)
+		wp_enqueue_style(
+			'lgp-portal-components',
+			LGP_ASSETS_URL . 'css/portal-components.css',
+			array( 'lgp-design-tokens' ),
+			LGP_VERSION,
+			'all'
+		);
+
 		// Enqueue the refactored design system next (base styles, utilities, components)
 		wp_enqueue_style(
 			'lgp-design-system',
 			LGP_ASSETS_URL . 'css/design-system-refactored.css',
-			array( 'lgp-design-tokens' ),
+			array( 'lgp-portal-components' ),
 			LGP_VERSION,
 			'all'
 		);

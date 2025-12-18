@@ -1,35 +1,22 @@
-# OS Files
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# Editor files
-.vscode/
-.idea/
-*.sublime-project
-*.sublime-workspace
-*.swp
-*.swo
-*~
-
-# Temporary files
-*.tmp
-*.log
-*.cache
-
-# Build artifacts
-*.zip
-build/
-dist/
-
-# Node modules (if using build tools)
-node_modules/
+# Dependencies
+/vendor/
+/node_modules/
+composer.lock
 package-lock.json
 
-# Environment files
-.env.local
-.env.production
+# Testing
+/tests/
+.phpunit.result.cache
+phpunit.xml
 
-# WordPress specific
-wp-config.php
-.htaccess
+# Development
+.env
+.DS_Store
+*.log
+*.bak
+.vscode/
+.idea/
+
+# Build files
+/build/
+/dist/
