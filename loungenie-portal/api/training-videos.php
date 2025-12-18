@@ -12,9 +12,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 class LGP_Training_Videos_API {
 
 	/**
+	 * Initialize API endpoints
+	 */
+	public static function init() {
+		add_action( 'rest_api_init', array( __CLASS__, 'register_routes' ) );
+	}
+
+	/**
 	 * Register REST API routes
 	 */
-	public function register_routes() {
+	public static function register_routes() {
+		$api = new self();
+		$api->register_endpoints();
+	}
+
+	/**
+	 * Register REST API endpoints
+	 */
+	public function register_endpoints() {
 		// Get all videos (role-based filtering)
 		register_rest_route(
 			'lgp/v1',
@@ -251,22 +266,16 @@ class LGP_Training_Videos_API {
 	}
 
 	/**
-	 * Check if user has support role
+	 * Check if user has support role (can manage training videos)
 	 *
 	 * @return bool
 	 */
 	public function support_only_permission() {
-		return current_user_can( 'manage_options' );
-	}
-}
-
-// Register API routes (only in WordPress context)
-if ( function_exists( 'add_action' ) ) {
-	add_action(
-		'rest_api_init',
-		function() {
-			$api = new LGP_Training_Videos_API();
-			$api->register_routes();
+		if ( ! is_user_logged_in() ) {
+			return false;
 		}
-	);
+
+		// Check if user has the capability to manage training videos
+		return current_user_can( 'lgp_manage_training_videos' ) || LGP_Auth::is_support();
+	}
 }

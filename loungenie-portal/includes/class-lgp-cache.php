@@ -280,36 +280,3 @@ class LGP_Cache {
 		}
 	}
 }
-
-// Warm up cache on init for logged-in users
-add_action(
-	'init',
-	function() {
-		if ( is_user_logged_in() && current_user_can( 'lgp_access_portal' ) ) {
-			// Defer to avoid slowing down page load
-			add_action( 'shutdown', array( 'LGP_Cache', 'warm_up' ), 999 );
-		}
-	}
-);
-
-// Invalidate cache on data changes (hooks into REST API)
-add_action(
-	'lgp_company_created',
-	function() {
-		LGP_Cache::invalidate_entity( 'companies' );
-	}
-);
-
-add_action(
-	'lgp_ticket_created',
-	function() {
-		LGP_Cache::invalidate_entity( 'tickets' );
-	}
-);
-
-add_action(
-	'lgp_ticket_updated',
-	function() {
-		LGP_Cache::invalidate_entity( 'tickets' );
-	}
-);

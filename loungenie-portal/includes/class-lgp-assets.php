@@ -24,6 +24,10 @@ class LGP_Assets {
 	 * Called by router when loading portal
 	 */
 	public static function enqueue_portal_assets() {
+		// Safety check: don't enqueue in WordPress admin
+		if ( is_admin() ) {
+			return;
+		}
 		// Resource hints for faster connections to external CDNs used by the portal
 		add_filter(
 			'wp_resource_hints',
@@ -117,6 +121,15 @@ class LGP_Assets {
 			'lgp-portal',
 			LGP_ASSETS_URL . 'js/portal.js',
 			array( 'lgp-utils' ),
+			LGP_VERSION,
+			true
+		);
+
+		// Enqueue portal initialization (sidebar toggle, CSP-compliant)
+		wp_enqueue_script(
+			'lgp-portal-init',
+			LGP_ASSETS_URL . 'js/portal-init.js',
+			array(),
 			LGP_VERSION,
 			true
 		);

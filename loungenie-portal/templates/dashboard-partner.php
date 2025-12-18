@@ -58,13 +58,38 @@ $recent_requests = $wpdb->get_results(
 
 ?>
 
-<div class="lgp-dashboard-header">
-	<h1><?php esc_html_e( 'Partner Dashboard', 'loungenie-portal' ); ?></h1>
-	<p><?php echo esc_html( $company->name ); ?></p>
-</div>
+<div class="lgp-dashboard-container">
+	
+	<div class="lgp-dashboard-header">
+		<h1><?php esc_html_e( 'Partner Dashboard', 'loungenie-portal' ); ?></h1>
+	</div>
+
+	<!-- Orientation Card -->
+	<div class="lgp-orientation-card" aria-label="<?php esc_attr_e( 'Dashboard Orientation', 'loungenie-portal' ); ?>">
+		<div class="lgp-orientation-left">
+			<div class="lgp-orientation-title">
+				<?php echo esc_html( $company->name ); ?>
+			</div>
+			<?php if ( $management_company ) : ?>
+				<div class="lgp-orientation-subtitle">
+					<?php echo esc_html( $management_company->name ); ?>
+				</div>
+			<?php endif; ?>
+		</div>
+		<div class="lgp-orientation-right">
+			<div class="lgp-orientation-metric-item">
+				<p class="lgp-orientation-metric">
+					<?php echo esc_html( $unit_count ?: '0' ); ?>
+				</p>
+				<p class="lgp-orientation-metric-label">
+					<?php esc_html_e( 'Active Units', 'loungenie-portal' ); ?>
+				</p>
+			</div>
+		</div>
+	</div>
 
 <!-- KPI Cards -->
-<div class="lgp-card-grid" style="margin-top: var(--lgp-space-4);">
+<div class="lgp-card-grid lgp-mt-4">
 	<div class="lgp-stat-card">
 		<div class="lgp-stat-card-header">
 			<div class="lgp-stat-card-icon"><i class="fa-solid fa-tower-cell" aria-hidden="true"></i></div>
@@ -95,11 +120,11 @@ $recent_requests = $wpdb->get_results(
 </div>
 
 <!-- Primary Actions -->
-<div class="lgp-card" style="display: flex; align-items: center; justify-content: space-between;">
-	<div class="lgp-card-header" style="border-bottom: none; padding-bottom: 0; margin-bottom: 0;">
+<div class="lgp-card lgp-flex lgp-items-center lgp-justify-between">
+	<div class="lgp-card-header lgp-border-none lgp-pb-0 lgp-mb-0">
 		<h2 class="lgp-card-title"><?php esc_html_e( 'Quick Actions', 'loungenie-portal' ); ?></h2>
 	</div>
-	<div class="lgp-card-footer" style="border-top: none; padding-top: 0;">
+	<div class="lgp-card-footer lgp-border-none lgp-pt-0">
 		<a href="<?php echo esc_url( home_url( '/portal/requests' ) ); ?>" class="lgp-btn lgp-btn-primary">
 			<i class="fa-solid fa-plus" aria-hidden="true"></i>
 			<?php esc_html_e( 'Create Ticket', 'loungenie-portal' ); ?>
@@ -117,7 +142,7 @@ $recent_requests = $wpdb->get_results(
 		<h2 class="lgp-card-title"><?php esc_html_e( 'Company Information', 'loungenie-portal' ); ?></h2>
 	</div>
 	<div class="lgp-card-body">
-		<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-lg);">
+		<div class="lgp-grid-auto-250">
 			<div>
 				<p><strong><?php esc_html_e( 'Company Name:', 'loungenie-portal' ); ?></strong> <?php echo esc_html( $company->name ); ?></p>
 				<p><strong><?php esc_html_e( 'Address:', 'loungenie-portal' ); ?></strong> <?php echo esc_html( $company->address ?? __( 'N/A', 'loungenie-portal' ) ); ?></p>
@@ -131,19 +156,6 @@ $recent_requests = $wpdb->get_results(
 			</div>
 			<?php endif; ?>
 		</div>
-	</div>
-</div>
-
-<!-- Statistics -->
-<div class="lgp-stats-grid">
-	<div class="lgp-stat-card">
-		<div class="lgp-stat-label"><?php esc_html_e( 'LounGenie Units', 'loungenie-portal' ); ?></div>
-		<div class="lgp-stat-value"><?php echo esc_html( $unit_count ?: '0' ); ?></div>
-	</div>
-	
-	<div class="lgp-stat-card">
-		<div class="lgp-stat-label"><?php esc_html_e( 'Open Requests', 'loungenie-portal' ); ?></div>
-		<div class="lgp-stat-value"><?php echo esc_html( $open_requests ?: '0' ); ?></div>
 	</div>
 </div>
 
@@ -236,3 +248,5 @@ $recent_requests = $wpdb->get_results(
 		<?php endif; ?>
 	</div>
 </div>
+
+</div><!-- .lgp-dashboard-container -->

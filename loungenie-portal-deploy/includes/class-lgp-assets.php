@@ -24,11 +24,66 @@ class LGP_Assets {
 	 * Called by router when loading portal
 	 */
 	public static function enqueue_portal_assets() {
-		// Enqueue portal CSS
+		// Resource hints for faster connections to external CDNs used by the portal
+		add_filter(
+			'wp_resource_hints',
+			function ( $hints, $relation_type ) {
+				$domains = array(
+					'fonts.googleapis.com',
+					'fonts.gstatic.com',
+					'cdnjs.cloudflare.com',
+					'unpkg.com',
+				);
+				if ( 'preconnect' === $relation_type || 'dns-prefetch' === $relation_type ) {
+					$hints = array_unique( array_merge( $hints, $domains ) );
+				}
+				return $hints;
+			},
+			10,
+			2
+		);
+
+		// Enqueue Montserrat font (brand typography)
+		wp_enqueue_style(
+			'lgp-font-montserrat',
+			'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap',
+			array(),
+			null,
+			'all'
+		);
+
+		// Enqueue FontAwesome for consistent iconography
+		wp_enqueue_style(
+			'font-awesome',
+			'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
+			array('lgp-font-montserrat'),
+			'6.5.1',
+			'all'
+		);
+
+		// Enqueue design tokens first (CSS variables)
+		wp_enqueue_style(
+			'lgp-design-tokens',
+			LGP_ASSETS_URL . 'css/design-tokens.css',
+			array( 'font-awesome' ),
+			LGP_VERSION,
+			'all'
+		);
+
+		// Enqueue the refactored design system next (base styles, utilities, components)
+		wp_enqueue_style(
+			'lgp-design-system',
+			LGP_ASSETS_URL . 'css/design-system-refactored.css',
+			array( 'lgp-design-tokens' ),
+			LGP_VERSION,
+			'all'
+		);
+
+		// Enqueue portal CSS (overrides and portal-specific layout)
 		wp_enqueue_style(
 			'lgp-portal',
 			LGP_ASSETS_URL . 'css/portal.css',
-			array(),
+			array( 'lgp-design-system' ),
 			LGP_VERSION,
 			'all'
 		);
@@ -50,11 +105,20 @@ class LGP_Assets {
 			);
 		}
 
+		// Utilities library (shared helpers used across portal scripts)
+		wp_enqueue_script(
+			'lgp-utils',
+			LGP_ASSETS_URL . 'js/lgp-utils.js',
+			array(),
+			LGP_VERSION,
+			true
+		);
+
 		// Enqueue portal JS
 		wp_enqueue_script(
 			'lgp-portal',
 			LGP_ASSETS_URL . 'js/portal.js',
-			array(),
+			array( 'lgp-utils' ),
 			LGP_VERSION,
 			true
 		);
@@ -86,6 +150,15 @@ class LGP_Assets {
 				true
 			);
 		}
+
+		// Responsive sidebar controller for mobile/off-canvas behavior
+		wp_enqueue_script(
+			'lgp-responsive-sidebar',
+			LGP_ASSETS_URL . 'js/responsive-sidebar.js',
+			array( 'lgp-portal' ),
+			LGP_VERSION,
+			true
+		);
 
 		// Localize script with AJAX data
 		wp_localize_script(

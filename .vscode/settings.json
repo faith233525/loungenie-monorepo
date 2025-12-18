@@ -1,0 +1,47 @@
+{
+    // Reduce background indexing and file watching for large folders
+    "files.exclude": {
+        "**/.git": true,
+        "**/node_modules": true,
+        "**/vendor": true,
+        "**/tests": true
+    },
+    "search.exclude": {
+        "**/.git": true,
+        "**/node_modules": true,
+        "**/vendor": true,
+        "**/tests": true
+    },
+    "files.watcherExclude": {
+        "**/.git/**": true,
+        "**/node_modules/**": true,
+        "**/vendor/**": true,
+        "**/tests/**": true
+    },
+
+    // PHP: keep indexing light
+    "intelephense.files.exclude": [
+        "**/vendor/**",
+        "**/.git/**",
+        "**/node_modules/**",
+        "**/tests/**"
+    ],
+    "php.suggest.basic": false,
+    "php.validate.enable": false,
+
+    // UI simplifications
+    "editor.minimap.enabled": false,
+    "workbench.tips.enabled": false,
+
+    // Extensions: avoid background churn
+    "extensions.autoUpdate": false,
+    "extensions.autoCheckUpdates": false,
+    "extensions.ignoreRecommendations": true,
+
+    // Telemetry off
+    "telemetry.telemetryLevel": "off",
+
+    // Preserve existing Python env settings
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    "python-envs.pythonProjects": []
+}

@@ -16,15 +16,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param string $color_name Color name
  * @return string Hex color code
  */
-function lgp_get_color_hex( $color_name ) {
-	$color_map   = array(
-		'yellow'       => '#FFD700',
-		'red'          => '#DC143C',
-		'classic blue' => '#4169E1',
-		'ice blue'     => '#87CEEB',
-	);
-	$color_lower = strtolower( trim( $color_name ) );
-	return isset( $color_map[ $color_lower ] ) ? $color_map[ $color_lower ] : '#999';
+if ( ! function_exists( 'lgp_get_color_hex' ) ) {
+	function lgp_get_color_hex( $color_name ) {
+		$color_map   = array(
+			'yellow'       => '#D8EFF3',
+			'red'          => '#DCFCE7',
+			'classic blue' => '#CCF8F1',
+			'ice blue'     => '#D6F6FC',
+		);
+		$color_lower = strtolower( trim( $color_name ) );
+		return isset( $color_map[ $color_lower ] ) ? $color_map[ $color_lower ] : '#E9F8F9';
+	}
 }
 
 global $wpdb;
@@ -86,9 +88,185 @@ $yearround_units = $wpdb->get_var( "SELECT COUNT(*) FROM $units_table WHERE seas
 
 ?>
 
-<div class="lgp-dashboard-header">
-	<h1><?php esc_html_e( 'Support Dashboard', 'loungenie-portal' ); ?></h1>
-	<p><?php esc_html_e( 'Overview of all companies, units, and support tickets', 'loungenie-portal' ); ?></p>
+<div class="lgp-dashboard-container">
+
+	<div class="lgp-dashboard-header">
+		<h1><?php esc_html_e( 'Support Dashboard', 'loungenie-portal' ); ?></h1>
+		<p><?php esc_html_e( 'Overview of all companies, units, and support tickets', 'loungenie-portal' ); ?></p>
+	</div>
+
+	<!-- Welcome Banner -->
+	<div class="lgp-support-welcome" role="note">
+		<h3 class="lgp-support-welcome-title"><?php esc_html_e( 'Welcome to the LounGenie Support Portal!', 'loungenie-portal' ); ?></h3>
+		<p class="lgp-support-welcome-body"><?php esc_html_e( 'Track partner updates, service requests, and units all in one place. Let\'s keep everything running smoothly!', 'loungenie-portal' ); ?></p>
+	</div>
+
+	<!-- Orientation Card -->
+	<div class="lgp-orientation-card" aria-label="<?php esc_attr_e( 'Dashboard Orientation', 'loungenie-portal' ); ?>">
+		<div class="lgp-orientation-left">
+			<div class="lgp-orientation-title">
+				<?php esc_html_e( 'Support Operations', 'loungenie-portal' ); ?>
+			</div>
+			<?php if ( ! empty( $support_team_location ) ) : ?>
+				<div class="lgp-orientation-subtitle">
+					<?php echo esc_html( $support_team_location ); ?>
+				</div>
+			<?php endif; ?>
+		</div>
+		<div class="lgp-orientation-right">
+			<div class="lgp-orientation-metric-group">
+				<div class="lgp-orientation-metric-item">
+					<p class="lgp-orientation-metric">
+						<?php echo esc_html( $total_units ?: '0' ); ?>
+					</p>
+					<p class="lgp-orientation-metric-label">
+						<?php esc_html_e( 'Total Units', 'loungenie-portal' ); ?>
+					</p>
+				</div>
+				<div class="lgp-orientation-metric-item">
+					<p class="lgp-orientation-metric-secondary-number">
+						<?php echo esc_html( $open_tickets ?: '0' ); ?>
+					</p>
+					<p class="lgp-orientation-metric-label">
+						<?php esc_html_e( 'Active Tickets', 'loungenie-portal' ); ?>
+					</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+	<!-- Quick Stats Overview -->
+	<div class="lgp-card-grid lgp-mt-4">
+		<div class="lgp-stat-card">
+			<div class="lgp-stat-card-header">
+				<div class="lgp-stat-card-icon"><i class="fa-solid fa-building" aria-hidden="true"></i></div>
+				<div>
+					<div class="lgp-stat-card-value"><?php echo esc_html( $total_companies ?: '0' ); ?></div>
+					<div class="lgp-stat-card-label"><?php esc_html_e( 'Total Companies', 'loungenie-portal' ); ?></div>
+				</div>
+			</div>
+		</div>
+		<div class="lgp-stat-card">
+			<div class="lgp-stat-card-header">
+				<div class="lgp-stat-card-icon"><i class="fa-solid fa-tower-cell" aria-hidden="true"></i></div>
+				<div>
+					<div class="lgp-stat-card-value"><?php echo esc_html( $total_units ?: '0' ); ?></div>
+					<div class="lgp-stat-card-label"><?php esc_html_e( 'Active Units', 'loungenie-portal' ); ?></div>
+				</div>
+			</div>
+		</div>
+		<div class="lgp-stat-card">
+			<div class="lgp-stat-card-header">
+				<div class="lgp-stat-card-icon"><i class="fa-solid fa-ticket" aria-hidden="true"></i></div>
+				<div>
+					<div class="lgp-stat-card-value"><?php echo esc_html( $open_tickets ?: '0' ); ?></div>
+					<div class="lgp-stat-card-label"><?php esc_html_e( 'Open Tickets', 'loungenie-portal' ); ?></div>
+				</div>
+			</div>
+		</div>
+		<div class="lgp-stat-card">
+			<div class="lgp-stat-card-header">
+				<div class="lgp-stat-card-icon"><i class="fa-solid fa-wrench" aria-hidden="true"></i></div>
+				<div>
+					<div class="lgp-stat-card-value"><?php echo esc_html( $active_installs ?: '0' ); ?></div>
+					<div class="lgp-stat-card-label"><?php esc_html_e( 'Active Installs', 'loungenie-portal' ); ?></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!-- Welcome Card -->
+<div class="lgp-welcome-card lgp-welcome-card-hidden">
+	<div class="lgp-welcome-greeting">
+		<?php
+		$hour = (int) date( 'H' );
+		if ( $hour < 12 ) {
+			esc_html_e( 'Good morning!', 'loungenie-portal' );
+		} elseif ( $hour < 18 ) {
+			esc_html_e( 'Good afternoon!', 'loungenie-portal' );
+		} else {
+			esc_html_e( 'Good evening!', 'loungenie-portal' );
+		}
+		?>
+	</div>
+	<div class="lgp-welcome-user">
+		<?php 
+		$current_user = wp_get_current_user();
+		// Translators: %s is the user's display name
+		printf( esc_html__( 'Welcome back, %s', 'loungenie-portal' ), esc_html( $current_user->display_name ) );
+		?>
+	</div>
+
+	<div class="lgp-welcome-context">
+		<div class="lgp-welcome-context-icon">
+			<i class="fa-solid fa-headset lgp-icon-default" aria-hidden="true"></i>
+		</div>
+		<div class="lgp-welcome-context-text">
+			<h3><?php esc_html_e( 'Support Operations', 'loungenie-portal' ); ?></h3>
+			<p>
+				<?php 
+				// Translators: %d is the number of companies
+				printf( esc_html__( 'Managing %d companies', 'loungenie-portal' ), esc_html( $total_companies ) );
+				?>
+			</p>
+		</div>
+	</div>
+
+	<div class="lgp-welcome-actions">
+		<a href="<?php echo esc_url( home_url( '/portal/tickets' ) ); ?>" class="lgp-btn lgp-btn-primary">
+			<i class="fa-solid fa-ticket lgp-icon-action" aria-hidden="true"></i>
+			<?php 
+			if ( $open_tickets > 0 ) {
+				// Translators: %d is the number of open tickets
+				printf( esc_html__( 'View Tickets (%d)', 'loungenie-portal' ), esc_html( $open_tickets ) );
+			} else {
+				esc_html_e( 'View Tickets', 'loungenie-portal' );
+			}
+			?>
+		</a>
+		<a href="<?php echo esc_url( home_url( '/portal/companies' ) ); ?>" class="lgp-btn lgp-btn-secondary">
+			<i class="fa-solid fa-building lgp-icon-action" aria-hidden="true"></i>
+			<?php esc_html_e( 'Manage Companies', 'loungenie-portal' ); ?>
+		</a>
+	</div>
+
+	<div class="lgp-welcome-tip">
+		<strong><?php esc_html_e( 'System Status:', 'loungenie-portal' ); ?></strong>
+		<?php 
+		if ( $open_tickets > 5 ) {
+			esc_html_e( ' Moderate ticket volume. Review priority items.', 'loungenie-portal' );
+		} elseif ( $open_tickets > 0 ) {
+			esc_html_e( ' Light ticket volume. All systems nominal.', 'loungenie-portal' );
+		} else {
+			esc_html_e( ' No open tickets. Excellent!', 'loungenie-portal' );
+		}
+		?>
+	</div>
+</div>
+
+<!-- KPI Statistics Cards -->
+<div class="lgp-kpi-grid">
+	<div class="lgp-kpi-card">
+		<div class="lgp-kpi-card-icon">
+			<i class="fa-solid fa-building lgp-kpi-icon-color"></i>
+		</div>
+		<p class="lgp-kpi-value"><?php echo esc_html( $total_companies ?: '0' ); ?></p>
+		<p class="lgp-kpi-label"><?php esc_html_e( 'Total Companies', 'loungenie-portal' ); ?></p>
+	</div>
+	<div class="lgp-kpi-card">
+		<div class="lgp-kpi-card-icon">
+			<i class="fa-solid fa-tower-cell lgp-kpi-icon-color"></i>
+		</div>
+		<p class="lgp-kpi-value"><?php echo esc_html( $total_units ?: '0' ); ?></p>
+		<p class="lgp-kpi-label"><?php esc_html_e( 'Total Units', 'loungenie-portal' ); ?></p>
+	</div>
+	<div class="lgp-kpi-card">
+		<div class="lgp-kpi-card-icon">
+			<i class="fa-solid fa-ticket lgp-kpi-icon-color"></i>
+		</div>
+		<p class="lgp-kpi-value"><?php echo esc_html( $open_tickets ?: '0' ); ?></p>
+		<p class="lgp-kpi-label"><?php esc_html_e( 'Open Tickets', 'loungenie-portal' ); ?></p>
+	</div>
 </div>
 
 <div class="lgp-card">
@@ -97,11 +275,11 @@ $yearround_units = $wpdb->get_var( "SELECT COUNT(*) FROM $units_table WHERE seas
 		<p class="lgp-card-subtitle"><?php esc_html_e( 'Support-only view powered by OpenStreetMap', 'loungenie-portal' ); ?></p>
 	</div>
 	<div class="lgp-card-body">
-		<div id="lgp-company-map" style="height: 480px;"></div>
+		<div id="lgp-company-map" class="lgp-h-480"></div>
 	</div>
 </div>
 
-<!-- Statistics Grid -->
+<!-- Statistics Grid (Legacy) -->
 <div class="lgp-stats-grid">
 	<div class="lgp-stat-card">
 		<div class="lgp-stat-label"><?php esc_html_e( 'Total Companies', 'loungenie-portal' ); ?></div>
@@ -142,7 +320,7 @@ $yearround_units = $wpdb->get_var( "SELECT COUNT(*) FROM $units_table WHERE seas
 							?>
 							<li class="lgp-metric-item">
 								<span class="lgp-metric-label">
-									<span class="lgp-color-indicator" style="background-color: <?php echo esc_attr( $color_hex ); ?>"></span>
+									<span class="lgp-color-indicator" style="--lgp-color-value: <?php echo esc_attr( $color_hex ); ?>;"></span>
 									<?php echo esc_html( $color->color_tag ); ?>
 								</span>
 								<span class="lgp-metric-value"><?php echo esc_html( $color->count ); ?> <?php esc_html_e( 'units', 'loungenie-portal' ); ?></span>
@@ -203,6 +381,65 @@ $yearround_units = $wpdb->get_var( "SELECT COUNT(*) FROM $units_table WHERE seas
 				</ul>
 			</div>
 		</div>
+	</div>
+</div>
+
+
+<!-- Create New Ticket Section -->
+<div class="lgp-card lgp-ticket-creation-card">
+	<div class="lgp-card-header">
+		<h2 class="lgp-card-title"><?php esc_html_e( 'Create Support Ticket', 'loungenie-portal' ); ?></h2>
+		<p class="lgp-card-subtitle"><?php esc_html_e( 'Or upload attachments to an existing ticket', 'loungenie-portal' ); ?></p>
+	</div>
+	<div class="lgp-card-body">
+		<form class="lgp-ticket-form" method="POST" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
+			<input type="hidden" name="action" value="lgp_create_ticket">
+			<?php wp_nonce_field( 'lgp_create_ticket_nonce' ); ?>
+			
+			<div class="lgp-form-group">
+				<label class="lgp-form-label" for="ticket_subject"><?php esc_html_e( 'Subject', 'loungenie-portal' ); ?></label>
+				<input type="text" id="ticket_subject" name="subject" class="lgp-form-input" placeholder="<?php esc_attr_e( 'Brief description of the issue', 'loungenie-portal' ); ?>" required>
+			</div>
+			
+			<div class="lgp-form-group">
+				<label class="lgp-form-label" for="ticket_priority"><?php esc_html_e( 'Priority', 'loungenie-portal' ); ?></label>
+				<select id="ticket_priority" name="priority" class="lgp-form-select">
+					<option value="low"><?php esc_html_e( 'Low', 'loungenie-portal' ); ?></option>
+					<option value="medium" selected><?php esc_html_e( 'Medium', 'loungenie-portal' ); ?></option>
+					<option value="high"><?php esc_html_e( 'High', 'loungenie-portal' ); ?></option>
+					<option value="critical"><?php esc_html_e( 'Critical', 'loungenie-portal' ); ?></option>
+				</select>
+			</div>
+			
+			<div class="lgp-form-group">
+				<label class="lgp-form-label" for="ticket_description"><?php esc_html_e( 'Description', 'loungenie-portal' ); ?></label>
+				<textarea id="ticket_description" name="description" class="lgp-form-textarea" placeholder="<?php esc_attr_e( 'Detailed information about the issue', 'loungenie-portal' ); ?>" required></textarea>
+			</div>
+			
+			<div class="lgp-form-group">
+				<label class="lgp-form-label"><?php esc_html_e( 'Attachments', 'loungenie-portal' ); ?></label>
+				<div class="lgp-attachment-zone">
+					<div class="lgp-attachment-zone-icon">📎</div>
+					<div class="lgp-attachment-zone-text">
+						<?php esc_html_e( 'Drag and drop files here or click to select', 'loungenie-portal' ); ?>
+					</div>
+					<div class="lgp-attachment-zone-hint">
+						<?php esc_html_e( 'Supported: PDF, DOC, XLS, PPT, TXT, CSV, JPG, PNG, GIF, ZIP (Max 10 MB)', 'loungenie-portal' ); ?>
+					</div>
+					<input type="file" class="lgp-attachment-input" multiple>
+				</div>
+				<ul class="lgp-attachment-list"></ul>
+			</div>
+			
+			<div class="lgp-flex-center lgp-form-buttons">
+				<button type="submit" class="lgp-btn lgp-btn-primary">
+					<?php esc_html_e( 'Create Ticket', 'loungenie-portal' ); ?>
+				</button>
+				<button type="reset" class="lgp-btn lgp-btn-secondary">
+					<?php esc_html_e( 'Clear', 'loungenie-portal' ); ?>
+				</button>
+			</div>
+		</form>
 	</div>
 </div>
 
@@ -270,3 +507,4 @@ $yearround_units = $wpdb->get_var( "SELECT COUNT(*) FROM $units_table WHERE seas
 		</div>
 	</div>
 </div>
+</div><!-- .lgp-dashboard-container -->

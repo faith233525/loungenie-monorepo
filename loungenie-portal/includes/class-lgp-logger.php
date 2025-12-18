@@ -11,6 +11,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! class_exists( 'LGP_Logger' ) ) {
 	class LGP_Logger {
 		/**
+		 * Initialize logger
+		 */
+		public static function init() {
+			// Logger is passive - no hooks needed
+			// Just provides static methods for audit logging
+		}
+
+		/**
 		 * Log a generic audit event.
 		 *
 		 * @param int      $user_id

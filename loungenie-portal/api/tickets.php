@@ -84,8 +84,9 @@ class LGP_Tickets_API {
 	public static function get_tickets( $request ) {
 		global $wpdb;
 
-		$tickets_table  = $wpdb->prefix . 'lgp_tickets';
-		$requests_table = $wpdb->prefix . 'lgp_service_requests';
+		$tickets_table   = $wpdb->prefix . 'lgp_tickets';
+		$requests_table  = $wpdb->prefix . 'lgp_service_requests';
+		$companies_table = $wpdb->prefix . 'lgp_companies';
 		$page           = $request->get_param( 'page' ) ?: 1;
 		$per_page       = $request->get_param( 'per_page' ) ?: 20;
 		$offset         = ( $page - 1 ) * $per_page;
@@ -94,9 +95,10 @@ class LGP_Tickets_API {
 			// Support can see all tickets
 			$tickets = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT t.*, sr.request_type, sr.priority, sr.company_id 
+					"SELECT t.*, sr.request_type, sr.priority, sr.company_id, c.name AS company_name 
                 FROM $tickets_table t 
                 LEFT JOIN $requests_table sr ON t.service_request_id = sr.id 
+                LEFT JOIN $companies_table c ON sr.company_id = c.id 
                 ORDER BY t.created_at DESC 
                 LIMIT %d OFFSET %d",
 					$per_page,
@@ -109,9 +111,10 @@ class LGP_Tickets_API {
 			$company_id = LGP_Auth::get_user_company_id();
 			$tickets    = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT t.*, sr.request_type, sr.priority, sr.company_id 
+					"SELECT t.*, sr.request_type, sr.priority, sr.company_id, c.name AS company_name 
                 FROM $tickets_table t 
                 LEFT JOIN $requests_table sr ON t.service_request_id = sr.id 
+                LEFT JOIN $companies_table c ON sr.company_id = c.id 
                 WHERE sr.company_id = %d 
                 ORDER BY t.created_at DESC 
                 LIMIT %d OFFSET %d",
@@ -147,15 +150,17 @@ class LGP_Tickets_API {
 	public static function get_ticket( $request ) {
 		global $wpdb;
 
-		$id             = $request->get_param( 'id' );
-		$tickets_table  = $wpdb->prefix . 'lgp_tickets';
-		$requests_table = $wpdb->prefix . 'lgp_service_requests';
+		$id              = $request->get_param( 'id' );
+		$tickets_table   = $wpdb->prefix . 'lgp_tickets';
+		$requests_table  = $wpdb->prefix . 'lgp_service_requests';
+		$companies_table = $wpdb->prefix . 'lgp_companies';
 
 		$ticket = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT t.*, sr.request_type, sr.priority, sr.company_id, sr.notes 
+				"SELECT t.*, sr.request_type, sr.priority, sr.company_id, sr.notes, c.name AS company_name 
             FROM $tickets_table t 
             LEFT JOIN $requests_table sr ON t.service_request_id = sr.id 
+            LEFT JOIN $companies_table c ON sr.company_id = c.id 
             WHERE t.id = %d",
 				$id
 			)

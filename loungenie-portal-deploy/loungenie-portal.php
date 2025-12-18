@@ -3,14 +3,14 @@
  * LounGenie Portal - Enterprise SaaS Partner Management System
  *
  * @package   LounGenie Portal
- * @version   1.0.0
+ * @version   1.8.0
  * @author    LounGenie Team
  * @license   GPL-2.0-or-later
  *
  * Plugin Name: LounGenie Portal
  * Plugin URI: https://loungenie.com/portal
  * Description: Commercial enterprise SaaS portal for LounGenie partner and support management
- * Version: 1.0.0
+ * Version: 1.8.0
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: LounGenie Team
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // PLUGIN CONSTANTS
 // ============================================================================
 
-define( 'LGP_VERSION', '1.0.0' );
+define( 'LGP_VERSION', '1.8.0' );
 define( 'LGP_PLUGIN_FILE', __FILE__ );
 define( 'LGP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'LGP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -134,6 +134,9 @@ function lgp_init() {
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-router.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-auth.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-assets.php';
+	// Feature modules
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-attachments.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-handler.php';
 
 	// Load enterprise features (backported from PoolSafe Portal v3.3.0)
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-cache.php';

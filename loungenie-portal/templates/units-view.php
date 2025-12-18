@@ -16,15 +16,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param string $color_name Color name
  * @return string Hex color code
  */
-function lgp_get_color_hex( $color_name ) {
-	$color_map   = array(
-		'yellow'       => '#FFD700',
-		'red'          => '#DC143C',
-		'classic blue' => '#4169E1',
-		'ice blue'     => '#87CEEB',
-	);
-	$color_lower = strtolower( trim( $color_name ) );
-	return isset( $color_map[ $color_lower ] ) ? $color_map[ $color_lower ] : '#999';
+if ( ! function_exists( 'lgp_get_color_hex' ) ) {
+	function lgp_get_color_hex( $color_name ) {
+		$color_map   = array(
+			'yellow'       => '#D8EFF3',
+			'red'          => '#DCFCE7',
+			'classic blue' => '#CCF8F1',
+			'ice blue'     => '#D6F6FC',
+		);
+		$color_lower = strtolower( trim( $color_name ) );
+		return isset( $color_map[ $color_lower ] ) ? $color_map[ $color_lower ] : '#E9F8F9';
+	}
 }
 
 global $wpdb;
@@ -139,7 +141,7 @@ $units = $wpdb->get_results(
 		</div>
 
 		<!-- Active Filters Display -->
-		<div id="active-filters" class="lgp-active-filters" style="display: none;">
+		<div id="active-filters" class="lgp-active-filters lgp-hidden">
 			<strong><?php esc_html_e( 'Active Filters:', 'loungenie-portal' ); ?></strong>
 			<div id="active-filters-list" class="lgp-filter-tags"></div>
 		</div>
@@ -156,7 +158,7 @@ $units = $wpdb->get_results(
 	</div>
 	<div class="lgp-card-body">
 		<!-- Loading Spinner -->
-		<div id="lgp-loading-spinner" class="lgp-loading-spinner" style="display: none;">
+		<div id="lgp-loading-spinner" class="lgp-loading-spinner lgp-hidden">
 			<div class="lgp-spinner"></div>
 			<p><?php esc_html_e( 'Loading...', 'loungenie-portal' ); ?></p>
 		</div>
@@ -192,7 +194,7 @@ $units = $wpdb->get_results(
 										$color_hex = lgp_get_color_hex( $unit->color_tag );
 										?>
 										<span class="lgp-color-tag">
-											<span class="lgp-color-indicator" style="background-color: <?php echo esc_attr( $color_hex ); ?>"></span>
+											<span class="lgp-color-indicator" style="--lgp-color-value: <?php echo esc_attr( $color_hex ); ?>;"></span>
 											<?php echo esc_html( $unit->color_tag ); ?>
 										</span>
 									<?php else : ?>

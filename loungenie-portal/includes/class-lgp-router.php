@@ -72,6 +72,11 @@ class LGP_Router {
 	 * Handle /portal/login, /support-login, /partner-login routes
 	 */
 	public static function handle_portal_login_route() {
+		// Never handle login routes in admin area
+		if ( is_admin() || wp_doing_ajax() || wp_doing_cron() ) {
+			return;
+		}
+		
 		// Derive the current request path safely.
 		$raw_request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '/';
 		$request_uri     = untrailingslashit( strtok( $raw_request_uri, '?' ) );
@@ -103,6 +108,11 @@ class LGP_Router {
 	 * Handle /portal route
 	 */
 	public static function handle_portal_route() {
+		// Never handle portal routes in admin area
+		if ( is_admin() || wp_doing_ajax() || wp_doing_cron() ) {
+			return;
+		}
+		
 		if ( ! get_query_var( 'lgp_portal' ) ) {
 			return;
 		}
@@ -140,17 +150,22 @@ class LGP_Router {
 	 * Load portal template
 	 */
 	private static function load_portal() {
-		// Prevent theme CSS from loading
-		remove_all_actions( 'wp_enqueue_scripts' );
-		remove_all_actions( 'wp_print_styles' );
-		remove_all_actions( 'wp_print_head_scripts' );
-		remove_all_actions( 'wp_footer' );
-
-		// Re-add only our assets
+		// Enqueue our assets (scoped CSS ensures minimal theme interference)
 		add_action( 'wp_enqueue_scripts', array( 'LGP_Assets', 'enqueue_portal_assets' ) );
 
 		// Check if specific section is requested
 		$section = get_query_var( 'lgp_section' );
+
+		// Tickets / requests view scripts
+		if ( in_array( $section, array( 'tickets', 'requests', 'history' ), true ) ) {
+			add_action(
+				'wp_enqueue_scripts',
+				function () {
+					wp_enqueue_script( 'lgp-tickets-view', LGP_ASSETS_URL . 'js/tickets-view.js', array( 'lgp-portal' ), LGP_VERSION, true );
+				},
+				20
+			);
+		}
 
 		// If map section and user is support, load map view directly
 		if ( 'map' === $section && LGP_Auth::is_support() ) {

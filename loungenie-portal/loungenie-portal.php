@@ -3,14 +3,14 @@
  * LounGenie Portal - Enterprise SaaS Partner Management System
  *
  * @package   LounGenie Portal
- * @version   1.6.0
+ * @version   1.8.0
  * @author    LounGenie Team
  * @license   GPL-2.0-or-later
  *
  * Plugin Name: LounGenie Portal
  * Plugin URI: https://loungenie.com/portal
  * Description: Commercial enterprise SaaS portal for LounGenie partner and support management
- * Version: 1.6.0
+ * Version: 1.8.0
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: LounGenie Team
@@ -30,11 +30,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 // PLUGIN CONSTANTS
 // ============================================================================
 
-define( 'LGP_VERSION', '1.6.0' );
+define( 'LGP_VERSION', '1.8.0' );
 define( 'LGP_PLUGIN_FILE', __FILE__ );
-define( 'LGP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-define( 'LGP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'LGP_ASSETS_URL', LGP_PLUGIN_URL . 'assets/' );
+
+// Use PHP functions instead of WordPress functions to avoid timing issues during activation
+if ( ! defined( 'LGP_PLUGIN_DIR' ) ) {
+	define( 'LGP_PLUGIN_DIR', trailingslashit( dirname( __FILE__ ) ) );
+}
+if ( ! defined( 'LGP_PLUGIN_URL' ) ) {
+	define( 'LGP_PLUGIN_URL', trailingslashit( plugins_url( '', __FILE__ ) ) );
+}
+if ( ! defined( 'LGP_ASSETS_URL' ) ) {
+	define( 'LGP_ASSETS_URL', LGP_PLUGIN_URL . 'assets/' );
+}
 define( 'LGP_TEXT_DOMAIN', 'loungenie-portal' );
 
 // ============================================================================
@@ -162,18 +170,13 @@ function lgp_init() {
 	require_once LGP_PLUGIN_DIR . 'api/service-notes.php';
 	require_once LGP_PLUGIN_DIR . 'api/audit-log.php';
 
+	// Load feature modules
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-attachments.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-handler.php';
+
 	// Load role definitions
 	require_once LGP_PLUGIN_DIR . 'roles/support.php';
 	require_once LGP_PLUGIN_DIR . 'roles/partner.php';
-
-	// Initialize router for /portal route
-	LGP_Router::init();
-
-	// Initialize authentication system
-	LGP_Auth::init();
-
-	// Initialize asset management
-	LGP_Assets::init();
 
 	// Initialize enterprise features
 	// Note: Security headers initialized via plugins_loaded hook in class
@@ -208,6 +211,8 @@ function lgp_add_rewrite_rules() {
 	add_rewrite_rule( '^portal/login/?$', 'index.php?lgp_portal_login=1', 'top' );
 	add_rewrite_rule( '^support-login/?$', 'index.php?lgp_support_login=1', 'top' );
 	add_rewrite_rule( '^partner-login/?$', 'index.php?lgp_partner_login=1', 'top' );
+	add_rewrite_rule( '^psp-azure-callback/?$', 'index.php?lgp_azure_callback=1', 'top' );
+	add_rewrite_rule( '^m365-sso-callback/?$', 'index.php?lgp_m365_callback=1', 'top' );
 }
 
 add_action( 'init', 'lgp_add_rewrite_rules' );
@@ -218,8 +223,15 @@ add_action( 'init', 'lgp_add_rewrite_rules' );
  * - Skips admin, login, REST, callback, sitemap/robots, and existing portal paths
  */
 function lgp_redirect_root_to_portal() {
-	if ( is_admin() ) {
-		return; // never redirect wp-admin
+	// Never redirect admin, AJAX, or cron requests
+	if ( is_admin() || wp_doing_ajax() || wp_doing_cron() ) {
+		return;
+	}
+
+	// Explicit check: don't redirect WordPress admin URLs
+	$raw_uri = isset( $_SERVER['REQUEST_URI'] ) ? strtok( $_SERVER['REQUEST_URI'], '?' ) : '/';
+	if ( 0 === strpos( $raw_uri, '/wp-admin' ) || 0 === strpos( $raw_uri, '/wp-login.php' ) ) {
+		return; // Don't interfere with WordPress admin
 	}
 
 	// Current request path (no query string)
@@ -229,9 +241,11 @@ function lgp_redirect_root_to_portal() {
 	// Exclusions: don't interfere with these paths
 	$excluded_prefixes = array(
 		'/portal/',
+		'/wp-admin/',
 		'/wp-login.php/',
 		'/wp-json/',
 		'/psp-azure-callback/',
+		'/m365-sso-callback/',
 		'/xmlrpc.php/',
 		'/feed/',
 		'/sitemap', // includes variations
@@ -270,6 +284,8 @@ function lgp_query_vars( $vars ) {
 	$vars[] = 'lgp_portal_login';
 	$vars[] = 'lgp_support_login';
 	$vars[] = 'lgp_partner_login';
+	$vars[] = 'lgp_azure_callback';
+	$vars[] = 'lgp_m365_callback';
 	return $vars;
 }
 
