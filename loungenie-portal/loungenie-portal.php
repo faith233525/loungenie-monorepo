@@ -94,13 +94,14 @@ if ( ! lgp_check_compatibility() ) {
  */
 function lgp_activate() {
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-database.php';
+	// Capabilities are required by role registration during activation
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-capabilities.php';
 	require_once LGP_PLUGIN_DIR . 'roles/support.php';
 	require_once LGP_PLUGIN_DIR . 'roles/partner.php';
 
-	// Create database tables
+	// Create database tables and register roles
 	LGP_Database::create_tables();
-
-	// Register custom roles
+	LGP_Capabilities::register_capabilities();
 	LGP_Support_Role::register();
 	LGP_Partner_Role::register();
 
