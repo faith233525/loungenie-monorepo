@@ -1147,7 +1147,7 @@
                     </div>
 
                     <div class="lgp-grid lgp-grid-3">
-                        <div class="lgp-card lgp-card-compact" onclick="openUnitDrawer('A-101')" style="cursor: pointer; transition: all var(--lgp-transition);" onmouseover="this.style.borderColor='var(--lgp-role-accent)'" onmouseout="this.style.borderColor='var(--lgp-atmosphere-border)'">
+                        <div class="lgp-card lgp-card-compact" data-company="abc" data-status="active" data-name="Unit A-101" onclick="openUnitDrawer('A-101')" style="cursor: pointer; transition: all var(--lgp-transition);" onmouseover="this.style.borderColor='var(--lgp-role-accent)'" onmouseout="this.style.borderColor='var(--lgp-atmosphere-border)'">
                             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--lgp-space-2);">
                                 <h4 style="margin: 0; color: var(--lgp-structure-headline);">Unit A-101</h4>
                                 <span class="lgp-badge lgp-badge-info" style="font-size: var(--lgp-text-xs);">3 tickets</span>
@@ -1162,7 +1162,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="lgp-card lgp-card-compact" onclick="openUnitDrawer('B-205')" style="cursor: pointer; transition: all var(--lgp-transition);" onmouseover="this.style.borderColor='var(--lgp-role-accent)'" onmouseout="this.style.borderColor='var(--lgp-atmosphere-border)'">
+                        <div class="lgp-card lgp-card-compact" data-company="resort" data-status="maintenance" data-name="Unit B-205" onclick="openUnitDrawer('B-205')" style="cursor: pointer; transition: all var(--lgp-transition);" onmouseover="this.style.borderColor='var(--lgp-role-accent)'" onmouseout="this.style.borderColor='var(--lgp-atmosphere-border)'">
                             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--lgp-space-2);">
                                 <h4 style="margin: 0; color: var(--lgp-structure-headline);">Unit B-205</h4>
                                 <span class="lgp-badge lgp-badge-warning" style="font-size: var(--lgp-text-xs);">5 tickets</span>
@@ -1177,7 +1177,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="lgp-card lgp-card-compact" onclick="openUnitDrawer('C-312')" style="cursor: pointer; transition: all var(--lgp-transition);" onmouseover="this.style.borderColor='var(--lgp-role-accent)'" onmouseout="this.style.borderColor='var(--lgp-atmosphere-border)'">
+                        <div class="lgp-card lgp-card-compact" data-company="luxury" data-status="active" data-name="Unit C-312" onclick="openUnitDrawer('C-312')" style="cursor: pointer; transition: all var(--lgp-transition);" onmouseover="this.style.borderColor='var(--lgp-role-accent)'" onmouseout="this.style.borderColor='var(--lgp-atmosphere-border)'">
                             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--lgp-space-2);">
                                 <h4 style="margin: 0; color: var(--lgp-structure-headline);">Unit C-312</h4>
                                 <span class="lgp-badge lgp-badge-success" style="font-size: var(--lgp-text-xs);">1 ticket</span>
@@ -1339,7 +1339,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr data-company="abc" data-unit="a101" data-status="inprogress" data-priority="high">
                                     <td>#1234</td>
                                     <td>Pump Not Working</td>
                                     <td>
@@ -1352,7 +1352,7 @@
                                     <td><span class="lgp-badge lgp-badge-warning">In Progress</span></td>
                                     <td>2 hours ago</td>
                                 </tr>
-                                <tr>
+                                <tr data-company="resort" data-unit="b205" data-status="resolved" data-priority="medium">
                                     <td>#1233</td>
                                     <td>Sensor Calibration</td>
                                     <td>
@@ -1365,7 +1365,7 @@
                                     <td><span class="lgp-badge lgp-badge-success">Resolved</span></td>
                                     <td>1 day ago</td>
                                 </tr>
-                                <tr>
+                                <tr data-company="luxury" data-unit="c312" data-status="resolved" data-priority="low">
                                     <td>#1232</td>
                                     <td>Connection Issues</td>
                                     <td>
@@ -1730,6 +1730,14 @@
             console.log('📱 Resize your browser to see responsive behavior');
             console.log('🎛️ Use the Demo Mode Controls to switch roles');
             console.log('🎯 Click on unit cards to see detailed activity timeline');
+
+            // Wire filter controls if present
+            try {
+                initUnitsFilters();
+                initTicketsFilters();
+            } catch (err) {
+                console.warn('Filters init warning:', err);
+            }
         });
 
         // Close drawer on ESC key
@@ -1738,6 +1746,76 @@
                 closeUnitDrawer();
             }
         });
+
+        // ===== Client-side Filters =====
+        function initUnitsFilters() {
+            const companySel = document.getElementById('unitsCompanyFilter');
+            const statusSel = document.getElementById('unitsStatusFilter');
+            const searchInput = document.getElementById('unitsSearchInput');
+            const unitCards = document.querySelectorAll('#units .lgp-grid .lgp-card.lgp-card-compact');
+
+            function applyUnitsFilters() {
+                const company = (companySel && companySel.value) || 'all';
+                const status = (statusSel && statusSel.value) || 'all';
+                const search = (searchInput && searchInput.value || '').toLowerCase();
+
+                unitCards.forEach(card => {
+                    const c = card.getAttribute('data-company');
+                    const s = card.getAttribute('data-status');
+                    const n = (card.getAttribute('data-name') || '').toLowerCase();
+                    let visible = true;
+                    if (company !== 'all' && c !== company) visible = false;
+                    if (status !== 'all' && s !== status) visible = false;
+                    if (search && !n.includes(search)) visible = false;
+                    card.style.display = visible ? '' : 'none';
+                });
+            }
+
+            ['change', 'input'].forEach(evt => {
+                if (companySel) companySel.addEventListener('change', applyUnitsFilters);
+                if (statusSel) statusSel.addEventListener('change', applyUnitsFilters);
+                if (searchInput) searchInput.addEventListener('input', applyUnitsFilters);
+            });
+
+            applyUnitsFilters();
+        }
+
+        function initTicketsFilters() {
+            const companySel = document.getElementById('ticketsCompanyFilter');
+            const unitSel = document.getElementById('ticketsUnitFilter');
+            const statusSel = document.getElementById('ticketsStatusFilter');
+            const prioritySel = document.getElementById('ticketsPriorityFilter');
+            const rows = document.querySelectorAll('#tickets table.lgp-table tbody tr');
+
+            function applyTicketsFilters() {
+                const company = (companySel && companySel.value) || 'all';
+                const unit = (unitSel && unitSel.value) || 'all';
+                const status = (statusSel && statusSel.value) || 'all';
+                const priority = (prioritySel && prioritySel.value) || 'all';
+
+                rows.forEach(row => {
+                    const c = row.getAttribute('data-company');
+                    const u = row.getAttribute('data-unit');
+                    const s = row.getAttribute('data-status');
+                    const p = row.getAttribute('data-priority');
+                    let visible = true;
+                    if (company !== 'all' && c !== company) visible = false;
+                    if (unit !== 'all' && u !== unit) visible = false;
+                    if (status !== 'all' && s !== status) visible = false;
+                    if (priority !== 'all' && p !== priority) visible = false;
+                    row.style.display = visible ? '' : 'none';
+                });
+            }
+
+            ['change'].forEach(evt => {
+                if (companySel) companySel.addEventListener('change', applyTicketsFilters);
+                if (unitSel) unitSel.addEventListener('change', applyTicketsFilters);
+                if (statusSel) statusSel.addEventListener('change', applyTicketsFilters);
+                if (prioritySel) prioritySel.addEventListener('change', applyTicketsFilters);
+            });
+
+            applyTicketsFilters();
+        }
     </script>
 </body>
 </html>

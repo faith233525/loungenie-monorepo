@@ -59,7 +59,7 @@ class LGP_Assets {
 			'all'
 		);
 
-		// Enqueue design tokens first (CSS variables and component styles)
+		// Enqueue design tokens first (CSS variables)
 		wp_enqueue_style(
 			'lgp-design-tokens',
 			LGP_ASSETS_URL . 'css/design-tokens.css',
@@ -68,11 +68,20 @@ class LGP_Assets {
 			'all'
 		);
 
-		// Enqueue portal CSS
+		// Enqueue the refactored design system next (base styles, utilities, components)
+		wp_enqueue_style(
+			'lgp-design-system',
+			LGP_ASSETS_URL . 'css/design-system-refactored.css',
+			array( 'lgp-design-tokens' ),
+			LGP_VERSION,
+			'all'
+		);
+
+		// Enqueue portal CSS (overrides and portal-specific layout)
 		wp_enqueue_style(
 			'lgp-portal',
 			LGP_ASSETS_URL . 'css/portal.css',
-			array( 'lgp-design-tokens' ),
+			array( 'lgp-design-system' ),
 			LGP_VERSION,
 			'all'
 		);
@@ -94,11 +103,20 @@ class LGP_Assets {
 			);
 		}
 
+		// Utilities library (shared helpers used across portal scripts)
+		wp_enqueue_script(
+			'lgp-utils',
+			LGP_ASSETS_URL . 'js/lgp-utils.js',
+			array(),
+			LGP_VERSION,
+			true
+		);
+
 		// Enqueue portal JS
 		wp_enqueue_script(
 			'lgp-portal',
 			LGP_ASSETS_URL . 'js/portal.js',
-			array(),
+			array( 'lgp-utils' ),
 			LGP_VERSION,
 			true
 		);
@@ -130,6 +148,24 @@ class LGP_Assets {
 				true
 			);
 		}
+
+		// Responsive sidebar controller for mobile/off-canvas behavior
+		wp_enqueue_script(
+			'lgp-responsive-sidebar',
+			LGP_ASSETS_URL . 'js/responsive-sidebar.js',
+			array( 'lgp-portal' ),
+			LGP_VERSION,
+			true
+		);
+
+		// Demo portal enhancements: client-side filters for Units & Tickets
+		wp_enqueue_script(
+			'lgp-portal-demo',
+			LGP_ASSETS_URL . 'js/portal-demo.js',
+			array( 'lgp-portal' ),
+			LGP_VERSION,
+			true
+		);
 
 		// Localize script with AJAX data
 		wp_localize_script(
