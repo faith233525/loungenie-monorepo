@@ -175,16 +175,48 @@ class LGP_Tickets_API {
 		global $wpdb;
 
 		$company_id = LGP_Auth::get_user_company_id();
+		$unit_id    = absint( $request->get_param( 'unit_id' ) );
+		$priority   = sanitize_text_field( $request->get_param( 'priority' ) ?: 'normal' );
+		$request_type = sanitize_text_field( $request->get_param( 'request_type' ) ?: 'general' );
+
+		$contact_name   = sanitize_text_field( $request->get_param( 'contact_name' ) );
+		$contact_email  = sanitize_email( $request->get_param( 'contact_email' ) );
+		$contact_phone  = sanitize_text_field( $request->get_param( 'contact_phone' ) );
+		$units_affected = absint( $request->get_param( 'units_affected' ) );
+		$notes_raw      = sanitize_textarea_field( $request->get_param( 'notes' ) );
+
+		// Build a safe note that captures minimal form data
+		$notes_parts = array();
+		if ( $contact_name ) {
+			$notes_parts[] = 'Contact: ' . $contact_name;
+		}
+		if ( $contact_email ) {
+			$notes_parts[] = 'Email: ' . $contact_email;
+		}
+		if ( $contact_phone ) {
+			$notes_parts[] = 'Phone: ' . $contact_phone;
+		}
+		if ( $units_affected ) {
+			$notes_parts[] = 'Units affected: ' . $units_affected;
+		}
+		if ( $notes_raw ) {
+			$notes_parts[] = 'Issue: ' . $notes_raw;
+		}
+
+		$notes_combined = implode( "\n", array_filter( $notes_parts ) );
+		if ( empty( $notes_combined ) ) {
+			return new WP_Error( 'invalid_request', __( 'Please provide issue details.', 'loungenie-portal' ), array( 'status' => 400 ) );
+		}
 
 		// Create service request first
 		$requests_table = $wpdb->prefix . 'lgp_service_requests';
 		$request_data   = array(
 			'company_id'   => $company_id,
-			'unit_id'      => absint( $request->get_param( 'unit_id' ) ),
-			'request_type' => sanitize_text_field( $request->get_param( 'request_type' ) ),
-			'priority'     => sanitize_text_field( $request->get_param( 'priority' ) ?: 'normal' ),
+			'unit_id'      => $unit_id,
+			'request_type' => $request_type,
+			'priority'     => $priority,
 			'status'       => 'pending',
-			'notes'        => sanitize_textarea_field( $request->get_param( 'notes' ) ),
+			'notes'        => $notes_combined,
 		);
 
 		$inserted = $wpdb->insert( $requests_table, $request_data );
