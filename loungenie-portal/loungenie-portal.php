@@ -137,13 +137,12 @@ register_deactivation_hook( __FILE__, 'lgp_deactivate' );
  * Initialize all plugin components
  */
 function lgp_init() {
-	// Load core classes
+	// Load all required classes first
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-loader.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-database.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-router.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-auth.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-assets.php';
-
-	// Load enterprise features (backported from PoolSafe Portal v3.3.0)
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-cache.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-security.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-microsoft-sso.php';
@@ -152,13 +151,17 @@ function lgp_init() {
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-geocode.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-gateway.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-training-video.php';
-
-	// Load integration classes
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-hubspot.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-outlook.php';
-
-	// Load monitoring/admin classes
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-system-health.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-attachments.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-handler.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-capabilities.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-rest-errors.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-file-validator.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-rate-limiter.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-shared-hosting-rules.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-to-ticket.php';
 
 	// Load API endpoints
 	require_once LGP_PLUGIN_DIR . 'api/companies.php';
@@ -170,30 +173,12 @@ function lgp_init() {
 	require_once LGP_PLUGIN_DIR . 'api/service-notes.php';
 	require_once LGP_PLUGIN_DIR . 'api/audit-log.php';
 
-	// Load feature modules
-	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-attachments.php';
-	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-handler.php';
-
 	// Load role definitions
 	require_once LGP_PLUGIN_DIR . 'roles/support.php';
 	require_once LGP_PLUGIN_DIR . 'roles/partner.php';
 
-	// Initialize enterprise features
-	// Note: Security headers initialized via plugins_loaded hook in class
-	// Cache and SSO initialized via their own hooks
-
-	// Initialize integrations
-	LGP_HubSpot::init();
-	LGP_Outlook::init();
-
-	// Initialize monitoring/admin
-	LGP_System_Health::init();
-
-	// Initialize REST API endpoints
-	LGP_Companies_API::init();
-	LGP_Units_API::init();
-	LGP_Tickets_API::init();
-	LGP_Gateways_API::init();
+	// Initialize all components via centralized loader
+	LGP_Loader::init();
 }
 
 add_action( 'plugins_loaded', 'lgp_init' );
