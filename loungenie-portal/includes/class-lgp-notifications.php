@@ -74,3 +74,43 @@ class LGP_Notifications {
 		}
 	}
 }
+
+// Hook into ticket lifecycle events to send notifications
+add_action( 'lgp_ticket_created', function( $ticket_id, $context ) {
+	$company_id = isset( $context->company_id ) ? (int) $context->company_id : 0;
+	$partner    = wp_get_current_user();
+	$payload    = array(
+		'ticket_id'      => $ticket_id,
+		'company_id'     => $company_id,
+		'partner_user_id'=> $partner ? $partner->ID : 0,
+		'partner_email'  => $partner ? $partner->user_email : '',
+		'support_email'  => get_option( 'lgp_support_email', 'support@poolsafeinc.com' ),
+	);
+	LGP_Notifications::notify_ticket_event( $payload, 'created', 'medium' );
+}, 10, 2 );
+
+add_action( 'lgp_ticket_updated', function( $ticket_id, $new_status ) {
+	$company_id = method_exists( 'LGP_Auth', 'get_user_company_id' ) ? LGP_Auth::get_user_company_id() : 0;
+	$partner    = wp_get_current_user();
+	$payload    = array(
+		'ticket_id'      => (int) $ticket_id,
+		'company_id'     => (int) $company_id,
+		'partner_user_id'=> $partner ? $partner->ID : 0,
+		'partner_email'  => $partner ? $partner->user_email : '',
+		'support_email'  => get_option( 'lgp_support_email', 'support@poolsafeinc.com' ),
+	);
+	LGP_Notifications::notify_ticket_event( $payload, 'updated', 'medium' );
+}, 10, 2 );
+
+add_action( 'lgp_ticket_reply_added', function( $ticket_id, $message, $ticket_obj ) {
+	$company_id = isset( $ticket_obj->company_id ) ? (int) $ticket_obj->company_id : 0;
+	$partner    = wp_get_current_user();
+	$payload    = array(
+		'ticket_id'      => (int) $ticket_id,
+		'company_id'     => (int) $company_id,
+		'partner_user_id'=> $partner ? $partner->ID : 0,
+		'partner_email'  => $partner ? $partner->user_email : '',
+		'support_email'  => get_option( 'lgp_support_email', 'support@poolsafeinc.com' ),
+	);
+	LGP_Notifications::notify_ticket_event( $payload, 'replied', 'medium' );
+}, 10, 3 );

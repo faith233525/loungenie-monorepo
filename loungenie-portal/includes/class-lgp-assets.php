@@ -169,6 +169,8 @@ class LGP_Assets {
 
 		// Prepare localized data for portal
 		$company_name = method_exists( 'LGP_Auth', 'get_company_name' ) ? LGP_Auth::get_company_name() : '';
+		$current_user = wp_get_current_user();
+		$rest_nonce   = wp_create_nonce( 'wp_rest' );
 
 		// Localize script with AJAX data
 		wp_localize_script(
@@ -178,9 +180,12 @@ class LGP_Assets {
 				'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
 				'restUrl'   => rest_url( 'lgp/v1/' ),
 				'nonce'     => wp_create_nonce( 'lgp_portal_nonce' ),
+				'restNonce' => $rest_nonce,
 				'isSupport' => LGP_Auth::is_support(),
 				'isPartner' => LGP_Auth::is_partner(),
 				'companyName' => $company_name,
+				'userEmail'   => $current_user ? $current_user->user_email : '',
+				'userName'    => $current_user ? $current_user->display_name : '',
 			)
 		);
 

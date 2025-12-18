@@ -1555,7 +1555,7 @@
 
             <!-- Action Buttons -->
             <div style="margin-top: var(--lgp-space-6); display: flex; gap: var(--lgp-space-3);">
-                <button class="lgp-btn lgp-btn-primary" style="flex: 1;">Create Ticket</button>
+                <button class="lgp-btn lgp-btn-primary" style="flex: 1;" onclick="goToTickets()">Create Ticket</button>
                 <button class="lgp-btn lgp-btn-outline" style="flex: 1;">View All Activity</button>
             </div>
         </div>
@@ -1710,6 +1710,23 @@
             }
         }
 
+        // Navigate to Tickets tab and focus the form
+        function goToTickets() {
+            const ticketsLink = Array.from(document.querySelectorAll('.lgp-nav-link')).find(l => l.textContent.includes('Service Tickets'));
+            if (ticketsLink) {
+                ticketsLink.click();
+            } else {
+                // Fallback
+                switchTab({ preventDefault: () => {}, target: document.querySelector('.lgp-nav-link') }, 'tickets');
+            }
+            const form = document.querySelector('#tickets form');
+            if (form) {
+                form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const nameInput = document.getElementById('ticketFullName');
+                if (nameInput) nameInput.focus();
+            }
+        }
+
         // Initialize demo
         window.addEventListener('load', function() {
             console.log('✅ Portal Demo v1.8.0 loaded');
@@ -1731,6 +1748,13 @@
             } catch (err) {
                 console.warn('Company prefill warning:', err);
             }
+
+            // Wire ticket form submission to REST
+            try {
+                initTicketSubmission();
+            } catch (err) {
+                console.warn('Ticket submit init warning:', err);
+            }
         });
 
         // Close drawer on ESC key
@@ -1739,6 +1763,61 @@
                 closeUnitDrawer();
             }
         });
+
+        function initTicketSubmission() {
+            const form = document.querySelector('#tickets form');
+            if (!form) return;
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const payload = collectTicketPayload();
+                if (!payload) return;
+                try {
+                    const res = await fetch((window.lgpData ? window.lgpData.restUrl : '/wp-json/lgp/v1/') + 'tickets', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-WP-Nonce': window.lgpData ? window.lgpData.restNonce : ''
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                    const data = await res.json();
+                    if (res.ok) {
+                        alert('Ticket submitted successfully! Ticket #' + (data.ticket_id || '')); 
+                        form.reset();
+                        prefillTicketCompany();
+                    } else {
+                        alert('Failed to submit ticket: ' + (data.message || res.status));
+                    }
+                } catch (err) {
+                    alert('Network error while submitting ticket.');
+                    console.error(err);
+                }
+            });
+        }
+
+        function collectTicketPayload() {
+            const name = document.getElementById('ticketFullName')?.value?.trim();
+            const email = document.getElementById('ticketEmail')?.value?.trim();
+            const phone = document.getElementById('ticketPhone')?.value?.trim();
+            const company = document.getElementById('ticketCompany')?.value?.trim();
+            const issue = document.getElementById('ticketIssueDesc')?.value?.trim();
+            const units = document.getElementById('ticketUnitsAffected')?.value?.trim();
+
+            if (!name || !email || !phone || !company || !issue || !units) {
+                alert('Please complete all fields.');
+                return null;
+            }
+
+            // Map minimal fields to API expectations
+            const notes = `Contact: ${name} <${email}> (${phone})\nCompany: ${company}\nUnits affected: ${units}\nIssue: ${issue}`;
+            return {
+                request_type: 'general',
+                priority: 'normal',
+                unit_id: 0,
+                notes
+            };
+        }
 
         function prefillTicketCompany() {
             const companyInput = document.getElementById('ticketCompany');
