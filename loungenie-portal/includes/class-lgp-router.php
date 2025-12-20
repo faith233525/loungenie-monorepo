@@ -78,8 +78,8 @@ class LGP_Router {
 		}
 
 		// Derive the current request path safely.
-		$raw_request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '/';
-		$request_uri     = untrailingslashit( strtok( $raw_request_uri, '?' ) );
+		$raw_request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '/';
+		$request_uri     = untrailingslashit( sanitize_text_field( strtok( $raw_request_uri, '?' ) ) );
 
 		// Support auto-SSO entry: /support-login
 		if ( '/support-login' === $request_uri ) {

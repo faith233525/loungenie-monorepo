@@ -268,8 +268,8 @@ function lgp_redirect_root_to_portal() {
 	}
 
 	// Current request path (no query string)
-	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? strtok( $_SERVER['REQUEST_URI'], '?' ) : '/';
-	$request_uri = trailingslashit( $request_uri );
+	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? strtok( wp_unslash( $_SERVER['REQUEST_URI'] ), '?' ) : '/';
+	$request_uri = trailingslashit( sanitize_text_field( $request_uri ) );
 
 	// Exclusions: don't interfere with these paths
 	$excluded_prefixes = array(

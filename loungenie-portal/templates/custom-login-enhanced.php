@@ -71,7 +71,7 @@ wp_enqueue_style( 'lgp-login-enhanced', plugin_dir_url( __FILE__ ) . '../assets/
 				<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
 					<path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1.455.894l-4-2-4 2A1 1 0 015 16V4z"/>
 				</svg>
-				<?php _e( 'Partner', 'loungenie-portal' ); ?>
+				<?php esc_html_e( 'Partner', 'loungenie-portal' ); ?>
 				<kbd class="lgp-keyboard-hint">Alt+P</kbd>
 			</button>
 			<button type="button" 
@@ -81,7 +81,7 @@ wp_enqueue_style( 'lgp-login-enhanced', plugin_dir_url( __FILE__ ) . '../assets/
 				<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
 					<path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zm0 16a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
 				</svg>
-				<?php _e( 'Support', 'loungenie-portal' ); ?>
+				<?php esc_html_e( 'Support', 'loungenie-portal' ); ?>
 				<kbd class="lgp-keyboard-hint">Alt+S</kbd>
 			</button>
 		</div>

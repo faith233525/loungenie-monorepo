@@ -39,7 +39,7 @@ if ( strpos( $redirect_base, $home_base ) !== 0 ) {
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="LounGenie Portal - Secure Login">
-	<title><?php echo get_bloginfo( 'name' ); ?> - Login</title>
+	<title><?php echo esc_html( get_bloginfo( 'name' ) ); ?> - Login</title>
 	
 	<!-- Favicon -->
 	<link rel="icon" type="image/x-icon" href="<?php echo home_url( '/favicon.ico' ); ?>">
