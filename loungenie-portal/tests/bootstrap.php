@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHPUnit Bootstrap
  */
@@ -36,7 +37,8 @@ if (!defined('ARRAY_N')) {
 }
 
 // Define a named WPDB stub class for better PHPUnit compatibility
-class WP_Database_Stub {
+class WP_Database_Stub
+{
 	public $prefix = 'wp_';
 	public $insert_id = 0;
 
@@ -56,10 +58,20 @@ class WP_Database_Stub {
 		'lgp_audit_log' => 1,
 	];
 
-	public function get_charset_collate() { return 'CHARSET'; }
-	public function query($sql) { return true; }
-	public function esc_like($s){ return $s; }
-	public function prepare($q, ...$args){
+	public function get_charset_collate()
+	{
+		return 'CHARSET';
+	}
+	public function query($sql)
+	{
+		return true;
+	}
+	public function esc_like($s)
+	{
+		return $s;
+	}
+	public function prepare($q, ...$args)
+	{
 		// Minimal replacement; tests generally ignore placeholders in mocks
 		if (strpos($q, '%d') !== false || strpos($q, '%s') !== false) {
 			foreach ($args as $a) {
@@ -69,7 +81,8 @@ class WP_Database_Stub {
 		return $q;
 	}
 
-	public function insert($table, $data){
+	public function insert($table, $data)
+	{
 		$name = $this->normalize($table);
 		$id = $this->auto[$name] ?? 1;
 		$this->auto[$name] = $id + 1;
@@ -77,17 +90,29 @@ class WP_Database_Stub {
 		$data['id'] = $id;
 		$this->insert_id = $id;
 		switch ($name) {
-			case 'lgp_companies': $this->companies[$id] = (object)$data; break;
-			case 'lgp_units': $this->units[$id] = (object)$data; break;
-			case 'lgp_service_requests': $this->service_requests[$id] = (object)$data; break;
-			case 'lgp_tickets': $this->tickets[$id] = (object)$data; break;
-			case 'lgp_audit_log': $this->audit_log[$id] = (object)$data; break;
-			default: break;
+			case 'lgp_companies':
+				$this->companies[$id] = (object)$data;
+				break;
+			case 'lgp_units':
+				$this->units[$id] = (object)$data;
+				break;
+			case 'lgp_service_requests':
+				$this->service_requests[$id] = (object)$data;
+				break;
+			case 'lgp_tickets':
+				$this->tickets[$id] = (object)$data;
+				break;
+			case 'lgp_audit_log':
+				$this->audit_log[$id] = (object)$data;
+				break;
+			default:
+				break;
 		}
 		return 1;
 	}
 
-	public function update($table, $data, $where){
+	public function update($table, $data, $where)
+	{
 		$name = $this->normalize($table);
 		if ($name === 'lgp_tickets' && isset($where['id'])) {
 			$id = (int)$where['id'];
@@ -97,24 +122,29 @@ class WP_Database_Stub {
 		}
 		return 1;
 	}
-	public function delete($table, $where, $where_format = []){ return 1; }
+	public function delete($table, $where, $where_format = [])
+	{
+		return 1;
+	}
 
-	public function get_var($sql){
+	public function get_var($sql)
+	{
 		$sql = trim($sql);
 		if (stripos($sql, 'FROM ' . $this->prefix . 'lgp_units') !== false) {
 			$company = $this->extractCompanyId($sql);
 			$units = $this->units;
 			if ($company !== null) {
-				$units = array_filter($units, fn($u)=>isset($u->company_id) && (int)$u->company_id === (int)$company);
+				$units = array_filter($units, fn($u) => isset($u->company_id) && (int)$u->company_id === (int)$company);
 			}
 			return (int)count($units);
 		}
 		if (stripos($sql, 'AVG(TIMESTAMPDIFF') !== false && stripos($sql, 'FROM ' . $this->prefix . 'lgp_tickets') !== false) {
 			$company = $this->extractCompanyId($sql);
 			$tickets = $this->filterTicketsByCompany($company);
-			$tickets = array_filter($tickets, fn($t)=>in_array($t->status ?? '', ['resolved','closed'], true) && !empty($t->updated_at) && !empty($t->created_at));
+			$tickets = array_filter($tickets, fn($t) => in_array($t->status ?? '', ['resolved', 'closed'], true) && !empty($t->updated_at) && !empty($t->created_at));
 			if (!count($tickets)) return null;
-			$sum = 0; $n = 0;
+			$sum = 0;
+			$n = 0;
 			foreach ($tickets as $t) {
 				$sum += max(0, (strtotime($t->updated_at) - strtotime($t->created_at)) / 3600);
 				$n++;
@@ -125,11 +155,11 @@ class WP_Database_Stub {
 			$company = $this->extractCompanyId($sql);
 			$tickets = $this->filterTicketsByCompany($company);
 			if (stripos($sql, 'status NOT IN') !== false) {
-				$tickets = array_filter($tickets, fn($t)=>!in_array($t->status ?? '', ['resolved','closed'], true));
+				$tickets = array_filter($tickets, fn($t) => !in_array($t->status ?? '', ['resolved', 'closed'], true));
 			}
 			if (stripos($sql, 'DATE(updated_at) = CURDATE()') !== false) {
 				$today = date('Y-m-d');
-				$tickets = array_filter($tickets, fn($t)=>in_array($t->status ?? '', ['resolved','closed'], true) && substr((string)$t->updated_at,0,10) === $today);
+				$tickets = array_filter($tickets, fn($t) => in_array($t->status ?? '', ['resolved', 'closed'], true) && substr((string)$t->updated_at, 0, 10) === $today);
 			}
 			return (int)count($tickets);
 		}
@@ -142,14 +172,17 @@ class WP_Database_Stub {
 			foreach ($this->audit_log as $row) {
 				$matchesAction = empty($action) || ((isset($row->action) ? $row->action : '') === $action);
 				$matchesUser   = ($uid === 0) || ((int)$row->user_id === (int)$uid);
-				if ($matchesAction && $matchesUser) { $cnt++; }
+				if ($matchesAction && $matchesUser) {
+					$cnt++;
+				}
 			}
 			return (int)$cnt;
 		}
 		return 0;
 	}
 
-	public function get_results($sql){
+	public function get_results($sql)
+	{
 		// Map units query for map endpoint
 		if (stripos($sql, 'FROM ' . $this->prefix . 'lgp_units') !== false) {
 			$units = array_values($this->units);
@@ -166,7 +199,8 @@ class WP_Database_Stub {
 		}
 		return [];
 	}
-	public function get_row($sql){
+	public function get_row($sql)
+	{
 		// Support audit log check in tests
 		if (stripos($sql, $this->prefix . 'lgp_audit_log') !== false) {
 			$uid = $this->extractNumberAfter($sql, 'user_id =');
@@ -204,33 +238,44 @@ class WP_Database_Stub {
 		return null;
 	}
 
-	private function normalize($table){
+	private function normalize($table)
+	{
 		return str_replace($this->prefix, '', $table);
 	}
-	private function withTimestamps($data){
+	private function withTimestamps($data)
+	{
 		$now = date('Y-m-d H:i:s');
 		if (!isset($data['created_at'])) $data['created_at'] = $now;
 		if (!isset($data['updated_at'])) $data['updated_at'] = $now;
 		return $data;
 	}
-	private function extractCompanyId($sql){
+	private function extractCompanyId($sql)
+	{
 		if (preg_match('/company_id\s*=\s*(\d+)/i', $sql, $m)) return (int)$m[1];
 		return null;
 	}
-	private function extractNumberAfter($sql, $token){ if (preg_match('/'.preg_quote($token,'/').'\s*(\d+)/', $sql, $m)) return (int)$m[1]; return 0; }
-	private function extractStringAfter($sql, $token){ 
-		if (preg_match('/'.preg_quote($token,'/').'\s*\'?([\w_-]+)\'?/i', $sql, $m)) {
+	private function extractNumberAfter($sql, $token)
+	{
+		if (preg_match('/' . preg_quote($token, '/') . '\s*(\d+)/', $sql, $m)) return (int)$m[1];
+		return 0;
+	}
+	private function extractStringAfter($sql, $token)
+	{
+		if (preg_match('/' . preg_quote($token, '/') . '\s*\'?([\w_-]+)\'?/i', $sql, $m)) {
 			return $m[1];
 		}
-		return ''; 
+		return '';
 	}
-	private function filterTicketsByCompany($company){
+	private function filterTicketsByCompany($company)
+	{
 		// Map tickets via service_request_id to company_id
 		$map = [];
-		foreach ($this->service_requests as $sr) { $map[$sr->id] = $sr->company_id ?? null; }
+		foreach ($this->service_requests as $sr) {
+			$map[$sr->id] = $sr->company_id ?? null;
+		}
 		$t = array_values($this->tickets);
 		if ($company !== null) {
-			$t = array_filter($t, function($row) use ($map, $company){
+			$t = array_filter($t, function ($row) use ($map, $company) {
 				$srid = $row->service_request_id ?? null;
 				return isset($map[$srid]) && (int)$map[$srid] === (int)$company;
 			});
@@ -241,16 +286,41 @@ class WP_Database_Stub {
 
 // Provide a minimal wpdb class so PHPUnit tests can create mocks like $this->createMock('wpdb')
 if (!class_exists('wpdb')) {
-	class wpdb {
+	class wpdb
+	{
 		public $prefix = 'wp_';
-		public function prepare($query, ...$args) { return $query; }
-		public function get_results($query) { return []; }
-		public function get_row($query) { return null; }
-		public function get_var($query) { return null; }
-		public function insert($table, $data) { return 1; }
-		public function update($table, $data, $where) { return 1; }
-		public function delete($table, $where, $where_format = []) { return 1; }
-		public function query($query) { return true; }
+		public function prepare($query, ...$args)
+		{
+			return $query;
+		}
+		public function get_results($query)
+		{
+			return [];
+		}
+		public function get_row($query)
+		{
+			return null;
+		}
+		public function get_var($query)
+		{
+			return null;
+		}
+		public function insert($table, $data)
+		{
+			return 1;
+		}
+		public function update($table, $data, $where)
+		{
+			return 1;
+		}
+		public function delete($table, $where, $where_format = [])
+		{
+			return 1;
+		}
+		public function query($query)
+		{
+			return true;
+		}
 	}
 }
 
@@ -277,14 +347,44 @@ $test_user_meta = [];  // user_id => [meta_key => meta_value]
 // STUB FUNCTIONS: Only define stub functions that tests cannot mock (those not intercepted by Patchwork)
 // These are typically functions used at file-load time (not in test methods)
 
+// Note: add_action/add_filter are intentionally NOT defined here to allow
+// Brain Monkey/Patchwork to intercept these functions during tests.
 if (!function_exists('register_rest_route')) {
-	function register_rest_route($namespace, $route, $args) {
+	function register_rest_route($namespace, $route, $args)
+	{
+		// Record routes for tests that assert uniqueness
+		global $test_registered_routes;
+		if (!isset($test_registered_routes) || !is_array($test_registered_routes)) {
+			$test_registered_routes = [];
+		}
+
+		// Methods may be provided as a string or array in $args['methods']
+		$methods = [];
+		if (is_array($args) && isset($args['methods'])) {
+			$m = $args['methods'];
+			if (is_array($m)) {
+				$methods = $m;
+			} else {
+				$methods = [$m];
+			}
+		} else {
+			// Default to GET when not explicitly provided
+			$methods = ['GET'];
+		}
+
+		foreach ($methods as $meth) {
+			$method = strtoupper(is_string($meth) ? $meth : (string)$meth);
+			$key = $namespace . ' ' . $route . ' ' . $method;
+			$test_registered_routes[] = $key;
+		}
+
 		return true;
 	}
 }
 
 if (!function_exists('wp_remote_retrieve_response_code')) {
-	function wp_remote_retrieve_response_code($response) {
+	function wp_remote_retrieve_response_code($response)
+	{
 		return isset($response['response']['code']) ? $response['response']['code'] : 200;
 	}
 }
@@ -294,14 +394,16 @@ if (!function_exists('wp_remote_retrieve_response_code')) {
 // Patchwork needs these to be undefined until after it loads so tests can mock them.
 
 if (!function_exists('wp_create_user')) {
-	function wp_create_user($username, $password, $email = '') {
+	function wp_create_user($username, $password, $email = '')
+	{
 		// Mock user creation - just return a new user ID
 		return mt_rand(1, 99999);
 	}
 }
 
 if (!class_exists('WP_User')) {
-	class WP_User {
+	class WP_User
+	{
 		public $ID = 0;
 		public $roles = [];
 		public $caps = [];
@@ -309,8 +411,9 @@ if (!class_exists('WP_User')) {
 		public $user_login = '';
 		public $user_email = '';
 		public $display_name = '';
-		
-		public function __construct($id = 0) {
+
+		public function __construct($id = 0)
+		{
 			$this->ID = $id;
 			if ($id) {
 				$this->user_login   = 'user_' . $id;
@@ -321,8 +424,9 @@ if (!class_exists('WP_User')) {
 				$this->data         = (object) ['ID' => 0, 'user_login' => '', 'user_email' => '', 'display_name' => ''];
 			}
 		}
-		
-		public function has_cap($cap) {
+
+		public function has_cap($cap)
+		{
 			return in_array($cap, $this->caps, true);
 		}
 	}
@@ -333,90 +437,102 @@ if (!class_exists('WP_User')) {
 
 // Stub REST API classes
 if (!class_exists('WP_REST_Request')) {
-	class WP_REST_Request {
+	class WP_REST_Request
+	{
 		private $method = 'GET';
 		private $route = '/';
 		private $params = [];
-		
-		public function __construct($method = 'GET', $route = '') {
+
+		public function __construct($method = 'GET', $route = '')
+		{
 			$this->method = $method;
 			$this->route = $route;
 		}
-		
-		public function get_param($name) {
+
+		public function get_param($name)
+		{
 			return $this->params[$name] ?? null;
 		}
-		
-		public function set_param($name, $value) {
+
+		public function set_param($name, $value)
+		{
 			$this->params[$name] = $value;
 		}
-		
-		public function get_method() {
+
+		public function get_method()
+		{
 			return $this->method;
 		}
-		
-		public function get_route() {
+
+		public function get_route()
+		{
 			return $this->route;
 		}
 	}
 }
 
 if (!class_exists('WP_REST_Response')) {
-	class WP_REST_Response {
+	class WP_REST_Response
+	{
 		public $data;
 		public $status;
-		
-		public function __construct($data = null, $status = 200) {
+
+		public function __construct($data = null, $status = 200)
+		{
 			$this->data = $data;
 			$this->status = $status;
 		}
-		
-		public function get_status() {
+
+		public function get_status()
+		{
 			return $this->status;
 		}
-		
-		public function get_data() {
+
+		public function get_data()
+		{
 			return $this->data;
 		}
 	}
 }
 
 if (!function_exists('rest_do_request')) {
-	function rest_do_request($request) {
+	function rest_do_request($request)
+	{
 		// Simple REST dispatcher for testing
 		$route = $request->get_route();
 		$method = $request->get_method();
-		
+
 		// Dashboard endpoint
 		if (strpos($route, '/lgp/v1/dashboard') !== false) {
 			return _rest_dispatch_dashboard($request, $method);
 		}
-		
+
 		// Map units endpoint
 		if ($method === 'GET' && strpos($route, '/lgp/v1/map/units') !== false) {
 			return _rest_dispatch_map_units($request);
 		}
-		
+
 		// Tickets endpoint
 		if (strpos($route, '/lgp/v1/tickets') !== false) {
 			return _rest_dispatch_tickets($request, $method);
 		}
-		
+
 		return new WP_REST_Response(['error' => 'Endpoint not found'], 404);
 	}
-	
-	function _rest_dispatch_dashboard($request, $method) {
+
+	function _rest_dispatch_dashboard($request, $method)
+	{
 		if ($method !== 'GET') {
 			return new WP_REST_Response(['error' => 'Method not allowed'], 405);
 		}
-		
+
 		// Require the dashboard API class if not already loaded
 		if (!class_exists('LGP_Dashboard_API')) {
 			require_once ABSPATH . 'api/dashboard.php';
 		}
-		
+
 		$api = new LGP_Dashboard_API();
-		
+
 		// Check permission first
 		if (!$api->check_portal_access()) {
 			// Determine if it's unauthenticated (401) or forbidden (403)
@@ -432,10 +548,10 @@ if (!function_exists('rest_do_request')) {
 				);
 			}
 		}
-		
+
 		// Call the endpoint
 		$response_data = $api->get_metrics($request);
-		
+
 		// Check if it's an error
 		if (is_wp_error($response_data)) {
 			return new WP_REST_Response(
@@ -443,27 +559,28 @@ if (!function_exists('rest_do_request')) {
 				$response_data->get_error_data()['status'] ?? 400
 			);
 		}
-		
+
 		// Extract data from response if it's a response object
 		$data = $response_data;
 		if (is_object($response_data) && method_exists($response_data, 'get_data')) {
 			$data = $response_data->get_data();
 		}
-		
+
 		return new WP_REST_Response($data, 200);
 	}
-	
-	function _rest_dispatch_map_units($request) {
+
+	function _rest_dispatch_map_units($request)
+	{
 		// Require the map API class if not already loaded
 		if (!class_exists('LGP_Map_API')) {
 			require_once ABSPATH . 'api/map.php';
 		}
-		
+
 		$api = new LGP_Map_API();
-		
+
 		// Call the endpoint
 		$response_data = $api->get_units($request);
-		
+
 		// Check if it's an error
 		if (is_wp_error($response_data)) {
 			return new WP_REST_Response(
@@ -471,22 +588,23 @@ if (!function_exists('rest_do_request')) {
 				$response_data->get_error_data()['status'] ?? 400
 			);
 		}
-		
+
 		// Extract data from response if it's a response object
 		$data = $response_data;
 		if (is_object($response_data) && method_exists($response_data, 'get_data')) {
 			$data = $response_data->get_data();
 		}
-		
+
 		return new WP_REST_Response($data, 200);
 	}
-	
-	function _rest_dispatch_tickets($request, $method) {
+
+	function _rest_dispatch_tickets($request, $method)
+	{
 		// Require the tickets API class if not already loaded
 		if (!class_exists('LGP_Tickets_API')) {
 			require_once ABSPATH . 'api/tickets.php';
 		}
-		
+
 		// Route to appropriate method
 		if ($method === 'GET') {
 			// Check if it's a single ticket or list
@@ -514,7 +632,7 @@ if (!function_exists('rest_do_request')) {
 		} else {
 			return new WP_REST_Response(['error' => 'Method not allowed'], 405);
 		}
-		
+
 		// Check if it's an error
 		if (is_wp_error($response_data)) {
 			return new WP_REST_Response(
@@ -522,13 +640,13 @@ if (!function_exists('rest_do_request')) {
 				$response_data->get_error_data()['status'] ?? 400
 			);
 		}
-		
+
 		// Extract data from response if it's a response object
 		$data = $response_data;
 		if (is_object($response_data) && method_exists($response_data, 'get_data')) {
 			$data = $response_data->get_data();
 		}
-		
+
 		return new WP_REST_Response($data, 200);
 	}
 }
@@ -537,11 +655,13 @@ if (!function_exists('rest_do_request')) {
 // Not defining them here to allow Patchwork to patch them for tests that need to mock them.
 
 if (!class_exists('WP_Error')) {
-	class WP_Error {
+	class WP_Error
+	{
 		public $errors = [];
 		public $error_data = [];
-		
-		public function __construct($code = '', $message = '', $data = '') {
+
+		public function __construct($code = '', $message = '', $data = '')
+		{
 			if (!empty($code)) {
 				$this->errors[$code] = [$message];
 				if (!empty($data)) {
@@ -549,20 +669,23 @@ if (!class_exists('WP_Error')) {
 				}
 			}
 		}
-		
-		public function get_error_code() {
+
+		public function get_error_code()
+		{
 			$codes = array_keys($this->errors);
 			return $codes[0] ?? '';
 		}
-		
-		public function get_error_message($code = '') {
+
+		public function get_error_message($code = '')
+		{
 			if (empty($code)) {
 				$code = $this->get_error_code();
 			}
 			return $this->errors[$code][0] ?? '';
 		}
-		
-		public function get_error_data($code = '') {
+
+		public function get_error_data($code = '')
+		{
 			if (empty($code)) {
 				$code = $this->get_error_code();
 			}

@@ -1,1 +1,19 @@
 .env
+
+# Ignore session-generated artifacts and local outputs
+ULTRA_COMPREHENSIVE_TEST_REPORT.md
+ultra_comprehensive_test.sh
+COMPREHENSIVE_TEST_REPORT.md
+comprehensive_validation.sh
+comprehensive_fix.php
+fix_comments.php
+
+# Local cache and temporary files
+.phpunit.result.cache
+/tmp/
+*.log
+*.tmp
+
+# Node and vendor (if not needed in repo)
+/node_modules/
+/vendor/

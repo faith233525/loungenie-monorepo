@@ -89,6 +89,7 @@ final class RouterSuccessTest extends WPTestCase
             public $prefix = 'wp_';
             public function get_var($sql){ return 0; }
             public function get_results($sql){ return []; }
+            public function prepare($q, ...$args){ return $q; }
         };
 
         require_once __DIR__ . '/../includes/class-lgp-router.php';

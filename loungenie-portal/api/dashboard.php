@@ -1,45 +1,53 @@
 <?php
+
 /**
  * Dashboard Metrics API
  * Returns aggregated metrics for Support/Partner users
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; }
+if (! defined('ABSPATH')) {
+	exit;
+}
 
-class LGP_Dashboard_API {
-	public static function init() {
-		add_action( 'rest_api_init', array( __CLASS__, 'register_routes' ) );
+class LGP_Dashboard_API
+{
+	public static function init()
+	{
+		add_action('rest_api_init', array(__CLASS__, 'register_routes'));
 	}
 
-	public static function register_routes() {
+	public static function register_routes()
+	{
 		$api = new self();
 		register_rest_route(
 			'lgp/v1',
 			'/dashboard',
 			array(
 				'methods'             => 'GET',
-				'callback'            => array( $api, 'get_metrics' ),
-				'permission_callback' => array( $api, 'check_portal_access' ),
+				'callback'            => array($api, 'get_metrics'),
+				'permission_callback' => array($api, 'check_portal_access'),
 			)
 		);
 	}
 
-	public function check_portal_access() {
-		if ( ! is_user_logged_in() ) {
-			return false; }
+	public function check_portal_access()
+	{
+		if (! is_user_logged_in()) {
+			return false;
+		}
 		return LGP_Auth::is_support() || LGP_Auth::is_partner();
 	}
 
-	public function get_metrics( $request ) {
+	public function get_metrics($request)
+	{
 		global $wpdb;
 
 		// Enhanced authentication check
-		if ( ! is_user_logged_in() ) {
+		if (! is_user_logged_in()) {
 			return new WP_Error(
 				'unauthorized',
 				'Authentication required',
-				array( 'status' => 401 )
+				array('status' => 401)
 			);
 		}
 
@@ -47,22 +55,22 @@ class LGP_Dashboard_API {
 		$is_support = LGP_Auth::is_support();
 		$is_partner = LGP_Auth::is_partner();
 
-		if ( ! $is_support && ! $is_partner ) {
+		if (! $is_support && ! $is_partner) {
 			return new WP_Error(
 				'forbidden',
 				'Insufficient permissions to access dashboard',
-				array( 'status' => 403 )
+				array('status' => 403)
 			);
 		}
 
 		// Get company context for partners
 		$company_id = LGP_Auth::get_user_company_id();
 
-		if ( ! $is_support && empty( $company_id ) ) {
+		if (! $is_support && empty($company_id)) {
 			return new WP_Error(
 				'invalid_company',
 				'No company associated with user account',
-				array( 'status' => 400 )
+				array('status' => 400)
 			);
 		}
 
@@ -72,19 +80,19 @@ class LGP_Dashboard_API {
 		$requests_table = $wpdb->prefix . 'lgp_service_requests';
 
 		// Apply role-based filtering at database level
-		if ( $is_support ) {
+		if ($is_support) {
 			// Support sees all companies
 			$where_units   = '1=1';
 			$where_company = '1=1';
 		} else {
 			// Partner sees only their company
-			$where_units   = $wpdb->prepare( 'company_id = %d', $company_id );
-			$where_company = $wpdb->prepare( 'sr.company_id = %d', $company_id );
+			$where_units   = $wpdb->prepare('company_id = %d', $company_id);
+			$where_company = $wpdb->prepare('sr.company_id = %d', $company_id);
 		}
 
 		// Units total (use prepared statements when scoping by company)
-		if ( $is_support ) {
-			$total_units = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$units_table}" );
+		if ($is_support) {
+			$total_units = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$units_table}");
 		} else {
 			$total_units = (int) $wpdb->get_var(
 				$wpdb->prepare(
@@ -95,7 +103,7 @@ class LGP_Dashboard_API {
 		}
 
 		// Ticket counts are derived by joining service requests -> tickets for company scope
-		if ( $is_support ) {
+		if ($is_support) {
 			$active_tickets = (int) $wpdb->get_var(
 				"SELECT COUNT(*) FROM {$tickets_table} t 
 				 JOIN {$requests_table} sr ON sr.id = t.service_request_id 
@@ -112,7 +120,7 @@ class LGP_Dashboard_API {
 			);
 		}
 
-		if ( $is_support ) {
+		if ($is_support) {
 			$resolved_today = (int) $wpdb->get_var(
 				"SELECT COUNT(*) FROM {$tickets_table} t 
 				 JOIN {$requests_table} sr ON sr.id = t.service_request_id 
@@ -130,7 +138,7 @@ class LGP_Dashboard_API {
 		}
 
 		// Average resolution time (hours)
-		if ( $is_support ) {
+		if ($is_support) {
 			$resolution_data = $wpdb->get_var(
 				"SELECT AVG(TIMESTAMPDIFF(HOUR, t.created_at, t.updated_at)) 
 				 FROM {$tickets_table} t 
@@ -148,7 +156,7 @@ class LGP_Dashboard_API {
 				)
 			);
 		}
-		$avg_resolution  = $resolution_data !== null ? round( (float) $resolution_data, 1 ) : null;
+		$avg_resolution  = $resolution_data !== null ? round((float) $resolution_data, 1) : null;
 
 		// Log access for audit trail
 		LGP_Logger::log_event(

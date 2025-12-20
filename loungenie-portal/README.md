@@ -43,7 +43,7 @@ This plugin uses WordPress **strictly as a backend framework** for:
 
 ## User Roles
 
-### Support Role (`lgp_support`)
+### Support Team Role (`lgp_support`)
 
 **Capabilities:**
 - View all companies and management companies
@@ -54,7 +54,7 @@ This plugin uses WordPress **strictly as a backend framework** for:
 - Full dashboard access
 - Filter, search, and sort all data
 
-### Partner Role (`lgp_partner`)
+### Partner Company Role (`lgp_partner`)
 
 **Capabilities:**
 - View only their company and management company
@@ -235,21 +235,21 @@ Send emails and notifications via Microsoft Graph API:
 
 ## Usage
 
-### Creating Support Users
+### Creating Support Team Users
 
 1. Go to WordPress Admin → Users → Add New
 2. Create user with username and password
-3. Assign role: **LounGenie Support**
+3. Assign role: **LounGenie Support Team**
 4. User can now access `/portal` with full privileges
 
-### Creating Partner Users
+### Creating Partner Company Users
 
 1. Create user in WordPress
-2. Assign role: **LounGenie Partner**
+2. Assign role: **LounGenie Partner Company**
 3. Set user meta `lgp_company_id` to link to a company
 4. User can access `/portal` with limited privileges
 
-### Assigning Company to Partner
+### Assigning Company to Partner Company User
 
 ```php
 update_user_meta( $user_id, 'lgp_company_id', $company_id );
@@ -298,6 +298,15 @@ lgp_render_company_colors( $company_id );
 - Permission callbacks on REST endpoints
 - Nonce verification
 - Data sanitization and escaping
+
+## Documentation & Archive
+
+Additional project documents (audits, delivery reports, and historical summaries) have been moved to a dedicated archive to keep the repository root clean:
+
+- Docs archive: `../docs/archive/`
+- Demo pages: `../docs/demos/`
+
+For a curated list of what was archived and why, see `../docs/ARCHIVE_RECOMMENDATIONS.md`.
 - SQL injection protection via `$wpdb->prepare()`
 
 ## Browser Support

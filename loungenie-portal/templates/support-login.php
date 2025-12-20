@@ -2,7 +2,7 @@
 // phpcs:ignoreFile
 /**
  * Support Team Login Form
- * Custom branded login for Support team members (no WordPress branding)
+ * Custom branded login for Support Team members (no WordPress branding)
  *
  * @package LounGenie Portal
  */
@@ -51,7 +51,7 @@ echo "<!DOCTYPE html>\n";
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><?php esc_html_e( 'Support Login', 'loungenie-portal' ); ?></title>
+	 <title><?php esc_html_e( 'Support Team Login', 'loungenie-portal' ); ?></title>
 	<link rel="stylesheet" href="<?php echo esc_url( LGP_ASSETS_URL . 'css/design-tokens.css' ); ?>">
 	<link rel="stylesheet" href="<?php echo esc_url( LGP_ASSETS_URL . 'css/login.css' ); ?>">
 </head>
@@ -114,9 +114,9 @@ echo "<!DOCTYPE html>\n";
 		</form>
 
 		<div class="lgp-login-footer">
-			<p class="lgp-text-sm lgp-text-muted"><?php esc_html_e( 'Are you a partner?', 'loungenie-portal' ); ?></p>
+			<p class="lgp-text-sm lgp-text-muted"><?php esc_html_e( 'Are you a Partner Company member?', 'loungenie-portal' ); ?></p>
 			<a href="<?php echo esc_url( $partner_login_url ); ?>" class="lgp-link-back">
-				<?php esc_html_e( 'Go to Partner Login →', 'loungenie-portal' ); ?>
+				<?php esc_html_e( 'Go to Partner Company Login →', 'loungenie-portal' ); ?>
 			</a>
 		</div>
 	</div>

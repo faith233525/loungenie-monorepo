@@ -22,41 +22,42 @@
  * Domain Path: /languages
  */
 
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) {
+// Exit if accessed directly.
+if (! defined('ABSPATH')) {
 	exit;
 }
 
 // ============================================================================
-// PLUGIN CONSTANTS
+// PLUGIN CONSTANTS.
 // ============================================================================
 
-define( 'LGP_VERSION', '1.8.1' );
-define( 'LGP_PLUGIN_FILE', __FILE__ );
+define('LGP_VERSION', '1.8.1');
+define('LGP_PLUGIN_FILE', __FILE__);
 
-// Use PHP functions instead of WordPress functions to avoid timing issues during activation
-if ( ! defined( 'LGP_PLUGIN_DIR' ) ) {
-	define( 'LGP_PLUGIN_DIR', trailingslashit( dirname( __FILE__ ) ) );
+// Use PHP functions instead of WordPress functions to avoid timing issues during activation.
+if (! defined('LGP_PLUGIN_DIR')) {
+	define('LGP_PLUGIN_DIR', trailingslashit(dirname(__FILE__)));
 }
-if ( ! defined( 'LGP_PLUGIN_URL' ) ) {
-	define( 'LGP_PLUGIN_URL', trailingslashit( plugins_url( '', __FILE__ ) ) );
+if (! defined('LGP_PLUGIN_URL')) {
+	define('LGP_PLUGIN_URL', trailingslashit(plugins_url('', __FILE__)));
 }
-if ( ! defined( 'LGP_ASSETS_URL' ) ) {
-	define( 'LGP_ASSETS_URL', LGP_PLUGIN_URL . 'assets/' );
+if (! defined('LGP_ASSETS_URL')) {
+	define('LGP_ASSETS_URL', LGP_PLUGIN_URL . 'assets/');
 }
-define( 'LGP_TEXT_DOMAIN', 'loungenie-portal' );
+define('LGP_TEXT_DOMAIN', 'loungenie-portal');
 
 // ============================================================================
-// PREFLIGHT CHECKS
+// PREFLIGHT CHECKS.
 // ============================================================================
 
 /**
- * Check PHP and WordPress version compatibility
+ * Check PHP and WordPress version compatibility.
  */
-function lgp_check_compatibility() {
+function lgp_check_compatibility()
+{
 	global $wp_version;
 
-	if ( version_compare( PHP_VERSION, '7.4', '<' ) ) {
+	if (version_compare(PHP_VERSION, '7.4', '<')) {
 		add_action(
 			'admin_notices',
 			function () {
@@ -66,7 +67,7 @@ function lgp_check_compatibility() {
 		return false;
 	}
 
-	if ( version_compare( $wp_version, '5.8', '<' ) ) {
+	if (version_compare($wp_version, '5.8', '<')) {
 		add_action(
 			'admin_notices',
 			function () {
@@ -79,57 +80,59 @@ function lgp_check_compatibility() {
 	return true;
 }
 
-if ( ! lgp_check_compatibility() ) {
+if (! lgp_check_compatibility()) {
 	return;
 }
 
 // ============================================================================
-// ACTIVATION & DEACTIVATION
+// ACTIVATION & DEACTIVATION.
 // ============================================================================
 
 /**
- * Plugin activation
- * - Create database tables
- * - Register custom roles
- * - Set default capabilities
+ * Plugin activation.
+ * - Create database tables.
+ * - Register custom roles.
+ * - Set default capabilities.
  */
-function lgp_activate() {
+function lgp_activate()
+{
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-database.php';
-	// Capabilities are required by role registration during activation
+	// Capabilities are required by role registration during activation.
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-capabilities.php';
 	require_once LGP_PLUGIN_DIR . 'roles/support.php';
 	require_once LGP_PLUGIN_DIR . 'roles/partner.php';
 
-	// Create database tables and register roles
+	// Create database tables and register roles.
 	LGP_Database::create_tables();
 	LGP_Capabilities::register_capabilities();
 	LGP_Support_Role::register();
 	LGP_Partner_Role::register();
 
-	// Flush rewrite rules for custom routes
+	// Flush rewrite rules. for custom routes.
 	flush_rewrite_rules();
 }
 
-register_activation_hook( __FILE__, 'lgp_activate' );
+register_activation_hook(__FILE__, 'lgp_activate');
 
 /**
  * Plugin deactivation
  * - Remove custom roles
  * - Flush rewrite rules
  */
-function lgp_deactivate() {
-	 require_once LGP_PLUGIN_DIR . 'roles/support.php';
+function lgp_deactivate()
+{
+	require_once LGP_PLUGIN_DIR . 'roles/support.php';
 	require_once LGP_PLUGIN_DIR . 'roles/partner.php';
 
-	// Remove custom roles
+	// Remove custom roles.
 	LGP_Support_Role::remove();
 	LGP_Partner_Role::remove();
 
-	// Flush rewrite rules
+	// Flush rewrite rules.
 	flush_rewrite_rules();
 }
 
-register_deactivation_hook( __FILE__, 'lgp_deactivate' );
+register_deactivation_hook(__FILE__, 'lgp_deactivate');
 
 // ============================================================================
 // INTERNATIONALIZATION
@@ -138,14 +141,15 @@ register_deactivation_hook( __FILE__, 'lgp_deactivate' );
 /**
  * Load plugin text domain for translations
  */
-function lgp_load_textdomain() {
+function lgp_load_textdomain()
+{
 	load_plugin_textdomain(
 		'loungenie-portal',
 		false,
-		dirname( plugin_basename( __FILE__ ) ) . '/languages'
+		dirname(plugin_basename(__FILE__)) . '/languages'
 	);
 }
-add_action( 'plugins_loaded', 'lgp_load_textdomain' );
+add_action('plugins_loaded', 'lgp_load_textdomain');
 
 // ============================================================================
 // INITIALIZE PLUGIN
@@ -154,7 +158,8 @@ add_action( 'plugins_loaded', 'lgp_load_textdomain' );
 /**
  * Initialize all plugin components
  */
-function lgp_init() {
+function lgp_init()
+{
 	// Load all required classes first
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-loader.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-database.php';
@@ -187,16 +192,16 @@ function lgp_init() {
 
 	// Conditionally load new Graph-based email pipeline
 	$use_new_email = false;
-	if ( defined( 'LGP_EMAIL_PIPELINE' ) ) {
-		$use_new_email = ( 'new' === LGP_EMAIL_PIPELINE || true === LGP_EMAIL_PIPELINE || 1 === LGP_EMAIL_PIPELINE );
-	} elseif ( getenv( 'LGP_EMAIL_PIPELINE' ) ) {
-		$env           = strtolower( trim( getenv( 'LGP_EMAIL_PIPELINE' ) ) );
-		$use_new_email = in_array( $env, array( 'new', 'true', '1', 'on' ), true );
+	if (defined('LGP_EMAIL_PIPELINE')) {
+		$use_new_email = ('new' === LGP_EMAIL_PIPELINE || true === LGP_EMAIL_PIPELINE || 1 === LGP_EMAIL_PIPELINE);
+	} elseif (getenv('LGP_EMAIL_PIPELINE')) {
+		$env           = strtolower(trim(getenv('LGP_EMAIL_PIPELINE')));
+		$use_new_email = in_array($env, array('new', 'true', '1', 'on'), true);
 	} else {
-		$use_new_email = (bool) get_option( 'lgp_use_new_email_pipeline', false );
+		$use_new_email = (bool) get_option('lgp_use_new_email_pipeline', false);
 	}
 
-	if ( $use_new_email ) {
+	if ($use_new_email) {
 		// New pipeline components
 		require_once LGP_PLUGIN_DIR . 'includes/class-lgp-graph-client.php';
 		require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-ingest.php';
@@ -229,7 +234,7 @@ function lgp_init() {
 // Initialize after the theme directory is registered to avoid early core calls
 // that may trigger wp_is_block_theme() notices in WordPress >= 6.8.
 // after_setup_theme runs after setup_theme and before init, which is safe for our loaders.
-add_action( 'after_setup_theme', 'lgp_init', 0 );
+add_action('after_setup_theme', 'lgp_init', 0);
 
 // ============================================================================
 // CUSTOM REWRITE RULES
@@ -238,40 +243,43 @@ add_action( 'after_setup_theme', 'lgp_init', 0 );
 /**
  * Add custom rewrite rules for /portal route
  */
-function lgp_add_rewrite_rules() {
-	add_rewrite_rule( '^portal/?$', 'index.php?lgp_portal=1', 'top' );
-	add_rewrite_rule( '^portal/(.+)/?$', 'index.php?lgp_portal=1&lgp_section=$matches[1]', 'top' );
-	add_rewrite_rule( '^portal/login/?$', 'index.php?lgp_portal_login=1', 'top' );
-	add_rewrite_rule( '^support-login/?$', 'index.php?lgp_support_login=1', 'top' );
-	add_rewrite_rule( '^partner-login/?$', 'index.php?lgp_partner_login=1', 'top' );
-	add_rewrite_rule( '^psp-azure-callback/?$', 'index.php?lgp_azure_callback=1', 'top' );
-	add_rewrite_rule( '^m365-sso-callback/?$', 'index.php?lgp_m365_callback=1', 'top' );
+function lgp_add_rewrite_rules()
+{
+	add_rewrite_rule('^portal/?$', 'index.php?lgp_portal=1', 'top');
+	add_rewrite_rule('^portal/(.+)/?$', 'index.php?lgp_portal=1&lgp_section=$matches[1]', 'top');
+	add_rewrite_rule('^portal/login/?$', 'index.php?lgp_portal_login=1', 'top');
+	add_rewrite_rule('^support-login/?$', 'index.php?lgp_support_login=1', 'top');
+	add_rewrite_rule('^partner-login/?$', 'index.php?lgp_partner_login=1', 'top');
+	add_rewrite_rule('^psp-azure-callback/?$', 'index.php?lgp_azure_callback=1', 'top');
+	add_rewrite_rule('^m365-sso-callback/?$', 'index.php?lgp_m365_callback=1', 'top');
 }
 
-add_action( 'init', 'lgp_add_rewrite_rules' );
+add_action('init', 'lgp_add_rewrite_rules');
 
 /**
  * Redirect root domain to /portal
  * - Applies to any request hitting the site root ('/') on the frontend
  * - Skips admin, login, REST, callback, sitemap/robots, and existing portal paths
  */
-function lgp_redirect_root_to_portal() {
-	// Never redirect admin, AJAX, or cron requests
-	if ( is_admin() || wp_doing_ajax() || wp_doing_cron() ) {
+function lgp_redirect_root_to_portal()
+{
+	// Never redirect admin, AJAX, or cron requests..
+	if (is_admin() || wp_doing_ajax() || wp_doing_cron()) {
 		return;
 	}
 
-	// Explicit check: don't redirect WordPress admin URLs
-	$raw_uri = isset( $_SERVER['REQUEST_URI'] ) ? strtok( $_SERVER['REQUEST_URI'], '?' ) : '/';
-	if ( 0 === strpos( $raw_uri, '/wp-admin' ) || 0 === strpos( $raw_uri, '/wp-login.php' ) ) {
-		return; // Don't interfere with WordPress admin
+	// Explicit check: don't redirect WordPress admin URLs..
+	$raw_request_uri = isset($_SERVER['REQUEST_URI']) ? sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'])) : '/';
+	$raw_uri         = strtok($raw_request_uri, '?');
+	if (0 === strpos($raw_uri, '/wp-admin') || 0 === strpos($raw_uri, '/wp-login.php')) {
+		return; // Don't interfere with WordPress admin.
 	}
 
-	// Current request path (no query string)
-	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? strtok( wp_unslash( $_SERVER['REQUEST_URI'] ), '?' ) : '/';
-	$request_uri = trailingslashit( sanitize_text_field( $request_uri ) );
+	// Current request path (no query string)..
+	$request_uri = isset($_SERVER['REQUEST_URI']) ? sanitize_text_field(wp_unslash(strtok($_SERVER['REQUEST_URI'], '?'))) : '/';
+	$request_uri = trailingslashit($request_uri);
 
-	// Exclusions: don't interfere with these paths
+	// Exclusions: don't interfere with these paths..
 	$excluded_prefixes = array(
 		'/portal/',
 		'/wp-admin/',
@@ -284,34 +292,38 @@ function lgp_redirect_root_to_portal() {
 		'/sitemap', // includes variations
 	);
 
-	foreach ( $excluded_prefixes as $prefix ) {
-		if ( 0 === strpos( $request_uri, $prefix ) ) {
+	foreach ($excluded_prefixes as $prefix) {
+		if (0 === strpos($request_uri, $prefix)) {
 			return;
 		}
 	}
 
-	// Also skip robots and favicon
-	if ( '/robots.txt/' === $request_uri || '/favicon.ico/' === $request_uri ) {
+	// Also skip robots and favicon..
+	if ('/robots.txt/' === $request_uri || '/favicon.ico/' === $request_uri) {
 		return;
 	}
 
-	// If this is the root/front request, always redirect to /portal (regardless of login state)
-	if ( '/' === $request_uri || is_front_page() || is_home() ) {
-		// Avoid redirect loop if home_url already ends with /portal
-		$target  = home_url( '/portal' );
-		$current = home_url( $request_uri );
-		if ( trailingslashit( $current ) !== trailingslashit( $target ) ) {
-			wp_safe_redirect( $target, 301 );
+	// If this is the root/front request, always redirect to /portal (regardless of login state)..
+	if ('/' === $request_uri || is_front_page() || is_home()) {
+		// Avoid redirect loop if home_url already ends with /portal.
+		$target  = home_url('/portal');
+		$current = home_url($request_uri);
+		if (trailingslashit($current) !== trailingslashit($target)) {
+			wp_safe_redirect($target, 301);
 			exit;
 		}
 	}
 }
-add_action( 'template_redirect', 'lgp_redirect_root_to_portal', 0 );
+add_action('template_redirect', 'lgp_redirect_root_to_portal', 0);
 
 /**
  * Add query vars for portal routing
+ *
+ * @param array $vars Query vars.
+ * @return array
  */
-function lgp_query_vars( $vars ) {
+function lgp_query_vars($vars)
+{
 	$vars[] = 'lgp_portal';
 	$vars[] = 'lgp_section';
 	$vars[] = 'lgp_portal_login';
@@ -322,4 +334,4 @@ function lgp_query_vars( $vars ) {
 	return $vars;
 }
 
-add_filter( 'query_vars', 'lgp_query_vars' );
+add_filter('query_vars', 'lgp_query_vars');
