@@ -82,29 +82,72 @@ class LGP_Dashboard_API {
 			$where_company = $wpdb->prepare( 'sr.company_id = %d', $company_id );
 		}
 
-		// Units total
-		$total_units = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$units_table} WHERE {$where_units}" );
+		// Units total (use prepared statements when scoping by company)
+		if ( $is_support ) {
+			$total_units = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$units_table}" );
+		} else {
+			$total_units = (int) $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(*) FROM {$units_table} WHERE company_id = %d",
+					$company_id
+				)
+			);
+		}
 
 		// Ticket counts are derived by joining service requests -> tickets for company scope
-		$active_tickets = (int) $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$tickets_table} t 
-             JOIN {$requests_table} sr ON sr.id = t.service_request_id 
-             WHERE {$where_company} AND t.status NOT IN ('resolved','closed')"
-		);
+		if ( $is_support ) {
+			$active_tickets = (int) $wpdb->get_var(
+				"SELECT COUNT(*) FROM {$tickets_table} t 
+				 JOIN {$requests_table} sr ON sr.id = t.service_request_id 
+				 WHERE t.status NOT IN ('resolved','closed')"
+			);
+		} else {
+			$active_tickets = (int) $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(*) FROM {$tickets_table} t 
+					 JOIN {$requests_table} sr ON sr.id = t.service_request_id 
+					 WHERE sr.company_id = %d AND t.status NOT IN ('resolved','closed')",
+					$company_id
+				)
+			);
+		}
 
-		$resolved_today = (int) $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$tickets_table} t 
-             JOIN {$requests_table} sr ON sr.id = t.service_request_id 
-             WHERE {$where_company} AND DATE(t.updated_at) = CURDATE() AND t.status IN ('resolved','closed')"
-		);
+		if ( $is_support ) {
+			$resolved_today = (int) $wpdb->get_var(
+				"SELECT COUNT(*) FROM {$tickets_table} t 
+				 JOIN {$requests_table} sr ON sr.id = t.service_request_id 
+				 WHERE DATE(t.updated_at) = CURDATE() AND t.status IN ('resolved','closed')"
+			);
+		} else {
+			$resolved_today = (int) $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(*) FROM {$tickets_table} t 
+					 JOIN {$requests_table} sr ON sr.id = t.service_request_id 
+					 WHERE sr.company_id = %d AND DATE(t.updated_at) = CURDATE() AND t.status IN ('resolved','closed')",
+					$company_id
+				)
+			);
+		}
 
 		// Average resolution time (hours)
-		$resolution_data = $wpdb->get_var(
-			"SELECT AVG(TIMESTAMPDIFF(HOUR, t.created_at, t.updated_at)) 
-             FROM {$tickets_table} t 
-             JOIN {$requests_table} sr ON sr.id = t.service_request_id 
-             WHERE {$where_company} AND t.status IN ('resolved','closed') AND t.updated_at IS NOT NULL"
-		);
+		if ( $is_support ) {
+			$resolution_data = $wpdb->get_var(
+				"SELECT AVG(TIMESTAMPDIFF(HOUR, t.created_at, t.updated_at)) 
+				 FROM {$tickets_table} t 
+				 JOIN {$requests_table} sr ON sr.id = t.service_request_id 
+				 WHERE t.status IN ('resolved','closed') AND t.updated_at IS NOT NULL"
+			);
+		} else {
+			$resolution_data = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT AVG(TIMESTAMPDIFF(HOUR, t.created_at, t.updated_at)) 
+					 FROM {$tickets_table} t 
+					 JOIN {$requests_table} sr ON sr.id = t.service_request_id 
+					 WHERE sr.company_id = %d AND t.status IN ('resolved','closed') AND t.updated_at IS NOT NULL",
+					$company_id
+				)
+			);
+		}
 		$avg_resolution  = $resolution_data !== null ? round( (float) $resolution_data, 1 ) : null;
 
 		// Log access for audit trail

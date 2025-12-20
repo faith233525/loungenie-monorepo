@@ -73,20 +73,27 @@ class LGP_Map_API {
 		$units_table     = $wpdb->prefix . 'lgp_units';
 		$companies_table = $wpdb->prefix . 'lgp_companies';
 
-		// Apply role-based filtering at database level
-		$where = $is_support ? '1=1' : $wpdb->prepare( 'u.company_id = %d', $company_id );
-
-		// Query with role-based filtering
-		// Note: Unit IDs are included here for map markers, but Phase 2B will verify
-		// that aggregation principles are followed elsewhere
-		// Do not expose unit IDs externally; markers use lat/lng and minimal metadata
-		$sql = "SELECT u.company_id, u.unit_number, u.status, u.season, u.latitude, u.longitude,
-                       c.primary_contract_status
-                FROM {$units_table} u
-                LEFT JOIN {$companies_table} c ON c.id = u.company_id
-                WHERE {$where} AND u.latitude IS NOT NULL AND u.longitude IS NOT NULL";
-
-		$results = $wpdb->get_results( $sql );
+		// Query with role-based filtering using prepared statements when scoping by company
+		if ( $is_support ) {
+			$results = $wpdb->get_results(
+				"SELECT u.company_id, u.unit_number, u.status, u.season, u.latitude, u.longitude,
+						c.primary_contract_status
+				 FROM {$units_table} u
+				 LEFT JOIN {$companies_table} c ON c.id = u.company_id
+				 WHERE u.latitude IS NOT NULL AND u.longitude IS NOT NULL"
+			);
+		} else {
+			$results = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT u.company_id, u.unit_number, u.status, u.season, u.latitude, u.longitude,
+							c.primary_contract_status
+					 FROM {$units_table} u
+					 LEFT JOIN {$companies_table} c ON c.id = u.company_id
+					 WHERE u.company_id = %d AND u.latitude IS NOT NULL AND u.longitude IS NOT NULL",
+					$company_id
+				)
+			);
+		}
 
 		// Log access for audit trail
 		LGP_Logger::log_event(
