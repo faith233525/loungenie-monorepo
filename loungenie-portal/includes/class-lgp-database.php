@@ -43,11 +43,28 @@ class LGP_Database {
             contact_email varchar(255),
             contact_phone varchar(50),
             management_company_id bigint(20) UNSIGNED,
+            -- Spec additions
+            company_name varchar(255),
+            management_company varchar(255),
+            primary_contract varchar(50),
+            primary_contract_status varchar(20),
+            secondary_contract varchar(50),
+            secondary_contract_status varchar(20),
+            contract_notes text,
+            season varchar(20),
+            street_address varchar(255),
+            city varchar(100),
+            zip varchar(20),
+            country varchar(100),
+            top_colour varchar(50),
             created_at datetime DEFAULT CURRENT_TIMESTAMP,
             updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
             KEY management_company_id (management_company_id),
-            KEY venue_type (venue_type)
+            KEY venue_type (venue_type),
+            KEY primary_contract_status (primary_contract_status),
+            KEY secondary_contract_status (secondary_contract_status),
+            KEY season (season)
         ) $charset_collate;";
 
 		// Management Companies table
@@ -70,18 +87,27 @@ class LGP_Database {
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             company_id bigint(20) UNSIGNED NOT NULL,
             management_company_id bigint(20) UNSIGNED,
+            unit_number varchar(100),
             address text,
             lock_type varchar(100),
             lock_brand varchar(50),
+            lock_part varchar(100),
+            key varchar(100),
             color_tag varchar(50),
             season varchar(20) DEFAULT 'year-round',
             venue_type varchar(50),
             status varchar(50) DEFAULT 'active',
             install_date date,
+            installation_date date,
+            master_code varbinary(255),
+            sub_master_code varbinary(255),
+            latitude decimal(10,6),
+            longitude decimal(10,6),
             service_history text,
             created_at datetime DEFAULT CURRENT_TIMESTAMP,
             updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
+            UNIQUE KEY unit_number (unit_number),
             KEY company_id (company_id),
             KEY management_company_id (management_company_id),
             KEY status (status),
@@ -144,14 +170,16 @@ class LGP_Database {
             KEY channel_number (channel_number)
         ) $charset_collate;";
 
-		// Training Videos table (support uploads, partners view assigned)
-		$training_videos_table = $wpdb->prefix . 'lgp_training_videos';
-		$sql_training_videos   = "CREATE TABLE $training_videos_table (
+		// Help and Guides table (support uploads, partners view assigned)
+		$help_guides_table = $wpdb->prefix . 'lgp_help_guides';
+		$sql_help_guides   = "CREATE TABLE $help_guides_table (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             title varchar(255) NOT NULL,
             description text,
-            video_url varchar(500) NOT NULL,
+            content_url varchar(500) NOT NULL,
+            type varchar(50) DEFAULT 'video',
             category varchar(100) DEFAULT 'general',
+            tags longtext,
             target_companies longtext,
             duration int(11),
             created_by bigint(20) UNSIGNED,
@@ -160,6 +188,18 @@ class LGP_Database {
             PRIMARY KEY (id),
             KEY category (category),
             KEY created_by (created_by)
+        ) $charset_collate;";
+
+		// User progress table for Knowledge Center
+		$user_progress_table = $wpdb->prefix . 'lgp_user_progress';
+		$sql_user_progress   = "CREATE TABLE $user_progress_table (
+            user_id bigint(20) UNSIGNED NOT NULL,
+            guide_id bigint(20) UNSIGNED NOT NULL,
+            status varchar(20) NOT NULL,
+            updated_at datetime DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (user_id, guide_id),
+            KEY status (status),
+            KEY guide_id (guide_id)
         ) $charset_collate;";
 
 		// Ticket Attachments table (secure file storage with metadata)
@@ -223,7 +263,8 @@ class LGP_Database {
 		dbDelta( $sql_service_requests );
 		dbDelta( $sql_tickets );
 		dbDelta( $sql_gateways );
-		dbDelta( $sql_training_videos );
+		dbDelta( $sql_help_guides );
+		dbDelta( $sql_user_progress );
 		dbDelta( $sql_attachments );
 		dbDelta( $sql_service_notes );
 		dbDelta( $sql_audit_log );
@@ -245,7 +286,7 @@ class LGP_Database {
 			$wpdb->prefix . 'lgp_service_requests',
 			$wpdb->prefix . 'lgp_tickets',
 			$wpdb->prefix . 'lgp_gateways',
-			$wpdb->prefix . 'lgp_training_videos',
+			$wpdb->prefix . 'lgp_help_guides',
 			$wpdb->prefix . 'lgp_ticket_attachments',
 			$wpdb->prefix . 'lgp_service_notes',
 			$wpdb->prefix . 'lgp_audit_log',

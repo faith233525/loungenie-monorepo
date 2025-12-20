@@ -50,11 +50,11 @@ class LGP_Shared_Hosting_Rules {
 	 * Test on shared hosting before merge.
 	 */
 	const RULE_2_REST_PERFORMANCE = array(
-		'max_response_time_ms'  => 300,
-		'max_items_per_page'    => 100,
-		'max_join_depth'        => 2,
-		'require_pagination'    => true,
-		'require_index_on_fk'   => true,
+		'max_response_time_ms' => 300,
+		'max_items_per_page'   => 100,
+		'max_join_depth'       => 2,
+		'require_pagination'   => true,
+		'require_index_on_fk'  => true,
 	);
 
 	/**
@@ -91,9 +91,9 @@ class LGP_Shared_Hosting_Rules {
 	 * ❌ CSS conflicts with theme
 	 */
 	const RULE_4_ASSET_DISCIPLINE = array(
-		'conditional_enqueue'  => true,
-		'per_view_bundles'     => true,
-		'minified'             => true,
+		'conditional_enqueue'   => true,
+		'per_view_bundles'      => true,
+		'minified'              => true,
 		'cdn_only_for_external' => true,
 	);
 
@@ -172,9 +172,9 @@ class LGP_Shared_Hosting_Rules {
 	 * - Paginate all list queries
 	 */
 	const RULE_8_DATABASE_REALISM = array(
-		'query_timeout_seconds'      => 60,
-		'require_fk_indexes'         => true,
-		'normalize_over_json'        => true,
+		'query_timeout_seconds'       => 60,
+		'require_fk_indexes'          => true,
+		'normalize_over_json'         => true,
 		'use_transients_for_computed' => true,
 	);
 

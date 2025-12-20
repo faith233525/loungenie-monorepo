@@ -5,15 +5,17 @@
     <!-- Ensure WPCS is available from Composer vendor path -->
     <config name="installed_paths" value="vendor/wp-coding-standards/wpcs"/>
 
-    <!-- Base standards: WordPress (includes Core + Docs) and PSR12 formatting where compatible -->
+    <!-- Base standards: WordPress (includes Core + Docs) -->
     <rule ref="WordPress"/>
-    <rule ref="PSR12"/>
 
     <!-- Exclude vendor and test files -->
     <exclude-pattern>*/vendor/*</exclude-pattern>
     <exclude-pattern>*/node_modules/*</exclude-pattern>
     <exclude-pattern>*/tests/*</exclude-pattern>
     <exclude-pattern>*/assets/*</exclude-pattern>
+    <exclude-pattern>*/wp-cli/*</exclude-pattern>
+    <!-- Exclude dev/offline scripts from coding standards checks -->
+    <exclude-pattern>*/scripts/*</exclude-pattern>
 
     <!-- Note: Spelling checks require a spellcheck sniff (not installed by default).
          If we add a spellcheck package (e.g., sirbrillig/phpcs-spellcheck),

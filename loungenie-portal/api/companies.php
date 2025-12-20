@@ -1,4 +1,5 @@
 <?php
+use LounGenie\Portal\LGP_Auth;
 /**
  * Companies REST API Endpoints
  *

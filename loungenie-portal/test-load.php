@@ -7,5 +7,5 @@ if ( ! function_exists( 'register_rest_route' ) ) {
 	function register_rest_route( $n, $r, $a ) {
 		return true; }
 }
-require 'api/training-videos.php';
+require 'api/help-guides.php';
 echo "OK: API file loaded\n";

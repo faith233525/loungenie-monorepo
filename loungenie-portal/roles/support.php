@@ -1,8 +1,8 @@
 <?php
 /**
- * Support Role Definition
+ * Support Team Role Definition
  * 
- * Support Role Capabilities:
+ * Support Team Capabilities:
  * - View all companies and management companies
  * - View all LounGenie units
  * - Track installs, service, maintenance, updates
@@ -36,7 +36,7 @@ class LGP_Support_Role {
         // Add role with capabilities
         add_role(
             'lgp_support',
-            __( 'LounGenie Support', 'loungenie-portal' ),
+            __( 'LounGenie Support Team', 'loungenie-portal' ),
             $caps
         );
 

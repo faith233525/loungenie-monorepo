@@ -42,11 +42,11 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 			$logo_url = get_option( 'lgp_custom_logo_url' );
 			if ( ! $logo_url && has_custom_logo() ) {
 				$custom_logo_id = get_theme_mod( 'custom_logo' );
-				$logo_url = wp_get_attachment_image_url( $custom_logo_id, 'full' );
+				$logo_url       = wp_get_attachment_image_url( $custom_logo_id, 'full' );
 			}
-			
+
 			if ( $logo_url ) :
-			?>
+				?>
 				<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php esc_attr_e( 'LounGenie Portal', 'loungenie-portal' ); ?>" class="lgp-logo-image" />
 			<?php else : ?>
 				<span class="lgp-logo-loungenie">LounGenie</span>
@@ -115,9 +115,9 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 						</a>
 					</li>
 					<li class="lgp-nav-item">
-						<a href="<?php echo esc_url( home_url( '/portal/training' ) ); ?>" class="lgp-nav-link <?php echo $section === 'training' ? 'active' : ''; ?>">
-							<span class="lgp-nav-icon">🎓</span>
-							<?php esc_html_e( 'Training Videos', 'loungenie-portal' ); ?>
+						<a href="<?php echo esc_url( home_url( '/portal/help' ) ); ?>" class="lgp-nav-link <?php echo $section === 'help' ? 'active' : ''; ?>">
+						<span class="lgp-nav-icon">📚</span>
+						<?php esc_html_e( 'Knowledge Center', 'loungenie-portal' ); ?>
 						</a>
 					</li>
 				<?php else : ?>
@@ -146,9 +146,9 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 						</a>
 					</li>
 					<li class="lgp-nav-item">
-						<a href="<?php echo esc_url( home_url( '/portal/training' ) ); ?>" class="lgp-nav-link <?php echo $section === 'training' ? 'active' : ''; ?>">
+						<a href="<?php echo esc_url( home_url( '/portal/help' ) ); ?>" class="lgp-nav-link <?php echo $section === 'help' ? 'active' : ''; ?>">
 							<span class="lgp-nav-icon">🎓</span>
-							<?php esc_html_e( 'Training Videos', 'loungenie-portal' ); ?>
+							<?php esc_html_e( 'Help and Guides', 'loungenie-portal' ); ?>
 						</a>
 					</li>
 				<?php endif; ?>
@@ -165,8 +165,8 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 				$template_file = LGP_PLUGIN_DIR . 'templates/map-view.php';
 			} elseif ( $section === 'gateways' && $is_support ) {
 				$template_file = LGP_PLUGIN_DIR . 'templates/gateway-view.php';
-			} elseif ( $section === 'training' ) {
-				$template_file = LGP_PLUGIN_DIR . 'templates/training-view.php';
+			} elseif ( $section === 'help' ) {
+				$template_file = LGP_PLUGIN_DIR . 'templates/help-guides-view.php';
 			} elseif ( in_array( $section, array( 'tickets', 'requests', 'history' ), true ) ) {
 				$template_file = LGP_PLUGIN_DIR . 'templates/tickets-view.php';
 			} elseif ( $section === 'units' ) {
@@ -194,6 +194,13 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 </div>
 
 <?php wp_footer(); ?>
+
+<?php
+// Admin-only role switcher widget (Partner/Support toggle)
+if ( function_exists( 'lgp_role_switcher_widget' ) ) {
+	echo lgp_role_switcher_widget();
+}
+?>
 
 
 </body>

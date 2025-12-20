@@ -12,18 +12,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class LGP_File_Validator {
 
-	const MAX_FILE_SIZE = 10485760; // 10MB
+	const MAX_FILE_SIZE        = 10485760; // 10MB
 	const MAX_FILES_PER_UPLOAD = 5;
-	const ALLOWED_MIMES = array(
-		'image/jpeg'  => 'jpg|jpeg',
-		'image/png'   => 'png',
-		'application/pdf' => 'pdf',
-		'text/plain'  => 'txt',
+	const ALLOWED_MIMES        = array(
+		'image/jpeg'         => 'jpg|jpeg',
+		'image/png'          => 'png',
+		'application/pdf'    => 'pdf',
+		'text/plain'         => 'txt',
 		'application/msword' => 'doc',
 		'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
 	);
-	const UPLOAD_DIR = 'lgp-attachments';
-	const RETENTION_DAYS = 90;
+	const UPLOAD_DIR           = 'lgp-attachments';
+	const RETENTION_DAYS       = 90;
 
 	/**
 	 * Validate a file before upload
@@ -37,7 +37,10 @@ class LGP_File_Validator {
 		// Check file exists
 		if ( ! isset( $file['tmp_name'] ) || ! is_uploaded_file( $file['tmp_name'] ) ) {
 			$errors[] = __( 'No file uploaded', 'loungenie-portal' );
-			return array( 'valid' => false, 'errors' => $errors );
+			return array(
+				'valid'  => false,
+				'errors' => $errors,
+			);
 		}
 
 		// Check size
@@ -90,7 +93,7 @@ class LGP_File_Validator {
 		}
 
 		// Generate random filename
-		$random = bin2hex( random_bytes( 16 ) );
+		$random    = bin2hex( random_bytes( 16 ) );
 		$sanitized = sanitize_file_name( $original_name );
 		$sanitized = preg_replace( '/[^a-zA-Z0-9_-]/', '', $sanitized );
 
@@ -123,7 +126,7 @@ class LGP_File_Validator {
 		global $wpdb;
 
 		$attachments_table = $wpdb->prefix . 'lgp_attachments';
-		$cutoff_date       = gmdate( 'Y-m-d H:i:s', strtotime( "-" . self::RETENTION_DAYS . " days" ) );
+		$cutoff_date       = gmdate( 'Y-m-d H:i:s', strtotime( '-' . self::RETENTION_DAYS . ' days' ) );
 
 		// Find expired attachments
 		$expired = $wpdb->get_results(

@@ -16,6 +16,7 @@ class LGP_Units_API {
 	 */
 	public static function init() {
 		add_action( 'rest_api_init', array( __CLASS__, 'register_routes' ) );
+		add_action( 'wp_ajax_lgp_get_map_data', array( __CLASS__, 'get_map_data_ajax' ) );
 	}
 
 	/**
@@ -276,5 +277,60 @@ class LGP_Units_API {
 		}
 
 		return false;
+	}
+
+	/**
+	 * AJAX handler to get map data (units + tickets)
+	 */
+	public static function get_map_data_ajax() {
+		check_ajax_referer( 'lgp_map_nonce' );
+
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( array( 'message' => 'Unauthorized' ), 401 );
+		}
+
+		global $wpdb;
+
+		$units_table   = $wpdb->prefix . 'lgp_units';
+		$tickets_table = $wpdb->prefix . 'lgp_tickets';
+
+		// Get units (with role-based filtering)
+		if ( LGP_Auth::is_support() ) {
+			$units = $wpdb->get_results( "SELECT id, name, type, location, latitude, longitude, company_id FROM $units_table" );
+		} else {
+			// Partners only see their company's units
+			$company_id = LGP_Auth::get_user_company_id();
+			$units      = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT id, name, type, location, latitude, longitude, company_id FROM $units_table WHERE company_id = %d",
+					$company_id
+				)
+			);
+		}
+
+		// Get tickets with unit association
+		$tickets = $wpdb->get_results(
+			"SELECT t.id, t.title, t.description, t.unit_id, t.urgency, t.status, t.created_at 
+			 FROM $tickets_table t 
+			 WHERE t.status IN ('open', 'in_progress')"
+		);
+
+		// Filter tickets by user's units if partner
+		if ( ! LGP_Auth::is_support() ) {
+			$unit_ids = array_column( $units, 'id' );
+			$tickets  = array_filter(
+				$tickets,
+				function( $ticket ) use ( $unit_ids ) {
+					return in_array( $ticket->unit_id, $unit_ids );
+				}
+			);
+		}
+
+		wp_send_json_success(
+			array(
+				'units'   => $units,
+				'tickets' => array_values( $tickets ),
+			)
+		);
 	}
 }

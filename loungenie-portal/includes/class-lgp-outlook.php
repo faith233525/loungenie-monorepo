@@ -51,7 +51,7 @@ class LGP_Outlook {
 
 		// Add reply button to portal
 		add_action( 'wp_ajax_lgp_send_outlook_reply', array( __CLASS__, 'ajax_send_reply' ) );
-		
+
 		// Clear error log handler
 		add_action( 'admin_post_lgp_clear_outlook_errors', array( __CLASS__, 'clear_error_log' ) );
 	}
@@ -142,9 +142,14 @@ class LGP_Outlook {
 	 * @param string $subject Email subject
 	 * @param string $body Email body (HTML)
 	 * @param array  $cc CC recipients (optional)
+	 * @param array  $options Optional sender info for "send on behalf"
+	 *                       - 'sender_user_id': WordPress user ID replying
+	 *                       - 'sender_name': Display name of replying user
+	 *                       - 'sender_email': Email of replying user
+	 *                       - 'send_on_behalf': true/false to enable header
 	 * @return bool|WP_Error
 	 */
-	public static function send_email( $to, $subject, $body, $cc = array() ) {
+	public static function send_email( $to, $subject, $body, $cc = array(), $options = array() ) {
 		if ( ! self::is_enabled() ) {
 			return new WP_Error( 'outlook_disabled', __( 'Outlook integration is not enabled', 'loungenie-portal' ) );
 		}
@@ -172,6 +177,18 @@ class LGP_Outlook {
 			),
 			'saveToSentItems' => 'true',
 		);
+
+		// Method 2: Optional "send on behalf" header for shared mailbox
+		// Shows "From: support@company.com on behalf of Jane Doe" in Outlook
+		if ( ! empty( $options['send_on_behalf'] ) && ! empty( $options['sender_email'] ) ) {
+			$message['message']['from'] = array(
+				'emailAddress' => array(
+					'name'    => ! empty( $options['sender_name'] ) ? $options['sender_name'] : '',
+					'address' => $options['sender_email'],
+				),
+			);
+			// The shared mailbox is implicit (logged-in account)
+		}
 
 		// Add CC recipients if provided
 		if ( ! empty( $cc ) ) {
@@ -276,6 +293,8 @@ class LGP_Outlook {
 
 	/**
 	 * Handle AJAX request to send Outlook reply
+	 * Method 1: Portal tracks which user replied (user_id, name, email)
+	 * Method 2: Optional "send on behalf" header in email
 	 */
 	public static function ajax_send_reply() {
 		check_ajax_referer( 'lgp_portal_nonce', 'nonce' );
@@ -286,6 +305,7 @@ class LGP_Outlook {
 
 		$ticket_id = absint( $_POST['ticket_id'] ?? 0 );
 		$message   = sanitize_textarea_field( $_POST['message'] ?? '' );
+		$send_as   = ! empty( $_POST['send_as'] ) ? 'yes' : 'no'; // Optional: user wants "send on behalf" header
 
 		if ( ! $ticket_id || ! $message ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid data', 'loungenie-portal' ) ) );
@@ -312,20 +332,35 @@ class LGP_Outlook {
 			wp_send_json_error( array( 'message' => __( 'Ticket not found', 'loungenie-portal' ) ) );
 		}
 
-		// Send email
-		$result = self::send_notification_email( $ticket_id, $message, $ticket );
+		// Get current user for portal tracking
+		$current_user = wp_get_current_user();
+
+		// Send email with optional "send on behalf" header
+		$send_options = array(
+			'sender_user_id' => $current_user->ID,
+			'sender_name'    => $current_user->display_name,
+			'sender_email'   => $current_user->user_email,
+			'send_on_behalf' => ( $send_as === 'yes' ), // User opted in
+		);
+
+		$result = self::send_notification_email( $ticket_id, $message, $ticket, $send_options );
 
 		if ( is_wp_error( $result ) ) {
 			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
 		}
 
-		// Add reply to ticket thread
+		// Method 1: Add reply to ticket thread with full user tracking
+		// This ensures we always know WHO replied, independent of From header
 		$thread   = json_decode( $ticket->thread_history, true ) ?: array();
 		$thread[] = array(
-			'timestamp' => current_time( 'mysql' ),
-			'user'      => wp_get_current_user()->display_name,
-			'message'   => $message,
-			'via'       => 'outlook',
+			'timestamp'        => current_time( 'mysql' ),
+			'user'             => $current_user->display_name,
+			'user_id'          => $current_user->ID,           // New: user ID
+			'user_email'       => $current_user->user_email,   // New: user email
+			'message'          => $message,
+			'via'              => 'outlook',
+			'sent_from_shared' => 'yes',                        // New: clarify shared mailbox
+			'send_on_behalf'   => ( $send_as === 'yes' ? 'yes' : 'no' ), // New: header used?
 		);
 
 		$wpdb->update(
@@ -408,7 +443,7 @@ class LGP_Outlook {
 					$code    = sanitize_text_field( $_GET['code'] );
 					$success = self::exchange_code_for_token( $code );
 				}
-				
+
 				// Check for OAuth errors
 				if ( isset( $_GET['error'] ) ) {
 					$error_desc = isset( $_GET['error_description'] ) ? $_GET['error_description'] : $_GET['error'];
@@ -416,7 +451,7 @@ class LGP_Outlook {
 					wp_redirect( admin_url( 'options-general.php?page=lgp-outlook-settings&auth=error' ) );
 					exit;
 				}
-				
+
 				// Redirect based on success
 				if ( $success ) {
 					wp_redirect( admin_url( 'options-general.php?page=lgp-outlook-settings&auth=success' ) );
@@ -475,14 +510,14 @@ class LGP_Outlook {
 		if ( isset( $body['access_token'] ) ) {
 			update_option( 'lgp_outlook_access_token', $body['access_token'] );
 			update_option( 'lgp_outlook_token_expires', time() + $body['expires_in'] );
-			
+
 			if ( isset( $body['refresh_token'] ) ) {
 				update_option( 'lgp_outlook_refresh_token', $body['refresh_token'] );
 			}
 
 			// Log success for debugging
 			self::log_error( 'Token exchange successful. Token expires in ' . $body['expires_in'] . ' seconds.' );
-			
+
 			return true;
 		}
 
@@ -545,9 +580,9 @@ class LGP_Outlook {
 
 		// Clear any caches before checking authentication
 		wp_cache_delete( 'lgp_outlook_access_token', 'options' );
-		
+
 		$is_authenticated = ! empty( get_option( 'lgp_outlook_access_token' ) );
-		$redirect_mode   = get_option( 'lgp_outlook_redirect_mode', 'front' );
+		$redirect_mode    = get_option( 'lgp_outlook_redirect_mode', 'front' );
 		$current_redirect = self::get_redirect_uri();
 		?>
 		<div class="wrap">
@@ -758,7 +793,7 @@ class LGP_Outlook {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( __( 'Unauthorized', 'loungenie-portal' ) );
 		}
-		
+
 		delete_option( 'lgp_outlook_errors' );
 		wp_safe_redirect( admin_url( 'options-general.php?page=lgp-outlook-settings' ) );
 		exit;

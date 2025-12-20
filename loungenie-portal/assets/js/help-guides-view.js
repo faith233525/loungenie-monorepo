@@ -1,5 +1,5 @@
 /**
- * Training Videos View JavaScript
+ * Help and Guides View JavaScript
  * Handles video management for Support and viewing for Partners
  * 
  * @package LounGenie Portal
@@ -77,7 +77,7 @@
      */
     async function loadVideos(filters = {}) {
         try {
-            let url = '/wp-json/lgp/v1/training-videos';
+            let url = '/wp-json/lgp/v1/help-guides';
             const params = new URLSearchParams();
 
             if (filters.category) {
@@ -104,7 +104,7 @@
 
         } catch (error) {
             console.error('Error loading videos:', error);
-            showError('Failed to load training videos');
+            showError('Failed to load help and guides');
         }
     }
 
@@ -335,8 +335,8 @@
 
         try {
             const url = videoId
-                ? `/wp-json/lgp/v1/training-videos/${videoId}`
-                : '/wp-json/lgp/v1/training-videos';
+                ? `/wp-json/lgp/v1/help-guides/${videoId}`
+                : '/wp-json/lgp/v1/help-guides';
 
             const method = videoId ? 'PUT' : 'POST';
 
@@ -380,7 +380,7 @@
         }
 
         try {
-            const response = await fetch(`/wp-json/lgp/v1/training-videos/${videoId}`, {
+            const response = await fetch(`/wp-json/lgp/v1/help-guides/${videoId}`, {
                 method: 'DELETE',
                 headers: {
                     'X-WP-Nonce': wpApiSettings.nonce

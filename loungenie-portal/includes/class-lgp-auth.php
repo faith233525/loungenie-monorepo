@@ -15,42 +15,48 @@ if ( ! defined( 'ABSPATH' ) ) {
 use WP_User;
 use WP_Error;
 
+/**
+ * Authentication Handler
+ * Manages user authentication, redirects, and audit logging.
+ *
+ * @package LounGenie\Portal
+ */
 class LGP_Auth {
 
 	/**
 	 * Initialize authentication system
 	 */
 	public static function init() {
-		// Redirect after login to /portal if user has portal role
+		// Redirect after login to /portal if user has portal role.
 		add_filter( 'login_redirect', array( __CLASS__, 'redirect_after_login' ), 10, 3 );
 
-		// Audit logging for authentication events
+		// Audit logging for authentication events.
 		add_action( 'wp_login', array( __CLASS__, 'log_login_success' ), 10, 2 );
 		add_action( 'wp_login_failed', array( __CLASS__, 'log_login_failed' ), 10, 2 );
 		add_action( 'wp_logout', array( __CLASS__, 'log_logout' ) );
 		add_action( 'password_reset', array( __CLASS__, 'log_password_reset' ), 10, 2 );
 		add_action( 'profile_update', array( __CLASS__, 'log_password_change' ), 10, 2 );
 
-		// Prevent partners from landing in WordPress admin; send to /portal instead
+		// Prevent partners from landing in WordPress admin; send to /portal instead.
 		add_action( 'admin_init', array( __CLASS__, 'maybe_redirect_admin_to_portal' ) );
 	}
 
 	/**
-	 * Redirect users to portal after successful login
+	 * Redirect users to portal after successful login.
 	 *
-	 * @param string           $redirect_to URL to redirect to
-	 * @param string           $request URL the user is coming from
-	 * @param WP_User|WP_Error $user User object
-	 * @return string Redirect URL
+	 * @param string           $redirect_to URL to redirect to.
+	 * @param string           $request URL the user is coming from.
+	 * @param WP_User|WP_Error $user User object.
+	 * @return string Redirect URL.
 	 */
 	public static function redirect_after_login( $redirect_to, $request, $user ) {
 		if ( ! isset( $user->roles ) || ! is_array( $user->roles ) ) {
 			return $redirect_to;
 		}
 
-		// Check if user has portal access
+		// Check if user has portal access.
 		$portal_roles = array( 'lgp_support', 'lgp_partner' );
-		if ( array_intersect( $portal_roles, $user->roles ) ) {
+		if ( array_intersect( $portal_roles, (array) $user->roles ) ) {
 			return home_url( '/portal' );
 		}
 
@@ -58,18 +64,18 @@ class LGP_Auth {
 	}
 
 	/**
-	 * Redirect non-admin portal users away from /wp-admin to /portal
+	 * Redirect non-admin portal users away from /wp-admin to /portal.
 	 */
 	public static function maybe_redirect_admin_to_portal() {
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			return; // Allow AJAX
+			return; // Allow AJAX.
 		}
 
 		if ( ! is_user_logged_in() ) {
 			return;
 		}
 
-		// Only act on dashboard/admin pages
+		// Only act on dashboard/admin pages.
 		if ( ! is_admin() ) {
 			return;
 		}
@@ -79,7 +85,7 @@ class LGP_Auth {
 			return;
 		}
 
-		// Allow users with management capabilities to access admin
+		// Allow users with management capabilities to access admin.
 		if ( user_can( $current_user, 'manage_options' ) ) {
 			return;
 		}
@@ -92,9 +98,9 @@ class LGP_Auth {
 	}
 
 	/**
-	 * Check if current user has Support role
+	 * Check if current user has Support Team role.
 	 *
-	 * @return bool
+	 * @return bool True if user is support.
 	 */
 	public static function is_support() {
 		if ( ! is_user_logged_in() ) {
@@ -102,13 +108,13 @@ class LGP_Auth {
 		}
 
 		$current_user = wp_get_current_user();
-		return in_array( 'lgp_support', $current_user->roles );
+		return in_array( 'lgp_support', (array) $current_user->roles, true );
 	}
 
 	/**
-	 * Check if current user has Partner role
+	 * Check if current user has Partner Company role.
 	 *
-	 * @return bool
+	 * @return bool True if user is partner.
 	 */
 	public static function is_partner() {
 		if ( ! is_user_logged_in() ) {
@@ -116,7 +122,7 @@ class LGP_Auth {
 		}
 
 		$current_user = wp_get_current_user();
-		return in_array( 'lgp_partner', $current_user->roles );
+		return in_array( 'lgp_partner', (array) $current_user->roles, true );
 	}
 
 	/**
@@ -238,4 +244,9 @@ class LGP_Auth {
 			);
 		}
 	}
+}
+
+// Provide global alias for legacy references
+if ( ! class_exists( '\\LGP_Auth', false ) ) {
+	class_alias( __NAMESPACE__ . '\\LGP_Auth', 'LGP_Auth' );
 }

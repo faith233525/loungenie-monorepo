@@ -319,10 +319,10 @@ class PerformanceBenchmark {
     private function get_performance_grade($passed, $total) {
         $percent = ($passed / $total) * 100;
         
-        if ($percent >= 90) return "🟢 Excellent (90-100%)";
-        if ($percent >= 70) return "🟡 Good (70-89%)";
-        if ($percent >= 50) return "🟠 Fair (50-69%)";
-        return "🔴 Poor (<50%)";
+        if ($percent >= 90) return "✓ Excellent (90-100%)";
+        if ($percent >= 70) return "✓ Good (70-89%)";
+        if ($percent >= 50) return "⚠ Fair (50-69%)";
+        return "✗ Poor (<50%)";
     }
 }
 

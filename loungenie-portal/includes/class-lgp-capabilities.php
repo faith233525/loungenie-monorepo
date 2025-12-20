@@ -21,33 +21,33 @@ class LGP_Capabilities {
 	 */
 	const CAPABILITIES = array(
 		// Viewing
-		'lgp_view_all_companies'    => 'View all companies (support only)',
-		'lgp_view_own_company'      => 'View own company data (partners)',
-		'lgp_view_units'            => 'View units list',
-		'lgp_view_tickets'          => 'View tickets',
-		'lgp_view_gateways'         => 'View gateway records (support only)',
-		'lgp_view_audit_log'        => 'View audit trail (support only)',
-		'lgp_view_training_videos'  => 'View training library',
+		'lgp_view_all_companies'   => 'View all companies (support only)',
+		'lgp_view_own_company'     => 'View own company data (partners)',
+		'lgp_view_units'           => 'View units list',
+		'lgp_view_tickets'         => 'View tickets',
+		'lgp_view_gateways'        => 'View gateway records (support only)',
+		'lgp_view_audit_log'       => 'View audit trail (support only)',
+		'lgp_view_help_guides'     => 'View help and guides library',
 
 		// Creating
-		'lgp_create_tickets'        => 'Create/submit service requests',
-		'lgp_create_service_notes'  => 'Add internal service notes',
+		'lgp_create_tickets'       => 'Create/submit service requests',
+		'lgp_create_service_notes' => 'Add internal service notes',
 
 		// Managing (mostly support)
-		'lgp_manage_tickets'        => 'Update ticket status',
-		'lgp_manage_gateways'       => 'Modify gateway config (support only)',
-		'lgp_manage_companies'      => 'Edit company records (admin only)',
-		'lgp_manage_training_videos' => 'Upload and manage training videos (support only)',
+		'lgp_manage_tickets'       => 'Update ticket status',
+		'lgp_manage_gateways'      => 'Modify gateway config (support only)',
+		'lgp_manage_companies'     => 'Edit company records (admin only)',
+		'lgp_manage_help_guides'   => 'Upload and manage help and guides (support only)',
 
 		// Replying/Threading
-		'lgp_reply_tickets'         => 'Add replies to ticket thread',
+		'lgp_reply_tickets'        => 'Add replies to ticket thread',
 
 		// Uploading
-		'lgp_upload_attachments'    => 'Attach files to tickets',
+		'lgp_upload_attachments'   => 'Attach files to tickets',
 
 		// Admin
-		'lgp_manage_plugin'         => 'Access plugin settings',
-		'lgp_view_system_health'    => 'View system diagnostics',
+		'lgp_manage_plugin'        => 'Access plugin settings',
+		'lgp_view_system_health'   => 'View system diagnostics',
 	);
 
 	/**
@@ -125,10 +125,10 @@ class LGP_Capabilities {
 			'lgp_view_tickets',
 			'lgp_view_gateways',
 			'lgp_view_audit_log',
-			'lgp_view_training_videos',
+			'lgp_view_help_guides',
 			'lgp_manage_tickets',
 			'lgp_manage_gateways',
-			'lgp_manage_training_videos',
+			'lgp_manage_help_guides',
 			'lgp_reply_tickets',
 			'lgp_upload_attachments',
 			'lgp_create_service_notes',
@@ -141,7 +141,7 @@ class LGP_Capabilities {
 			'lgp_view_own_company',
 			'lgp_view_units',
 			'lgp_view_tickets',
-			'lgp_view_training_videos',
+			'lgp_view_help_guides',
 			'lgp_create_tickets',
 			'lgp_reply_tickets',
 			'lgp_upload_attachments',
@@ -154,7 +154,7 @@ class LGP_Capabilities {
 			'lgp_view_units',
 			'lgp_view_tickets',
 			'lgp_view_audit_log',
-			'lgp_view_training_videos',
+			'lgp_view_help_guides',
 			'lgp_manage_tickets',
 			'lgp_reply_tickets',
 			'lgp_upload_attachments',
@@ -166,7 +166,7 @@ class LGP_Capabilities {
 		// Future: technician role for on-site installations
 		return array(
 			'lgp_view_units',
-			'lgp_view_training_videos',
+			'lgp_view_help_guides',
 			'lgp_create_service_notes',
 			'lgp_upload_attachments',
 		);
@@ -178,7 +178,7 @@ class LGP_Capabilities {
 			'lgp_view_own_company',
 			'lgp_view_units',
 			'lgp_view_tickets',
-			'lgp_view_training_videos',
+			'lgp_view_help_guides',
 		);
 	}
 

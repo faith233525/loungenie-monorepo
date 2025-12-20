@@ -1,4 +1,5 @@
 <?php
+use LounGenie\Portal\LGP_Auth;
 /**
  * Gateway Management Class (Support-Only)
  * Manages LounGenie gateways with audit logging

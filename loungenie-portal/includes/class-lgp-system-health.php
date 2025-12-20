@@ -91,8 +91,8 @@ class LGP_System_Health {
 							<td>
 								<?php if ( $health_data['outlook']['expires_at'] ) : ?>
 									<?php
-									$time_until = $health_data['outlook']['expires_at'] - time();
-									$hours_until = round( $time_until / 3600 );
+									$time_until   = $health_data['outlook']['expires_at'] - time();
+									$hours_until  = round( $time_until / 3600 );
 									$status_class = $time_until < 3600 ? 'danger' : ( $time_until < 86400 ? 'warning' : 'success' );
 									?>
 									<span class="lgp-badge lgp-badge-<?php echo esc_attr( $status_class ); ?>">
@@ -352,11 +352,11 @@ class LGP_System_Health {
 		}
 
 		$outlook_data = array(
-			'configured'   => ! empty( $outlook_client_id ) && ! empty( $outlook_client_secret ),
-			'has_token'    => ! empty( $outlook_token ),
-			'expires_at'   => $outlook_expires ? (int) $outlook_expires : null,
+			'configured'    => ! empty( $outlook_client_id ) && ! empty( $outlook_client_secret ),
+			'has_token'     => ! empty( $outlook_token ),
+			'expires_at'    => $outlook_expires ? (int) $outlook_expires : null,
 			'redirect_mode' => $redirect_mode,
-			'redirect_uri' => $redirect_uri,
+			'redirect_uri'  => $redirect_uri,
 		);
 
 		// System requirements

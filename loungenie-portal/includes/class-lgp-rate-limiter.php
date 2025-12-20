@@ -51,9 +51,9 @@ class LGP_Rate_Limiter {
 		$user_id = get_current_user_id();
 		$ip      = self::get_client_ip();
 
-		$key    = "lgp_rate_{$action}_{$user_id}";
-		$ip_key = "lgp_rate_{$action}_ip_{$ip}";
-		$count  = (int) get_transient( $key );
+		$key      = "lgp_rate_{$action}_{$user_id}";
+		$ip_key   = "lgp_rate_{$action}_ip_{$ip}";
+		$count    = (int) get_transient( $key );
 		$ip_count = (int) get_transient( $ip_key );
 
 		set_transient( $key, $count + 1, $window_secs );

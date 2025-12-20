@@ -58,7 +58,7 @@ class LGP_Assets {
 		wp_enqueue_style(
 			'font-awesome',
 			'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
-			array('lgp-font-montserrat'),
+			array( 'lgp-font-montserrat' ),
 			'6.5.1',
 			'all'
 		);
@@ -95,6 +95,15 @@ class LGP_Assets {
 			'lgp-portal',
 			LGP_ASSETS_URL . 'css/portal.css',
 			array( 'lgp-design-system' ),
+			LGP_VERSION,
+			'all'
+		);
+
+		// Admin role switcher widget styles
+		wp_enqueue_style(
+			'lgp-role-switcher',
+			LGP_ASSETS_URL . 'css/role-switcher.css',
+			array( 'lgp-portal' ),
 			LGP_VERSION,
 			'all'
 		);
@@ -199,12 +208,12 @@ class LGP_Assets {
 			'lgp-portal',
 			'lgpData',
 			array(
-				'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
-				'restUrl'   => rest_url( 'lgp/v1/' ),
-				'nonce'     => wp_create_nonce( 'lgp_portal_nonce' ),
-				'restNonce' => $rest_nonce,
-				'isSupport' => LGP_Auth::is_support(),
-				'isPartner' => LGP_Auth::is_partner(),
+				'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
+				'restUrl'     => rest_url( 'lgp/v1/' ),
+				'nonce'       => wp_create_nonce( 'lgp_portal_nonce' ),
+				'restNonce'   => $rest_nonce,
+				'isSupport'   => LGP_Auth::is_support(),
+				'isPartner'   => LGP_Auth::is_partner(),
 				'companyName' => $company_name,
 				'userEmail'   => $current_user ? $current_user->user_email : '',
 				'userName'    => $current_user ? $current_user->display_name : '',

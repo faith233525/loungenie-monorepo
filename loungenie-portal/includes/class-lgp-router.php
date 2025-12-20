@@ -76,7 +76,7 @@ class LGP_Router {
 		if ( is_admin() || wp_doing_ajax() || wp_doing_cron() ) {
 			return;
 		}
-		
+
 		// Derive the current request path safely.
 		$raw_request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '/';
 		$request_uri     = untrailingslashit( strtok( $raw_request_uri, '?' ) );
@@ -108,11 +108,15 @@ class LGP_Router {
 	 * Handle /portal route
 	 */
 	public static function handle_portal_route() {
-		// Never handle portal routes in admin area
-		if ( is_admin() || wp_doing_ajax() || wp_doing_cron() ) {
+		// Never handle portal routes in admin area or when WP context isn't available
+		$is_admin_context = function_exists( 'is_admin' ) ? is_admin() : false;
+		$doing_ajax       = function_exists( 'wp_doing_ajax' ) ? wp_doing_ajax() : false;
+		$doing_cron       = function_exists( 'wp_doing_cron' ) ? wp_doing_cron() : false;
+
+		if ( $is_admin_context || $doing_ajax || $doing_cron ) {
 			return;
 		}
-		
+
 		if ( ! get_query_var( 'lgp_portal' ) ) {
 			return;
 		}
@@ -129,7 +133,7 @@ class LGP_Router {
 			exit;
 		}
 
-		// Check if user has portal access (Support or Partner role)
+		// Check if user has portal access (Support Team or Partner Company role)
 		$current_user  = wp_get_current_user();
 		$allowed_roles = array( 'lgp_support', 'lgp_partner' );
 
@@ -179,9 +183,9 @@ class LGP_Router {
 			return;
 		}
 
-		// If training section, load training videos view
-		if ( 'training' === $section ) {
-			self::load_training_view();
+		// If help section, load help and guides view
+		if ( 'help' === $section ) {
+			self::load_help_guides_view();
 			return;
 		}
 
@@ -211,10 +215,10 @@ class LGP_Router {
 	}
 
 	/**
-	 * Load training videos view in portal shell
+	 * Load help and guides view in portal shell
 	 */
-	private static function load_training_view() {
-		wp_enqueue_script( 'lgp-training-view', LGP_ASSETS_URL . 'js/training-view.js', array( 'lgp-portal' ), LGP_VERSION, true );
+	private static function load_help_guides_view() {
+		wp_enqueue_script( 'lgp-help-guides-view', LGP_ASSETS_URL . 'js/help-guides-view.js', array( 'lgp-portal' ), LGP_VERSION, true );
 		require_once LGP_PLUGIN_DIR . 'templates/portal-shell.php';
 	}
 

@@ -54,7 +54,12 @@ if ( ! $company ) {
 }
 
 // Fetch related data
-$units    = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $units_table WHERE company_id = %d ORDER BY id DESC", $company_id ) );
+$units = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $units_table WHERE company_id = %d ORDER BY id DESC", $company_id ) );
+
+// Phase 2B: Get color aggregates instead of individual units
+$unit_colors = LGP_Company_Colors::get_company_colors( $company_id );
+$unit_count  = LGP_Company_Colors::get_company_unit_count( $company_id );
+
 $gateways = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $gateways_table WHERE company_id = %d ORDER BY id DESC", $company_id ) );
 $tickets  = $wpdb->get_results(
 	$wpdb->prepare(
@@ -66,7 +71,9 @@ $tickets  = $wpdb->get_results(
 );
 
 // Count metrics
-$total_units               = count( $units );
+$total_units = count( $units );
+// Phase 2B: Use aggregated count instead of fetching all units
+$total_units               = $unit_count;
 $total_gateways            = count( $gateways );
 $open_tickets              = $wpdb->get_var(
 	$wpdb->prepare(
@@ -209,33 +216,78 @@ if ( $company->management_company_id ) {
 <!-- Units Section -->
 <div class="lgp-card" data-section="units">
 	<div class="lgp-card-header collapsible" data-section="units">
-		<h2 class="lgp-card-title"><?php esc_html_e( 'LounGenie Units', 'loungenie-portal' ); ?> (<?php echo esc_html( count( $units ) ); ?>)</h2>
+		<h2 class="lgp-card-title"><?php esc_html_e( 'LounGenie Units', 'loungenie-portal' ); ?> (<?php echo esc_html( $total_units ); ?>)</h2>
 	</div>
 	<div class="lgp-card-body">
-		<?php if ( ! empty( $units ) ) : ?>
-			<div class="lgp-table-container lgp-max-h-400">
-				<table class="lgp-table">
-					<thead>
-						<tr>
-							<th><?php esc_html_e( 'ID', 'loungenie-portal' ); ?></th>
-							<th><?php esc_html_e( 'Address', 'loungenie-portal' ); ?></th>
-							<th><?php esc_html_e( 'Lock Type', 'loungenie-portal' ); ?></th>
-							<th><?php esc_html_e( 'Status', 'loungenie-portal' ); ?></th>
-							<th><?php esc_html_e( 'Color', 'loungenie-portal' ); ?></th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php foreach ( $units as $unit ) : ?>
-							<tr>
-								<td>#<?php echo esc_html( $unit->id ); ?></td>
-								<td><?php echo esc_html( substr( $unit->address ?? 'N/A', 0, 40 ) ); ?></td>
-								<td><?php echo esc_html( $unit->lock_type ?? 'N/A' ); ?></td>
-								<td><span class="lgp-badge lgp-badge-info"><?php echo esc_html( ucfirst( $unit->status ?? 'unknown' ) ); ?></span></td>
-								<td><?php echo esc_html( $unit->color_tag ?? 'N/A' ); ?></td>
-							</tr>
+		<!-- Phase 2B: Color Distribution (Company-level aggregates only) -->
+		<?php if ( ! empty( $unit_colors ) ) : ?>
+			<div class="lgp-color-distribution">
+				<div class="lgp-color-legend">
+					<p class="lgp-text-muted lgp-mb-3">
+						<?php esc_html_e( 'Unit distribution by status color:', 'loungenie-portal' ); ?>
+					</p>
+					<div class="lgp-color-bars">
+						<?php
+						$total = array_sum( $unit_colors );
+						foreach ( $unit_colors as $color => $count ) :
+							$percentage = $total > 0 ? round( ( $count / $total ) * 100, 1 ) : 0;
+							$hex_color  = LGP_Company_Colors::get_color_hex( $color );
+							?>
+							<div class="lgp-color-bar-item lgp-mb-3">
+								<div class="lgp-flex lgp-justify-between lgp-items-center lgp-mb-1">
+									<div class="lgp-flex lgp-items-center">
+										<span class="lgp-color-indicator" style="background-color: <?php echo esc_attr( $hex_color ); ?>; width: 20px; height: 20px; display: inline-block; border-radius: 3px; margin-right: 8px; border: 1px solid #ddd;"></span>
+										<span class="lgp-color-name lgp-font-medium">
+											<?php echo esc_html( ucfirst( $color ) ); ?>
+										</span>
+									</div>
+									<span class="lgp-color-count lgp-text-muted">
+										<?php
+										/* translators: %1$d: unit count, %2$s: percentage */
+										printf( esc_html__( '%1$d units (%2$s%%)', 'loungenie-portal' ), $count, $percentage );
+										?>
+									</span>
+								</div>
+								<div class="lgp-progress-bar" style="background-color: #e0e0e0; height: 8px; border-radius: 4px; overflow: hidden;">
+									<div class="lgp-progress-fill" style="background-color: <?php echo esc_attr( $hex_color ); ?>; width: <?php echo esc_attr( $percentage ); ?>%; height: 100%;"></div>
+								</div>
+							</div>
 						<?php endforeach; ?>
-					</tbody>
-				</table>
+					</div>
+				</div>
+				
+				<?php if ( $is_support ) : ?>
+					<!-- Support: Show detailed units table -->
+					<div class="lgp-mt-4">
+						<button type="button" class="lgp-btn lgp-btn-secondary" onclick="this.nextElementSibling.classList.toggle('lgp-hidden')">
+							<?php esc_html_e( 'View Detailed Unit List', 'loungenie-portal' ); ?>
+						</button>
+						<div class="lgp-table-container lgp-max-h-400 lgp-mt-2 lgp-hidden">
+							<table class="lgp-table">
+								<thead>
+									<tr>
+										<th><?php esc_html_e( 'ID', 'loungenie-portal' ); ?></th>
+										<th><?php esc_html_e( 'Address', 'loungenie-portal' ); ?></th>
+										<th><?php esc_html_e( 'Lock Type', 'loungenie-portal' ); ?></th>
+										<th><?php esc_html_e( 'Status', 'loungenie-portal' ); ?></th>
+										<th><?php esc_html_e( 'Color', 'loungenie-portal' ); ?></th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php foreach ( $units as $unit ) : ?>
+										<tr>
+											<td>#<?php echo esc_html( $unit->id ); ?></td>
+											<td><?php echo esc_html( substr( $unit->address ?? 'N/A', 0, 40 ) ); ?></td>
+											<td><?php echo esc_html( $unit->lock_type ?? 'N/A' ); ?></td>
+											<td><span class="lgp-badge lgp-badge-info"><?php echo esc_html( ucfirst( $unit->status ?? 'unknown' ) ); ?></span></td>
+											<td><?php echo esc_html( $unit->color_tag ?? 'N/A' ); ?></td>
+										</tr>
+									<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				<?php endif; ?>
 			</div>
 		<?php else : ?>
 			<p><?php esc_html_e( 'No units found for this company.', 'loungenie-portal' ); ?></p>

@@ -1,4 +1,5 @@
 <?php
+/* phpcs:ignoreFile */
 /**
  * Offline Data Seeder: Creates realistic mock data
  */

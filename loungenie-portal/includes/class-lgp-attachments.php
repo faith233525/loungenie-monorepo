@@ -38,9 +38,9 @@ class LGP_Attachments {
 			'lgp-attachments',
 			'lgpAttachments',
 			array(
-				'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
-				'nonce'       => wp_create_nonce( 'lgp_attachment_nonce' ),
-				'maxFileSize' => self::get_max_file_size(),
+				'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
+				'nonce'        => wp_create_nonce( 'lgp_attachment_nonce' ),
+				'maxFileSize'  => self::get_max_file_size(),
 				'allowedTypes' => self::get_allowed_file_types(),
 			)
 		);
@@ -161,9 +161,9 @@ class LGP_Attachments {
 		wp_update_attachment_metadata( $attachment_id, $attach_data );
 
 		return array(
-			'success'  => true,
-			'file_id'  => $attachment_id,
-			'url'      => $movefile['url'],
+			'success'   => true,
+			'file_id'   => $attachment_id,
+			'url'       => $movefile['url'],
 			'file_name' => $file['name'],
 		);
 	}
@@ -216,12 +216,12 @@ class LGP_Attachments {
 		}
 
 		return array(
-			'id'    => $attachment_id,
-			'name'  => $attachment->post_title,
-			'url'   => wp_get_attachment_url( $attachment_id ),
-			'size'  => filesize( get_attached_file( $attachment_id ) ),
-			'type'  => $attachment->post_mime_type,
-			'date'  => $attachment->post_date,
+			'id'   => $attachment_id,
+			'name' => $attachment->post_title,
+			'url'  => wp_get_attachment_url( $attachment_id ),
+			'size' => filesize( get_attached_file( $attachment_id ) ),
+			'type' => $attachment->post_mime_type,
+			'date' => $attachment->post_date,
 		);
 	}
 

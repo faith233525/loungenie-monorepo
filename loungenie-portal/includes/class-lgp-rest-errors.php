@@ -18,71 +18,71 @@ class LGP_REST_Errors {
 	 */
 	const ERROR_CODES = array(
 		// 400-level: Client errors
-		'lgp_validation_failed'  => array(
+		'lgp_validation_failed' => array(
 			'status'  => 400,
 			'message' => 'Validation failed',
 		),
-		'lgp_missing_field'      => array(
+		'lgp_missing_field'     => array(
 			'status'  => 400,
 			'message' => 'Missing required field',
 		),
-		'lgp_invalid_type'       => array(
+		'lgp_invalid_type'      => array(
 			'status'  => 400,
 			'message' => 'Invalid data type',
 		),
-		'lgp_invalid_format'     => array(
+		'lgp_invalid_format'    => array(
 			'status'  => 400,
 			'message' => 'Invalid format',
 		),
 
 		// 401-level: Auth errors
-		'lgp_not_authenticated'  => array(
+		'lgp_not_authenticated' => array(
 			'status'  => 401,
 			'message' => 'Authentication required',
 		),
 
 		// 403-level: Permission errors
-		'lgp_forbidden'          => array(
+		'lgp_forbidden'         => array(
 			'status'  => 403,
 			'message' => 'Access denied',
 		),
-		'lgp_insufficient_caps'  => array(
+		'lgp_insufficient_caps' => array(
 			'status'  => 403,
 			'message' => 'Insufficient permissions',
 		),
 
 		// 404-level: Not found
-		'lgp_not_found'          => array(
+		'lgp_not_found'         => array(
 			'status'  => 404,
 			'message' => 'Resource not found',
 		),
 
 		// 409-level: Conflict
-		'lgp_conflict'           => array(
+		'lgp_conflict'          => array(
 			'status'  => 409,
 			'message' => 'Resource conflict',
 		),
-		'lgp_duplicate'          => array(
+		'lgp_duplicate'         => array(
 			'status'  => 409,
 			'message' => 'Resource already exists',
 		),
 
 		// 429-level: Rate limiting
-		'lgp_rate_limited'       => array(
+		'lgp_rate_limited'      => array(
 			'status'  => 429,
 			'message' => 'Too many requests',
 		),
 
 		// 500-level: Server errors
-		'lgp_database_error'     => array(
+		'lgp_database_error'    => array(
 			'status'  => 500,
 			'message' => 'Database error',
 		),
-		'lgp_internal_error'     => array(
+		'lgp_internal_error'    => array(
 			'status'  => 500,
 			'message' => 'Internal server error',
 		),
-		'lgp_integration_error'  => array(
+		'lgp_integration_error' => array(
 			'status'  => 500,
 			'message' => 'External service error',
 		),
@@ -147,7 +147,10 @@ class LGP_REST_Errors {
 		return self::error(
 			'lgp_not_found',
 			"{$resource} #{$id} not found",
-			array( 'resource' => $resource, 'id' => $id )
+			array(
+				'resource' => $resource,
+				'id'       => $id,
+			)
 		);
 	}
 

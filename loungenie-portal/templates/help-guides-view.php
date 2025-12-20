@@ -1,6 +1,6 @@
 <?php
 /**
- * Training Videos View
+ * Help and Guides View
  * Support: Upload and manage videos
  * Partners: View assigned videos
  *
@@ -15,21 +15,21 @@ $is_support = LGP_Auth::is_support();
 $categories = LGP_Training_Video::get_categories();
 ?>
 
-<div class="lgp-training-container">
+<div class="lgp-help-guides-container">
 	<div class="lgp-page-header">
-		<h1><?php esc_html_e( 'Training Videos', 'loungenie-portal' ); ?></h1>
+		<h1><?php esc_html_e( 'Help and Guides', 'loungenie-portal' ); ?></h1>
 		<?php if ( $is_support ) : ?>
 			<button id="lgp-add-video-btn" class="lgp-btn lgp-btn-primary">
-				<?php esc_html_e( '+ Add Video', 'loungenie-portal' ); ?>
+				<?php esc_html_e( '+ Add Guide', 'loungenie-portal' ); ?>
 			</button>
 		<?php endif; ?>
 	</div>
 	
 	<!-- Filters -->
-	<div class="lgp-training-filters">
+	<div class="lgp-help-guides-filters">
 		<input 
 			type="search" 
-			id="lgp-training-search" 
+			id="lgp-help-guides-search" 
 			placeholder="<?php esc_attr_e( 'Search videos...', 'loungenie-portal' ); ?>"
 			class="lgp-search-input"
 		/>
@@ -45,15 +45,15 @@ $categories = LGP_Training_Video::get_categories();
 	</div>
 	
 	<!-- Video Grid -->
-	<div id="lgp-training-grid" class="lgp-training-grid">
+	<div id="lgp-help-guides-grid" class="lgp-help-guides-grid">
 		<div class="lgp-loading"><?php esc_html_e( 'Loading videos...', 'loungenie-portal' ); ?></div>
 	</div>
 	
 	<!-- No Videos Message -->
 	<div id="lgp-no-videos" class="lgp-empty-state lgp-hidden">
-		<p><?php esc_html_e( 'No training videos available.', 'loungenie-portal' ); ?></p>
+		<p><?php esc_html_e( 'No help and guides available.', 'loungenie-portal' ); ?></p>
 		<?php if ( $is_support ) : ?>
-			<p><?php esc_html_e( 'Click "Add Video" to create your first training video.', 'loungenie-portal' ); ?></p>
+			<p><?php esc_html_e( 'Click "Add Guide" to create your first help guide.', 'loungenie-portal' ); ?></p>
 		<?php endif; ?>
 	</div>
 </div>
@@ -63,7 +63,7 @@ $categories = LGP_Training_Video::get_categories();
 <div id="lgp-video-modal" class="lgp-modal-overlay hidden">
 	<div class="lgp-modal">
 		<div class="lgp-modal-header">
-			<h3 id="lgp-modal-title"><?php esc_html_e( 'Add Training Video', 'loungenie-portal' ); ?></h3>
+			<h3 id="lgp-modal-title"><?php esc_html_e( 'Add Help Guide', 'loungenie-portal' ); ?></h3>
 			<button class="lgp-modal-close">&times;</button>
 		</div>
 		<div class="lgp-modal-body">

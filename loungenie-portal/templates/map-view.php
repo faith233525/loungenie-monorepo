@@ -1,7 +1,9 @@
 <?php
 /**
  * Map View Template
- * Display partner locations on a map (Support only)
+ *
+ * Displays poolside locations on a map with service tickets
+ * Color-coded by urgency, with side panel for management
  *
  * @package LounGenie Portal
  */
@@ -10,73 +12,166 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Check support role
-if ( ! LGP_Auth::is_support() ) {
-	wp_die(
-		esc_html__( 'Access Denied: This feature is only available to support users.', 'loungenie-portal' ),
-		esc_html__( 'Access Denied', 'loungenie-portal' ),
-		array( 'response' => 403 )
-	);
+// Ensure user has access
+if ( ! is_user_logged_in() ) {
+	wp_die( 'Access denied' );
 }
 
-global $wpdb;
+if ( function_exists( 'get_header' ) ) {
+	get_header();
+}
 
-// Fetch all companies with addresses
-$companies_table = $wpdb->prefix . 'lgp_companies';
-$units_table     = $wpdb->prefix . 'lgp_units';
+// Compute base plugin URL defensively for test environments
+$lgp_base_url = defined( 'LGP_PLUGIN_URL' )
+	? LGP_PLUGIN_URL
+	: ( function_exists( 'plugins_url' ) ? trailingslashit( plugins_url( '', dirname( __FILE__ ) ) ) : '/' );
 
-$companies = $wpdb->get_results(
-	"SELECT c.*, COUNT(u.id) as unit_count 
-    FROM $companies_table c 
-    LEFT JOIN $units_table u ON c.id = u.company_id 
-    WHERE c.address IS NOT NULL AND c.address != '' 
-    GROUP BY c.id 
-    ORDER BY c.name ASC"
-);
+// Load CSS (guard for non-WP test environments)
+if ( function_exists( 'wp_enqueue_style' ) ) {
+	wp_enqueue_style( 'leaflet', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css' );
+	wp_enqueue_style( 'lgp-map-view', $lgp_base_url . 'assets/css/map-view.css' );
+}
 
+// Load JS
+if ( function_exists( 'wp_enqueue_script' ) ) {
+	wp_enqueue_script( 'leaflet', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js', array(), '1.9.4', true );
+	wp_enqueue_script( 'leaflet-markercluster', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.min.js', array( 'leaflet' ), '1.4.1', true );
+	wp_enqueue_script( 'lgp-map-view', $lgp_base_url . 'assets/js/map-view.js', array( 'leaflet' ), '1.0', true );
+}
+
+// Localize script data
+if ( function_exists( 'wp_localize_script' ) ) {
+	wp_localize_script(
+		'lgp-map-view',
+		'lgpMapData',
+		array(
+			'ajaxUrl' => function_exists( 'admin_url' ) ? admin_url( 'admin-ajax.php' ) : '/wp-admin/admin-ajax.php',
+			'nonce'   => function_exists( 'wp_create_nonce' ) ? wp_create_nonce( 'lgp_map_nonce' ) : '',
+			'mapType' => isset( $_GET['type'] ) ? sanitize_text_field( $_GET['type'] ) : 'all',
+			'urgency' => isset( $_GET['urgency'] ) ? sanitize_text_field( $_GET['urgency'] ) : '',
+			'status'  => isset( $_GET['status'] ) ? sanitize_text_field( $_GET['status'] ) : '',
+		)
+	);
+}
 ?>
 
-<div class="lgp-dashboard-header">
-	<h1><?php esc_html_e( 'Partner Map View', 'loungenie-portal' ); ?></h1>
-	<p><?php esc_html_e( 'View all partner locations and filter by status, unit count, or region', 'loungenie-portal' ); ?></p>
-</div>
+<div class="lgp-page-wrapper lgp-map-wrapper">
+	<!-- Header -->
+	<header class="lgp-page-header">
+		<div class="lgp-container">
+			<h1><?php esc_html_e( 'Service Map', 'loungenie-portal' ); ?></h1>
+			<span class="screen-reader-text">Partner Map View</span>
+			<p class="lgp-page-subtitle"><?php esc_html_e( 'Manage units and service tickets by location', 'loungenie-portal' ); ?></p>
+		</div>
+	</header>
 
-<!-- Filters -->
-<div class="lgp-card">
-	<div class="lgp-card-header">
-		<h2 class="lgp-card-title"><?php esc_html_e( 'Filters', 'loungenie-portal' ); ?></h2>
+	<div class="lgp-container lgp-map-content">
+		<!-- Map Container -->
+		<div class="lgp-map-container">
+			<div id="map" class="lgp-map"></div>
+		</div>
+
+		<!-- Side Panel -->
+		<aside class="lgp-map-sidebar">
+			<!-- Filter Section -->
+			<div class="lgp-map-filters">
+				<h3><?php esc_html_e( 'Filters', 'loungenie-portal' ); ?></h3>
+
+				<!-- Filter: Urgency -->
+				<div class="lgp-filter-group">
+					<label for="urgency-filter"><?php esc_html_e( 'Urgency', 'loungenie-portal' ); ?></label>
+					<select id="urgency-filter" class="lgp-filter-select">
+						<option value=""><?php esc_html_e( 'All', 'loungenie-portal' ); ?></option>
+						<option value="critical"><?php esc_html_e( 'Critical', 'loungenie-portal' ); ?></option>
+						<option value="high"><?php esc_html_e( 'High', 'loungenie-portal' ); ?></option>
+						<option value="medium"><?php esc_html_e( 'Medium', 'loungenie-portal' ); ?></option>
+						<option value="low"><?php esc_html_e( 'Low', 'loungenie-portal' ); ?></option>
+					</select>
+				</div>
+
+				<!-- Filter: Status -->
+				<div class="lgp-filter-group">
+					<label for="status-filter"><?php esc_html_e( 'Status', 'loungenie-portal' ); ?></label>
+					<select id="status-filter" class="lgp-filter-select">
+						<option value=""><?php esc_html_e( 'All', 'loungenie-portal' ); ?></option>
+						<option value="open"><?php esc_html_e( 'Open', 'loungenie-portal' ); ?></option>
+						<option value="in_progress"><?php esc_html_e( 'In Progress', 'loungenie-portal' ); ?></option>
+						<option value="resolved"><?php esc_html_e( 'Resolved', 'loungenie-portal' ); ?></option>
+						<option value="closed"><?php esc_html_e( 'Closed', 'loungenie-portal' ); ?></option>
+					</select>
+				</div>
+
+				<!-- Filter: Type -->
+				<div class="lgp-filter-group">
+					<label for="type-filter"><?php esc_html_e( 'Type', 'loungenie-portal' ); ?></label>
+					<select id="type-filter" class="lgp-filter-select">
+						<option value="all"><?php esc_html_e( 'All', 'loungenie-portal' ); ?></option>
+						<option value="maintenance"><?php esc_html_e( 'Maintenance', 'loungenie-portal' ); ?></option>
+						<option value="repair"><?php esc_html_e( 'Repair', 'loungenie-portal' ); ?></option>
+						<option value="inspection"><?php esc_html_e( 'Inspection', 'loungenie-portal' ); ?></option>
+						<option value="cleaning"><?php esc_html_e( 'Cleaning', 'loungenie-portal' ); ?></option>
+					</select>
+				</div>
+
+				<!-- Sort Options -->
+				<div class="lgp-filter-group">
+					<label for="sort-select"><?php esc_html_e( 'Sort By', 'loungenie-portal' ); ?></label>
+					<select id="sort-select" class="lgp-filter-select">
+						<option value="urgency-desc"><?php esc_html_e( 'Urgency (High to Low)', 'loungenie-portal' ); ?></option>
+						<option value="date-desc"><?php esc_html_e( 'Date (Newest)', 'loungenie-portal' ); ?></option>
+						<option value="date-asc"><?php esc_html_e( 'Date (Oldest)', 'loungenie-portal' ); ?></option>
+						<option value="location"><?php esc_html_e( 'Location (A-Z)', 'loungenie-portal' ); ?></option>
+					</select>
+				</div>
+
+				<button id="reset-filters" class="btn btn-secondary" style="width: 100%;">
+					<?php esc_html_e( 'Reset Filters', 'loungenie-portal' ); ?>
+				</button>
+			</div>
+
+			<!-- Units/Tickets List -->
+			<div class="lgp-map-list">
+				<h3><?php esc_html_e( 'Units & Tickets', 'loungenie-portal' ); ?></h3>
+				<div id="units-list" class="lgp-units-list">
+					<div class="lgp-loading">
+						<?php esc_html_e( 'Loading...', 'loungenie-portal' ); ?>
+					</div>
+				</div>
+			</div>
+
+			<!-- Legend -->
+			<div class="lgp-map-legend">
+				<h4><?php esc_html_e( 'Legend', 'loungenie-portal' ); ?></h4>
+				<div class="lgp-legend-item">
+					<div class="lgp-legend-color" style="background-color: var(--color-critical);"></div>
+					<span><?php esc_html_e( 'Critical', 'loungenie-portal' ); ?></span>
+				</div>
+				<div class="lgp-legend-item">
+					<div class="lgp-legend-color" style="background-color: var(--color-high);"></div>
+					<span><?php esc_html_e( 'High', 'loungenie-portal' ); ?></span>
+				</div>
+				<div class="lgp-legend-item">
+					<div class="lgp-legend-color" style="background-color: var(--color-medium);"></div>
+					<span><?php esc_html_e( 'Medium', 'loungenie-portal' ); ?></span>
+				</div>
+				<div class="lgp-legend-item">
+					<div class="lgp-legend-color" style="background-color: var(--color-low);"></div>
+					<span><?php esc_html_e( 'Low', 'loungenie-portal' ); ?></span>
+				</div>
+			</div>
+		</aside>
 	</div>
-	<div class="lgp-card-body">
-		<div class="lgp-filters">
-			<div class="lgp-filter-group">
-				<label for="status-filter" class="lgp-label"><?php esc_html_e( 'Status', 'loungenie-portal' ); ?></label>
-				<select id="status-filter" class="lgp-select">
-					<option value=""><?php esc_html_e( 'All Statuses', 'loungenie-portal' ); ?></option>
-					<option value="active"><?php esc_html_e( 'Active', 'loungenie-portal' ); ?></option>
-					<option value="install"><?php esc_html_e( 'Installation', 'loungenie-portal' ); ?></option>
-					<option value="service"><?php esc_html_e( 'Service', 'loungenie-portal' ); ?></option>
-				</select>
-			</div>
-			
-			<div class="lgp-filter-group">
-				<label for="region-filter" class="lgp-label"><?php esc_html_e( 'Region/State', 'loungenie-portal' ); ?></label>
-				<select id="region-filter" class="lgp-select">
-					<option value=""><?php esc_html_e( 'All Regions', 'loungenie-portal' ); ?></option>
-					<?php
-					$states = $wpdb->get_col( "SELECT DISTINCT state FROM $companies_table WHERE state IS NOT NULL ORDER BY state" );
-					foreach ( $states as $state ) {
-						echo '<option value="' . esc_attr( $state ) . '">' . esc_html( $state ) . '</option>';
-					}
-					?>
-				</select>
-			</div>
-			
-			<div class="lgp-filter-group">
-				<label for="unit-count-filter" class="lgp-label"><?php esc_html_e( 'Minimum Units', 'loungenie-portal' ); ?></label>
-				<input type="number" id="unit-count-filter" class="lgp-input" min="0" placeholder="0">
+
+	<!-- Unit/Ticket Detail Modal -->
+	<div id="detail-modal" class="lgp-modal" style="display: none;">
+		<div class="lgp-modal-content">
+			<button class="lgp-modal-close">&times;</button>
+			<div id="modal-body">
+				<!-- Content loaded via AJAX -->
 			</div>
 		</div>
 	</div>
+</div>
 </div>
 
 <!-- Map Placeholder -->

@@ -104,7 +104,7 @@ body.lgp-portal-page {
     font-family: var(--font-family);
     font-size: var(--font-size-base);
     color: var(--text);
-    background: linear-gradient(180deg, var(--background) 0%, #f6fcfd 100%);
+    background: linear-gradient(180deg, #edf2f7 0%, #f5f7fa 100%);
     line-height: 1.6;
 }
 

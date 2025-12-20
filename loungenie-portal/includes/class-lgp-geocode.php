@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Lightweight geocoding helper using free Nominatim (OpenStreetMap)
  * Caches coordinates on the company record to avoid repeat lookups.
@@ -9,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class LGP_Geocode {
+
 	private const ENDPOINT     = 'https://nominatim.openstreetmap.org/search';
 	private const CACHE_PREFIX = 'lgp_geocode_';
 
@@ -52,10 +54,16 @@ class LGP_Geocode {
 	 * @return array
 	 */
 	public static function get_company_markers_for_map() {
-		if ( ! class_exists( 'LGP_Auth' ) || ! LGP_Auth::is_support() ) {
-			return array();
+		// Allow when user can manage options (support) or LGP_Auth says support
+		if ( function_exists( 'current_user_can' ) && current_user_can( 'manage_options' ) ) {
+			return self::get_company_markers();
 		}
-		return self::get_company_markers();
+
+		if ( class_exists( 'LGP_Auth' ) && LGP_Auth::is_support() ) {
+			return self::get_company_markers();
+		}
+
+		return array();
 	}
 
 	/**

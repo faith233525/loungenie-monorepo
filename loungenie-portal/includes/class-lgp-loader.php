@@ -40,14 +40,23 @@ class LGP_Loader {
 		// Phase 3: APIs & Logging
 		LGP_Logger::init();        // Audit logging
 		LGP_Notifications::init(); // Alert system
+		LGP_Company_Colors::init(); // Color aggregation (Phase 2B)
 		self::register_rest_apis();
 
 		// Phase 4: Features (optional, independently initialized)
-		LGP_Email_Handler::init();
+		if ( ! self::use_new_email_pipeline() ) {
+			// Legacy POP3/Graph hybrid handler
+			LGP_Email_Handler::init();
+		}
 		LGP_Microsoft_SSO::init();
 		LGP_HubSpot::init();
 		LGP_Outlook::init();
 		LGP_System_Health::init();
+
+		// Admin Tools
+		if ( is_admin() || current_user_can( 'manage_options' ) ) {
+			require_once plugin_dir_path( __FILE__ ) . 'class-lgp-role-switcher.php';
+		}
 	}
 
 	/**
@@ -57,12 +66,41 @@ class LGP_Loader {
 	 * Note: service-notes.php and audit-log.php self-register via add_action
 	 */
 	private static function register_rest_apis() {
-		LGP_Companies_API::init();
-		LGP_Units_API::init();
-		LGP_Tickets_API::init();
-		LGP_Gateways_API::init();
-		LGP_Training_Videos_API::init();
-		LGP_Attachments_API::init();
+		// Core API endpoints
+		if ( class_exists( 'LGP_Companies_API' ) ) {
+			LGP_Companies_API::init();
+		}
+		if ( class_exists( 'LGP_Units_API' ) ) {
+			LGP_Units_API::init();
+		}
+		if ( class_exists( 'LGP_Tickets_API' ) ) {
+			LGP_Tickets_API::init();
+		}
+		if ( class_exists( 'LGP_Gateways_API' ) ) {
+			LGP_Gateways_API::init();
+		}
+		if ( class_exists( 'LGP_Help_Guides_API' ) ) {
+			LGP_Help_Guides_API::init();
+		}
+		if ( class_exists( 'LGP_Attachments_API' ) ) {
+			LGP_Attachments_API::init();
+		}
+
+		// Feature API endpoints - with file existence checks
+		if ( file_exists( LGP_PLUGIN_DIR . 'api/dashboard.php' ) ) {
+			require_once LGP_PLUGIN_DIR . 'api/dashboard.php';
+			if ( class_exists( 'LGP_Dashboard_API' ) ) {
+				LGP_Dashboard_API::init();
+			}
+		}
+
+		if ( file_exists( LGP_PLUGIN_DIR . 'api/map.php' ) ) {
+			require_once LGP_PLUGIN_DIR . 'api/map.php';
+			if ( class_exists( 'LGP_Map_API' ) ) {
+				LGP_Map_API::init();
+			}
+		}
+
 		// Service Notes and Audit Log self-register when loaded (functional approach)
 	}
 
@@ -89,5 +127,30 @@ class LGP_Loader {
 			// eslint-disable-next-line no-console
 			error_log( "LGP_Loader: [{$component}] {$status}" . ( $message ? " - {$message}" : '' ) );
 		}
+	}
+
+	/**
+	 * Determine if the new Graph-based email pipeline is enabled.
+	 * Priority: Constant > Env var > Option.
+	 */
+	private static function use_new_email_pipeline() {
+		// Constant override
+		if ( defined( 'LGP_EMAIL_PIPELINE' ) ) {
+			return 'new' === LGP_EMAIL_PIPELINE || true === LGP_EMAIL_PIPELINE || 1 === LGP_EMAIL_PIPELINE;
+		}
+
+		// Env var
+		$env = getenv( 'LGP_EMAIL_PIPELINE' );
+		if ( $env ) {
+			$env = strtolower( trim( $env ) );
+			return in_array( $env, array( 'new', 'true', '1', 'on' ), true );
+		}
+
+		// Option flag
+		if ( function_exists( 'get_option' ) ) {
+			return (bool) get_option( 'lgp_use_new_email_pipeline', false );
+		}
+
+		return false;
 	}
 }

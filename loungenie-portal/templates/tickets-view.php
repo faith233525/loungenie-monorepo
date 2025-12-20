@@ -58,7 +58,7 @@ $priorities    = array( 'urgent', 'high', 'normal' );
 $request_types = array( 'install', 'maintenance', 'repair', 'update', 'general' );
 $statuses      = array( 'open', 'pending', 'closed' );
 
-$rest_base = esc_url_raw( rest_url( 'lgp/v1/' ) );
+$rest_base  = esc_url_raw( rest_url( 'lgp/v1/' ) );
 $rest_nonce = wp_create_nonce( 'wp_rest' );
 ?>
 

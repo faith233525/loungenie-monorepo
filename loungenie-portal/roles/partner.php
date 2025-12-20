@@ -1,8 +1,8 @@
 <?php
 /**
- * Partner Role Definition
+ * Partner Company Role Definition
  * 
- * Partner Role Capabilities:
+ * Partner Company Capabilities:
  * - View only their company and management company
  * - View their LounGenie unit count
  * - Submit service / install / update requests
@@ -34,7 +34,7 @@ class LGP_Partner_Role {
         // Add role with capabilities
         add_role(
             'lgp_partner',
-            __( 'LounGenie Partner', 'loungenie-portal' ),
+            __( 'LounGenie Partner Company', 'loungenie-portal' ),
             $caps
         );
 

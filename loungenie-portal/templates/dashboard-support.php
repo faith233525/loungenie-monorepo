@@ -93,19 +93,20 @@ $yearround_units = $wpdb->get_var( "SELECT COUNT(*) FROM $units_table WHERE seas
 	<div class="lgp-dashboard-header">
 		<h1><?php esc_html_e( 'Support Dashboard', 'loungenie-portal' ); ?></h1>
 		<p><?php esc_html_e( 'Overview of all companies, units, and support tickets', 'loungenie-portal' ); ?></p>
+		<p class="lgp-dashboard-subbrand">MyPOOLSAFE</p>
 	</div>
 
 	<!-- Welcome Banner -->
 	<div class="lgp-support-welcome" role="note">
-		<h3 class="lgp-support-welcome-title"><?php esc_html_e( 'Welcome to the LounGenie Support Portal!', 'loungenie-portal' ); ?></h3>
-		<p class="lgp-support-welcome-body"><?php esc_html_e( 'Track partner updates, service requests, and units all in one place. Let\'s keep everything running smoothly!', 'loungenie-portal' ); ?></p>
+		<h3 class="lgp-support-welcome-title"><?php esc_html_e( 'Welcome to the LounGenie Support Team Portal!', 'loungenie-portal' ); ?></h3>
+		<p class="lgp-support-welcome-body"><?php esc_html_e( 'Track partner company updates, service requests, and units all in one place. Let\'s keep everything running smoothly!', 'loungenie-portal' ); ?></p>
 	</div>
 
 	<!-- Orientation Card -->
 	<div class="lgp-orientation-card" aria-label="<?php esc_attr_e( 'Dashboard Orientation', 'loungenie-portal' ); ?>">
 		<div class="lgp-orientation-left">
 			<div class="lgp-orientation-title">
-				<?php esc_html_e( 'Support Operations', 'loungenie-portal' ); ?>
+				<?php esc_html_e( 'Support Team Operations', 'loungenie-portal' ); ?>
 			</div>
 			<?php if ( ! empty( $support_team_location ) ) : ?>
 				<div class="lgp-orientation-subtitle">
@@ -190,7 +191,7 @@ $yearround_units = $wpdb->get_var( "SELECT COUNT(*) FROM $units_table WHERE seas
 		?>
 	</div>
 	<div class="lgp-welcome-user">
-		<?php 
+		<?php
 		$current_user = wp_get_current_user();
 		// Translators: %s is the user's display name
 		printf( esc_html__( 'Welcome back, %s', 'loungenie-portal' ), esc_html( $current_user->display_name ) );
@@ -204,7 +205,7 @@ $yearround_units = $wpdb->get_var( "SELECT COUNT(*) FROM $units_table WHERE seas
 		<div class="lgp-welcome-context-text">
 			<h3><?php esc_html_e( 'Support Operations', 'loungenie-portal' ); ?></h3>
 			<p>
-				<?php 
+				<?php
 				// Translators: %d is the number of companies
 				printf( esc_html__( 'Managing %d companies', 'loungenie-portal' ), esc_html( $total_companies ) );
 				?>
@@ -215,7 +216,7 @@ $yearround_units = $wpdb->get_var( "SELECT COUNT(*) FROM $units_table WHERE seas
 	<div class="lgp-welcome-actions">
 		<a href="<?php echo esc_url( home_url( '/portal/tickets' ) ); ?>" class="lgp-btn lgp-btn-primary">
 			<i class="fa-solid fa-ticket lgp-icon-action" aria-hidden="true"></i>
-			<?php 
+			<?php
 			if ( $open_tickets > 0 ) {
 				// Translators: %d is the number of open tickets
 				printf( esc_html__( 'View Tickets (%d)', 'loungenie-portal' ), esc_html( $open_tickets ) );
@@ -232,7 +233,7 @@ $yearround_units = $wpdb->get_var( "SELECT COUNT(*) FROM $units_table WHERE seas
 
 	<div class="lgp-welcome-tip">
 		<strong><?php esc_html_e( 'System Status:', 'loungenie-portal' ); ?></strong>
-		<?php 
+		<?php
 		if ( $open_tickets > 5 ) {
 			esc_html_e( ' Moderate ticket volume. Review priority items.', 'loungenie-portal' );
 		} elseif ( $open_tickets > 0 ) {
@@ -392,9 +393,18 @@ $yearround_units = $wpdb->get_var( "SELECT COUNT(*) FROM $units_table WHERE seas
 		<p class="lgp-card-subtitle"><?php esc_html_e( 'Or upload attachments to an existing ticket', 'loungenie-portal' ); ?></p>
 	</div>
 	<div class="lgp-card-body">
-		<form class="lgp-ticket-form" method="POST" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
+		<?php
+			$lgp_admin_ajax = function_exists( 'admin_url' ) ? admin_url( 'admin-ajax.php' ) : '/wp-admin/admin-ajax.php';
+		?>
+		<form class="lgp-ticket-form" method="POST" action="<?php echo esc_url( $lgp_admin_ajax ); ?>">
 			<input type="hidden" name="action" value="lgp_create_ticket">
-			<?php wp_nonce_field( 'lgp_create_ticket_nonce' ); ?>
+			<?php
+			if ( function_exists( 'wp_nonce_field' ) ) {
+				wp_nonce_field( 'lgp_create_ticket_nonce' );
+			} else {
+				?>
+				<input type="hidden" name="_wpnonce" value="lgp_create_ticket_nonce" />
+			<?php } ?>
 			
 			<div class="lgp-form-group">
 				<label class="lgp-form-label" for="ticket_subject"><?php esc_html_e( 'Subject', 'loungenie-portal' ); ?></label>

@@ -1,4 +1,5 @@
 <?php
+use LounGenie\Portal\LGP_Auth;
 /**
  * Gateways REST API
  * Support-only gateway management endpoints

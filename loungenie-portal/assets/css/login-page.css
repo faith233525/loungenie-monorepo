@@ -1,46 +1,40 @@
-<?php
 /**
- * Login Page CSS
+ * Login Page CSS - LounGenie Portal
  * 
- * Styles for custom login page matching LounGenie Portal design
- * Uses 60-30-10 color system with role-specific theming
+ * Modern, clean login page matching portal dashboard design
+ * Uses 60-30-10 color system
  * Responsive and accessible for all devices
+ * Ready for WordPress background images
  * 
  * @package LounGenie Portal
  * @version 1.8.0
  */
 
-// Only load CSS in login page context
-if ( !function_exists('is_login') || !is_login()) {
-    return;
-}
-
-?><style>
 /* ============================================================================
- * LOGIN PAGE STYLES - LounGenie Portal Custom Login
+ * CSS VARIABLES - 60-30-10 Color System
  * ========================================================================== */
 
 :root {
-    /* 60% Atmosphere */
-    --lgp-atmosphere-light: #E9F8F9;
-    --lgp-atmosphere-white: #FFFFFF;
-    --lgp-atmosphere-soft: #F5FBFC;
-    --lgp-atmosphere-border: #D8E9EC;
-    --lgp-atmosphere-hover: #EEF7F9;
+    /* 60% ATMOSPHERE (Backgrounds & Surfaces) */
+    --atmosphere-light: #E9F8F9;
+    --atmosphere-white: #FFFFFF;
+    --atmosphere-soft: #F5FBFC;
+    --atmosphere-border: #D8E9EC;
+    --atmosphere-hover: #EEF7F9;
 
-    /* 30% Structure */
-    --lgp-structure-navy: #0F172A;
-    --lgp-structure-dark: #454F5E;
-    --lgp-structure-medium: #7A8699;
-    --lgp-structure-light: #94A3B8;
+    /* 30% STRUCTURE (Text & UI Elements) */
+    --structure-navy: #0F172A;
+    --structure-dark: #454F5E;
+    --structure-medium: #7A8699;
+    --structure-light: #94A3B8;
 
-    /* 10% Action */
-    --lgp-action-teal: #3AA6B9;
-    --lgp-action-teal-dark: #2A8A9A;
-    --lgp-action-teal-light: #D8EFF3;
-    --lgp-action-cyan: #25D0EE;
-    --lgp-action-cyan-dark: #1AB9D4;
-    --lgp-action-cyan-light: #D6F6FC;
+    /* 10% ACTION (Interactive Elements) */
+    --action-teal: #3AA6B9;
+    --action-teal-dark: #2A8A9A;
+    --action-teal-light: #D8EFF3;
+    --action-cyan: #25D0EE;
+    --action-cyan-dark: #1AB9D4;
+    --action-cyan-light: #D6F6FC;
 
     /* Spacing */
     --lgp-space-xs: 4px;
@@ -788,5 +782,3 @@ body.lgp-login-page {
         border-width: 2px;
     }
 }
-
-</style>

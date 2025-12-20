@@ -1,4 +1,5 @@
 <?php
+
 /**
  * LounGenie Portal - Enterprise SaaS Partner Management System
  *
@@ -10,7 +11,7 @@
  * Plugin Name: LounGenie Portal
  * Plugin URI: https://loungenie.com/portal
  * Description: Commercial enterprise SaaS portal for LounGenie partner and support management
- * Version: 1.8.0
+ * Version: 1.8.1
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: LounGenie Team
@@ -30,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // PLUGIN CONSTANTS
 // ============================================================================
 
-define( 'LGP_VERSION', '1.8.0' );
+define( 'LGP_VERSION', '1.8.1' );
 define( 'LGP_PLUGIN_FILE', __FILE__ );
 
 // Use PHP functions instead of WordPress functions to avoid timing issues during activation
@@ -58,7 +59,7 @@ function lgp_check_compatibility() {
 	if ( version_compare( PHP_VERSION, '7.4', '<' ) ) {
 		add_action(
 			'admin_notices',
-			function() {
+			function () {
 				echo '<div class="notice notice-error"><p><strong>LounGenie Portal:</strong> PHP 7.4 or higher is required.</p></div>';
 			}
 		);
@@ -68,7 +69,7 @@ function lgp_check_compatibility() {
 	if ( version_compare( $wp_version, '5.8', '<' ) ) {
 		add_action(
 			'admin_notices',
-			function() {
+			function () {
 				echo '<div class="notice notice-error"><p><strong>LounGenie Portal:</strong> WordPress 5.8 or higher is required.</p></div>';
 			}
 		);
@@ -117,7 +118,7 @@ register_activation_hook( __FILE__, 'lgp_activate' );
  * - Flush rewrite rules
  */
 function lgp_deactivate() {
-	require_once LGP_PLUGIN_DIR . 'roles/support.php';
+	 require_once LGP_PLUGIN_DIR . 'roles/support.php';
 	require_once LGP_PLUGIN_DIR . 'roles/partner.php';
 
 	// Remove custom roles
@@ -169,11 +170,12 @@ function lgp_init() {
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-notifications.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-geocode.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-gateway.php';
-	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-training-video.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-help-guide.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-hubspot.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-outlook.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-system-health.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-attachments.php';
+	// Legacy email handler will be conditionally initialized via loader based on feature flag
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-handler.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-capabilities.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-rest-errors.php';
@@ -181,16 +183,38 @@ function lgp_init() {
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-rate-limiter.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-shared-hosting-rules.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-to-ticket.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-migrations.php';
+
+	// Conditionally load new Graph-based email pipeline
+	$use_new_email = false;
+	if ( defined( 'LGP_EMAIL_PIPELINE' ) ) {
+		$use_new_email = ( 'new' === LGP_EMAIL_PIPELINE || true === LGP_EMAIL_PIPELINE || 1 === LGP_EMAIL_PIPELINE );
+	} elseif ( getenv( 'LGP_EMAIL_PIPELINE' ) ) {
+		$env           = strtolower( trim( getenv( 'LGP_EMAIL_PIPELINE' ) ) );
+		$use_new_email = in_array( $env, array( 'new', 'true', '1', 'on' ), true );
+	} else {
+		$use_new_email = (bool) get_option( 'lgp_use_new_email_pipeline', false );
+	}
+
+	if ( $use_new_email ) {
+		// New pipeline components
+		require_once LGP_PLUGIN_DIR . 'includes/class-lgp-graph-client.php';
+		require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-ingest.php';
+		require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-reply.php';
+		require_once LGP_PLUGIN_DIR . 'includes/email-integration.php';
+	}
 
 	// Load API endpoints
 	require_once LGP_PLUGIN_DIR . 'api/companies.php';
 	require_once LGP_PLUGIN_DIR . 'api/units.php';
 	require_once LGP_PLUGIN_DIR . 'api/tickets.php';
 	require_once LGP_PLUGIN_DIR . 'api/gateways.php';
-	require_once LGP_PLUGIN_DIR . 'api/training-videos.php';
+	require_once LGP_PLUGIN_DIR . 'api/help-guides.php';
 	require_once LGP_PLUGIN_DIR . 'api/attachments.php';
 	require_once LGP_PLUGIN_DIR . 'api/service-notes.php';
 	require_once LGP_PLUGIN_DIR . 'api/audit-log.php';
+	require_once LGP_PLUGIN_DIR . 'api/dashboard.php';
+	require_once LGP_PLUGIN_DIR . 'api/map.php';
 
 	// Load role definitions
 	require_once LGP_PLUGIN_DIR . 'roles/support.php';
@@ -198,6 +222,8 @@ function lgp_init() {
 
 	// Initialize all components via centralized loader
 	LGP_Loader::init();
+	// Initialize migrations (versioned schema upgrades)
+	LGP_Migrations::init();
 }
 
 // Initialize after the theme directory is registered to avoid early core calls
@@ -272,7 +298,7 @@ function lgp_redirect_root_to_portal() {
 	// If this is the root/front request, always redirect to /portal (regardless of login state)
 	if ( '/' === $request_uri || is_front_page() || is_home() ) {
 		// Avoid redirect loop if home_url already ends with /portal
-		$target = home_url( '/portal' );
+		$target  = home_url( '/portal' );
 		$current = home_url( $request_uri );
 		if ( trailingslashit( $current ) !== trailingslashit( $target ) ) {
 			wp_safe_redirect( $target, 301 );

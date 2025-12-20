@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tickets REST API Endpoints
  *
@@ -11,11 +12,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class LGP_Tickets_API {
 
+
 	/**
 	 * Initialize API endpoints
 	 */
 	public static function init() {
-		add_action( 'rest_api_init', array( __CLASS__, 'register_routes' ) );
+		 add_action( 'rest_api_init', array( __CLASS__, 'register_routes' ) );
 	}
 
 	/**
@@ -87,9 +89,9 @@ class LGP_Tickets_API {
 		$tickets_table   = $wpdb->prefix . 'lgp_tickets';
 		$requests_table  = $wpdb->prefix . 'lgp_service_requests';
 		$companies_table = $wpdb->prefix . 'lgp_companies';
-		$page           = $request->get_param( 'page' ) ?: 1;
-		$per_page       = $request->get_param( 'per_page' ) ?: 20;
-		$offset         = ( $page - 1 ) * $per_page;
+		$page            = $request->get_param( 'page' ) ?: 1;
+		$per_page        = $request->get_param( 'per_page' ) ?: 20;
+		$offset          = ( $page - 1 ) * $per_page;
 
 		if ( LGP_Auth::is_support() ) {
 			// Support can see all tickets
@@ -179,9 +181,9 @@ class LGP_Tickets_API {
 	public static function create_ticket( $request ) {
 		global $wpdb;
 
-		$company_id = LGP_Auth::get_user_company_id();
-		$unit_id    = absint( $request->get_param( 'unit_id' ) );
-		$priority   = sanitize_text_field( $request->get_param( 'priority' ) ?: 'normal' );
+		$company_id   = LGP_Auth::get_user_company_id();
+		$unit_id      = absint( $request->get_param( 'unit_id' ) );
+		$priority     = sanitize_text_field( $request->get_param( 'priority' ) ?: 'normal' );
 		$request_type = sanitize_text_field( $request->get_param( 'request_type' ) ?: 'general' );
 
 		$contact_name   = sanitize_text_field( $request->get_param( 'contact_name' ) );
@@ -210,72 +212,112 @@ class LGP_Tickets_API {
 
 		$notes_combined = implode( "\n", array_filter( $notes_parts ) );
 		if ( empty( $notes_combined ) ) {
-			return new WP_Error( 'invalid_request', __( 'Please provide issue details.', 'loungenie-portal' ), array( 'status' => 400 ) );
+			return new WP_Error( 'invalid_message', __( 'Please provide issue details.', 'loungenie-portal' ), array( 'status' => 400 ) );
 		}
 
-		// Create service request first
-		$requests_table = $wpdb->prefix . 'lgp_service_requests';
-		$request_data   = array(
-			'company_id'   => $company_id,
-			'unit_id'      => $unit_id,
-			'request_type' => $request_type,
-			'priority'     => $priority,
-			'status'       => 'pending',
-			'notes'        => $notes_combined,
-		);
+		// START TRANSACTION for atomic ticket creation
+		$wpdb->query( 'START TRANSACTION' );
 
-		$inserted = $wpdb->insert( $requests_table, $request_data );
+		try {
+			// Create service request first
+			$requests_table = $wpdb->prefix . 'lgp_service_requests';
+			$request_data   = array(
+				'company_id'   => $company_id,
+				'unit_id'      => $unit_id,
+				'request_type' => $request_type,
+				'priority'     => $priority,
+				'status'       => 'pending',
+				'notes'        => $notes_combined,
+			);
 
-		if ( $inserted === false ) {
-			return new WP_Error( 'db_error', __( 'Failed to create service request', 'loungenie-portal' ), array( 'status' => 500 ) );
-		}
+			$inserted = $wpdb->insert( $requests_table, $request_data );
 
-		$service_request_id = $wpdb->insert_id;
+			if ( $inserted === false ) {
+				throw new Exception( 'Failed to create service request' );
+			}
 
-		// Create ticket
-		$tickets_table = $wpdb->prefix . 'lgp_tickets';
-		$ticket_data   = array(
-			'service_request_id' => $service_request_id,
-			'status'             => 'open',
-			'thread_history'     => wp_json_encode(
-				array(
+			$service_request_id = $wpdb->insert_id;
+
+			// Create ticket
+			$tickets_table = $wpdb->prefix . 'lgp_tickets';
+			$ticket_data   = array(
+				'service_request_id' => $service_request_id,
+				'status'             => 'open',
+				'thread_history'     => wp_json_encode(
 					array(
-						'timestamp' => current_time( 'mysql' ),
-						'user'      => wp_get_current_user()->display_name,
-						'message'   => $request_data['notes'],
-					),
+						array(
+							'timestamp' => current_time( 'mysql' ),
+							'user'      => wp_get_current_user()->display_name,
+							'message'   => $request_data['notes'],
+						),
+					)
+				),
+			);
+
+			$inserted_ticket = $wpdb->insert( $tickets_table, $ticket_data );
+
+			if ( $inserted_ticket === false ) {
+				throw new Exception( 'Failed to create ticket' );
+			}
+
+			$ticket_id = $wpdb->insert_id;
+
+			// Audit logging
+			$user = wp_get_current_user();
+			LGP_Logger::log_event(
+				$user->ID,
+				'ticket_created',
+				$company_id,
+				array(
+					'ticket_id'          => $ticket_id,
+					'service_request_id' => $service_request_id,
+					'request_type'       => $request_data['request_type'],
+					'priority'           => $request_data['priority'],
+					'unit_id'            => $request_data['unit_id'],
 				)
-			),
-		);
+			);
 
-		$wpdb->insert( $tickets_table, $ticket_data );
-		$ticket_id = $wpdb->insert_id;
+			// COMMIT TRANSACTION
+			$wpdb->query( 'COMMIT' );
 
-		// Audit logging
-		$user = wp_get_current_user();
-		LGP_Logger::log_event(
-			$user->ID,
-			'ticket_created',
-			$company_id,
-			array(
-				'ticket_id'          => $ticket_id,
-				'service_request_id' => $service_request_id,
-				'request_type'       => $request_data['request_type'],
-				'priority'           => $request_data['priority'],
-				'unit_id'            => $request_data['unit_id'],
-			)
-		);
+			// Fire action for integrations (after successful commit)
+			do_action( 'lgp_ticket_created', $ticket_id, (object) array_merge( (array) $ticket_data, (array) $request_data ) );
 
-		// Fire action for integrations
-		do_action( 'lgp_ticket_created', $ticket_id, (object) array_merge( (array) $ticket_data, (array) $request_data ) );
+			return rest_ensure_response(
+				array(
+					'ticket_id'          => $ticket_id,
+					'service_request_id' => $service_request_id,
+					'message'            => __( 'Service request submitted successfully', 'loungenie-portal' ),
+				)
+			);
+		} catch ( Exception $e ) {
+			// ROLLBACK TRANSACTION on any error
+			$wpdb->query( 'ROLLBACK' );
 
-		return rest_ensure_response(
-			array(
-				'ticket_id'          => $ticket_id,
-				'service_request_id' => $service_request_id,
-				'message'            => __( 'Service request submitted successfully', 'loungenie-portal' ),
-			)
-		);
+			// Helpful debug during tests
+			if ( function_exists( 'error_log' ) ) {
+				error_log( 'LGP ticket create error: ' . $e->getMessage() );
+			}
+
+			// Use existing logger methods (no log_error in LGP_Logger)
+			LGP_Logger::log(
+				'ticket',
+				'creation_failed',
+				array(
+					'error'      => $e->getMessage(),
+					'company_id' => $company_id,
+					'user_id'    => get_current_user_id(),
+				),
+				get_current_user_id(),
+				$company_id
+			);
+
+			return new WP_Error(
+				'db_error',
+				__( 'Failed to create service request', 'loungenie-portal' ),
+				array( 'status' => 500 )
+			);
+		}
 	}
 
 	/**
@@ -284,46 +326,88 @@ class LGP_Tickets_API {
 	public static function update_ticket( $request ) {
 		global $wpdb;
 
-		$id    = $request->get_param( 'id' );
-		$table = $wpdb->prefix . 'lgp_tickets';
+		$id         = $request->get_param( 'id' );
+		$new_status = sanitize_text_field( $request->get_param( 'status' ) );
+		$table      = $wpdb->prefix . 'lgp_tickets';
 
-		$data = array(
-			'status' => sanitize_text_field( $request->get_param( 'status' ) ),
-		);
+		// START TRANSACTION for atomic update
+		$wpdb->query( 'START TRANSACTION' );
 
-		$updated = $wpdb->update( $table, $data, array( 'id' => $id ) );
+		try {
+			// Get current ticket for audit trail
+			$old_ticket = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table WHERE id = %d FOR UPDATE", $id ) );
 
-		if ( $updated === false ) {
-			return new WP_Error( 'db_error', __( 'Failed to update ticket', 'loungenie-portal' ), array( 'status' => 500 ) );
-		}
-
-		// Audit logging
-		$user   = wp_get_current_user();
-		$ticket = $wpdb->get_row( $wpdb->prepare( "SELECT service_request_id FROM $table WHERE id = %d", $id ) );
-		if ( $ticket ) {
-			$requests_table  = $wpdb->prefix . 'lgp_service_requests';
-			$service_request = $wpdb->get_row( $wpdb->prepare( "SELECT company_id FROM $requests_table WHERE id = %d", $ticket->service_request_id ) );
-			if ( $service_request ) {
-				LGP_Logger::log_event(
-					$user->ID,
-					'ticket_updated',
-					$service_request->company_id,
-					array(
-						'ticket_id'  => $id,
-						'new_status' => $data['status'],
-					)
-				);
+			if ( ! $old_ticket ) {
+				throw new Exception( 'Ticket not found' );
 			}
+
+			$old_status = $old_ticket->status;
+
+			// Update ticket status and timestamp
+			$data = array(
+				'status'     => $new_status,
+				'updated_at' => current_time( 'mysql' ),
+			);
+
+			$updated = $wpdb->update( $table, $data, array( 'id' => $id ) );
+
+			if ( $updated === false ) {
+				throw new Exception( 'Database update failed' );
+			}
+
+			// Get company context for audit logging
+			$requests_table  = $wpdb->prefix . 'lgp_service_requests';
+			$service_request = $wpdb->get_row( $wpdb->prepare( "SELECT company_id FROM $requests_table WHERE id = %d", $old_ticket->service_request_id ) );
+
+			// Audit logging (fallback to null company context if not found)
+			$user            = wp_get_current_user();
+			$company_context = $service_request ? $service_request->company_id : null;
+			LGP_Logger::log_event(
+				$user->ID,
+				'ticket_updated',
+				$company_context,
+				array(
+					'ticket_id'  => $id,
+					'old_status' => $old_status,
+					'new_status' => $new_status,
+					'updated_by' => $user->user_login,
+				)
+			);
+
+			// COMMIT TRANSACTION
+			$wpdb->query( 'COMMIT' );
+
+			// Fire action for integrations (after successful commit)
+			do_action( 'lgp_ticket_updated', $id, $new_status, $old_status );
+
+			return rest_ensure_response(
+				array(
+					'message'   => __( 'Ticket updated successfully', 'loungenie-portal' ),
+					'ticket_id' => $id,
+					'status'    => $new_status,
+				)
+			);
+		} catch ( Exception $e ) {
+			// ROLLBACK TRANSACTION on any error
+			$wpdb->query( 'ROLLBACK' );
+
+			LGP_Logger::log(
+				'ticket',
+				'update_failed',
+				array(
+					'error'     => $e->getMessage(),
+					'ticket_id' => $id,
+					'user_id'   => get_current_user_id(),
+				),
+				get_current_user_id()
+			);
+
+			return new WP_Error(
+				'db_error',
+				__( 'Failed to update ticket', 'loungenie-portal' ),
+				array( 'status' => 500 )
+			);
 		}
-
-		// Fire action for integrations
-		do_action( 'lgp_ticket_updated', $id, $data['status'] );
-
-		return rest_ensure_response(
-			array(
-				'message' => __( 'Ticket updated successfully', 'loungenie-portal' ),
-			)
-		);
 	}
 
 	/**
@@ -332,46 +416,105 @@ class LGP_Tickets_API {
 	public static function add_reply( $request ) {
 		global $wpdb;
 
-		$id    = $request->get_param( 'id' );
-		$table = $wpdb->prefix . 'lgp_tickets';
+		$id      = $request->get_param( 'id' );
+		$message = sanitize_textarea_field( $request->get_param( 'message' ) );
+		$table   = $wpdb->prefix . 'lgp_tickets';
 
-		// Get current thread history
-		$ticket = $wpdb->get_row(
-			$wpdb->prepare(
-				"SELECT * FROM $table WHERE id = %d",
-				$id
-			)
-		);
-
-		if ( ! $ticket ) {
-			return new WP_Error( 'not_found', __( 'Ticket not found', 'loungenie-portal' ), array( 'status' => 404 ) );
+		if ( empty( $message ) ) {
+			return new WP_Error(
+				'invalid_message',
+				__( 'Reply message cannot be empty', 'loungenie-portal' ),
+				array( 'status' => 400 )
+			);
 		}
 
-		$thread = json_decode( $ticket->thread_history, true ) ?: array();
+		// START TRANSACTION for atomic reply addition
+		$wpdb->query( 'START TRANSACTION' );
 
-		// Add new reply
-		$thread[] = array(
-			'timestamp' => current_time( 'mysql' ),
-			'user'      => wp_get_current_user()->display_name,
-			'message'   => sanitize_textarea_field( $request->get_param( 'message' ) ),
-		);
+		try {
+			// Get current thread history with row lock
+			$ticket = $wpdb->get_row(
+				$wpdb->prepare(
+					"SELECT * FROM $table WHERE id = %d FOR UPDATE",
+					$id
+				)
+			);
 
-		// Update ticket
-		$wpdb->update(
-			$table,
-			array( 'thread_history' => wp_json_encode( $thread ) ),
-			array( 'id' => $id )
-		);
+			if ( ! $ticket ) {
+				throw new Exception( 'Ticket not found' );
+			}
 
-		// Fire action for integrations
-		$message = sanitize_textarea_field( $request->get_param( 'message' ) );
-		do_action( 'lgp_ticket_reply_added', $id, $message, $ticket );
+			$thread = json_decode( $ticket->thread_history, true ) ?: array();
 
-		return rest_ensure_response(
-			array(
-				'message' => __( 'Reply added successfully', 'loungenie-portal' ),
-			)
-		);
+			// Add new reply
+			$thread[] = array(
+				'timestamp' => current_time( 'mysql' ),
+				'user'      => wp_get_current_user()->display_name,
+				'message'   => $message,
+			);
+
+			// Update ticket with new thread
+			$updated = $wpdb->update(
+				$table,
+				array(
+					'thread_history' => wp_json_encode( $thread ),
+					'updated_at'     => current_time( 'mysql' ),
+				),
+				array( 'id' => $id )
+			);
+
+			if ( $updated === false ) {
+				throw new Exception( 'Failed to update thread history' );
+			}
+
+			// COMMIT TRANSACTION
+			$wpdb->query( 'COMMIT' );
+
+			// Audit logging with company context
+			$requests_table  = $wpdb->prefix . 'lgp_service_requests';
+			$service_request = $wpdb->get_row( $wpdb->prepare( "SELECT company_id FROM $requests_table WHERE id = %d", $ticket->service_request_id ) );
+			$company_context = $service_request ? $service_request->company_id : null;
+			$user            = wp_get_current_user();
+			LGP_Logger::log_event(
+				$user->ID,
+				'ticket_reply_added',
+				$company_context,
+				array(
+					'ticket_id' => $id,
+					'reply_by'  => $user->user_login,
+				)
+			);
+
+			// Fire action for integrations (after successful commit)
+			do_action( 'lgp_ticket_reply_added', $id, $message, $ticket );
+
+			return rest_ensure_response(
+				array(
+					'message'   => __( 'Reply added successfully', 'loungenie-portal' ),
+					'ticket_id' => $id,
+				)
+			);
+		} catch ( Exception $e ) {
+			// ROLLBACK TRANSACTION on any error
+			$wpdb->query( 'ROLLBACK' );
+
+			LGP_Logger::log(
+				'ticket',
+				'reply_failed',
+				array(
+					'error'     => $e->getMessage(),
+					'ticket_id' => $id,
+					'user_id'   => get_current_user_id(),
+				),
+				get_current_user_id()
+			);
+
+			return new WP_Error(
+				'db_error',
+				__( 'Failed to add reply', 'loungenie-portal' ),
+				array( 'status' => 500 )
+			);
+		}
 	}
 
 	/**
@@ -385,14 +528,14 @@ class LGP_Tickets_API {
 	 * Check if user is Support
 	 */
 	public static function check_support_permission() {
-		return LGP_Auth::is_support();
+		 return LGP_Auth::is_support();
 	}
 
 	/**
 	 * Check if user is Partner
 	 */
 	public static function check_partner_permission() {
-		return LGP_Auth::is_partner();
+		 return LGP_Auth::is_partner();
 	}
 
 	/**
