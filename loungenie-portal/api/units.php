@@ -125,7 +125,7 @@ class LGP_Units_API {
 	public static function get_unit( $request ) {
 		global $wpdb;
 
-		$id    = $request->get_param( 'id' );
+		$id    = (int) $request->get_param( 'id' );
 		$table = $wpdb->prefix . 'lgp_units';
 
 		$unit = $wpdb->get_row(
@@ -197,7 +197,7 @@ class LGP_Units_API {
 	public static function update_unit( $request ) {
 		global $wpdb;
 
-		$id    = $request->get_param( 'id' );
+		$id    = (int) $request->get_param( 'id' );
 		$table = $wpdb->prefix . 'lgp_units';
 
 		$data = array(

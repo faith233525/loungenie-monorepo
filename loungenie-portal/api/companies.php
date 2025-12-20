@@ -105,7 +105,7 @@ class LGP_Companies_API {
 	public static function get_company( $request ) {
 		global $wpdb;
 
-		$id    = $request->get_param( 'id' );
+		$id    = (int) $request->get_param( 'id' );
 		$table = $wpdb->prefix . 'lgp_companies';
 
 		$company = $wpdb->get_row(
@@ -177,7 +177,7 @@ class LGP_Companies_API {
 	public static function update_company( $request ) {
 		global $wpdb;
 
-		$id    = $request->get_param( 'id' );
+		$id    = (int) $request->get_param( 'id' );
 		$table = $wpdb->prefix . 'lgp_companies';
 
 		$data = array(

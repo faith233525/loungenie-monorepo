@@ -152,7 +152,7 @@ class LGP_Tickets_API {
 	public static function get_ticket( $request ) {
 		global $wpdb;
 
-		$id              = $request->get_param( 'id' );
+		$id              = (int) $request->get_param( 'id' );
 		$tickets_table   = $wpdb->prefix . 'lgp_tickets';
 		$requests_table  = $wpdb->prefix . 'lgp_service_requests';
 		$companies_table = $wpdb->prefix . 'lgp_companies';
@@ -326,7 +326,7 @@ class LGP_Tickets_API {
 	public static function update_ticket( $request ) {
 		global $wpdb;
 
-		$id         = $request->get_param( 'id' );
+		$id         = (int) $request->get_param( 'id' );
 		$new_status = sanitize_text_field( $request->get_param( 'status' ) );
 		$table      = $wpdb->prefix . 'lgp_tickets';
 
@@ -416,7 +416,7 @@ class LGP_Tickets_API {
 	public static function add_reply( $request ) {
 		global $wpdb;
 
-		$id      = $request->get_param( 'id' );
+		$id      = (int) $request->get_param( 'id' );
 		$message = sanitize_textarea_field( $request->get_param( 'message' ) );
 		$table   = $wpdb->prefix . 'lgp_tickets';
 
@@ -548,7 +548,7 @@ class LGP_Tickets_API {
 
 		if ( LGP_Auth::is_partner() ) {
 			global $wpdb;
-			$ticket_id  = $request->get_param( 'id' );
+			$ticket_id  = (int) $request->get_param( 'id' );
 			$company_id = LGP_Auth::get_user_company_id();
 
 			$tickets_table  = $wpdb->prefix . 'lgp_tickets';

@@ -115,7 +115,7 @@ class LGP_Attachments_API {
 	 * Check if user can access attachment
 	 */
 	public static function check_attachment_permission( $request ) {
-		$id = $request->get_param( 'id' );
+		$id = (int) $request->get_param( 'id' );
 		global $wpdb;
 
 		if ( ! $id ) {

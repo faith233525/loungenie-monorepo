@@ -155,7 +155,7 @@ class LGP_Help_Guides_API {
 	 * @return WP_REST_Response
 	 */
 	public function get_guide( $request ) {
-		$id    = $request->get_param( 'id' );
+		$id    = (int) $request->get_param( 'id' );
 		$video = LGP_Help_Guide::get( $id );
 
 		if ( ! $video ) {
@@ -208,7 +208,7 @@ class LGP_Help_Guides_API {
 	 * @return WP_REST_Response
 	 */
 	public function update_guide( $request ) {
-		$id = $request->get_param( 'id' );
+		$id = (int) $request->get_param( 'id' );
 
 		$data = array();
 
@@ -252,7 +252,7 @@ class LGP_Help_Guides_API {
 	 * @return WP_REST_Response
 	 */
 	public function delete_guide( $request ) {
-		$id = $request->get_param( 'id' );
+		$id = (int) $request->get_param( 'id' );
 
 		$success = LGP_Help_Guide::delete( $id );
 
