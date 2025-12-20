@@ -17,3 +17,20 @@ fix_comments.php
 # Node and vendor (if not needed in repo)
 /node_modules/
 /vendor/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Build artifacts
+dist/
+build/
+coverage/
+*.cache
+*.bak
+*.swp
+
+# Composer lock optional (keep if you want exact versions)
+# composer.lock
