@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Login - LounGenie Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* 60-30-10 Color System */
+            --atmosphere-white: #FFFFFF;
+            --atmosphere-light: #E2E8F0;
+            --atmosphere-subtle: #F8FAFC;
+            --atmosphere-medium: #E2E8F0;
+            --atmosphere-soft: #EEF7F9;
+
+            --structure-dark: #0F172A;
+            --navy: #1E3A8A;
+            /* deep navy accent */
+            --navy-08: rgba(30, 58, 138, 0.08);
+            --structure-base: #475569;
+            --structure-medium: #64748B;
+            --structure-light: #94A3B8;
+
+            --action-primary: #11acc3;
+            /* brand azure */
+            --action-hover: #0f91a8;
+            /* deeper azure */
+            --action-light: #E0F2FE;
+            --action-bright: #37aaa2;
+            /* brand teal */
+            --action-active: #0f91a8;
+            --action-lightest: #CFFAFE;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--atmosphere-subtle);
+            color: #334155;
+            font-size: 15px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .lgp-login-container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--atmosphere-white);
+            border-radius: 24px;
+            border: 1px solid var(--atmosphere-medium);
+            box-shadow: 0 8px 22px rgba(17, 172, 195, 0.12);
+            padding: 48px 40px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Logo & Header */
+        .lgp-login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .lgp-logo {
+            margin-bottom: 24px;
+            filter: drop-shadow(0 4px 12px rgba(14, 165, 233, 0.25));
+        }
+
+        .lgp-login-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--structure-dark);
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .lgp-login-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--navy);
+            border-radius: 2px;
+        }
+
+        .lgp-login-subtitle {
+            font-size: 16px;
+            color: var(--structure-medium);
+            font-weight: 400;
+        }
+
+        /* Role Selector */
+        .lgp-role-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 32px;
+            background: var(--atmosphere-subtle);
+            padding: 6px;
+            border-radius: 12px;
+            border: 1px solid var(--navy-08);
+        }
+
+        .lgp-role-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 20px;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            background: transparent;
+            color: var(--structure-medium);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .lgp-role-btn:hover {
+            background: var(--atmosphere-white);
+            color: var(--action-primary);
+        }
+
+        .lgp-role-btn.active {
+            background: var(--atmosphere-white);
+            color: var(--action-primary);
+            box-shadow: 0 4px 12px rgba(58, 166, 185, 0.15);
+        }
+
+        .lgp-role-btn svg {
+            flex-shrink: 0;
+        }
+
+        .lgp-keyboard-hint {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--action-primary);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lgp-role-btn:hover .lgp-keyboard-hint {
+            opacity: 1;
+        }
+
+        /* Form */
+        .lgp-login-form {
+            display: none;
+        }
+
+        .lgp-login-form.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .lgp-form-group {
+            margin-bottom: 24px;
+        }
+
+        .lgp-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--structure-dark);
+            margin-bottom: 10px;
+        }
+
+        .lgp-label svg {
+            color: var(--action-primary);
+        }
+
+        .lgp-input-wrapper {
+            position: relative;
+        }
+
+        .lgp-form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--atmosphere-medium);
+            border-radius: 10px;
+            font-size: 15px;
+            color: var(--structure-dark);
+            background: var(--atmosphere-white);
+            transition: all 0.3s ease;
+        }
+
+        .lgp-form-input:focus {
+            outline: none;
+            border-color: var(--action-primary);
+            background: var(--atmosphere-subtle);
+            box-shadow: 0 0 0 4px var(--action-lightest);
+        }
+
+        .lgp-password-wrapper .lgp-form-input {
+            padding-right: 48px;
+        }
+
+        .lgp-toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            color: var(--structure-medium);
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .lgp-toggle-password:hover {
+            color: var(--action-primary);
+        }
+
+        .lgp-toggle-password.active .lgp-eye-open {
+            display: none;
+        }
+
+        .lgp-toggle-password.active .lgp-eye-closed {
+            display: block !important;
+        }
+
+        /* Form Options */
+        .lgp-form-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .lgp-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .lgp-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--atmosphere-medium);
+            border-radius: 4px;
+            cursor: pointer;
+            accent-color: var(--action-primary);
+        }
+
+        .lgp-checkbox-label {
+            font-size: 14px;
+            color: var(--structure-base);
+        }
+
+        .lgp-forgot-link {
+            font-size: 15px;
+            color: var(--action-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .lgp-forgot-link:hover {
+            color: var(--action-hover);
+            text-decoration: underline;
+        }
+
+        /* Buttons */
+        .lgp-btn-login,
+        .lgp-btn-sso {
+            width: 100%;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lgp-btn-login {
+            background: var(--action-primary);
+            color: white;
+            box-shadow: 0 3px 8px rgba(17, 172, 195, 0.18);
+        }
+
+        .lgp-btn-login:hover {
+            background: var(--action-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 14px rgba(17, 172, 195, 0.28);
+        }
+
+        .lgp-btn-login:active {
+            transform: translateY(0);
+        }
+
+        .lgp-btn-sso {
+            background: var(--atmosphere-white);
+            color: var(--structure-dark);
+            border: 1.5px solid var(--atmosphere-medium);
+        }
+
+        .lgp-btn-sso:hover {
+            background: var(--atmosphere-subtle);
+            border-color: var(--action-primary);
+        }
+
+        .lgp-btn-login:focus,
+        .lgp-btn-sso:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.16);
+        }
+
+        .lgp-btn-loader {
+            display: none;
+        }
+
+        .lgp-btn-login.loading .lgp-btn-text,
+        .lgp-btn-sso.loading .lgp-btn-text {
+            opacity: 0;
+        }
+
+        .lgp-btn-login.loading .lgp-btn-loader,
+        .lgp-btn-sso.loading .lgp-btn-loader {
+            display: block;
+            position: absolute;
+        }
+
+        .lgp-btn-login.loading,
+        .lgp-btn-sso.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        /* SSO Info */
+        .lgp-sso-info {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .lgp-sso-info p {
+            font-size: 14px;
+            color: var(--structure-medium);
+            line-height: 1.6;
+        }
+
+        /* Trust Badge */
+        .lgp-trust-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 12px;
+            background: var(--action-lightest);
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--action-primary);
+            font-weight: 500;
+        }
+
+        .lgp-trust-icon {
+            color: var(--action-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .lgp-login-container {
+                padding: 32px 24px;
+            }
+
+            .lgp-login-title {
+                font-size: 24px;
+            }
+
+            .lgp-role-btn {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+
+            .lgp-keyboard-hint {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="lgp-login-container">
+
+        <!-- Logo & Title -->
+        <div class="lgp-login-header">
+            <svg class="lgp-logo" width="64" height="64" viewBox="0 0 100 100" fill="none">
+                <defs>
+                    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#3AA6B9;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#25D0EE;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <rect x="10" y="10" width="80" height="80" rx="16" fill="var(--action-primary)" />
+                <rect x="25" y="40" width="14" height="28" rx="2" fill="white" opacity="0.9" />
+                <rect x="43" y="30" width="14" height="38" rx="2" fill="white" opacity="0.9" />
+                <rect x="61" y="35" width="14" height="33" rx="2" fill="white" opacity="0.9" />
+                <circle cx="32" cy="32" r="4" fill="white" />
+                <circle cx="50" cy="26" r="4" fill="white" />
+                <circle cx="68" cy="28" r="4" fill="white" />
+            </svg>
+
+            <h1 class="lgp-login-title">LounGenie Portal</h1>
+            <p class="lgp-login-subtitle">Partner Management System</p>
+        </div>
+
+        <!-- Role Selector -->
+        <div class="lgp-role-selector">
+            <button type="button" class="lgp-role-btn active" data-role="partner" onclick="switchRole('partner')">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1.455.894l-4-2-4 2A1 1 0 015 16V4z" />
+                </svg>
+                Partner
+                <kbd class="lgp-keyboard-hint">Alt+P</kbd>
+            </button>
+            <button type="button" class="lgp-role-btn" data-role="support" onclick="switchRole('support')">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                        d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zm0 16a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                </svg>
+                Support
+                <kbd class="lgp-keyboard-hint">Alt+S</kbd>
+            </button>
+        </div>
+
+        <!-- PARTNER LOGIN FORM -->
+        <form class="lgp-login-form active" id="partnerForm" onsubmit="handleSubmit(event, 'partner')">
+            <div class="lgp-form-group">
+                <label for="partner-username" class="lgp-label">
+                    <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10 10a4 4 0 100-8 4 4 0 000 8zm-7 8a7 7 0 1114 0H3z" />
+                    </svg>
+                    Username
+                </label>
+                <div class="lgp-input-wrapper">
+                    <input type="text" id="partner-username" class="lgp-form-input" placeholder="Enter your username"
+                        required autofocus autocomplete="username" autocapitalize="off">
+                </div>
+            </div>
+
+            <div class="lgp-form-group">
+                <label for="partner-password" class="lgp-label">
+                    <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            d="M10 2a5 5 0 00-5 5v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2V7a5 5 0 00-5-5zm3 7V7a3 3 0 00-6 0v2h6z" />
+                    </svg>
+                    Password
+                </label>
+                <div class="lgp-input-wrapper lgp-password-wrapper">
+                    <input type="password" id="partner-password" class="lgp-form-input"
+                        placeholder="Enter your password" required autocomplete="current-password">
+                    <button type="button" class="lgp-toggle-password"
+                        onclick="togglePassword('partner-password', this)">
+                        <svg class="lgp-eye-open" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                            <path fill-rule="evenodd"
+                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <svg class="lgp-eye-closed" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"
+                            style="display: none;">
+                            <path fill-rule="evenodd"
+                                d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z"
+                                clip-rule="evenodd" />
+                            <path
+                                d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.742L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="lgp-form-options">
+                <label class="lgp-checkbox">
+                    <input type="checkbox" checked>
+                    <span class="lgp-checkbox-label">Remember me</span>
+                </label>
+                <a href="#" class="lgp-forgot-link" onclick="alert('Password reset would open here'); return false;">
+                    Forgot password?
+                </a>
+            </div>
+
+            <button type="submit" class="lgp-btn-login">
+                <span class="lgp-btn-text">Sign In</span>
+                <span class="lgp-btn-loader">
+                    <svg width="20" height="20" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-dasharray="50" stroke-linecap="round">
+                            <animateTransform attributeName="transform" type="rotate" from="0 10 10" to="360 10 10"
+                                dur="1s" repeatCount="indefinite" />
+                        </circle>
+                    </svg>
+                </span>
+            </button>
+
+            <div class="lgp-trust-badge">
+                <svg class="lgp-trust-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path
+                        d="M8 0L2 3v5c0 3.5 2.4 6.8 6 7.6 3.6-.8 6-4.1 6-7.6V3L8 0zm4 8c0 2.8-1.9 5.4-4 6-2.1-.6-4-3.2-4-6V4l4-2 4 2v4zm-1.3-1.3L7 10.4 5.3 8.7l1-1 .7.7 2.7-2.7 1 1z" />
+                </svg>
+                Secure Partner Access
+            </div>
+        </form>
+
+        <!-- SUPPORT SSO FORM -->
+        <form class="lgp-login-form" id="supportForm" onsubmit="handleSubmit(event, 'support')">
+            <button type="submit" class="lgp-btn-sso">
+                <svg class="lgp-ms-icon" width="24" height="24" viewBox="0 0 23 23" fill="none">
+                    <rect width="11" height="11" fill="#F25022" />
+                    <rect x="12" width="11" height="11" fill="#7FBA00" />
+                    <rect y="12" width="11" height="11" fill="#00A4EF" />
+                    <rect x="12" y="12" width="11" height="11" fill="#FFB900" />
+                </svg>
+                <span class="lgp-btn-text">Microsoft Sign-In</span>
+                <span class="lgp-btn-loader">
+                    <svg width="20" height="20" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-dasharray="50" stroke-linecap="round">
+                            <animateTransform attributeName="transform" type="rotate" from="0 10 10" to="360 10 10"
+                                dur="1s" repeatCount="indefinite" />
+                        </circle>
+                    </svg>
+                </span>
+            </button>
+
+            <div class="lgp-sso-info">
+                <p>Use your Microsoft 365 credentials to access the support portal.</p>
+            </div>
+
+            <div class="lgp-trust-badge">
+                <svg class="lgp-trust-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path
+                        d="M8 0L2 3v5c0 3.5 2.4 6.8 6 7.6 3.6-.8 6-4.1 6-7.6V3L8 0zm4 8c0 2.8-1.9 5.4-4 6-2.1-.6-4-3.2-4-6V4l4-2 4 2v4zm-1.3-1.3L7 10.4 5.3 8.7l1-1 .7.7 2.7-2.7 1 1z" />
+                </svg>
+                SSO Protected • Enterprise Security
+            </div>
+        </form>
+
+    </div>
+
+    <script>
+        // Remember last role
+        const lastRole = localStorage.getItem('lgp_last_role') || 'partner';
+        if (lastRole === 'support') {
+            switchRole('support');
+        }
+
+        // Role switching
+        function switchRole(role) {
+            // Update buttons
+            document.querySelectorAll('.lgp-role-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.role === role);
+            });
+
+            // Update forms
+            document.querySelectorAll('.lgp-login-form').forEach(form => {
+                form.classList.toggle('active', form.id === role + 'Form');
+            });
+
+            // Focus first input
+            setTimeout(() => {
+                const activeForm = document.querySelector('.lgp-login-form.active');
+                const firstInput = activeForm.querySelector('input');
+                if (firstInput) firstInput.focus();
+            }, 100);
+
+            // Remember choice
+            localStorage.setItem('lgp_last_role', role);
+        }
+
+        // Password toggle
+        function togglePassword(inputId, button) {
+            const input = document.getElementById(inputId);
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            button.classList.toggle('active');
+            input.focus();
+        }
+
+        // Form submission
+        function handleSubmit(event, role) {
+            event.preventDefault();
+            const button = event.target.querySelector('button[type="submit"]');
+            button.classList.add('loading');
+
+            // Simulate login
+            setTimeout(() => {
+                alert(`✅ ${role === 'partner' ? 'Partner' : 'Support'} login successful!\n\nIn production, this would redirect to the dashboard.`);
+                button.classList.remove('loading');
+            }, 2000);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.altKey && !e.ctrlKey && !e.shiftKey && !e.metaKey) {
+                const key = e.key.toLowerCase();
+                if (key === 'p') {
+                    e.preventDefault();
+                    switchRole('partner');
+                } else if (key === 's') {
+                    e.preventDefault();
+                    switchRole('support');
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

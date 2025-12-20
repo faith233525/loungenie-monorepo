@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LounGenie Portal - Cyan & Teal Theme</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* 60% - Neutrals (Foundation) */
+            --white: #FFFFFF;
+            --bg: #F8FAFC;
+            /* Cool neutral */
+            --gray: #475569;
+            /* Slate 600 */
+            --text-light: #64748B;
+            /* Slate 500 */
+            --border: #E2E8F0;
+            /* Slate 200 */
+
+            /* Brand - Navy + Pool + Cyan */
+            --navy: #1E3A8A;
+            /* Deep navy (optional) */
+            --pool-blue: #11acc3;
+            /* Primary azure (brand) */
+            --pool-deep: #0f91a8;
+            /* Deeper azure for hover */
+            --pool-light: #E0F2FE;
+            /* Light hover */
+            --cyan: #37aaa2;
+            /* Teal accent (brand) */
+            --cyan-light: #CFFAFE;
+            /* Cyan hover */
+            --navy-08: rgba(30, 58, 138, 0.08);
+            /* subtle borders */
+            --navy-16: rgba(30, 58, 138, 0.16);
+            /* focus ring */
+
+            /* Status */
+            --success: #059669;
+            --danger: #DC2626;
+            --warning: #D97706;
+
+            /* Text */
+            --heading: #0F172A;
+            /* Slate 900 */
+        }
+
+
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: var(--bg);
+            color: #334155;
+            font-size: 15px;
+            line-height: 1.6;
+            letter-spacing: -0.011em;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header */
+        .header {
+            background: var(--pool-blue);
+            border-bottom: 2px solid var(--pool-deep);
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 3px rgba(14, 165, 233, 0.2), 0 8px 16px -8px rgba(14, 165, 233, 0.35);
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-header img {
+            height: 36px;
+            filter: brightness(0) invert(1);
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .logo-text .teal {
+            color: white;
+        }
+
+        .logo-text .gold {
+            color: var(--pool-blue);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+
+            .header-actions {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .notification-bell {
+                position: relative;
+                cursor: pointer;
+                padding: 8px;
+                border-radius: 8px;
+                transition: all 0.2s;
+            }
+
+            .notification-bell:hover {
+                background: rgba(255, 255, 255, 0.15);
+            }
+
+            .notification-bell svg {
+                width: 22px;
+                height: 22px;
+                color: white;
+            }
+
+            .notification-badge {
+                position: absolute;
+                top: 4px;
+                right: 4px;
+                background: var(--cyan);
+                color: white;
+                font-size: 10px;
+                font-weight: 700;
+                padding: 2px 5px;
+                border-radius: 10px;
+                min-width: 18px;
+                text-align: center;
+                box-shadow: 0 2px 4px rgba(6, 182, 212, 0.25);
+            }
+        }
+
+        .property-name {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--pool-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(17, 172, 195, 0.3);
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.08);
+            box-shadow: 0 4px 12px rgba(17, 172, 195, 0.4);
+        }
+
+        /* Role Switcher */
+        .role-switcher {
+            display: flex;
+            gap: 6px;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .role-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border: none;
+            background: transparent;
+            border-radius: 9px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .role-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .role-btn.active {
+            background: white;
+            color: var(--pool-blue);
+            box-shadow: 0 2px 8px rgba(17, 172, 195, 0.4);
+        }
+
+        .role-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            padding: 14px 40px;
+            background: white;
+            border-bottom: 1px solid var(--navy-08);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+        }
+
+        .breadcrumb-item {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb-item:hover {
+            color: var(--cyan);
+        }
+
+        .breadcrumb-item.active {
+            color: var(--pool-blue);
+            font-weight: 600;
+        }
+
+        .breadcrumb-separator {
+            color: var(--border);
+        }
+
+        /* Sidebar */
+        .container {
+            display: flex;
+            height: calc(100vh - 121px);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid var(--navy-08);
+            padding: 24px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            margin: 2px 12px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            border-left: 3px solid transparent;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background: var(--cyan-light);
+            color: var(--cyan);
+        }
+
+        .nav-item.active {
+            background: var(--pool-light);
+            color: var(--pool-blue);
+            border-left-color: var(--pool-blue);
+            font-weight: 600;
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .nav-badge {
+            position: absolute;
+            right: 24px;
+            background: var(--cyan);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 7px;
+            border-radius: 12px;
+            min-width: 22px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(6, 182, 212, 0.3);
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            padding: 32px 40px;
+            position: relative;
+            z-index: 1;
+            overflow-y: auto;
+            background: var(--bg);
+        }
+
+        .page-header {
+            margin-bottom: 28px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--heading);
+            margin-bottom: 6px;
+            letter-spacing: -0.025em;
+            line-height: 1.2;
+        }
+
+        .page-header p {
+            color: var(--gray);
+            font-size: 15px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            text-decoration: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--pool-blue);
+            color: white;
+            border: 1px solid var(--navy-08);
+            box-shadow: 0 3px 8px rgba(17, 172, 195, 0.18);
+        }
+
+        .btn-primary:hover {
+            background: var(--pool-deep);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 14px rgba(17, 172, 195, 0.28);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px var(--navy-16);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gray);
+            border: 1.5px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--cyan-light);
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        .btn-secondary:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px var(--navy-16);
+        }
+
+        /* Stats Grid */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 22px rgba(17, 172, 195, 0.12);
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 12px 30px rgba(17, 172, 195, 0.14);
+            transform: translateY(-2px);
+            border-color: var(--border);
+        }
+
+        .stat-card:nth-child(1) .stat-icon {
+            background: var(--pool-blue);
+            color: white;
+        }
+
+        .stat-card:nth-child(2) .stat-icon {
+            background: var(--cyan);
+            color: white;
+        }
+
+        .stat-card:nth-child(3) .stat-icon {
+            background: var(--pool-deep);
+            color: white;
+        }
+
+        .stat-card:nth-child(4) .stat-icon {
+            background: var(--gray);
+            color: white;
+        }
+
+        .stat-card:nth-child(1):hover {
+            border-color: var(--pool-blue);
+        }
+
+        .stat-card:nth-child(2):hover {
+            border-color: var(--cyan);
+        }
+
+        .stat-card:nth-child(3):hover {
+            border-color: var(--pool-deep);
+        }
+
+        .stat-card:nth-child(4):hover {
+            border-color: var(--gray);
+        }
+
+        .stat-title {
+            font-size: 15px;
+            color: var(--gray);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease;
+            border: 1px solid var(--border);
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: scale(1.05);
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--heading);
+            margin-bottom: 6px;
+            letter-spacing: -0.03em;
+            line-height: 1;
+        }
+
+        .stat-card:nth-child(1) .stat-value {
+            color: var(--pool-blue);
+        }
+
+        .stat-card:nth-child(2) .stat-value {
+            color: var(--cyan);
+        }
+
+        .stat-card:nth-child(3) .stat-value {
+            color: var(--pool-deep);
+        }
+
+        .stat-card:nth-child(4) .stat-value {
+            color: var(--gray);
+        }
+
+        .stat-change {
+            font-size: 13px;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .stat-change.negative {
+            color: var(--coral);
+        }
+
+        /* Content Cards */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 28px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 24px;
+            box-shadow: 0 8px 22px rgba(17, 172, 195, 0.12);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--heading);
+            letter-spacing: -0.01em;
+        }
+
+        .card-action {
+            color: var(--pool-blue);
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .card-action:hover {
+            color: var(--cyan);
+            gap: 8px;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 10px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #334155;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr {
+            transition: all 0.2s;
+        }
+
+        tr:hover {
+            background: rgba(17, 172, 195, 0.06);
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid var(--border);
+            font-size: 15px;
+            color: var(--gray);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid transparent;
+        }
+
+        .status::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status.active::before {
+            background: var(--cyan);
+            box-shadow: 0 0 8px var(--cyan);
+        }
+
+        .status.pending::before {
+            background: var(--pool-blue);
+            box-shadow: 0 0 8px var(--pool-blue);
+        }
+
+        .status.offline::before {
+            background: var(--danger);
+            box-shadow: 0 0 8px var(--danger);
+        }
+
+        .status.active {
+            background: var(--cyan-light);
+            color: var(--cyan);
+            border-color: var(--cyan-light);
+        }
+
+        .status.pending {
+            background: var(--pool-light);
+            color: var(--pool-blue);
+            border-color: var(--pool-light);
+        }
+
+        .status.offline {
+            background: #FEE2E2;
+            color: var(--danger);
+            border-color: #FEE2E2;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.6;
+                transform: scale(1.2);
+            }
+        }
+
+        /* Action Menu */
+        .table-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .action-btn {
+            padding: 10px;
+            border: none;
+            background: var(--cyan-light);
+            border-radius: 10px;
+            color: var(--cyan);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: var(--cyan);
+            color: white;
+            transform: scale(1.08);
+        }
+
+        /* Activity List */
+        .activity-item {
+            display: flex;
+            gap: 12px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .activity-item:hover {
+            background: var(--pool-light);
+            padding-left: 8px;
+            border-radius: 8px;
+        }
+
+        /* Responsive tweaks */
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                margin-bottom: 20px;
+            }
+
+            .stats {
+                gap: 16px;
+            }
+
+            .card {
+                padding: 16px;
+            }
+
+            td {
+                padding: 12px 10px;
+            }
+
+            .btn {
+                padding: 10px 16px;
+            }
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--cyan-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cyan);
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--heading);
+            margin-bottom: 4px;
+        }
+
+        .activity-time {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        /* Tooltip */
+        [data-tooltip] {
+            position: relative;
+            cursor: help;
+        }
+
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 12px;
+            background: var(--dark);
+            color: white;
+            font-size: 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+            z-index: 1000;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                padding: 20px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-header">
+            <img src="https://i.imgur.com/YourLogoHere.png" alt="LounGenie"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+            <span class="logo-text" style="display: none;"><span class="teal">Loung</span><span
+                    class="gold">Genie</span></span>
+        </div>
+        <div class="user-menu">
+            <span class="property-name">Grand Resort Hotel</span>
+            <div class="role-switcher">
+                <button class="role-btn active" data-role="partner">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    <span>Partner</span>
+                </button>
+                <button class="role-btn" data-role="support">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-2 0c0 .993-.241 1.929-.668 2.754l-1.524-1.525a3.997 3.997 0 00.078-2.183l1.562-1.562C15.802 8.249 16 9.1 16 10zm-5.165 3.913l1.58 1.58A5.98 5.98 0 0110 16a5.976 5.976 0 01-2.516-.552l1.562-1.562a4.006 4.006 0 001.789.027zm-4.677-2.796a4.002 4.002 0 01-.041-2.08l-.08.08-1.53-1.533A5.98 5.98 0 004 10c0 .954.223 1.856.619 2.657l1.54-1.54zm1.088-6.45A5.974 5.974 0 0110 4c.954 0 1.856.223 2.657.619l-1.54 1.54a4.002 4.002 0 00-2.346.033L7.246 4.668zM12 10a2 2 0 11-4 0 2 2 0 014 0z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <span>Support</span>
+                </button>
+            </div>
+            <div class="notification-bell">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
+                    </path>
+                </svg>
+                <span class="notification-badge">3</span>
+            </div>
+            <div class="user-avatar" data-tooltip="John Partner - Admin">JP</div>
+        </div>
+    </div>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <a href="#" class="breadcrumb-item">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active">Dashboard</span>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <a href="#" class="nav-item active">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                        d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                </svg>
+                Dashboard
+            </a>
+            <a href="#" class="nav-item">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                        d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+                </svg>
+                LounGenie Units
+            </a>
+            <a href="#" class="nav-item">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                        clip-rule="evenodd" />
+                </svg>
+                Service Tickets
+                <span class="nav-badge">12</span>
+            </a>
+            <a href="#" class="nav-item">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                    <path fill-rule="evenodd"
+                        d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                        clip-rule="evenodd" />
+                </svg>
+                Reports
+            </a>
+            <a href="#" class="nav-item">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+                        clip-rule="evenodd" />
+                </svg>
+                Settings
+            </a>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main">
+            <div class="page-header">
+                <div>
+                    <h1>Property Dashboard</h1>
+                    <p>Welcome back! Here's your property overview.</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+                        </svg>
+                        Export Report
+                    </button>
+                    <button class="btn btn-primary">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        New Ticket
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">Active Units</div>
+                        <div class="stat-icon">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-value">247</div>
+                    <div class="stat-change">↑ 12% vs last month</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">Open Tickets</div>
+                        <div class="stat-icon">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-value">12</div>
+                    <div class="stat-change">↓ 8% vs last week</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">Guest Orders</div>
+                        <div class="stat-icon">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-value">1,847</div>
+                    <div class="stat-change">↑ 23% vs last month</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">Revenue</div>
+                        <div class="stat-icon">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+                                <path fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-value">$24.5K</div>
+                    <div class="stat-change">↑ 18% vs last month</div>
+                </div>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="content-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Recent Units</div>
+                        <a href="#" class="card-action">View All →</a>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Unit ID</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Last Activity</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>LG-A-001</strong></td>
+                                <td>Pool Deck - Cabana 1</td>
+                                <td><span class="status active">Active</span></td>
+                                <td>2 minutes ago</td>
+                                <td class="table-actions">
+                                    <button class="action-btn" data-tooltip="View Details">
+                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                            <path fill-rule="evenodd"
+                                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                    <button class="action-btn" data-tooltip="Edit">
+                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                            <path
+                                                d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>LG-A-002</strong></td>
+                                <td>Pool Deck - Cabana 2</td>
+                                <td><span class="status active">Active</span></td>
+                                <td>5 minutes ago</td>
+                                <td class="table-actions">
+                                    <button class="action-btn" data-tooltip="View Details">
+                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                            <path fill-rule="evenodd"
+                                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                    <button class="action-btn" data-tooltip="Edit">
+                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                            <path
+                                                d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>LG-B-015</strong></td>
+                                <td>Beach - Premium Lounge</td>
+                                <td><span class="status pending">Maintenance</span></td>
+                                <td>1 hour ago</td>
+                                <td class="table-actions">
+                                    <button class="action-btn" data-tooltip="View Details">
+                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                            <path fill-rule="evenodd"
+                                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                    <button class="action-btn" data-tooltip="Edit">
+                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                            <path
+                                                d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>LG-C-032</strong></td>
+                                <td>Waterpark - VIP Section</td>
+                                <td><span class="status active">Active</span></td>
+                                <td>15 minutes ago</td>
+                                <td class="table-actions">
+                                    <button class="action-btn" data-tooltip="View Details">
+                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                            <path fill-rule="evenodd"
+                                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                    <button class="action-btn" data-tooltip="Edit">
+                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                            <path
+                                                d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>LG-A-008</strong></td>
+                                <td>Pool Deck - Cabana 8</td>
+                                <td><span class="status offline">Offline</span></td>
+                                <td>3 hours ago</td>
+                                <td class="table-actions">
+                                    <button class="action-btn" data-tooltip="View Details">
+                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                            <path fill-rule="evenodd"
+                                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                    <button class="action-btn" data-tooltip="Edit">
+                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                            <path
+                                                d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Recent Activity</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Order Completed</div>
+                            <div class="activity-time">Cabana 1 - 2 minutes ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Ticket Created</div>
+                            <div class="activity-time">Unit LG-B-015 - 1 hour ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                                <path fill-rule="evenodd"
+                                    d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Unit Serviced</div>
+                            <div class="activity-time">LG-A-005 - 2 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+                                <path fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Payment Processed</div>
+                            <div class="activity-time">$147.50 - 3 hours ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Role Switcher
+        document.addEventListener('DOMContentLoaded', function () {
+            const buttons = document.querySelectorAll('.role-btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const role = this.getAttribute('data-role');
+                    buttons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    showNotification(`Switched to ${role === 'partner' ? 'Property Partner' : 'Tech Support'} view`);
+                });
+            });
+        });
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: white;
+                padding: 16px 24px;
+                border-radius: 10px;
+                box-shadow: 0 4px 12px rgba(17, 172, 195, 0.3);
+                border-left: 4px solid #11acc3;
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 2000);
+        }
+    </script>
+    <style>
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+    </style>
+</body>
+
+</html>
