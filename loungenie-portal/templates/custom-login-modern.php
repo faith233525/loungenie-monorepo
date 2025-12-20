@@ -59,7 +59,7 @@ $error_messages = array(
 		
 		<!-- Title -->
 		<h1 class="lgp-form-title"><?php bloginfo( 'name' ); ?></h1>
-		<p class="lgp-form-subtitle"><?php _e( 'Partner Management System', 'loungenie-portal' ); ?></p>
+		<p class="lgp-form-subtitle"><?php esc_html_e( 'Partner Management System', 'loungenie-portal' ); ?></p>
 
 		<!-- Error Message -->
 		<?php if ( $error && isset( $error_messages[ $error ] ) ) : ?>
@@ -72,11 +72,11 @@ $error_messages = array(
 		<div class="lgp-role-selector">
 			<button class="lgp-role-btn <?php echo ( $login_type === 'partner' ) ? 'active' : ''; ?>" 
 					onclick="switchLoginType('partner')">
-				<?php _e( 'Partner', 'loungenie-portal' ); ?>
+				<?php esc_html_e( 'Partner', 'loungenie-portal' ); ?>
 			</button>
 			<button class="lgp-role-btn <?php echo ( $login_type === 'support' ) ? 'active' : ''; ?>" 
 					onclick="switchLoginType('support')">
-				<?php _e( 'Support', 'loungenie-portal' ); ?>
+				<?php esc_html_e( 'Support', 'loungenie-portal' ); ?>
 			</button>
 		</div>
 
@@ -120,14 +120,14 @@ $error_messages = array(
 				</div>
 				
 				<button type="submit" class="lgp-btn-login">
-					<?php _e( 'Sign In', 'loungenie-portal' ); ?>
+					<?php esc_html_e( 'Sign In', 'loungenie-portal' ); ?>
 				</button>
 				
 				<div class="lgp-trust-badge">
 					<svg class="lgp-trust-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
 						<path d="M8 0L2 3v5c0 3.5 2.4 6.8 6 7.6 3.6-.8 6-4.1 6-7.6V3L8 0zm4 8c0 2.8-1.9 5.4-4 6-2.1-.6-4-3.2-4-6V4l4-2 4 2v4zm-1.3-1.3L7 10.4 5.3 8.7l1-1 .7.7 2.7-2.7 1 1z"/>
 					</svg>
-					<?php _e( 'Secure Partner Access', 'loungenie-portal' ); ?>
+					<?php esc_html_e( 'Secure Partner Access', 'loungenie-portal' ); ?>
 				</div>
 			</form>
 		</div>
@@ -146,14 +146,14 @@ $error_messages = array(
 						<rect y="12" width="11" height="11" fill="#3AA6B9"/>
 						<rect x="12" y="12" width="11" height="11" fill="#3AA6B9"/>
 					</svg>
-					<?php _e( 'Microsoft Sign-In', 'loungenie-portal' ); ?>
+					<?php esc_html_e( 'Microsoft Sign-In', 'loungenie-portal' ); ?>
 				</button>
 				
 				<div class="lgp-trust-badge">
 					<svg class="lgp-trust-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
 						<path d="M8 0L2 3v5c0 3.5 2.4 6.8 6 7.6 3.6-.8 6-4.1 6-7.6V3L8 0zm4 8c0 2.8-1.9 5.4-4 6-2.1-.6-4-3.2-4-6V4l4-2 4 2v4zm-1.3-1.3L7 10.4 5.3 8.7l1-1 .7.7 2.7-2.7 1 1z"/>
 					</svg>
-					<?php _e( 'SSO Protected • Enterprise Security', 'loungenie-portal' ); ?>
+					<?php esc_html_e( 'SSO Protected • Enterprise Security', 'loungenie-portal' ); ?>
 				</div>
 			</form>
 		</div>

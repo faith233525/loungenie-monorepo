@@ -33,7 +33,7 @@ wp_enqueue_style( 'lgp-login-enhanced', plugin_dir_url( __FILE__ ) . '../assets/
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><?php echo esc_html( get_bloginfo( 'name' ) ); ?> - <?php _e( 'Sign In', 'loungenie-portal' ); ?></title>
+	<title><?php echo esc_html( get_bloginfo( 'name' ) ); ?> - <?php esc_html_e( 'Sign In', 'loungenie-portal' ); ?></title>
 	<?php wp_head(); ?>
 </head>
 <body class="lgp-login-page">
@@ -59,13 +59,13 @@ wp_enqueue_style( 'lgp-login-enhanced', plugin_dir_url( __FILE__ ) . '../assets/
 			</svg>
 			
 			<h1 class="lgp-login-title"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></h1>
-			<p class="lgp-login-subtitle"><?php _e( 'Partner Management System', 'loungenie-portal' ); ?></p>
+			<p class="lgp-login-subtitle"><?php esc_html_e( 'Partner Management System', 'loungenie-portal' ); ?></p>
 		</div>
 
 		<!-- Role Selector -->
 		<div class="lgp-role-selector">
-			<button type="button" 
-					class="lgp-role-btn <?php echo ( $login_type === 'partner' ? 'active' : '' ); ?>" 
+		    <button type="button" 
+			    class="lgp-role-btn <?php echo esc_attr( $login_type === 'partner' ? 'active' : '' ); ?>" 
 					onclick="switchLoginType('partner')"
 					data-role="partner">
 				<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
@@ -74,8 +74,8 @@ wp_enqueue_style( 'lgp-login-enhanced', plugin_dir_url( __FILE__ ) . '../assets/
 				<?php esc_html_e( 'Partner', 'loungenie-portal' ); ?>
 				<kbd class="lgp-keyboard-hint">Alt+P</kbd>
 			</button>
-			<button type="button" 
-					class="lgp-role-btn <?php echo ( $login_type === 'support' ? 'active' : '' ); ?>" 
+			    <button type="button" 
+				    class="lgp-role-btn <?php echo esc_attr( $login_type === 'support' ? 'active' : '' ); ?>" 
 					onclick="switchLoginType('support')"
 					data-role="support">
 				<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
@@ -87,7 +87,7 @@ wp_enqueue_style( 'lgp-login-enhanced', plugin_dir_url( __FILE__ ) . '../assets/
 		</div>
 
 		<!-- PARTNER LOGIN FORM -->
-		<div id="partnerForm" style="display: <?php echo ( $login_type === 'partner' ) ? 'block' : 'none'; ?>;">
+		<div id="partnerForm" style="display: <?php echo esc_attr( ( $login_type === 'partner' ) ? 'block' : 'none' ); ?>;">
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="lgp-login-form" id="lgpPartnerForm">
 				<?php wp_nonce_field( 'lgp_partner_login', 'lgp_partner_nonce' ); ?>
 				<input type="hidden" name="action" value="lgp_partner_login">
@@ -98,7 +98,7 @@ wp_enqueue_style( 'lgp-login-enhanced', plugin_dir_url( __FILE__ ) . '../assets/
 						<svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
 							<path d="M10 10a4 4 0 100-8 4 4 0 000 8zm-7 8a7 7 0 1114 0H3z"/>
 						</svg>
-						<?php _e( 'Username', 'loungenie-portal' ); ?>
+						<?php esc_html_e( 'Username', 'loungenie-portal' ); ?>
 					</label>
 					<div class="lgp-input-wrapper">
 						<input type="text" 
@@ -118,7 +118,7 @@ wp_enqueue_style( 'lgp-login-enhanced', plugin_dir_url( __FILE__ ) . '../assets/
 						<svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
 							<path d="M10 2a5 5 0 00-5 5v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2V7a5 5 0 00-5-5zm3 7V7a3 3 0 00-6 0v2h6z"/>
 						</svg>
-						<?php _e( 'Password', 'loungenie-portal' ); ?>
+						<?php esc_html_e( 'Password', 'loungenie-portal' ); ?>
 					</label>
 					<div class="lgp-input-wrapper lgp-password-wrapper">
 						<input type="password" 
@@ -144,15 +144,15 @@ wp_enqueue_style( 'lgp-login-enhanced', plugin_dir_url( __FILE__ ) . '../assets/
 				<div class="lgp-form-options">
 					<label class="lgp-checkbox">
 						<input type="checkbox" name="rememberme" value="1" checked>
-						<span class="lgp-checkbox-label"><?php _e( 'Remember me', 'loungenie-portal' ); ?></span>
+						<span class="lgp-checkbox-label"><?php esc_html_e( 'Remember me', 'loungenie-portal' ); ?></span>
 					</label>
 					<a href="<?php echo esc_url( wp_lostpassword_url() ); ?>" class="lgp-forgot-link">
-						<?php _e( 'Forgot password?', 'loungenie-portal' ); ?>
+						<?php esc_html_e( 'Forgot password?', 'loungenie-portal' ); ?>
 					</a>
 				</div>
 				
 				<button type="submit" class="lgp-btn-login">
-					<span class="lgp-btn-text"><?php _e( 'Sign In', 'loungenie-portal' ); ?></span>
+					<span class="lgp-btn-text"><?php esc_html_e( 'Sign In', 'loungenie-portal' ); ?></span>
 					<span class="lgp-btn-loader">
 						<svg width="20" height="20" viewBox="0 0 20 20">
 							<circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="50" stroke-linecap="round">
@@ -166,13 +166,13 @@ wp_enqueue_style( 'lgp-login-enhanced', plugin_dir_url( __FILE__ ) . '../assets/
 					<svg class="lgp-trust-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
 						<path d="M8 0L2 3v5c0 3.5 2.4 6.8 6 7.6 3.6-.8 6-4.1 6-7.6V3L8 0zm4 8c0 2.8-1.9 5.4-4 6-2.1-.6-4-3.2-4-6V4l4-2 4 2v4zm-1.3-1.3L7 10.4 5.3 8.7l1-1 .7.7 2.7-2.7 1 1z"/>
 					</svg>
-					<?php _e( 'Secure Partner Access', 'loungenie-portal' ); ?>
+					<?php esc_html_e( 'Secure Partner Access', 'loungenie-portal' ); ?>
 				</div>
 			</form>
 		</div>
 
 		<!-- SUPPORT SSO FORM -->
-		<div id="supportForm" style="display: <?php echo ( $login_type === 'support' ) ? 'block' : 'none'; ?>;">
+		<div id="supportForm" style="display: <?php echo esc_attr( ( $login_type === 'support' ) ? 'block' : 'none' ); ?>;">
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="lgp-login-form" id="lgpSupportForm">
 				<?php wp_nonce_field( 'lgp_sso_login', 'lgp_sso_nonce' ); ?>
 				<input type="hidden" name="action" value="lgp_sso_login">
@@ -185,7 +185,7 @@ wp_enqueue_style( 'lgp-login-enhanced', plugin_dir_url( __FILE__ ) . '../assets/
 						<rect y="12" width="11" height="11" fill="#00A4EF"/>
 						<rect x="12" y="12" width="11" height="11" fill="#FFB900"/>
 					</svg>
-					<span class="lgp-btn-text"><?php _e( 'Microsoft Sign-In', 'loungenie-portal' ); ?></span>
+					<span class="lgp-btn-text"><?php esc_html_e( 'Microsoft Sign-In', 'loungenie-portal' ); ?></span>
 					<span class="lgp-btn-loader">
 						<svg width="20" height="20" viewBox="0 0 20 20">
 							<circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="50" stroke-linecap="round">
@@ -196,14 +196,14 @@ wp_enqueue_style( 'lgp-login-enhanced', plugin_dir_url( __FILE__ ) . '../assets/
 				</button>
 				
 				<div class="lgp-sso-info">
-					<p><?php _e( 'Use your Microsoft 365 credentials to access the support portal.', 'loungenie-portal' ); ?></p>
+					<p><?php esc_html_e( 'Use your Microsoft 365 credentials to access the support portal.', 'loungenie-portal' ); ?></p>
 				</div>
 				
 				<div class="lgp-trust-badge">
 					<svg class="lgp-trust-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
 						<path d="M8 0L2 3v5c0 3.5 2.4 6.8 6 7.6 3.6-.8 6-4.1 6-7.6V3L8 0zm4 8c0 2.8-1.9 5.4-4 6-2.1-.6-4-3.2-4-6V4l4-2 4 2v4zm-1.3-1.3L7 10.4 5.3 8.7l1-1 .7.7 2.7-2.7 1 1z"/>
 					</svg>
-					<?php _e( 'SSO Protected • Enterprise Security', 'loungenie-portal' ); ?>
+					<?php esc_html_e( 'SSO Protected • Enterprise Security', 'loungenie-portal' ); ?>
 				</div>
 			</form>
 		</div>

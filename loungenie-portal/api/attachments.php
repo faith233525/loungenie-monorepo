@@ -107,7 +107,8 @@ class LGP_Attachments_API {
 			)
 		);
 
-		return $ticket_company === (string) $company_id;
+		// Compare company IDs as integers to avoid type mismatch
+		return (int) $ticket_company === (int) $company_id;
 	}
 
 	/**
@@ -415,10 +416,13 @@ class LGP_Attachments_API {
 			);
 		}
 
-		// Return file for download
-		header( 'Content-Type: ' . $attachment->file_type );
-		header( 'Content-Disposition: attachment; filename="' . $attachment->file_name . '"' );
-		header( 'Content-Length: ' . $attachment->file_size );
+		// Return file for download with safe headers
+		$mime      = in_array( $attachment->file_type, self::ALLOWED_TYPES, true ) ? $attachment->file_type : 'application/octet-stream';
+		$safe_name = sanitize_file_name( $attachment->file_name );
+		header( 'Content-Type: ' . $mime );
+		header( 'Content-Disposition: attachment; filename="' . $safe_name . '"' );
+		header( 'X-Content-Type-Options: nosniff' );
+		header( 'Content-Length: ' . (int) $attachment->file_size );
 		readfile( $file_path );
 		exit;
 	}
