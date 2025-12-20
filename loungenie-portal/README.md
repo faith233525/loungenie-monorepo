@@ -255,6 +255,30 @@ Send emails and notifications via Microsoft Graph API:
 update_user_meta( $user_id, 'lgp_company_id', $company_id );
 ```
 
+## Unit & Color Tracking
+
+**Important:** Units are tracked as **company-level aggregates**, not individually.
+
+- Total unit count per company (integer)
+- Color distribution stored as JSON: `{"yellow": 10, "orange": 5}`
+- No individual unit IDs exposed to Partners
+- Icons used throughout (no emojis)
+
+**Documentation:**
+- 📘 [Complete Guide](UNIT_COLOR_GUIDANCE.md) - Technical reference
+- 📋 [Implementation Summary](UNIT_COLOR_IMPLEMENTATION_SUMMARY.md) - What's been done
+- 🔖 [Quick Reference](UNIT_COLOR_QUICKREF.md) - Fast lookup
+
+**Usage:**
+```php
+// Get color aggregates
+$colors = LGP_Company_Colors::get_company_colors( $company_id );
+$total = LGP_Company_Colors::get_company_unit_count( $company_id );
+
+// Display in UI
+lgp_render_company_colors( $company_id );
+```
+
 ## Technical Standards
 
 - ✅ Semantic HTML5
