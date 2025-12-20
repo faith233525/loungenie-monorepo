@@ -233,8 +233,8 @@ class LGP_Companies_API {
 
 		if ( LGP_Auth::is_partner() ) {
 			$company_id   = LGP_Auth::get_user_company_id();
-			$requested_id = $request->get_param( 'id' );
-			return $company_id == $requested_id;
+			$requested_id = (int) $request->get_param( 'id' );
+			return (int) $company_id === $requested_id;
 		}
 
 		return false;

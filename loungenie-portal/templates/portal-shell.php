@@ -85,68 +85,68 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 			<ul class="lgp-nav" role="menu">
 				<?php if ( $is_support ) : ?>
 					<li class="lgp-nav-item">
-						<a href="<?php echo esc_url( home_url( '/portal' ) ); ?>" class="lgp-nav-link <?php echo $section === 'dashboard' ? 'active' : ''; ?>">
+						<a href="<?php echo esc_url( home_url( '/portal' ) ); ?>" class="lgp-nav-link <?php echo esc_attr( $section === 'dashboard' ? 'active' : '' ); ?>">
 							<span class="lgp-nav-icon">📊</span>
 							<?php esc_html_e( 'Dashboard', 'loungenie-portal' ); ?>
 						</a>
 					</li>
 					<li class="lgp-nav-item">
-						<a href="<?php echo esc_url( home_url( '/portal/companies' ) ); ?>" class="lgp-nav-link <?php echo $section === 'companies' ? 'active' : ''; ?>">
+						<a href="<?php echo esc_url( home_url( '/portal/companies' ) ); ?>" class="lgp-nav-link <?php echo esc_attr( $section === 'companies' ? 'active' : '' ); ?>">
 							<span class="lgp-nav-icon">🏢</span>
 							<?php esc_html_e( 'Companies', 'loungenie-portal' ); ?>
 						</a>
 					</li>
 					<li class="lgp-nav-item">
-						<a href="<?php echo esc_url( home_url( '/portal/units' ) ); ?>" class="lgp-nav-link <?php echo $section === 'units' || $section === 'gateways' ? 'active' : ''; ?>">
+						<a href="<?php echo esc_url( home_url( '/portal/units' ) ); ?>" class="lgp-nav-link <?php echo esc_attr( ( $section === 'units' || $section === 'gateways' ) ? 'active' : '' ); ?>">
 							<span class="lgp-nav-icon">📦</span>
 							<?php esc_html_e( 'Units & Gateways', 'loungenie-portal' ); ?>
 						</a>
 					</li>
 					<li class="lgp-nav-item">
-						<a href="<?php echo esc_url( home_url( '/portal/tickets' ) ); ?>" class="lgp-nav-link <?php echo $section === 'tickets' ? 'active' : ''; ?>">
+						<a href="<?php echo esc_url( home_url( '/portal/tickets' ) ); ?>" class="lgp-nav-link <?php echo esc_attr( $section === 'tickets' ? 'active' : '' ); ?>">
 							<span class="lgp-nav-icon">🎫</span>
 							<?php esc_html_e( 'Tickets', 'loungenie-portal' ); ?>
 						</a>
 					</li>
 					<li class="lgp-nav-item">
-						<a href="<?php echo esc_url( home_url( '/portal/map' ) ); ?>" class="lgp-nav-link <?php echo $section === 'map' ? 'active' : ''; ?>">
+						<a href="<?php echo esc_url( home_url( '/portal/map' ) ); ?>" class="lgp-nav-link <?php echo esc_attr( $section === 'map' ? 'active' : '' ); ?>">
 							<span class="lgp-nav-icon">🗺️</span>
 							<?php esc_html_e( 'Map View', 'loungenie-portal' ); ?>
 						</a>
 					</li>
 					<li class="lgp-nav-item">
-						<a href="<?php echo esc_url( home_url( '/portal/help' ) ); ?>" class="lgp-nav-link <?php echo $section === 'help' ? 'active' : ''; ?>">
+						<a href="<?php echo esc_url( home_url( '/portal/help' ) ); ?>" class="lgp-nav-link <?php echo esc_attr( $section === 'help' ? 'active' : '' ); ?>">
 						<span class="lgp-nav-icon">📚</span>
 						<?php esc_html_e( 'Knowledge Center', 'loungenie-portal' ); ?>
 						</a>
 					</li>
 				<?php else : ?>
 					<li class="lgp-nav-item">
-						<a href="<?php echo esc_url( home_url( '/portal' ) ); ?>" class="lgp-nav-link <?php echo $section === 'dashboard' ? 'active' : ''; ?>">
+						<a href="<?php echo esc_url( home_url( '/portal' ) ); ?>" class="lgp-nav-link <?php echo esc_attr( $section === 'dashboard' ? 'active' : '' ); ?>">
 							<span class="lgp-nav-icon">📊</span>
 							<?php esc_html_e( 'Dashboard', 'loungenie-portal' ); ?>
 						</a>
 					</li>
 					<li class="lgp-nav-item">
-						<a href="<?php echo esc_url( home_url( '/portal/units' ) ); ?>" class="lgp-nav-link <?php echo $section === 'units' ? 'active' : ''; ?>">
+						<a href="<?php echo esc_url( home_url( '/portal/units' ) ); ?>" class="lgp-nav-link <?php echo esc_attr( $section === 'units' ? 'active' : '' ); ?>">
 							<span class="lgp-nav-icon">📦</span>
 							<?php esc_html_e( 'My Units', 'loungenie-portal' ); ?>
 						</a>
 					</li>
 					<li class="lgp-nav-item">
-						<a href="<?php echo esc_url( home_url( '/portal/requests' ) ); ?>" class="lgp-nav-link <?php echo $section === 'requests' ? 'active' : ''; ?>">
+						<a href="<?php echo esc_url( home_url( '/portal/requests' ) ); ?>" class="lgp-nav-link <?php echo esc_attr( $section === 'requests' ? 'active' : '' ); ?>">
 							<span class="lgp-nav-icon">📝</span>
 							<?php esc_html_e( 'Service Requests', 'loungenie-portal' ); ?>
 						</a>
 					</li>
 					<li class="lgp-nav-item">
-						<a href="<?php echo esc_url( home_url( '/portal/history' ) ); ?>" class="lgp-nav-link <?php echo $section === 'history' ? 'active' : ''; ?>">
+						<a href="<?php echo esc_url( home_url( '/portal/history' ) ); ?>" class="lgp-nav-link <?php echo esc_attr( $section === 'history' ? 'active' : '' ); ?>">
 							<span class="lgp-nav-icon">📋</span>
 							<?php esc_html_e( 'Request History', 'loungenie-portal' ); ?>
 						</a>
 					</li>
 					<li class="lgp-nav-item">
-						<a href="<?php echo esc_url( home_url( '/portal/help' ) ); ?>" class="lgp-nav-link <?php echo $section === 'help' ? 'active' : ''; ?>">
+						<a href="<?php echo esc_url( home_url( '/portal/help' ) ); ?>" class="lgp-nav-link <?php echo esc_attr( $section === 'help' ? 'active' : '' ); ?>">
 							<span class="lgp-nav-icon">🎓</span>
 							<?php esc_html_e( 'Help and Guides', 'loungenie-portal' ); ?>
 						</a>

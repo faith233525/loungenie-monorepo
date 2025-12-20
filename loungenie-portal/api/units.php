@@ -261,8 +261,8 @@ class LGP_Units_API {
 
 		if ( LGP_Auth::is_partner() ) {
 			global $wpdb;
-			$unit_id    = $request->get_param( 'id' );
-			$company_id = LGP_Auth::get_user_company_id();
+			$unit_id    = (int) $request->get_param( 'id' );
+			$company_id = (int) LGP_Auth::get_user_company_id();
 			$table      = $wpdb->prefix . 'lgp_units';
 
 			$unit = $wpdb->get_row(
