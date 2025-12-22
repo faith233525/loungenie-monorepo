@@ -1,0 +1,195 @@
+# LounGenie Portal - Development Documentation Index
+
+**Welcome to the development documentation archive!**
+
+All developer and internal reference documents are organized here. These files are **NOT included in the production plugin ZIP**.
+
+---
+
+## 📚 Documentation Structure
+
+### 🏗️ [ARCHITECTURE/](ARCHITECTURE/)
+System design and technical architecture
+
+- **[ARCHITECTURE.md](ARCHITECTURE/ARCHITECTURE.md)** - Complete system architecture
+- **[FOLDER_STRUCTURE.md](ARCHITECTURE/FOLDER_STRUCTURE.md)** - Directory organization
+- **[INTEGRATION_GUIDE.md](ARCHITECTURE/INTEGRATION_GUIDE.md)** - System integrations
+
+### 🚀 [IMPLEMENTATION/](IMPLEMENTATION/)
+Implementation history and phase completion
+
+- **[IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION/IMPLEMENTATION_SUMMARY.md)** - Phases 0-13 completion matrix
+- **[IMPLEMENTATION_UPDATES.md](IMPLEMENTATION/IMPLEMENTATION_UPDATES.md)** - Detailed update history
+- **[IMPLEMENTATION_COMPLETE.md](IMPLEMENTATION/IMPLEMENTATION_COMPLETE.md)** - Project completion summary
+- **[PHASE_2B_COMPLETION_SUMMARY.md](IMPLEMENTATION/PHASE_2B_COMPLETION_SUMMARY.md)** - Phase 2B details
+- **[CSV_PARTNER_IMPORT_IMPLEMENTATION.md](IMPLEMENTATION/CSV_PARTNER_IMPORT_IMPLEMENTATION.md)** - CSV feature implementation
+
+### 🧪 [TESTING/](TESTING/)
+Testing guides and QA reports
+
+- **[COMPREHENSIVE_TESTING_GUIDE.md](TESTING/COMPREHENSIVE_TESTING_GUIDE.md)** - Full testing procedures
+- **[SHARED_SERVER_TEST_SUITE.md](TESTING/SHARED_SERVER_TEST_SUITE.md)** - Shared hosting tests
+- **[TESTS_ROUTE_UNIQUENESS.md](TESTING/TESTS_ROUTE_UNIQUENESS.md)** - Route uniqueness validation
+- **[FEATURE_AUDIT_REPORT.md](TESTING/FEATURE_AUDIT_REPORT.md)** - Feature audit results
+- **[TEST_FIX_SUMMARY.md](TESTING/TEST_FIX_SUMMARY.md)** - Test fixes applied
+- **[QA_PRODUCTION_AUDIT.md](TESTING/QA_PRODUCTION_AUDIT.md)** - Full production QA audit
+
+### 🚢 [DEPLOYMENT/](DEPLOYMENT/)
+Deployment guides and checklists
+
+- **[SHARED_SERVER_DEPLOYMENT.md](DEPLOYMENT/SHARED_SERVER_DEPLOYMENT.md)** - Shared hosting deployment
+- **[PRODUCTION_DEPLOYMENT.md](DEPLOYMENT/PRODUCTION_DEPLOYMENT.md)** - Production deployment guide
+- **[DEPLOYMENT_CHECKLIST.md](DEPLOYMENT/DEPLOYMENT_CHECKLIST.md)** - Pre-deployment checklist
+
+### 🔌 [INTEGRATIONS/](INTEGRATIONS/)
+Third-party API integration guides
+
+- **[EMAIL_TO_TICKET_INDEX.md](INTEGRATIONS/EMAIL_TO_TICKET_INDEX.md)** - Email integration index
+- **[EMAIL_TO_TICKET_README.md](INTEGRATIONS/EMAIL_TO_TICKET_README.md)** - Email integration guide
+- **[EMAIL_TO_TICKET_SUMMARY.md](INTEGRATIONS/EMAIL_TO_TICKET_SUMMARY.md)** - Email implementation
+- **[PRODUCTION_EMAIL_SECURITY.md](INTEGRATIONS/PRODUCTION_EMAIL_SECURITY.md)** - Email security details
+
+### ✨ [FEATURES/](FEATURES/)
+Feature-specific documentation
+
+- **[UNIT_COLOR_GUIDANCE.md](FEATURES/UNIT_COLOR_GUIDANCE.md)** - Color system design
+- **[UNIT_COLOR_IMPLEMENTATION_SUMMARY.md](FEATURES/UNIT_COLOR_IMPLEMENTATION_SUMMARY.md)** - Color implementation
+- **[UNIT_COLOR_QUICKREF.md](FEATURES/UNIT_COLOR_QUICKREF.md)** - Color quick reference
+- **[UNIT_COLOR_DEPLOYMENT_CHECKLIST.md](FEATURES/UNIT_COLOR_DEPLOYMENT_CHECKLIST.md)** - Color deployment
+
+### 🔐 [LOGIN/](LOGIN/)
+Custom login page and SSO documentation
+
+- **[CUSTOM_LOGIN_SETUP.md](LOGIN/CUSTOM_LOGIN_SETUP.md)** - Custom login setup
+- **[CUSTOM_LOGIN_QUICKSTART.md](LOGIN/CUSTOM_LOGIN_QUICKSTART.md)** - Quick start guide
+- **[MODERN_LOGIN_SETUP.md](LOGIN/MODERN_LOGIN_SETUP.md)** - Modern login features
+- **[ENHANCED_LOGIN_GUIDE.md](LOGIN/ENHANCED_LOGIN_GUIDE.md)** - Enhanced login options
+- **[LOGIN_BACKGROUND_GUIDE.md](LOGIN/LOGIN_BACKGROUND_GUIDE.md)** - Background configuration
+
+### 🔍 [AUDIT/](AUDIT/)
+Audit and cleanup reports
+
+- **[AUDIT_CLEANUP_INDEX.md](AUDIT/AUDIT_CLEANUP_INDEX.md)** - Audit index
+- **[COMPREHENSIVE_AUDIT_AND_FIXES.md](AUDIT/COMPREHENSIVE_AUDIT_AND_FIXES.md)** - Full audit results
+- **[FINAL_CLEANUP_VERIFICATION.md](AUDIT/FINAL_CLEANUP_VERIFICATION.md)** - Cleanup verification
+- **[CLEANUP_SUMMARY.txt](AUDIT/CLEANUP_SUMMARY.txt)** - Cleanup summary
+
+### 🔧 [OFFLINE/](OFFLINE/)
+Offline development and testing
+
+- **[OFFLINE_DEVELOPMENT.md](OFFLINE/OFFLINE_DEVELOPMENT.md)** - Offline development guide
+- **[OFFLINE_SUITE_SUMMARY.md](OFFLINE/OFFLINE_SUITE_SUMMARY.md)** - Offline suite summary
+
+### 📋 [OTHER/](OTHER/)
+Miscellaneous reference documents
+
+- **[ENHANCEMENTS_SUMMARY.md](OTHER/ENHANCEMENTS_SUMMARY.md)** - Feature enhancements
+- **[FEATURES.md](OTHER/FEATURES.md)** - Feature list
+- **[README_ENHANCEMENTS.md](OTHER/README_ENHANCEMENTS.md)** - Readme improvements
+- **[MIGRATION_GUIDE.md](OTHER/MIGRATION_GUIDE.md)** - Migration instructions
+- **[PLUGIN_STATUS_REPORT.md](OTHER/PLUGIN_STATUS_REPORT.md)** - Status reports
+- **[SECURITY_VULNERABILITY_REPORT.md](OTHER/SECURITY_VULNERABILITY_REPORT.md)** - Security audit
+
+---
+
+## 🎯 Quick Navigation
+
+### For New Contributors
+1. Start with [ARCHITECTURE/](ARCHITECTURE/ARCHITECTURE.md)
+2. Review [IMPLEMENTATION/IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION/IMPLEMENTATION_SUMMARY.md)
+3. Check [TESTING/COMPREHENSIVE_TESTING_GUIDE.md](TESTING/COMPREHENSIVE_TESTING_GUIDE.md)
+
+### For Deployment
+1. Read [DEPLOYMENT/DEPLOYMENT_CHECKLIST.md](DEPLOYMENT/DEPLOYMENT_CHECKLIST.md)
+2. Follow [DEPLOYMENT/PRODUCTION_DEPLOYMENT.md](DEPLOYMENT/PRODUCTION_DEPLOYMENT.md)
+3. Review [TESTING/QA_PRODUCTION_AUDIT.md](TESTING/QA_PRODUCTION_AUDIT.md)
+
+### For Feature Development
+1. Check relevant folder (e.g., [FEATURES/](FEATURES/) for colors, [LOGIN/](LOGIN/) for auth)
+2. Review implementation docs
+3. Follow testing guidelines
+
+### For Integration Setup
+1. Navigate to [INTEGRATIONS/](INTEGRATIONS/)
+2. Select relevant integration (Email, HubSpot, etc.)
+3. Follow setup steps
+
+---
+
+## 📊 Statistics
+
+- **Total Dev Docs:** 40+ files
+- **Organized Into:** 10 categories
+- **Coverage:** Architecture, Implementation, Testing, Deployment, Integrations, Features
+- **Total Lines:** 10,000+ lines of documentation
+
+---
+
+## ⚠️ Important Notes
+
+### These Files Are NOT in Production ZIP
+- They are development and reference materials
+- Users don't need these to run the plugin
+- They are preserved in Git for development reference
+
+### For Users/Administrators
+- Refer to the **production docs** in plugin root:
+  - `README.md` - Plugin overview
+  - `SETUP_GUIDE.md` - Installation
+  - `FILTERING_GUIDE.md` - Feature guides
+  - `CSV_PARTNER_IMPORT_GUIDE.md` - CSV import
+
+### For Developers
+- Refer to these docs in `/docs/` folder
+- Use for understanding architecture and history
+- Use for troubleshooting and debugging
+
+---
+
+## 🔄 Document Maintenance
+
+When updating documentation:
+
+1. **Production Docs** (plugin root) - Always keep current
+2. **Dev Docs** (this folder) - Update periodically for historical accuracy
+3. **Archive** - Older versions moved to `/docs/archive/` if needed
+
+---
+
+## 🎓 Learning Path
+
+### Phase 1: Overview
+- [ ] README.md (production)
+- [ ] ARCHITECTURE/ARCHITECTURE.md
+
+### Phase 2: Implementation
+- [ ] IMPLEMENTATION/IMPLEMENTATION_SUMMARY.md
+- [ ] IMPLEMENTATION/IMPLEMENTATION_UPDATES.md
+
+### Phase 3: Development
+- [ ] ARCHITECTURE/FOLDER_STRUCTURE.md
+- [ ] Relevant feature docs in FEATURES/ or LOGIN/
+
+### Phase 4: Testing
+- [ ] TESTING/COMPREHENSIVE_TESTING_GUIDE.md
+- [ ] TESTING/QA_PRODUCTION_AUDIT.md
+
+### Phase 5: Deployment
+- [ ] DEPLOYMENT/DEPLOYMENT_CHECKLIST.md
+- [ ] DEPLOYMENT/PRODUCTION_DEPLOYMENT.md
+
+---
+
+## 📞 Questions?
+
+- Architecture questions → See `ARCHITECTURE/`
+- Testing issues → See `TESTING/`
+- Integration problems → See `INTEGRATIONS/`
+- Feature details → See `FEATURES/`
+- Deployment help → See `DEPLOYMENT/`
+
+---
+
+**Last Updated:** December 22, 2025  
+**Status:** ✅ Complete  
+**Organization:** 10 categories, 40+ files

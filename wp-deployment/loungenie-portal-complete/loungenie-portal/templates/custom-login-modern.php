@@ -163,33 +163,34 @@ $error_messages = array(
 
 	</div>
 
-	<script>
+	<?php $lgp_nonce = method_exists('LGP_Security', 'get_csp_nonce') ? LGP_Security::get_csp_nonce() : ''; ?>
+	<script<?php echo $lgp_nonce ? ' nonce="' . esc_attr($lgp_nonce) . '"' : ''; ?>>
 		function switchLoginType(type) {
-			const partnerForm = document.getElementById('partnerForm');
-			const supportForm = document.getElementById('supportForm');
-			const partnerBtn = document.querySelector('.lgp-role-btn:first-child');
-			const supportBtn = document.querySelector('.lgp-role-btn:last-child');
+		const partnerForm = document.getElementById('partnerForm');
+		const supportForm = document.getElementById('supportForm');
+		const partnerBtn = document.querySelector('.lgp-role-btn:first-child');
+		const supportBtn = document.querySelector('.lgp-role-btn:last-child');
 
-			if (type === 'partner') {
-				partnerForm.style.display = 'block';
-				supportForm.style.display = 'none';
-				partnerBtn.classList.add('active');
-				supportBtn.classList.remove('active');
-			} else {
-				partnerForm.style.display = 'none';
-				supportForm.style.display = 'block';
-				partnerBtn.classList.remove('active');
-				supportBtn.classList.add('active');
-			}
-
-			// Update URL without reload
-			const url = new URL(window.location);
-			url.searchParams.set('login_type', type);
-			window.history.pushState({}, '', url);
+		if (type === 'partner') {
+		partnerForm.style.display = 'block';
+		supportForm.style.display = 'none';
+		partnerBtn.classList.add('active');
+		supportBtn.classList.remove('active');
+		} else {
+		partnerForm.style.display = 'none';
+		supportForm.style.display = 'block';
+		partnerBtn.classList.remove('active');
+		supportBtn.classList.add('active');
 		}
-	</script>
 
-	<?php wp_footer(); ?>
+		// Update URL without reload
+		const url = new URL(window.location);
+		url.searchParams.set('login_type', type);
+		window.history.pushState({}, '', url);
+		}
+		</script>
+
+		<?php wp_footer(); ?>
 </body>
 
 </html>

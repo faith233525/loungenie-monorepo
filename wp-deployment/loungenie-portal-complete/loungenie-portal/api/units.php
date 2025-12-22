@@ -89,7 +89,10 @@ class LGP_Units_API
 			// Support can see all units
 			$units = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT * FROM $table ORDER BY id DESC LIMIT %d OFFSET %d",
+					"SELECT id, company_id, unit_number, venue_type, address, city, state, latitude, longitude, lock_type, color_tag, status, install_date
+					 FROM $table
+					 ORDER BY id DESC
+					 LIMIT %d OFFSET %d",
 					$per_page,
 					$offset
 				)
@@ -100,7 +103,11 @@ class LGP_Units_API
 			$company_id = LGP_Auth::get_user_company_id();
 			$units      = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT * FROM $table WHERE company_id = %d ORDER BY id DESC LIMIT %d OFFSET %d",
+					"SELECT id, company_id, unit_number, venue_type, address, city, state, latitude, longitude, lock_type, color_tag, status, install_date
+					 FROM $table
+					 WHERE company_id = %d
+					 ORDER BY id DESC
+					 LIMIT %d OFFSET %d",
 					$company_id,
 					$per_page,
 					$offset
@@ -136,7 +143,8 @@ class LGP_Units_API
 
 		$unit = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM $table WHERE id = %d",
+				"SELECT id, company_id, unit_number, venue_type, address, city, state, latitude, longitude, lock_type, color_tag, status, install_date
+				 FROM $table WHERE id = %d",
 				$id
 			)
 		);

@@ -77,24 +77,75 @@ class LGP_Map_API
 
 		$units_table     = $wpdb->prefix . 'lgp_units';
 		$companies_table = $wpdb->prefix . 'lgp_companies';
+		$tickets_table   = $wpdb->prefix . 'lgp_tickets';
 
 		// Query with role-based filtering using prepared statements when scoping by company
+		// Return fields expected by map-view.js: id, name, type, location, latitude, longitude
+		// Using actual schema fields: unit_number, venue_type, address, lock_type
 		if ($is_support) {
-			$results = $wpdb->get_results(
-				"SELECT u.company_id, u.unit_number, u.status, u.season, u.latitude, u.longitude,
-						c.primary_contract_status
+			$units = $wpdb->get_results(
+				"SELECT 
+					u.id, 
+					CONCAT('Unit ', COALESCE(u.unit_number, u.id)) AS name,
+					COALESCE(u.venue_type, u.lock_type, 'Unknown') AS type,
+					CONCAT_WS(', ', c.name, u.address) AS location,
+					u.latitude, 
+					u.longitude,
+					u.status,
+					u.season
 				 FROM {$units_table} u
 				 LEFT JOIN {$companies_table} c ON c.id = u.company_id
 				 WHERE u.latitude IS NOT NULL AND u.longitude IS NOT NULL"
 			);
+
+			// Get all tickets for these units
+			$tickets = $wpdb->get_results(
+				"SELECT 
+					t.id,
+					t.unit_id,
+					t.title,
+					t.description,
+					t.status,
+					t.urgency,
+					t.created_at
+				 FROM {$tickets_table} t
+				 WHERE t.unit_id IS NOT NULL 
+				 AND t.status NOT IN ('closed', 'resolved')"
+			);
 		} else {
-			$results = $wpdb->get_results(
+			$units = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT u.company_id, u.unit_number, u.status, u.season, u.latitude, u.longitude,
-							c.primary_contract_status
+					"SELECT 
+						u.id,
+						CONCAT('Unit ', COALESCE(u.unit_number, u.id)) AS name,
+						COALESCE(u.venue_type, u.lock_type, 'Unknown') AS type,
+						CONCAT_WS(', ', c.name, u.address) AS location,
+						u.latitude, 
+						u.longitude,
+						u.status,
+						u.season
 					 FROM {$units_table} u
 					 LEFT JOIN {$companies_table} c ON c.id = u.company_id
 					 WHERE u.company_id = %d AND u.latitude IS NOT NULL AND u.longitude IS NOT NULL",
+					$company_id
+				)
+			);
+
+			// Get tickets for partner's units only
+			$tickets = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT 
+						t.id,
+						t.unit_id,
+						t.title,
+						t.description,
+						t.status,
+						t.urgency,
+						t.created_at
+					 FROM {$tickets_table} t
+					 INNER JOIN {$units_table} u ON t.unit_id = u.id
+					 WHERE u.company_id = %d 
+					 AND t.status NOT IN ('closed', 'resolved')",
 					$company_id
 				)
 			);
@@ -107,14 +158,16 @@ class LGP_Map_API
 			$is_support ? null : $company_id,
 			array(
 				'role'           => $is_support ? 'support' : 'partner',
-				'units_returned' => count($results),
+				'units_returned' => count($units),
+				'tickets_returned' => count($tickets),
 			)
 		);
 
 		return rest_ensure_response(
 			array(
-				'units' => $results,
-				'total' => count($results),
+				'units' => $units,
+				'tickets' => $tickets,
+				'total' => count($units),
 				'role'  => $is_support ? 'support' : 'partner',
 			)
 		);

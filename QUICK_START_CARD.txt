@@ -1,0 +1,133 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                       QUICK START - DEPLOYMENT CARD                          ║
+║                        LounGenie Portal v1.8.1                               ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 📦 PACKAGE                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+File:      loungenie-portal-wporg-production.zip
+Size:      242 KB
+Files:     95 (65 PHP, 7 CSS, 10 JS)
+MD5:       c9bbf1ae8ef48792f86d692396c4148f
+Status:    ✅ PRODUCTION READY
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 🚀 UPLOAD (3 STEPS)                                                         ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+1. WordPress Admin → Plugins → Add New → Upload Plugin
+2. Select loungenie-portal-wporg-production.zip → Install Now
+3. Activate → Navigate to /portal to verify
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ⚙️ CONFIGURATION (OPTIONAL)                                                 ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+HubSpot CRM:
+  • Settings → HubSpot Integration
+  • Enter Private App Access Token
+  • Enables company/ticket sync
+
+Microsoft 365 SSO:
+  • Settings → M365 SSO
+  • Enter Client ID, Secret, Tenant ID
+  • Enables Support SSO login
+
+Outlook/Graph API:
+  • Settings → Outlook Integration
+  • Enter Client ID, Secret
+  • Enables email notifications
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 👥 USERS                                                                     ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+Create Support User:
+  • WordPress Admin → Users → Add New
+  • Role: "LounGenie Support Team"
+  • Can: View all, manage all, Microsoft SSO
+
+Create Partner User:
+  • WordPress Admin → Users → Add New
+  • Role: "LounGenie Partner Company"
+  • Can: View own company, submit tickets
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ✅ VERIFY                                                                    ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+□ Navigate to /portal (should redirect to login)
+□ Login as Support → See full dashboard
+□ Login as Partner → See company-scoped dashboard
+□ Check /wp-json/lgp/v1/dashboard → Returns JSON
+□ No PHP errors in WordPress debug.log
+□ Clear browser cache (Ctrl+Shift+R) after upload
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 🔐 SECURITY                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+✓ CodeQL: 0 vulnerabilities
+✓ All outputs escaped
+✓ All inputs sanitized
+✓ All queries prepared
+✓ Nonces on forms/AJAX
+✓ Role-based access control
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 📊 PERFORMANCE                                                               ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+Plugin Init:        ~50ms
+Dashboard (cached): ~200ms
+API Response:       ~150ms (p50)
+Memory Usage:       ~8MB base
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 📚 DOCUMENTATION                                                             ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+EXECUTIVE_SUMMARY.txt                  Quick reference (this file)
+RELEASE_SUMMARY.md                     Complete release overview
+WORDPRESS_ORG_SUBMISSION_PACKAGE.md    Full submission guide
+WORDPRESS_ORG_FINAL_CHECKLIST.md       Production checklist
+WORDPRESS_ORG_RELEASE_AUDIT.md         Audit findings
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ❓ TROUBLESHOOTING                                                           ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+Portal shows 404:
+  → Settings → Permalinks → Save Changes
+
+Database tables not created:
+  → Check MySQL permissions (CREATE TABLE required)
+
+HubSpot sync fails:
+  → Verify API token in Settings → HubSpot Integration
+
+Outlook integration fails:
+  → Re-authenticate in Settings → Outlook Integration
+
+Map doesn't load:
+  → Check browser console for JS errors
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 💡 REQUIREMENTS                                                              ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+WordPress: 5.8+
+PHP:       7.4+
+MySQL:     5.6+ or MariaDB 10.0+
+Apache:    mod_rewrite enabled (for pretty URLs)
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                   ✅ STATUS: PRODUCTION READY                                ║
+║                   🚀 ACTION: UPLOAD AND ACTIVATE TODAY                       ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝

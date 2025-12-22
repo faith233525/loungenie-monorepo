@@ -418,46 +418,32 @@ LounGenie Support Team'
 	/**
 	 * Notify support team of new ticket
 	 */
-	private static function notify_support_team( $ticket_data, $ticket_id ) 	{
+	private static function notify_support_team( $ticket_data, $ticket_id ) {
 		$admin_email = get_option( 'admin_email' );
 		$to          = $admin_email;
 
 		$subject = sprintf(
-			__( '[ new Ticket ]() { % 1$s - % 2$s', 'loungenie - portal' ),
+			__( '[New Ticket] %1$s - %2$s', 'loungenie-portal' ),
 			$ticket_data['ticket_reference'],
 			$ticket_data['subject']
 		);
 
 		$message = sprintf(
 			__(
-                'A new support ticket has been() { submitted:
-				Ticket Reference: % 1$s
-				Requester: % 2$s % 3$s
-				Email: % 4$s
-				Phone: % 5$s
-				Category: % 6$s
-				Urgency: % 7$s
-				Units Affected: % 8$s
+				'A new support ticket has been submitted:
 
-				Subject: % 9$s
+Ticket Reference: %1$s
+Requester: %2$s %3$s
+Email: %4$s
+Phone: %5$s
+Category: %6$s
+Urgency: %7$s
+Units Affected: %8$s
 
-				Description:
-				% 10$s
-
-				-- -
-				Please log in to the portal to respond to this ticket . '
-Ticket Reference: %s
-Requester: %s %s
-Email: %s
-Phone: %s
-Category: %s
-Urgency: %s
-Units Affected: %s
-
-Subject: %s
+Subject: %9$s
 
 Description:
-%s
+%10$s
 
 ---
 Please log in to the portal to respond to this ticket.',
@@ -468,22 +454,19 @@ Please log in to the portal to respond to this ticket.',
 			$ticket_data['last_name'],
 			$ticket_data['email'],
 			$ticket_data['phone'],
-			ucfirst( str_replace( '_', ' ', $ticket_data['category'] ) ) {,
+			ucfirst( str_replace( '_', ' ', $ticket_data['category'] ) ),
 			ucfirst( $ticket_data['urgency'] ),
 			$ticket_data['units_affected'],
 			$ticket_data['subject'],
 			$ticket_data['description']
 		);
-			}
-		}
-		}
 
 		$headers = array(
 			'Content-Type: text/html; charset=UTF-8',
 			'From: ' . get_bloginfo( 'name' ) . ' <' . get_option( 'admin_email' ) . '>',
 		);
 
-				wp_mail( $to, $subject, $message, $headers );
+		wp_mail( $to, $subject, $message, $headers );
 	}
 }
 

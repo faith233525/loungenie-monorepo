@@ -7,9 +7,9 @@
             "display_name": "John Smith (Support)",
             "user_role": "support",
             "company_id": 0,
-            "user_registered": "2025-12-22 02:15:04",
+            "user_registered": "2025-12-22 19:57:35",
             "id": 1,
-            "created_at": "2025-12-22 02:15:04"
+            "created_at": "2025-12-22 19:57:35"
         },
         {
             "user_login": "partner_acme",
@@ -18,9 +18,9 @@
             "display_name": "Sarah Johnson (ACME)",
             "user_role": "partner",
             "company_id": 1,
-            "user_registered": "2025-12-22 02:15:04",
+            "user_registered": "2025-12-22 19:57:35",
             "id": 2,
-            "created_at": "2025-12-22 02:15:04"
+            "created_at": "2025-12-22 19:57:35"
         },
         {
             "user_login": "partner_techsolutions",
@@ -29,9 +29,9 @@
             "display_name": "Mike Davis (Tech Solutions)",
             "user_role": "partner",
             "company_id": 2,
-            "user_registered": "2025-12-22 02:15:04",
+            "user_registered": "2025-12-22 19:57:35",
             "id": 3,
-            "created_at": "2025-12-22 02:15:04"
+            "created_at": "2025-12-22 19:57:35"
         }
     ],
     "companies": [
@@ -53,8 +53,8 @@
             "secondary_contact_name": "John Chen",
             "secondary_contact_email": "john@acme.test",
             "secondary_contact_phone": "555-0102",
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 1
         },
         {
@@ -74,8 +74,8 @@
             "secondary_contact_name": "Lisa Wong",
             "secondary_contact_email": "lisa@techsolutions.test",
             "secondary_contact_phone": "555-0202",
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 2
         },
         {
@@ -95,8 +95,8 @@
             "secondary_contact_name": "Patricia Lee",
             "secondary_contact_email": "patricia@premiumhotels.test",
             "secondary_contact_phone": "555-0302",
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 3
         }
     ],
@@ -112,8 +112,8 @@
             "warranty_date": "2025-12-31",
             "assigned_technician": "Tech Team A",
             "service_history": "[{\"date\":\"2024-11-01\",\"action\":\"Installation\",\"notes\":\"Unit installed and tested\"}]",
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 1
         },
         {
@@ -127,8 +127,8 @@
             "warranty_date": "2025-06-30",
             "assigned_technician": "Tech Team B",
             "service_history": "[{\"date\":\"2024-11-01\",\"action\":\"Installation\",\"notes\":\"Unit installed and tested\"}]",
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 2
         },
         {
@@ -142,8 +142,8 @@
             "warranty_date": "2025-09-30",
             "assigned_technician": "Tech Team A",
             "service_history": "[{\"date\":\"2024-11-01\",\"action\":\"Installation\",\"notes\":\"Unit installed and tested\"}]",
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 3
         },
         {
@@ -157,8 +157,8 @@
             "warranty_date": "2026-03-31",
             "assigned_technician": "Tech Team C",
             "service_history": "[{\"date\":\"2024-11-01\",\"action\":\"Installation\",\"notes\":\"Unit installed and tested\"}]",
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 4
         },
         {
@@ -172,8 +172,8 @@
             "warranty_date": "2024-12-31",
             "assigned_technician": "Tech Team D",
             "service_history": "[{\"date\":\"2024-11-01\",\"action\":\"Installation\",\"notes\":\"Unit installed and tested\"}]",
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 5
         }
     ],
@@ -185,9 +185,9 @@
             "unit_capacity": 4,
             "call_button": 1,
             "included_equipment": "Router, Power Supply",
-            "admin_password": "$2y$10$b6ulxTRkg6rIPD43vFTICORqvRgorsDkRjbQn6DFl1x7xwWWAzNpO",
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "admin_password": "$2y$10$5CCFJZ8M2Xf4ccHuiyBrueXz/K9vqoBGGV2c/cVHpSi1DJwkZrdgu",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 1
         },
         {
@@ -197,9 +197,9 @@
             "unit_capacity": 2,
             "call_button": 0,
             "included_equipment": "Router",
-            "admin_password": "$2y$10$fMJh.ZOmhjc1pK90ALRDa.42UEOE2XOZSLTy2/MhowfEhlnki1d92",
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "admin_password": "$2y$10$ohxF9uatLAVPINJX77Uore7IDqwsB67K634pgc5aCMczY/kMZhE9a",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 2
         },
         {
@@ -209,9 +209,9 @@
             "unit_capacity": 6,
             "call_button": 1,
             "included_equipment": "Router, Power Supply, Backup Battery",
-            "admin_password": "$2y$10$Ci.y9VppvA7eaYuSPcGqLetm9wIisoec6ukYKKmaI9B6vhuCFuiw.",
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "admin_password": "$2y$10$boT0PxauL.tseoR.7C8rNepMTocKi9/EcCJsxJAe7Kr0hISMv7Iuq",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 3
         },
         {
@@ -221,9 +221,9 @@
             "unit_capacity": 8,
             "call_button": 1,
             "included_equipment": "Premium Router, UPS, Monitoring",
-            "admin_password": "$2y$10$Kxh7/yIjyGk0zjNycuyMlu6JypoF5aU7bZ5DxugBiGBcQbBvupPla",
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "admin_password": "$2y$10$moxBQrCTbdk/LxaIF/t/S.IDcHp3vYs6OLG5tvOr3uDUMhOfMUxDC",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 4
         }
     ],
@@ -235,8 +235,8 @@
             "description": "UNIT-001 is not responding to incoming calls. LED is on but no audio.",
             "priority": "high",
             "status": "open",
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 1
         },
         {
@@ -246,8 +246,8 @@
             "description": "When does UNIT-002 warranty expire?",
             "priority": "low",
             "status": "resolved",
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 2
         },
         {
@@ -257,8 +257,8 @@
             "description": "Need help configuring new gateway for expansion.",
             "priority": "medium",
             "status": "open",
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 3
         },
         {
@@ -268,8 +268,8 @@
             "description": "Please review lounge maintenance logs for October.",
             "priority": "low",
             "status": "open",
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 4
         }
     ],
@@ -280,8 +280,8 @@
             "file_type": "application/pdf",
             "file_size": 256000,
             "uploaded_by": 1,
-            "file_path": "/workspaces/Pool-Safe-Portal/loungenie-portal/scripts/offline-data/attachments/774f6e0f22ce4d5f7e241bba7d4f8d9f.pdf",
-            "created_at": "2025-12-22 02:15:04",
+            "file_path": "/workspaces/Pool-Safe-Portal/loungenie-portal/scripts/offline-data/attachments/8964874fdec2c0bb83f1a60ed49a2538.pdf",
+            "created_at": "2025-12-22 19:57:35",
             "id": 1
         },
         {
@@ -290,8 +290,8 @@
             "file_type": "text/plain",
             "file_size": 2048,
             "uploaded_by": 1,
-            "file_path": "/workspaces/Pool-Safe-Portal/loungenie-portal/scripts/offline-data/attachments/543211339dbf539d2c3b53de9051ee3f.txt",
-            "created_at": "2025-12-22 02:15:04",
+            "file_path": "/workspaces/Pool-Safe-Portal/loungenie-portal/scripts/offline-data/attachments/112dd3338bc587e3ec30094fa5fae85a.txt",
+            "created_at": "2025-12-22 19:57:35",
             "id": 2
         },
         {
@@ -300,8 +300,8 @@
             "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "file_size": 512000,
             "uploaded_by": 1,
-            "file_path": "/workspaces/Pool-Safe-Portal/loungenie-portal/scripts/offline-data/attachments/a3b86d31676d3c14357596e3e5a0a3b1.docx",
-            "created_at": "2025-12-22 02:15:04",
+            "file_path": "/workspaces/Pool-Safe-Portal/loungenie-portal/scripts/offline-data/attachments/5ef3dd46971b661e372f25c5d5c7d277.docx",
+            "created_at": "2025-12-22 19:57:35",
             "id": 3
         }
     ],
@@ -314,8 +314,8 @@
             "target_companies": "[]",
             "duration": 480,
             "created_by": 1,
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 1
         },
         {
@@ -326,8 +326,8 @@
             "target_companies": "[1,2]",
             "duration": 720,
             "created_by": 1,
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 2
         },
         {
@@ -338,8 +338,8 @@
             "target_companies": "[]",
             "duration": 600,
             "created_by": 1,
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 3
         },
         {
@@ -350,8 +350,8 @@
             "target_companies": "[1]",
             "duration": 540,
             "created_by": 1,
-            "created_at": "2025-12-22 02:15:04",
-            "updated_at": "2025-12-22 02:15:04",
+            "created_at": "2025-12-22 19:57:35",
+            "updated_at": "2025-12-22 19:57:35",
             "id": 4
         }
     ]

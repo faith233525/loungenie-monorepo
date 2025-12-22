@@ -104,7 +104,7 @@
 
         } catch (error) {
             console.error('Error loading videos:', error);
-            showError('Failed to load help and guides');
+            showError('Failed to load knowledge guides');
         }
     }
 

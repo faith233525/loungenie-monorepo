@@ -215,161 +215,162 @@ wp_enqueue_style('lgp-login-enhanced', plugin_dir_url(__FILE__) . '../assets/css
 
 	</div>
 
-	<script>
+	<?php $lgp_nonce = method_exists('LGP_Security', 'get_csp_nonce') ? LGP_Security::get_csp_nonce() : ''; ?>
+	<script<?php echo $lgp_nonce ? ' nonce="' . esc_attr($lgp_nonce) . '"' : ''; ?>>
 		(function() {
-			'use strict';
+		'use strict';
 
-			// State management
-			const state = {
-				lastRole: localStorage.getItem('lgp_last_role') || 'partner'
-			};
+		// State management
+		const state = {
+		lastRole: localStorage.getItem('lgp_last_role') || 'partner'
+		};
 
-			// Initialize on DOM ready
-			document.addEventListener('DOMContentLoaded', function() {
-				initRoleSwitcher();
-				initPasswordToggle();
-				initFormSubmission();
-				initKeyboardShortcuts();
+		// Initialize on DOM ready
+		document.addEventListener('DOMContentLoaded', function() {
+		initRoleSwitcher();
+		initPasswordToggle();
+		initFormSubmission();
+		initKeyboardShortcuts();
 
-				// Restore last selected role
-				if (state.lastRole && !new URL(window.location).searchParams.has('login_type')) {
-					switchLoginType(state.lastRole);
-				}
-			});
+		// Restore last selected role
+		if (state.lastRole && !new URL(window.location).searchParams.has('login_type')) {
+		switchLoginType(state.lastRole);
+		}
+		});
 
-			/**
-			 * Role switcher with memory
-			 */
-			function initRoleSwitcher() {
-				const roleButtons = document.querySelectorAll('.lgp-role-btn');
+		/**
+		* Role switcher with memory
+		*/
+		function initRoleSwitcher() {
+		const roleButtons = document.querySelectorAll('.lgp-role-btn');
 
-				roleButtons.forEach(button => {
-					button.addEventListener('click', function() {
-						const role = this.getAttribute('data-role');
-						if (role) {
-							localStorage.setItem('lgp_last_role', role);
-						}
-					});
-				});
-			}
+		roleButtons.forEach(button => {
+		button.addEventListener('click', function() {
+		const role = this.getAttribute('data-role');
+		if (role) {
+		localStorage.setItem('lgp_last_role', role);
+		}
+		});
+		});
+		}
 
-			/**
-			 * Password visibility toggle
-			 */
-			function initPasswordToggle() {
-				const toggleBtn = document.querySelector('.lgp-toggle-password');
-				const passwordInput = document.getElementById('lgp-password');
+		/**
+		* Password visibility toggle
+		*/
+		function initPasswordToggle() {
+		const toggleBtn = document.querySelector('.lgp-toggle-password');
+		const passwordInput = document.getElementById('lgp-password');
 
-				if (!toggleBtn || !passwordInput) return;
+		if (!toggleBtn || !passwordInput) return;
 
-				toggleBtn.addEventListener('click', function() {
-					const isPassword = passwordInput.type === 'password';
-					passwordInput.type = isPassword ? 'text' : 'password';
+		toggleBtn.addEventListener('click', function() {
+		const isPassword = passwordInput.type === 'password';
+		passwordInput.type = isPassword ? 'text' : 'password';
 
-					// Toggle icons
-					const openEye = this.querySelector('.lgp-eye-open');
-					const closedEye = this.querySelector('.lgp-eye-closed');
+		// Toggle icons
+		const openEye = this.querySelector('.lgp-eye-open');
+		const closedEye = this.querySelector('.lgp-eye-closed');
 
-					if (openEye && closedEye) {
-						openEye.style.display = isPassword ? 'none' : 'block';
-						closedEye.style.display = isPassword ? 'block' : 'none';
-					}
+		if (openEye && closedEye) {
+		openEye.style.display = isPassword ? 'none' : 'block';
+		closedEye.style.display = isPassword ? 'block' : 'none';
+		}
 
-					this.classList.toggle('active');
+		this.classList.toggle('active');
 
-					// Refocus password field
-					passwordInput.focus();
-				});
-			}
+		// Refocus password field
+		passwordInput.focus();
+		});
+		}
 
-			/**
-			 * Form submission with loading states
-			 */
-			function initFormSubmission() {
-				const forms = document.querySelectorAll('.lgp-login-form');
+		/**
+		* Form submission with loading states
+		*/
+		function initFormSubmission() {
+		const forms = document.querySelectorAll('.lgp-login-form');
 
-				forms.forEach(form => {
-					form.addEventListener('submit', function(e) {
-						const submitBtn = this.querySelector('button[type="submit"]');
+		forms.forEach(form => {
+		form.addEventListener('submit', function(e) {
+		const submitBtn = this.querySelector('button[type="submit"]');
 
-						if (submitBtn) {
-							submitBtn.classList.add('loading');
-							submitBtn.disabled = true;
+		if (submitBtn) {
+		submitBtn.classList.add('loading');
+		submitBtn.disabled = true;
 
-							// Re-enable after 10 seconds (timeout fallback)
-							setTimeout(function() {
-								submitBtn.classList.remove('loading');
-								submitBtn.disabled = false;
-							}, 10000);
-						}
-					});
-				});
-			}
+		// Re-enable after 10 seconds (timeout fallback)
+		setTimeout(function() {
+		submitBtn.classList.remove('loading');
+		submitBtn.disabled = false;
+		}, 10000);
+		}
+		});
+		});
+		}
 
-			/**
-			 * Keyboard shortcuts
-			 */
-			function initKeyboardShortcuts() {
-				document.addEventListener('keydown', function(e) {
-					// Alt+P for Partner Company, Alt+S for Support Team
-					if (e.altKey && !e.ctrlKey && !e.shiftKey && !e.metaKey) {
-						const key = e.key.toLowerCase();
+		/**
+		* Keyboard shortcuts
+		*/
+		function initKeyboardShortcuts() {
+		document.addEventListener('keydown', function(e) {
+		// Alt+P for Partner Company, Alt+S for Support Team
+		if (e.altKey && !e.ctrlKey && !e.shiftKey && !e.metaKey) {
+		const key = e.key.toLowerCase();
 
-						if (key === 'p') {
-							e.preventDefault();
-							switchLoginType('partner');
-						} else if (key === 's') {
-							e.preventDefault();
-							switchLoginType('support');
-						}
-					}
-				});
-			}
+		if (key === 'p') {
+		e.preventDefault();
+		switchLoginType('partner');
+		} else if (key === 's') {
+		e.preventDefault();
+		switchLoginType('support');
+		}
+		}
+		});
+		}
 
-			/**
-			 * Switch login type (exposed globally)
-			 */
-			window.switchLoginType = function(type) {
-				const partnerForm = document.getElementById('partnerForm');
-				const supportForm = document.getElementById('supportForm');
-				const partnerBtn = document.querySelector('[data-role="partner"]');
-				const supportBtn = document.querySelector('[data-role="support"]');
+		/**
+		* Switch login type (exposed globally)
+		*/
+		window.switchLoginType = function(type) {
+		const partnerForm = document.getElementById('partnerForm');
+		const supportForm = document.getElementById('supportForm');
+		const partnerBtn = document.querySelector('[data-role="partner"]');
+		const supportBtn = document.querySelector('[data-role="support"]');
 
-				if (!partnerForm || !supportForm) return;
+		if (!partnerForm || !supportForm) return;
 
-				// Switch forms
-				if (type === 'partner') {
-					partnerForm.style.display = 'block';
-					supportForm.style.display = 'none';
+		// Switch forms
+		if (type === 'partner') {
+		partnerForm.style.display = 'block';
+		supportForm.style.display = 'none';
 
-					if (partnerBtn) partnerBtn.classList.add('active');
-					if (supportBtn) supportBtn.classList.remove('active');
+		if (partnerBtn) partnerBtn.classList.add('active');
+		if (supportBtn) supportBtn.classList.remove('active');
 
-					// Focus username field
-					setTimeout(() => {
-						const usernameField = document.getElementById('lgp-username');
-						if (usernameField) usernameField.focus();
-					}, 100);
-				} else {
-					partnerForm.style.display = 'none';
-					supportForm.style.display = 'block';
+		// Focus username field
+		setTimeout(() => {
+		const usernameField = document.getElementById('lgp-username');
+		if (usernameField) usernameField.focus();
+		}, 100);
+		} else {
+		partnerForm.style.display = 'none';
+		supportForm.style.display = 'block';
 
-					if (partnerBtn) partnerBtn.classList.remove('active');
-					if (supportBtn) supportBtn.classList.add('active');
-				}
+		if (partnerBtn) partnerBtn.classList.remove('active');
+		if (supportBtn) supportBtn.classList.add('active');
+		}
 
-				// Update URL without reload
-				const url = new URL(window.location);
-				url.searchParams.set('login_type', type);
-				window.history.replaceState({}, '', url);
+		// Update URL without reload
+		const url = new URL(window.location);
+		url.searchParams.set('login_type', type);
+		window.history.replaceState({}, '', url);
 
-				// Store preference
-				localStorage.setItem('lgp_last_role', type);
-			};
+		// Store preference
+		localStorage.setItem('lgp_last_role', type);
+		};
 		})();
-	</script>
+		</script>
 
-	<?php wp_footer(); ?>
+		<?php wp_footer(); ?>
 </body>
 
 </html>
