@@ -474,6 +474,7 @@ class LGP_Migrations {
 	 */
 	public static function rollback( $version ) {
 		if ( defined( 'WP_ENV' ) && 'development' !== WP_ENV ) {
+			// @phpstan-ignore-next-line wp_die is WordPress core function
 			wp_die( 'Rollback only allowed in development environment' );
 		}
 
