@@ -35,3 +35,4 @@ coverage/
 # Composer lock optional (keep if you want exact versions)
 # composer.lock
 wp-deployment/
+deploy-ready/
