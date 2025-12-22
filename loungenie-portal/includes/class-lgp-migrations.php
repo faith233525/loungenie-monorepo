@@ -415,6 +415,7 @@ class LGP_Migrations {
 
 		foreach ( $companies as $company ) {
 			// Aggregate color counts for this company
+			// @phpstan-ignore-next-line OBJECT_K is WordPress core constant
 			$colors = $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT COALESCE(color_tag, 'unknown') as color, COUNT(*) as count
@@ -424,7 +425,15 @@ class LGP_Migrations {
 					 ORDER BY count DESC",
 					$company->id
 				),
-			// @phpstan-ignore-next-line OBJECT_K is WordPress core constant
+				OBJECT_K
+			);
+
+			// Convert color results to associative array
+			$color_counts = array();
+			if ( ! empty( $colors ) ) {
+				foreach ( $colors as $color => $row ) {
+					$color_counts[ $color ] = (int) $row->count;
+				}
 			}
 
 			// Update company with color aggregates
