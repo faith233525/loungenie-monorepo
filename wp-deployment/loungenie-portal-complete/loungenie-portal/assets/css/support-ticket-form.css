@@ -1,0 +1,873 @@
+/**
+ * Support Ticket Form Styles
+ * Production-ready form styling with accessibility and responsiveness
+ */
+
+/* Form Container */
+.lgp-support-ticket-form-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.lgp-support-ticket-form {
+    padding: 2rem;
+}
+
+/* Form Header */
+.lgp-form-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.lgp-form-header h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.lgp-form-description {
+    margin: 0.5rem 0 0;
+    color: #6b7280;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.lgp-form-reference {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background-color: #f3f4f6;
+    border-left: 3px solid #3b82f6;
+    border-radius: 4px;
+}
+
+.lgp-form-reference small {
+    color: #374151;
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-weight: 500;
+}
+
+/* Fieldset Styling */
+.lgp-form-fieldset {
+    margin-bottom: 2rem;
+    padding: 0;
+    border: none;
+}
+
+.lgp-form-fieldset:last-of-type {
+    margin-bottom: 1.5rem;
+}
+
+.lgp-form-legend {
+    display: block;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1f2937;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* Form Rows (Multi-column layout) */
+.lgp-form-row {
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.lgp-form-row-two-cols {
+    grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 768px) {
+    .lgp-form-row-two-cols {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Form Groups */
+.lgp-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.lgp-form-group:last-child {
+    margin-bottom: 0;
+}
+
+/* Labels */
+.lgp-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+}
+
+.lgp-label strong {
+    color: #1f2937;
+}
+
+/* Required & Optional Markers */
+.lgp-required {
+    color: #ef4444;
+    margin-left: 0.25rem;
+    font-weight: 600;
+}
+
+.lgp-optional {
+    color: #9ca3af;
+    font-size: 0.85rem;
+    font-weight: 400;
+    margin-left: 0.5rem;
+}
+
+/* Form Inputs */
+.lgp-form-input,
+.lgp-form-select,
+.lgp-form-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    font-family: inherit;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #1f2937;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.lgp-form-input:focus,
+.lgp-form-select:focus,
+.lgp-form-textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    background-color: #f8faff;
+}
+
+.lgp-form-input:invalid:not(:placeholder-shown),
+.lgp-form-select:invalid,
+.lgp-form-textarea:invalid:not(:placeholder-shown) {
+    border-color: #ef4444;
+}
+
+.lgp-form-input:valid:not(:placeholder-shown),
+.lgp-form-select:valid,
+.lgp-form-textarea:valid:not(:placeholder-shown) {
+    border-color: #10b981;
+}
+
+.lgp-form-input::placeholder,
+.lgp-form-textarea::placeholder {
+    color: #9ca3af;
+}
+
+/* Textarea */
+.lgp-form-textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.5;
+}
+
+/* Select Multiple */
+.lgp-form-select-multiple {
+    min-height: 120px;
+    padding: 0;
+}
+
+.lgp-form-select-multiple option {
+    padding: 0.5rem 1rem;
+    color: #1f2937;
+    background-color: #ffffff;
+    border: none;
+}
+
+.lgp-form-select-multiple option:checked {
+    background: linear-gradient(#3b82f6, #3b82f6);
+    background-color: #3b82f6;
+    color: #ffffff;
+}
+
+/* Radio Groups */
+.lgp-form-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.lgp-radio-label {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    margin: 0 -0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s ease;
+}
+
+.lgp-radio-label:hover {
+    background-color: #f3f4f6;
+}
+
+.lgp-radio-input {
+    margin-right: 0.75rem;
+    margin-left: 0;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    accent-color: #3b82f6;
+}
+
+.lgp-radio-label span {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #374151;
+}
+
+.lgp-radio-input:focus~span {
+    color: #3b82f6;
+    font-weight: 500;
+}
+
+/* Checkbox */
+.lgp-checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    padding: 0.75rem;
+    margin: 0 -0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s ease;
+}
+
+.lgp-checkbox-label:hover {
+    background-color: #f3f4f6;
+}
+
+.lgp-checkbox-input {
+    margin-right: 0.75rem;
+    margin-top: 3px;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    accent-color: #3b82f6;
+    flex-shrink: 0;
+}
+
+.lgp-checkbox-label span {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #374151;
+    line-height: 1.5;
+}
+
+.lgp-checkbox-input:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* Static Display (for logged-in users) */
+.lgp-form-static {
+    padding: 0.75rem 1rem;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    color: #1f2937;
+    font-size: 0.95rem;
+}
+
+/* Form Hints */
+.lgp-form-hint {
+    display: block;
+    margin-top: 0.5rem;
+    color: #6b7280;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+/* Form Errors */
+.lgp-form-error {
+    display: none;
+    margin-top: 0.5rem;
+    color: #dc2626;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.lgp-form-error.show {
+    display: block;
+}
+
+.lgp-form-input:invalid:not(:placeholder-shown)~.lgp-form-error,
+.lgp-form-textarea:invalid:not(:placeholder-shown)~.lgp-form-error,
+.lgp-form-select:invalid~.lgp-form-error {
+    display: block;
+}
+
+/* Form Counter (character count) */
+.lgp-form-counter {
+    display: block;
+    margin-top: 0.5rem;
+    text-align: right;
+    color: #9ca3af;
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+
+.lgp-form-counter.warning {
+    color: #f59e0b;
+}
+
+.lgp-form-counter.error {
+    color: #ef4444;
+}
+
+/* File Upload */
+.lgp-file-upload-zone {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+    background-color: #f9fafb;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.lgp-file-upload-zone:hover {
+    border-color: #3b82f6;
+    background-color: #f0f7ff;
+}
+
+.lgp-file-upload-zone.drag-over {
+    border-color: #3b82f6;
+    background-color: #eff6ff;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.lgp-file-input {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.lgp-file-upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    pointer-events: none;
+    width: 100%;
+}
+
+.lgp-file-upload-icon {
+    width: 48px;
+    height: 48px;
+    color: #9ca3af;
+    transition: color 0.3s ease;
+}
+
+.lgp-file-upload-zone:hover .lgp-file-upload-icon {
+    color: #3b82f6;
+}
+
+.lgp-file-upload-text {
+    display: block;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1f2937;
+    text-align: center;
+}
+
+.lgp-file-upload-subtext {
+    display: block;
+    font-size: 0.85rem;
+    color: #6b7280;
+    text-align: center;
+}
+
+/* File List */
+.lgp-file-list {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+}
+
+.lgp-file-list h4 {
+    margin: 0 0 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.lgp-file-list ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.lgp-file-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #374151;
+}
+
+.lgp-file-list li:last-child {
+    margin-bottom: 0;
+}
+
+.lgp-file-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 0;
+    word-break: break-all;
+}
+
+.lgp-file-name i {
+    flex-shrink: 0;
+    color: #6b7280;
+}
+
+.lgp-file-size {
+    color: #9ca3af;
+    font-size: 0.8rem;
+    margin: 0 0.75rem;
+    flex-shrink: 0;
+}
+
+.lgp-file-remove {
+    padding: 0.25rem 0.5rem;
+    background: none;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+    transition: color 0.2s ease;
+}
+
+.lgp-file-remove:hover {
+    color: #dc2626;
+}
+
+/* Form Actions */
+.lgp-form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-start;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* Buttons */
+.lgp-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.lgp-btn-large {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+}
+
+.lgp-btn-primary {
+    background-color: #3b82f6;
+    color: #ffffff;
+    border: 1px solid #3b82f6;
+}
+
+.lgp-btn-primary:hover {
+    background-color: #2563eb;
+    border-color: #2563eb;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.lgp-btn-primary:active {
+    transform: scale(0.98);
+}
+
+.lgp-btn-primary:disabled {
+    background-color: #9ca3af;
+    border-color: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.lgp-btn-secondary {
+    background-color: #e5e7eb;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+
+.lgp-btn-secondary:hover {
+    background-color: #d1d5db;
+    border-color: #9ca3af;
+}
+
+.lgp-btn-secondary:active {
+    transform: scale(0.98);
+}
+
+/* Button Spinner */
+.lgp-btn-spinner {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.lgp-btn-text {
+    display: inline;
+}
+
+/* Alerts */
+.lgp-alert {
+    padding: 1.5rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+}
+
+.lgp-alert-success {
+    background-color: #dcfce7;
+    border: 1px solid #86efac;
+    color: #166534;
+}
+
+.lgp-alert-success h4 {
+    margin: 0 0 0.5rem;
+    font-size: 1.05rem;
+    color: #166534;
+}
+
+.lgp-alert-content p {
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+}
+
+.lgp-alert-subtext {
+    color: #4ade80;
+    font-size: 0.85rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .lgp-support-ticket-form-wrapper {
+        border-radius: 0;
+    }
+
+    .lgp-support-ticket-form {
+        padding: 1.5rem;
+    }
+
+    .lgp-form-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .lgp-form-header h3 {
+        font-size: 1.5rem;
+    }
+
+    .lgp-form-legend {
+        margin-bottom: 1rem;
+        font-size: 1rem;
+    }
+
+    .lgp-form-actions {
+        flex-direction: column;
+    }
+
+    .lgp-btn,
+    .lgp-btn-large {
+        width: 100%;
+    }
+
+    .lgp-file-upload-zone {
+        padding: 2rem 1rem;
+    }
+
+    .lgp-file-upload-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .lgp-file-upload-text {
+        font-size: 0.95rem;
+    }
+
+    .lgp-file-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .lgp-file-size {
+        margin: 0;
+    }
+
+    .lgp-file-remove {
+        align-self: flex-end;
+    }
+}
+
+/* Dark Mode Support (optional) */
+@media (prefers-color-scheme: dark) {
+    .lgp-support-ticket-form-wrapper {
+        background-color: #1f2937;
+    }
+
+    .lgp-support-ticket-form {
+        background-color: #1f2937;
+    }
+
+    .lgp-form-header {
+        border-bottom-color: #374151;
+    }
+
+    .lgp-form-header h3 {
+        color: #f3f4f6;
+    }
+
+    .lgp-form-description {
+        color: #d1d5db;
+    }
+
+    .lgp-form-reference {
+        background-color: #111827;
+        border-left-color: #60a5fa;
+    }
+
+    .lgp-form-reference small {
+        color: #e5e7eb;
+    }
+
+    .lgp-form-legend {
+        color: #f3f4f6;
+        border-bottom-color: #374151;
+    }
+
+    .lgp-label,
+    .lgp-radio-label span,
+    .lgp-checkbox-label span {
+        color: #e5e7eb;
+    }
+
+    .lgp-form-input,
+    .lgp-form-select,
+    .lgp-form-textarea {
+        background-color: #111827;
+        border-color: #374151;
+        color: #f3f4f6;
+    }
+
+    .lgp-form-input:focus,
+    .lgp-form-select:focus,
+    .lgp-form-textarea:focus {
+        background-color: #1f2937;
+        border-color: #60a5fa;
+    }
+
+    .lgp-form-static {
+        background-color: #111827;
+        border-color: #374151;
+        color: #f3f4f6;
+    }
+
+    .lgp-form-hint {
+        color: #9ca3af;
+    }
+
+    .lgp-file-upload-zone {
+        background-color: #111827;
+        border-color: #374151;
+    }
+
+    .lgp-file-upload-zone:hover,
+    .lgp-file-upload-zone.drag-over {
+        background-color: #1e3a5f;
+        border-color: #60a5fa;
+    }
+
+    .lgp-file-upload-icon {
+        color: #6b7280;
+    }
+
+    .lgp-file-upload-zone:hover .lgp-file-upload-icon {
+        color: #60a5fa;
+    }
+
+    .lgp-file-upload-text {
+        color: #f3f4f6;
+    }
+
+    .lgp-file-upload-subtext {
+        color: #d1d5db;
+    }
+
+    .lgp-file-list {
+        background-color: #111827;
+        border-color: #374151;
+    }
+
+    .lgp-file-list h4 {
+        color: #e5e7eb;
+    }
+
+    .lgp-file-list li {
+        background-color: #1f2937;
+        border-color: #374151;
+    }
+}
+
+/* Print Styles */
+@media print {
+
+    .lgp-file-upload-zone,
+    .lgp-form-actions,
+    .lgp-success-message {
+        display: none;
+    }
+
+    .lgp-form-input,
+    .lgp-form-select,
+    .lgp-form-textarea {
+        border: 1px solid #000;
+        padding: 0.5rem;
+    }
+}
+/* ============================================
+   Urgency Icons (replacing emojis)
+   ============================================ */
+.lgp-urgency-icon {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.lgp-urgency-icon.lgp-urgency-normal {
+    background: #4CAF50; /* Green */
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+.lgp-urgency-icon.lgp-urgency-high {
+    background: #FFC107; /* Yellow/Amber */
+    box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2);
+}
+
+.lgp-urgency-icon.lgp-urgency-critical {
+    background: #F44336; /* Red */
+    box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.2);
+    animation: pulse-critical 2s ease-in-out infinite;
+}
+
+@keyframes pulse-critical {
+    0%, 100% {
+        box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 0 4px rgba(244, 67, 54, 0.4);
+    }
+}
+
+/* ============================================
+   Color Badge Icons (for unit color display)
+   ============================================ */
+.lgp-color-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    margin: 4px;
+    background: #f3f4f6;
+    border-radius: 12px;
+    font-size: 0.875rem;
+}
+
+.lgp-color-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    margin-right: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.lgp-color-icon.lgp-color-yellow {
+    background: #FFC107;
+}
+
+.lgp-color-icon.lgp-color-orange {
+    background: #FF9800;
+}
+
+.lgp-color-icon.lgp-color-red {
+    background: #F44336;
+}
+
+.lgp-color-icon.lgp-color-green {
+    background: #4CAF50;
+}
+
+.lgp-color-icon.lgp-color-blue {
+    background: #2196F3;
+}
+
+.lgp-color-icon.lgp-color-purple {
+    background: #9C27B0;
+}
+
+.lgp-color-icon.lgp-color-gray,
+.lgp-color-icon.lgp-color-grey {
+    background: #9E9E9E;
+}
+
+.lgp-color-icon.lgp-color-white {
+    background: #FFFFFF;
+    border: 2px solid #ddd;
+}
+
+.lgp-color-icon.lgp-color-black {
+    background: #000000;
+}
+
+.lgp-color-count {
+    font-weight: 500;
+    color: #374151;
+}

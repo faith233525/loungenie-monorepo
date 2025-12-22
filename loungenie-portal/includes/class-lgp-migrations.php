@@ -231,7 +231,7 @@ class LGP_Migrations {
 	 */
 	public static function migrate_v1_5_0() {
 		global $wpdb;
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		require_once LGP_PLUGIN_DIR . 'includes/lgp-upgrade-shim.php';
 		$charset_collate = $wpdb->get_charset_collate();
 
 		$user_progress = $wpdb->prefix . 'lgp_user_progress';
@@ -424,13 +424,7 @@ class LGP_Migrations {
 					 ORDER BY count DESC",
 					$company->id
 				),
-				OBJECT_K
-			);
-
-			// Build color counts array
-			$color_counts = array();
-			foreach ( $colors as $color => $data ) {
-				$color_counts[ $color ] = (int) $data->count;
+			// @phpstan-ignore-next-line OBJECT_K is WordPress core constant
 			}
 
 			// Update company with color aggregates

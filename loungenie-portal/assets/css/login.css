@@ -33,6 +33,10 @@ body.lgp-login-page.lgp-screen-center {
     border: 1px solid var(--lgp-color-border);
 }
 
+.lgp-card.lgp-card-wide {
+    max-width: 720px;
+}
+
 @media (max-width: 640px) {
     .lgp-card {
         margin: var(--lgp-space-4);
@@ -369,6 +373,12 @@ p {
     color: var(--lgp-color-text-tertiary);
 }
 
+.lgp-login-help-text {
+    font-size: 13px;
+    margin-top: var(--lgp-space-4);
+    text-align: center;
+}
+
 .lgp-text-sm {
     font-size: var(--lgp-font-size-sm);
 }
@@ -410,6 +420,12 @@ p {
     border: 1px solid var(--lgp-color-border);
 }
 
+.lgp-login-card.lgp-login-card-flat {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
 .lgp-login-sidebar {
     background: linear-gradient(135deg, var(--lgp-color-brand) 0%, var(--lgp-color-brand-hover) 100%);
     color: white;
@@ -417,6 +433,10 @@ p {
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.lgp-login-sidebar.lgp-login-sidebar-rounded {
+    border-radius: var(--lgp-radius-lg) 0 0 var(--lgp-radius-lg);
 }
 
 .lgp-badge {

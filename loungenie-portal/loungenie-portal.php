@@ -96,6 +96,10 @@ if (! lgp_check_compatibility()) {
  */
 function lgp_activate()
 {
+	// Ensure no output leaks during activation to avoid "unexpected output" notices.
+	$activation_ob_level = ob_get_level();
+	ob_start();
+
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-database.php';
 	// Capabilities are required by role registration during activation.
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-capabilities.php';
@@ -110,6 +114,16 @@ function lgp_activate()
 
 	// Flush rewrite rules. for custom routes.
 	flush_rewrite_rules();
+
+	// Swallow any buffered output to keep activation clean. Log for diagnostics if present.
+	$activation_output = ob_get_clean();
+	while (ob_get_level() > $activation_ob_level) {
+		ob_end_clean();
+	}
+
+	if (! empty($activation_output)) {
+		error_log('LGP activation output suppressed: ' . substr($activation_output, 0, 500));
+	}
 }
 
 register_activation_hook(__FILE__, 'lgp_activate');
@@ -176,6 +190,7 @@ function lgp_init()
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-geocode.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-gateway.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-help-guide.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-training-video.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-hubspot.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-outlook.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-system-health.php';
@@ -188,6 +203,7 @@ function lgp_init()
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-rate-limiter.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-shared-hosting-rules.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-to-ticket.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-company-colors.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-migrations.php';
 
 	// Conditionally load new Graph-based email pipeline

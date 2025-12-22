@@ -143,6 +143,10 @@ class LGP_Assets {
 			true
 		);
 
+		// Ensure WordPress REST API settings (wpApiSettings) are available for nonces
+		// This provides wpApiSettings.root and wpApiSettings.nonce used by our JS
+		wp_enqueue_script( 'wp-api' );
+
 		// Enqueue portal initialization (sidebar toggle, CSP-compliant)
 		wp_enqueue_script(
 			'lgp-portal-init',

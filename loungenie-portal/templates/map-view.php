@@ -17,9 +17,7 @@ if ( ! is_user_logged_in() ) {
 	wp_die( 'Access denied' );
 }
 
-if ( function_exists( 'get_header' ) ) {
-	get_header();
-}
+// Do not call theme header/footer to avoid theme dependency and deprecation warnings.
 
 // Compute base plugin URL defensively for test environments
 $lgp_base_url = defined( 'LGP_PLUGIN_URL' )

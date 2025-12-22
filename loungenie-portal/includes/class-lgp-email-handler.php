@@ -20,13 +20,28 @@ class LGP_Email_Handler {
 	 * Initialize email handler
 	 */
 	public static function init() {
-		// Schedule email processing
-		if ( ! wp_next_scheduled( 'lgp_process_emails' ) ) {
-			// Shared hosting constraint: use WP-Cron hourly schedule only
-			wp_schedule_event( time(), 'hourly', 'lgp_process_emails' );
-		}
+		// Schedule/clear email processing based on configuration
+		self::ensure_cron_scheduled();
 
 		add_action( 'lgp_process_emails', array( __CLASS__, 'process_emails' ) );
+	}
+
+	/**
+	 * Ensure the email processing cron is scheduled (or cleared) based on settings.
+	 */
+	public static function ensure_cron_scheduled() {
+		$has_graph = self::is_graph_enabled();
+		$has_pop3  = self::is_pop3_configured();
+
+		if ( $has_graph || $has_pop3 ) {
+			if ( ! wp_next_scheduled( 'lgp_process_emails' ) ) {
+				// Shared hosting constraint: use WP-Cron hourly schedule only
+				wp_schedule_event( time(), 'hourly', 'lgp_process_emails' );
+			}
+		} else {
+			// No configuration present; avoid noisy cron runs
+			wp_clear_scheduled_hook( 'lgp_process_emails' );
+		}
 	}
 
 	/**
@@ -41,8 +56,8 @@ class LGP_Email_Handler {
 
 		$settings = get_option( self::$option_key, array() );
 
-		if ( empty( $settings['pop3_server'] ) || empty( $settings['pop3_username'] ) || empty( $settings['pop3_password'] ) ) {
-			error_log( 'LGP: Email settings not configured' );
+		if ( ! self::is_pop3_configured() ) {
+			// Not configured; skip. Cron is cleared when not configured.
 			return;
 		}
 
@@ -84,6 +99,16 @@ class LGP_Email_Handler {
 			&& ! empty( $settings['client_id'] )
 			&& ! empty( $settings['client_secret'] )
 			&& ! empty( $settings['mailbox'] );
+	}
+
+	/**
+	 * Check if POP3 settings are configured.
+	 */
+	private static function is_pop3_configured() {
+		$settings = get_option( self::$option_key, array() );
+		return ! empty( $settings['pop3_server'] )
+			&& ! empty( $settings['pop3_username'] )
+			&& ! empty( $settings['pop3_password'] );
 	}
 
 	/**

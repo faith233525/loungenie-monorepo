@@ -8,15 +8,17 @@
 (function () {
     'use strict';
 
-    const isSupport = document.body.classList.contains('lgp-support');
+    // Detect support role via body data-role or localized data
+    const isSupport = (document.body && document.body.dataset && document.body.dataset.role === 'support')
+        || (typeof window.lgpData !== 'undefined' && !!lgpData.isSupport);
     let videos = [];
     let companies = [];
     let currentVideoId = null;
 
     // DOM Elements
-    const grid = document.getElementById('lgp-training-grid');
+    const grid = document.getElementById('lgp-help-guides-grid');
     const noVideos = document.getElementById('lgp-no-videos');
-    const searchInput = document.getElementById('lgp-training-search');
+    const searchInput = document.getElementById('lgp-help-guides-search');
     const categoryFilter = document.getElementById('lgp-category-filter');
     const addVideoBtn = document.getElementById('lgp-add-video-btn');
     const videoModal = document.getElementById('lgp-video-modal');
@@ -255,7 +257,7 @@
         document.getElementById('lgp-video-id').value = video.id;
         document.getElementById('lgp-video-title').value = video.title;
         document.getElementById('lgp-video-description').value = video.description || '';
-        document.getElementById('lgp-video-url').value = video.video_url;
+        document.getElementById('lgp-video-url').value = video.content_url;
         document.getElementById('lgp-video-category').value = video.category || 'general';
         document.getElementById('lgp-video-duration').value = video.duration || '';
 
@@ -327,7 +329,7 @@
         const data = {
             title: document.getElementById('lgp-video-title').value,
             description: document.getElementById('lgp-video-description').value,
-            video_url: document.getElementById('lgp-video-url').value,
+            content_url: document.getElementById('lgp-video-url').value,
             category: document.getElementById('lgp-video-category').value,
             duration: parseInt(document.getElementById('lgp-video-duration').value) || 0,
             target_companies: targetCompanies
@@ -342,10 +344,15 @@
 
             const response = await fetch(url, {
                 method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-WP-Nonce': wpApiSettings.nonce
-                },
+                headers: (function(){
+                    const h = { 'Content-Type': 'application/json' };
+                    if (typeof window.wpApiSettings !== 'undefined' && wpApiSettings.nonce) {
+                        h['X-WP-Nonce'] = wpApiSettings.nonce;
+                    } else if (typeof window.lgpData !== 'undefined' && lgpData.restNonce) {
+                        h['X-WP-Nonce'] = lgpData.restNonce;
+                    }
+                    return h;
+                })(),
                 credentials: 'same-origin',
                 body: JSON.stringify(data)
             });
@@ -380,11 +387,19 @@
         }
 
         try {
+            const delHeaders = (function(){
+                const h = {};
+                if (typeof window.wpApiSettings !== 'undefined' && wpApiSettings.nonce) {
+                    h['X-WP-Nonce'] = wpApiSettings.nonce;
+                } else if (typeof window.lgpData !== 'undefined' && lgpData.restNonce) {
+                    h['X-WP-Nonce'] = lgpData.restNonce;
+                }
+                return h;
+            })();
+
             const response = await fetch(`/wp-json/lgp/v1/help-guides/${videoId}`, {
                 method: 'DELETE',
-                headers: {
-                    'X-WP-Nonce': wpApiSettings.nonce
-                },
+                headers: delHeaders,
                 credentials: 'same-origin'
             });
 
@@ -418,7 +433,7 @@
         description.textContent = video.description || '';
 
         // Embed video based on URL
-        player.innerHTML = embedVideo(video.video_url);
+        player.innerHTML = embedVideo(video.content_url);
 
         playerModal.classList.remove('hidden');
     }

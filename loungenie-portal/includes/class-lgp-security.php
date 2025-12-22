@@ -93,25 +93,46 @@ class LGP_Security {
 				'https://login.microsoftonline.com',
 				'https://graph.microsoft.com',
 				'https://api.hubapi.com',
+				'https://unpkg.com',
+				'https://cdnjs.cloudflare.com',
 			),
 			'img-src'         => array(
 				"'self'",
 				'data:',
 				'https:',
+				'https://*.tile.openstreetmap.org',
 			),
 			'style-src'       => array(
 				"'self'",
 				"'nonce-" . self::$csp_nonce . "'",
 				"'unsafe-inline'", // Allow for WordPress admin compatibility
+				'https://fonts.googleapis.com',
+				'https://cdnjs.cloudflare.com',
+				'https://unpkg.com',
 			),
 			'script-src'      => array(
 				"'self'",
 				"'nonce-" . self::$csp_nonce . "'",
 				'https://login.microsoftonline.com',
+				'https://cdnjs.cloudflare.com',
+				'https://unpkg.com',
+			),
+			// Allow embedding videos from YouTube and Vimeo in Knowledge Center
+			'frame-src'       => array(
+				"'self'",
+				'https://www.youtube.com',
+				'https://www.youtube-nocookie.com',
+				'https://player.vimeo.com',
+			),
+			// Allow direct video sources
+			'media-src'       => array(
+				"'self'",
+				'https:'
 			),
 			'font-src'        => array(
 				"'self'",
 				'data:',
+				'https://fonts.gstatic.com',
 			),
 			'frame-ancestors' => "'self'",
 			'base-uri'        => "'self'",
@@ -221,7 +242,15 @@ class LGP_Security {
 		$host   = isset( $parsed['host'] ) ? $parsed['host'] : '';
 
 		foreach ( $allowed_hosts as $allowed_host ) {
-			if ( $host === $allowed_host || str_ends_with( $host, '.' . $allowed_host ) ) {
+			// PHP 7.4-compatible ends-with check (polyfill for str_ends_with)
+			$dot_host = '.' . $allowed_host;
+			$ends_with = false;
+			if ( '' !== $host && '' !== $allowed_host ) {
+				$len = strlen( $dot_host );
+				$ends_with = ( $len <= strlen( $host ) ) && ( substr( $host, -$len ) === $dot_host );
+			}
+
+			if ( $host === $allowed_host || $ends_with ) {
 				return $url;
 			}
 		}

@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LounGenie Portal - Production Preview</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* 60% ATMOSPHERE (Soft Cyan & White) */
+            --atmosphere-primary: #E9F8F9;
+            --atmosphere-white: #FFFFFF;
+            --atmosphere-alt: #F5FBFC;
+            --atmosphere-border: #D8E9EC;
+            
+            /* 30% STRUCTURE (Deep Navy) */
+            --structure-navy: #0F172A;
+            --structure-text: #454F5E;
+            --structure-secondary: #7A8699;
+            
+            /* 10% ACTION (Teal & Cyan) */
+            --action-teal: #3AA6B9;
+            --action-teal-dark: #2A8A9A;
+            --action-teal-light: #D8EFF3;
+            --action-cyan: #25D0EE;
+            
+            --success: #16A34A;
+            --warning: #D97706;
+            --danger: #DC2626;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--atmosphere-primary);
+            color: var(--structure-navy);
+            line-height: 1.6;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 280px;
+            background: var(--structure-navy);
+            padding: 24px 20px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            border-left: 4px solid var(--action-teal);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 32px;
+        }
+        
+        .logo-text { color: white; }
+        .logo-accent { color: var(--action-cyan); }
+        
+        .nav-list {
+            list-style: none;
+        }
+        
+        .nav-item {
+            margin-bottom: 12px;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transform: translateX(4px);
+        }
+        
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--action-teal);
+            border-left: 4px solid var(--action-teal);
+            padding-left: 12px;
+        }
+        
+        /* ===== MAIN CONTENT ===== */
+        .main {
+            margin-left: 280px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* ===== HEADER ===== */
+        .header {
+            background: white;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--atmosphere-border);
+            box-shadow: 0 2px 4px rgba(15, 23, 42, 0.1);
+        }
+        
+        .header-left { display: flex; align-items: center; gap: 16px; }
+        .header-right { display: flex; align-items: center; gap: 24px; }
+        
+        .user-role {
+            background: var(--action-teal-light);
+            color: var(--action-teal);
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* ===== CONTENT AREA ===== */
+        .content {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .page-subtitle {
+            color: var(--structure-secondary);
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+        
+        /* ===== STATS GRID ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 24px;
+            text-align: center;
+            border: 1px solid var(--atmosphere-border);
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(15, 23, 42, 0.1);
+            border-color: var(--action-teal);
+        }
+        
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--action-teal);
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            color: var(--structure-secondary);
+            font-weight: 500;
+        }
+        
+        /* ===== CARDS ===== */
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid var(--atmosphere-border);
+            box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04);
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--structure-navy);
+        }
+        
+        /* ===== TABLE ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: var(--atmosphere-alt);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--structure-secondary);
+            border-bottom: 2px solid var(--atmosphere-border);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--atmosphere-border);
+            font-size: 14px;
+        }
+        
+        tr:hover {
+            background: var(--atmosphere-alt);
+        }
+        
+        /* ===== BADGES ===== */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .badge-open {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3B82F6;
+        }
+        
+        .badge-resolved {
+            background: rgba(22, 163, 74, 0.1);
+            color: var(--success);
+        }
+        
+        .badge-pending {
+            background: rgba(217, 119, 6, 0.1);
+            color: var(--warning);
+        }
+        
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: var(--action-teal);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--action-teal-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(58, 166, 185, 0.2);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--action-teal);
+            border: 1.5px solid var(--action-teal);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--action-teal-light);
+        }
+        
+        /* ===== THEME VARIANTS ===== */
+        .theme-support .action-color { color: var(--action-cyan); }
+        .theme-support .btn-primary { background: var(--action-cyan); }
+        .theme-support .stat-value { color: var(--action-cyan); }
+        .theme-support .nav-link.active { color: var(--action-cyan); border-left-color: var(--action-cyan); }
+        .theme-support .sidebar { border-left-color: var(--action-cyan); }
+        
+        /* ===== LAYOUT VARIANTS ===== */
+        .variant { display: none; }
+        .variant.active { display: block; }
+        
+        .switcher {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+        }
+        
+        .switcher-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--structure-secondary);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .switcher-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .switcher-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--atmosphere-border);
+            background: white;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        
+        .switcher-btn.active {
+            background: var(--action-teal);
+            color: white;
+            border-color: var(--action-teal);
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar { width: 80px; }
+            .main { margin-left: 80px; }
+            .nav-link span { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== SUPPORT DASHBOARD ===== -->
+    <!-- SUPPORT LOGIN PAGE (Cyan Theme) -->
+    <div id="variant-login-support" class="variant" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: linear-gradient(135deg, #E9F8F9 0%, #F5FBFC 100%); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 9999;">
+        <div style="max-width: 420px; width: 100%;">
+            <div style="background: white; padding: 48px 40px; border-radius: 12px; box-shadow: 0 8px 32px rgba(15, 23, 42, 0.12); border-top: 4px solid #25D0EE;">
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <div style="width: 64px; height: 64px; background: linear-gradient(135deg, #25D0EE, #00A4EF); border-radius: 16px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px;">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h1 style="font-size: 28px; font-weight: 700; color: var(--structure-navy); margin-bottom: 4px;">Support Team</h1>
+                    <p style="color: #25D0EE; font-size: 12px; font-weight: 600; margin-bottom: 8px;">LounGenie Portal</p>
+                    <p style="color: var(--structure-secondary); font-size: 14px;">Sign in to your support dashboard</p>
+                </div>
+                
+                <form style="display: flex; flex-direction: column; gap: 20px;">
+                    <button type="button" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #25D0EE, #00A4EF); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 15px; cursor: pointer; box-shadow: 0 4px 12px rgba(37, 208, 238, 0.3); display: flex; align-items: center; justify-content: center; gap: 10px;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(37, 208, 238, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(37, 208, 238, 0.3)';">
+                        <i class="fab fa-microsoft" style="font-size: 18px;"></i> Sign in with Outlook 365
+                    </button>
+                    <p style="text-align: center; font-size: 12px; color: var(--structure-secondary); margin-top: 8px;">Use your corporate Outlook email to access the support dashboard</p>
+                </form>
+                
+                <p style="margin-top: 28px; text-align: center; font-size: 12px; color: var(--structure-secondary);">
+                    <i class="fas fa-lock" style="margin-right: 6px; color: #25D0EE;"></i>Secure enterprise authentication
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PARTNER LOGIN PAGE (Teal Theme) -->
+    <div id="variant-login-partner" class="variant" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: linear-gradient(135deg, #E9F8F9 0%, #F5FBFC 100%); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 9999;">
+        <div style="max-width: 420px; width: 100%;">
+            <div style="background: white; padding: 48px 40px; border-radius: 12px; box-shadow: 0 8px 32px rgba(15, 23, 42, 0.12); border-top: 4px solid #3AA6B9;">
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <div style="width: 64px; height: 64px; background: linear-gradient(135deg, #3AA6B9, #2A8A9A); border-radius: 16px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px;">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h1 style="font-size: 28px; font-weight: 700; color: var(--structure-navy); margin-bottom: 4px;">Partner Portal</h1>
+                    <p style="color: #3AA6B9; font-size: 12px; font-weight: 600; margin-bottom: 8px;">LounGenie Portal</p>
+                    <p style="color: var(--structure-secondary); font-size: 14px;">Sign in to manage your account</p>
+                </div>
+                
+                <form style="display: flex; flex-direction: column; gap: 20px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: var(--structure-navy);">
+                            <i class="fas fa-envelope" style="margin-right: 6px; color: #3AA6B9;"></i>Email
+                        </label>
+                        <input type="email" placeholder="contact@company.com" style="width: 100%; padding: 12px 14px; border: 1.5px solid var(--atmosphere-border); border-radius: 8px; font-size: 14px;" onfocus="this.style.borderColor='#3AA6B9'; this.style.boxShadow='0 0 0 3px rgba(58, 166, 185, 0.1)';" onblur="this.style.borderColor='var(--atmosphere-border)'; this.style.boxShadow='none';"/>
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: var(--structure-navy);">
+                            <i class="fas fa-lock" style="margin-right: 6px; color: #3AA6B9;"></i>Password
+                        </label>
+                        <input type="password" placeholder="••••••••" style="width: 100%; padding: 12px 14px; border: 1.5px solid var(--atmosphere-border); border-radius: 8px; font-size: 14px;" onfocus="this.style.borderColor='#3AA6B9'; this.style.boxShadow='0 0 0 3px rgba(58, 166, 185, 0.1)';" onblur="this.style.borderColor='var(--atmosphere-border)'; this.style.boxShadow='none';"/>
+                        <a href="#" style="display: block; margin-top: 8px; font-size: 13px; color: #3AA6B9; text-decoration: none;">Forgot password?</a>
+                    </div>
+                    <button type="submit" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #3AA6B9, #2A8A9A); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 15px; cursor: pointer; box-shadow: 0 4px 12px rgba(58, 166, 185, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(58, 166, 185, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(58, 166, 185, 0.3)';">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                </form>
+                
+                <div style="margin-top: 28px; padding-top: 28px; border-top: 1px solid var(--atmosphere-border); text-align: center;">
+                    <p style="font-size: 13px; color: var(--structure-secondary); margin-bottom: 14px;">Or sign in with</p>
+                    <button style="width: 100%; padding: 12px; background: white; border: 1.5px solid #3AA6B9; border-radius: 8px; cursor: pointer; font-weight: 600; color: #3AA6B9; display: flex; align-items: center; justify-content: center; gap: 8px;" onmouseover="this.style.backgroundColor='rgba(58, 166, 185, 0.05)';" onmouseout="this.style.backgroundColor='white';">
+                        <i class="fab fa-microsoft"></i> Microsoft 365
+                    </button>
+                </div>
+                
+                <p style="margin-top: 24px; text-align: center; font-size: 13px; color: var(--structure-secondary);">
+                    Don't have an account? <a href="#" style="color: #3AA6B9; text-decoration: none; font-weight: 600;">Contact Support</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="variant-support" class="variant" style="display: none;">
+        <div class="container">
+            <!-- SIDEBAR -->
+            <aside class="sidebar">
+                <div class="logo">
+                    <span class="logo-text">LounGenie</span>
+                    <span class="logo-accent">Portal</span>
+                </div>
+                <nav>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-building"></i>
+                                <span>Companies</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-key"></i>
+                                <span>Units</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-ticket-alt"></i>
+                                <span>Tickets</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-map"></i>
+                                <span>Map View</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-cog"></i>
+                                <span>Gateways</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-book"></i>
+                                <span>Help Center</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- MAIN CONTENT -->
+            <div class="main">
+                <!-- HEADER -->
+                <header class="header">
+                    <div class="header-left">
+                        <h1 style="font-size: 20px; font-weight: 600;">LounGenie Portal</h1>
+                    </div>
+                    <div class="header-right">
+                        <div class="user-role">Support Team</div>
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: #E9F8F9;"></div>
+                    </div>
+                </header>
+
+                <!-- CONTENT -->
+                <div class="content">
+                    <h1 class="page-title">Dashboard</h1>
+                    <p class="page-subtitle">Welcome back! Here's an overview of all partner activity.</p>
+
+                    <!-- STATS GRID -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-building"></i></div>
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">Companies</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-key"></i></div>
+                            <div class="stat-value">247</div>
+                            <div class="stat-label">Units Total</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-ticket-alt"></i></div>
+                            <div class="stat-value">18</div>
+                            <div class="stat-label">Open Tickets</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="stat-value">94</div>
+                            <div class="stat-label">Resolved Today</div>
+                        </div>
+                    </div>
+
+                    <!-- RECENT TICKETS -->
+                    <div class="card">
+                        <h2 class="card-title">Recent Tickets</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Company</th>
+                                    <th>Subject</th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#2847</td>
+                                    <td>ACME Lounges</td>
+                                    <td>Unit not responding to calls</td>
+                                    <td><span class="badge badge-open">Open</span></td>
+                                    <td style="color: var(--danger); font-weight: 600;">High</td>
+                                </tr>
+                                <tr>
+                                    <td>#2846</td>
+                                    <td>Tech Solutions</td>
+                                    <td>Gateway configuration needed</td>
+                                    <td><span class="badge badge-pending">Pending</span></td>
+                                    <td style="color: var(--warning); font-weight: 600;">Medium</td>
+                                </tr>
+                                <tr>
+                                    <td>#2845</td>
+                                    <td>Premium Hotels</td>
+                                    <td>Monthly maintenance report</td>
+                                    <td><span class="badge badge-resolved">Resolved</span></td>
+                                    <td style="color: var(--structure-secondary);">Low</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- TOP COLORS -->
+                    <div class="card">
+                        <h2 class="card-title">Top Unit Colors</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-top: 16px;">
+                            <div style="text-align: center;">
+                                <div style="width: 60px; height: 60px; background: #FFC107; border-radius: 50%; margin: 0 auto 12px; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
+                                <div style="font-weight: 600;">Yellow</div>
+                                <div style="font-size: 24px; font-weight: 700; color: var(--action-teal);">45</div>
+                                <div style="font-size: 12px; color: var(--structure-secondary);">units</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="width: 60px; height: 60px; background: #FF9800; border-radius: 50%; margin: 0 auto 12px; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
+                                <div style="font-weight: 600;">Orange</div>
+                                <div style="font-size: 24px; font-weight: 700; color: var(--action-teal);">38</div>
+                                <div style="font-size: 12px; color: var(--structure-secondary);">units</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="width: 60px; height: 60px; background: #2196F3; border-radius: 50%; margin: 0 auto 12px; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
+                                <div style="font-weight: 600;">Blue</div>
+                                <div style="font-size: 24px; font-weight: 700; color: var(--action-teal);">32</div>
+                                <div style="font-size: 12px; color: var(--structure-secondary);">units</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PARTNER DASHBOARD ===== -->
+    <div id="variant-partner" class="variant theme-support" style="display: none;">
+        <div class="container">
+            <!-- SIDEBAR -->
+            <aside class="sidebar">
+                <div class="logo">
+                    <span class="logo-text">LounGenie</span>
+                    <span class="logo-accent">Portal</span>
+                </div>
+                <nav>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-key"></i>
+                                <span>My Units</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-ticket-alt"></i>
+                                <span>My Tickets</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>New Request</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-book"></i>
+                                <span>Help Center</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- MAIN CONTENT -->
+            <div class="main">
+                <!-- HEADER -->
+                <header class="header">
+                    <div class="header-left">
+                        <h1 style="font-size: 20px; font-weight: 600;">LounGenie Portal</h1>
+                    </div>
+                    <div class="header-right">
+                        <div class="user-role action-color">Partner: ACME Lounges</div>
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: #E9F8F9;"></div>
+                    </div>
+                </header>
+
+                <!-- CONTENT -->
+                <div class="content">
+                    <h1 class="page-title">My Dashboard</h1>
+                    <p class="page-subtitle">Manage your LounGenie units and submit support requests.</p>
+
+                    <!-- STATS GRID -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-key"></i></div>
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">My Units</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-ticket-alt"></i></div>
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">Open Requests</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="stat-value">28</div>
+                            <div class="stat-label">Resolved</div>
+                        </div>
+                    </div>
+
+                    <!-- QUICK ACTION -->
+                    <div class="card">
+                        <h2 class="card-title">Submit New Request</h2>
+                        <form style="display: flex; flex-direction: column; gap: 16px;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                <div>
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px;">
+                                        <i class="fas fa-user" style="margin-right: 6px; color: var(--structure-secondary);"></i>Your Name
+                                    </label>
+                                    <input type="text" placeholder="John Smith" style="width: 100%; padding: 10px; border: 1px solid var(--atmosphere-border); border-radius: 6px; font-size: 14px;" required/>
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px;">
+                                        <i class="fas fa-envelope" style="margin-right: 6px; color: var(--structure-secondary);"></i>Email
+                                    </label>
+                                    <input type="email" placeholder="john@acme.com" style="width: 100%; padding: 10px; border: 1px solid var(--atmosphere-border); border-radius: 6px; font-size: 14px;" required/>
+                                </div>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                <div>
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px;">
+                                        <i class="fas fa-phone" style="margin-right: 6px; color: var(--structure-secondary);"></i>Phone
+                                    </label>
+                                    <input type="tel" placeholder="(555) 123-4567" style="width: 100%; padding: 10px; border: 1px solid var(--atmosphere-border); border-radius: 6px; font-size: 14px;"/>
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px;">
+                                        <i class="fas fa-key" style="margin-right: 6px; color: var(--structure-secondary);"></i>Units Affected
+                                    </label>
+                                    <input type="number" placeholder="e.g., 3" min="1" style="width: 100%; padding: 10px; border: 1px solid var(--atmosphere-border); border-radius: 6px; font-size: 14px;" required/>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px;">
+                                    <i class="fas fa-list" style="margin-right: 6px; color: var(--structure-secondary);"></i>Request Type
+                                </label>
+                                <select style="width: 100%; padding: 10px; border: 1px solid var(--atmosphere-border); border-radius: 6px; font-size: 14px;" required>
+                                    <option value="">Select Request Type</option>
+                                    <option>Technical Support</option>
+                                    <option>Service Request</option>
+                                    <option>Account Support</option>
+                                    <option>General Inquiry</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px;">
+                                    <i class="fas fa-comments" style="margin-right: 6px; color: var(--structure-secondary);"></i>Description
+                                </label>
+                                <textarea style="width: 100%; padding: 10px; border: 1px solid var(--atmosphere-border); border-radius: 6px; font-size: 14px; min-height: 100px; font-family: inherit; resize: vertical;" placeholder="Please describe your request in detail..." required></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary" style="align-self: flex-start; align-self: flex-start;"><i class="fas fa-paper-plane"></i> Submit Request</button>
+                        </form>
+                    </div>
+
+                    <!-- MY TICKETS -->
+                    <div class="card">
+                        <h2 class="card-title">My Recent Tickets</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Request</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#2847</td>
+                                    <td>Unit not responding</td>
+                                    <td><span class="badge badge-open">Open</span></td>
+                                    <td>2 hours ago</td>
+                                </tr>
+                                <tr>
+                                    <td>#2834</td>
+                                    <td>Monthly maintenance</td>
+                                    <td><span class="badge badge-resolved">Resolved</span></td>
+                                    <td>3 days ago</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- THEME SWITCHER -->
+    <div class="switcher">
+        <div class="switcher-title">View</div>
+        <div class="switcher-buttons">
+            <button class="switcher-btn active" onclick="showVariant('support-login')"><i class="fas fa-headset"></i> Support Login</button>
+            <button class="switcher-btn" onclick="showVariant('partner-login')"><i class="fas fa-building"></i> Partner Login</button>
+            <button class="switcher-btn" onclick="showVariant('support')"><i class="fas fa-users-cog"></i> Support View</button>
+            <button class="switcher-btn" onclick="showVariant('partner')"><i class="fas fa-user-tie"></i> Partner View</button>
+        </div>
+    </div>
+
+    <script>
+        function showVariant(variant) {
+            // Hide all variants
+            document.getElementById('variant-login-support').style.display = variant === 'support-login' ? 'flex' : 'none';
+            document.getElementById('variant-login-partner').style.display = variant === 'partner-login' ? 'flex' : 'none';
+            document.getElementById('variant-support').style.display = variant === 'support' ? 'block' : 'none';
+            document.getElementById('variant-partner').style.display = variant === 'partner' ? 'block' : 'none';
+            
+            // Update active button
+            document.querySelectorAll('.switcher-btn').forEach(btn => {
+                btn.classList.remove('active');
+                const btnText = btn.textContent.trim();
+                if ((variant === 'support-login' && btnText.includes('Support Login')) ||
+                    (variant === 'partner-login' && btnText.includes('Partner Login')) ||
+                    (variant === 'support' && btnText.includes('Support View')) ||
+                    (variant === 'partner' && btnText.includes('Partner View'))) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

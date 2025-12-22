@@ -119,7 +119,7 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 							</a>
 						</li>
 						<li class="lgp-nav-item">
-							<a href="<?php echo esc_url(home_url('/portal/help')); ?>" class="lgp-nav-link <?php echo esc_attr($section === 'help' ? 'active' : ''); ?>">
+							<a href="<?php echo esc_url(home_url('/portal/knowledge')); ?>" class="lgp-nav-link <?php echo esc_attr(($section === 'help' || $section === 'knowledge' || $section === 'knowledge-center') ? 'active' : ''); ?>">
 								<span class="lgp-nav-icon">📚</span>
 								<?php esc_html_e('Knowledge Center', 'loungenie-portal'); ?>
 							</a>
@@ -150,9 +150,9 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 							</a>
 						</li>
 						<li class="lgp-nav-item">
-							<a href="<?php echo esc_url(home_url('/portal/help')); ?>" class="lgp-nav-link <?php echo esc_attr($section === 'help' ? 'active' : ''); ?>">
+							<a href="<?php echo esc_url(home_url('/portal/knowledge')); ?>" class="lgp-nav-link <?php echo esc_attr(($section === 'help' || $section === 'knowledge' || $section === 'knowledge-center') ? 'active' : ''); ?>">
 								<span class="lgp-nav-icon">🎓</span>
-								<?php esc_html_e('Help and Guides', 'loungenie-portal'); ?>
+								<?php esc_html_e('Knowledge Center', 'loungenie-portal'); ?>
 							</a>
 						</li>
 					<?php endif; ?>

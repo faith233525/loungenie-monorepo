@@ -96,26 +96,32 @@
 			const loading = document.querySelector('.lgp-loading');
 			if (loading) loading.textContent = 'Loading...';
 
-			// Fetch units with ticket data
-			fetch(lgpMapData.ajaxUrl, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
-				body: new URLSearchParams({
-					action: 'lgp_get_map_data',
-					nonce: lgpMapData.nonce,
-				}).toString(),
+			// Fetch units for map via REST API
+			const restUrl = '/wp-json/lgp/v1/map/units';
+			const headers = {};
+			// Prefer core wpApiSettings nonce; fallback to localized lgpData.restNonce if available
+			if (typeof window.wpApiSettings !== 'undefined' && wpApiSettings.nonce) {
+				headers['X-WP-Nonce'] = wpApiSettings.nonce;
+			} else if (typeof window.lgpData !== 'undefined' && lgpData.restNonce) {
+				headers['X-WP-Nonce'] = lgpData.restNonce;
+			}
+
+			fetch(restUrl, {
+				method: 'GET',
+				headers,
+				credentials: 'same-origin',
 			})
 				.then(response => response.json())
 				.then(data => {
-					if (data.success) {
-						this.units = data.data.units || [];
-						this.tickets = data.data.tickets || [];
+					if (data && Array.isArray(data.units)) {
+						this.units = data.units || [];
+						// Tickets are optional in REST response; keep empty array if not returned
+						this.tickets = data.tickets || [];
 						this.renderMap();
 						this.renderList();
+						if (loading) loading.textContent = '';
 					} else {
-						console.error('Failed to load map data:', data.message);
+						console.error('Failed to load map data (unexpected shape):', data);
 						if (loading) loading.textContent = 'Failed to load data';
 					}
 				})

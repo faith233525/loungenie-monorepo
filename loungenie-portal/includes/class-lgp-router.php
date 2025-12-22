@@ -190,8 +190,8 @@ class LGP_Router
 			return;
 		}
 
-		// If help section, load help and guides view
-		if ('help' === $section) {
+		// If help/knowledge sections, load Knowledge Center (help & guides) view
+		if ('help' === $section || 'knowledge' === $section || 'knowledge-center' === $section) {
 			self::load_help_guides_view();
 			return;
 		}

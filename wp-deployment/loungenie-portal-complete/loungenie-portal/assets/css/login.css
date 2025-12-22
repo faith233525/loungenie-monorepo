@@ -1,0 +1,537 @@
+/**
+ * Partner Login Page Styles
+ * 
+ * Uses design-tokens.css variables for consistency with main portal.
+ * Styles are applied as overrides on top of portal.css and design-tokens.css
+ * to ensure visual consistency across all login surfaces.
+ *
+ * @package LounGenie Portal
+ */
+
+/* ============================================================================
+   LOGIN CONTAINER LAYOUT
+   ============================================================================ */
+
+body.lgp-login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.lgp-login-page.lgp-screen-center {
+    background: linear-gradient(135deg, var(--lgp-color-surface) 0%, #f0fafb 100%);
+}
+
+.lgp-card {
+    width: 100%;
+    max-width: 520px;
+    padding: var(--lgp-space-8);
+    background: var(--lgp-color-surface-raised);
+    border-radius: var(--lgp-radius-lg);
+    box-shadow: var(--lgp-shadow-lg);
+    border: 1px solid var(--lgp-color-border);
+}
+
+@media (max-width: 640px) {
+    .lgp-card {
+        margin: var(--lgp-space-4);
+        padding: var(--lgp-space-6);
+    }
+}
+
+/* ============================================================================
+   LOGO SECTION - UNIFIED BRANDING
+   ============================================================================ */
+
+.logo-section {
+    text-align: center;
+    margin-bottom: var(--lgp-space-8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo-container {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--lgp-space-2);
+    margin-bottom: var(--lgp-space-2);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.logo-loungenie {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--lgp-color-brand);
+    font-family: var(--lgp-font-family);
+}
+
+.logo-divider {
+    color: var(--lgp-color-border);
+    font-size: 22px;
+    font-weight: 400;
+    opacity: 0.6;
+}
+
+.logo-poolsafe {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--lgp-color-text-primary);
+    letter-spacing: 0.2px;
+    font-family: var(--lgp-font-family);
+}
+
+.logo-subline {
+    color: var(--lgp-color-text-tertiary);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-top: var(--lgp-space-1);
+}
+
+.lgp-login-logo {
+    max-width: 380px;
+    max-height: 80px;
+    height: auto;
+    margin-bottom: var(--lgp-space-4);
+    display: block;
+}
+
+/* ============================================================================
+   HEADING & TEXT HIERARCHY
+   ============================================================================ */
+
+.lgp-login-heading {
+    font-size: var(--lgp-font-size-2xl);
+    font-weight: var(--lgp-font-weight-bold);
+    margin-bottom: var(--lgp-space-2);
+    color: var(--lgp-color-text-primary);
+    font-family: var(--lgp-font-family);
+}
+
+.lgp-login-subtitle {
+    color: var(--lgp-color-text-secondary);
+    font-size: var(--lgp-font-size-sm);
+    margin-bottom: var(--lgp-space-6);
+    line-height: 1.5;
+}
+
+h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--lgp-color-text-primary);
+    margin-bottom: var(--lgp-space-3);
+}
+
+p {
+    color: var(--lgp-color-text-secondary);
+    line-height: 1.6;
+    font-size: var(--lgp-font-size-sm);
+}
+
+/* ============================================================================
+   ALERTS & MESSAGES
+   ============================================================================ */
+
+.lgp-alert {
+    padding: var(--lgp-space-4);
+    border-radius: var(--lgp-radius-md);
+    font-size: var(--lgp-font-size-sm);
+    margin-bottom: var(--lgp-space-6);
+    border: 1px solid;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--lgp-space-3);
+}
+
+.lgp-alert-error {
+    background: var(--lgp-color-danger-light);
+    color: #9c1c1c;
+    border-color: #dc2626;
+}
+
+.lgp-alert-success {
+    background: var(--lgp-color-success-light);
+    color: #165e31;
+    border-color: var(--lgp-color-success);
+}
+
+.lgp-alert-warning {
+    background: var(--lgp-color-warning-light);
+    color: #92400e;
+    border-color: var(--lgp-color-warning);
+}
+
+.lgp-alert-info {
+    background: var(--lgp-color-info-light);
+    color: #0f766e;
+    border-color: var(--lgp-color-info);
+}
+
+/* ============================================================================
+   FORM ELEMENTS
+   ============================================================================ */
+
+.lgp-form-group {
+    margin-bottom: var(--lgp-space-5);
+}
+
+.lgp-form-group:last-of-type {
+    margin-bottom: var(--lgp-space-6);
+}
+
+.lgp-label {
+    display: block;
+    font-size: 13px;
+    font-weight: var(--lgp-font-weight-semibold);
+    color: var(--lgp-color-text-secondary);
+    margin-bottom: var(--lgp-space-2);
+    text-transform: none;
+}
+
+.lgp-input {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1.25px solid var(--lgp-color-border);
+    border-radius: var(--lgp-radius-md);
+    font-size: 15px;
+    font-family: inherit;
+    background: #fafbfc;
+    transition: all 0.15s ease;
+    color: var(--lgp-color-text-primary);
+}
+
+.lgp-input::placeholder {
+    color: var(--lgp-color-text-tertiary);
+}
+
+.lgp-input:focus {
+    outline: none;
+    border-color: var(--lgp-color-accent);
+    box-shadow: 0 0 0 3px rgba(37, 208, 238, 0.12);
+    background: #ffffff;
+}
+
+.lgp-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: #f3f4f6;
+}
+
+/* Checkbox */
+.lgp-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: var(--lgp-space-2);
+    font-size: var(--lgp-font-size-sm);
+    color: var(--lgp-color-text-secondary);
+    cursor: pointer;
+    user-select: none;
+    margin-bottom: 0;
+    font-weight: normal;
+}
+
+.lgp-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--lgp-color-brand);
+}
+
+/* ============================================================================
+   BUTTONS - PRIMARY & SECONDARY
+   ============================================================================ */
+
+.lgp-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--lgp-space-2);
+    padding: 12px 20px;
+    border: none;
+    border-radius: var(--lgp-radius-md);
+    font-size: var(--lgp-font-size-sm);
+    font-weight: var(--lgp-font-weight-semibold);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-decoration: none;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.lgp-btn-primary {
+    background: var(--lgp-color-brand);
+    color: white;
+    box-shadow: 0 4px 12px rgba(58, 166, 185, 0.2);
+}
+
+.lgp-btn-primary:hover {
+    background: var(--lgp-color-brand-hover);
+    box-shadow: 0 6px 16px rgba(58, 166, 185, 0.28);
+    transform: translateY(-1px);
+}
+
+.lgp-btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(58, 166, 185, 0.16);
+}
+
+.lgp-btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.lgp-btn-secondary {
+    background: white;
+    color: var(--lgp-color-text-primary);
+    border: 1.5px solid var(--lgp-color-border);
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+.lgp-btn-secondary:hover {
+    border-color: var(--lgp-color-accent);
+    background: rgba(37, 208, 238, 0.06);
+    box-shadow: 0 4px 12px rgba(37, 208, 238, 0.12);
+    transform: translateY(-1px);
+}
+
+.lgp-btn-secondary:active {
+    transform: translateY(0);
+}
+
+.lgp-btn-lg {
+    padding: 13px 24px;
+    font-size: var(--lgp-font-size-base);
+    font-weight: 600;
+}
+
+.lgp-w-full {
+    width: 100%;
+}
+
+/* ============================================================================
+   DIVIDER
+   ============================================================================ */
+
+.lgp-divider {
+    display: flex;
+    align-items: center;
+    margin: var(--lgp-space-6) 0;
+    font-size: var(--lgp-font-size-sm);
+    color: var(--lgp-color-text-tertiary);
+}
+
+.lgp-divider::before,
+.lgp-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--lgp-color-border);
+}
+
+.lgp-divider span {
+    padding: 0 var(--lgp-space-3);
+    font-weight: 500;
+}
+
+/* ============================================================================
+   FOOTER & LINKS
+   ============================================================================ */
+
+.lgp-login-footer {
+    margin-top: var(--lgp-space-6);
+    text-align: center;
+}
+
+.lgp-link-back {
+    color: var(--lgp-color-brand);
+    font-size: var(--lgp-font-size-sm);
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.lgp-link-back:hover {
+    color: var(--lgp-color-brand-hover);
+    text-decoration: underline;
+}
+
+.lgp-text-center {
+    text-align: center;
+}
+
+.lgp-text-muted {
+    color: var(--lgp-color-text-tertiary);
+}
+
+.lgp-text-sm {
+    font-size: var(--lgp-font-size-sm);
+}
+
+.lgp-mt-4 {
+    margin-top: var(--lgp-space-4);
+}
+
+.lgp-mt-6 {
+    margin-top: var(--lgp-space-6);
+}
+
+/* ============================================================================
+   LOGIN ACTIONS / BUTTON GROUPS
+   ============================================================================ */
+
+.lgp-login-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--lgp-space-4);
+}
+
+.lgp-login-actions .lgp-btn {
+    width: 100%;
+}
+
+/* ============================================================================
+   LOGIN SIDEBAR (Portal Login Choice Page)
+   ============================================================================ */
+
+.lgp-login-card {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 0;
+    border-radius: var(--lgp-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--lgp-shadow-lg);
+    background: var(--lgp-color-surface-raised);
+    border: 1px solid var(--lgp-color-border);
+}
+
+.lgp-login-sidebar {
+    background: linear-gradient(135deg, var(--lgp-color-brand) 0%, var(--lgp-color-brand-hover) 100%);
+    color: white;
+    padding: var(--lgp-space-8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.lgp-badge {
+    display: inline-block;
+    padding: var(--lgp-space-1) var(--lgp-space-3);
+    border-radius: var(--lgp-radius-sm);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    width: fit-content;
+    margin-bottom: var(--lgp-space-4);
+}
+
+.lgp-badge-premium {
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+}
+
+.lgp-login-title {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: var(--lgp-space-3);
+    line-height: 1.2;
+}
+
+.lgp-login-subtitle {
+    font-size: var(--lgp-font-size-sm);
+    margin-bottom: var(--lgp-space-6);
+    opacity: 0.95;
+    line-height: 1.6;
+}
+
+.lgp-login-list {
+    list-style: none;
+    font-size: var(--lgp-font-size-sm);
+}
+
+.lgp-login-list li {
+    margin-bottom: var(--lgp-space-3);
+    display: flex;
+    gap: var(--lgp-space-2);
+    opacity: 0.9;
+}
+
+.lgp-login-list li::before {
+    content: '✓';
+    flex-shrink: 0;
+    font-weight: 700;
+}
+
+.lgp-login-main {
+    padding: var(--lgp-space-8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.lgp-login-main h2 {
+    color: var(--lgp-color-text-primary);
+    margin-bottom: var(--lgp-space-2);
+}
+
+.lgp-login-main p {
+    margin-bottom: var(--lgp-space-6);
+}
+
+@media (max-width: 768px) {
+    .lgp-login-card {
+        grid-template-columns: 1fr;
+    }
+
+    .lgp-login-sidebar {
+        padding: var(--lgp-space-6);
+    }
+
+    .lgp-login-main {
+        padding: var(--lgp-space-6);
+    }
+
+    .lgp-login-title {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 480px) {
+    .lgp-card {
+        padding: var(--lgp-space-5);
+        border-radius: var(--lgp-radius-md);
+    }
+
+    .logo-container {
+        flex-direction: column;
+        gap: var(--lgp-space-1);
+    }
+
+    .logo-loungenie,
+    .logo-poolsafe {
+        font-size: 16px;
+    }
+
+    .logo-divider {
+        display: none;
+    }
+
+    .lgp-login-heading {
+        font-size: 20px;
+    }
+
+    .lgp-btn {
+        padding: 11px 16px;
+        font-size: 14px;
+    }
+
+    .lgp-btn-lg {
+        padding: 12px 18px;
+    }
+}

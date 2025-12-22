@@ -49,7 +49,7 @@ class LGP_Deduplication {
 			KEY expires_at (expires_at)
 		) $charset_collate;";
 
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		require_once LGP_PLUGIN_DIR . 'includes/lgp-upgrade-shim.php';
 		dbDelta( $sql );
 	}
 
@@ -63,6 +63,7 @@ class LGP_Deduplication {
 	 */
 	public static function generate_hash( $sender_email, $subject, $date ) {
 		// Normalize inputs
+		// @phpstan-ignore-next-line sanitize_email and sanitize_text_field are WordPress core
 		$sender_email = strtolower( sanitize_email( $sender_email ) );
 		$subject      = strtolower( trim( sanitize_text_field( $subject ) ) );
 

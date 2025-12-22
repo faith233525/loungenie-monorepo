@@ -34,6 +34,15 @@ global $wpdb;
 $units_table     = $wpdb->prefix . 'lgp_units';
 $companies_table = $wpdb->prefix . 'lgp_companies';
 
+// Guard: ensure units table exists; attempt schema creation if missing.
+$units_table_exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $units_table ) );
+if ( strtolower( (string) $units_table_exists ) !== strtolower( $units_table ) ) {
+	if ( class_exists( 'LGP_Database' ) ) {
+		LGP_Database::create_tables();
+		$units_table_exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $units_table ) );
+	}
+}
+
 // Check user role for data filtering
 $is_support = LGP_Auth::is_support();
 $company_id = LGP_Auth::get_user_company_id();
@@ -47,18 +56,22 @@ if ( ! $is_support && $company_id ) {
 
 $where_sql = implode( ' AND ', $where_clauses );
 
-// Fetch units (table names are from wpdb prefix which is safe)
-$units = $wpdb->get_results(
-	$wpdb->prepare(
-		"SELECT u.*, c.name as company_name 
-        FROM {$units_table} u 
-        LEFT JOIN {$companies_table} c ON u.company_id = c.id 
-        WHERE {$where_sql}
-        ORDER BY u.created_at DESC 
-        LIMIT %d",
-		100
-	)
-);
+// Fetch units only if table exists; otherwise show empty list
+if ( strtolower( (string) $units_table_exists ) === strtolower( $units_table ) ) {
+	$units = $wpdb->get_results(
+		$wpdb->prepare(
+			"SELECT u.*, c.name as company_name 
+			FROM {$units_table} u 
+			LEFT JOIN {$companies_table} c ON u.company_id = c.id 
+			WHERE {$where_sql}
+			ORDER BY u.created_at DESC 
+			LIMIT %d",
+			100
+		)
+	);
+} else {
+	$units = array();
+}
 
 ?>
 

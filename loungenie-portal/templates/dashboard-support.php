@@ -45,14 +45,31 @@ $lgp_units_table            = $wpdb->prefix . 'lgp_units';
 $lgp_tickets_table          = $wpdb->prefix . 'lgp_tickets';
 $lgp_service_requests_table = $wpdb->prefix . 'lgp_service_requests';
 
+// Guard: if units table is missing (e.g., activation skipped), try to create schema and fall back to zero metrics
+$units_table_exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $lgp_units_table ) );
+if ( strtolower( (string) $units_table_exists ) !== strtolower( $lgp_units_table ) ) {
+	if ( class_exists( 'LGP_Database' ) ) {
+		LGP_Database::create_tables();
+		$units_table_exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $lgp_units_table ) );
+	}
+}
+
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal
-$total_companies = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$lgp_companies_table}");
-// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal
-$total_units     = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$lgp_units_table}");
-// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal
-$active_installs = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$lgp_service_requests_table} WHERE request_type = %s AND status = %s", 'install', 'active'));
-// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal
-$open_tickets    = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$lgp_tickets_table} WHERE status = %s", 'open'));
+if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table ) ) {
+	$total_companies = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$lgp_companies_table}");
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal
+	$total_units     = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$lgp_units_table}");
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal
+	$active_installs = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$lgp_service_requests_table} WHERE request_type = %s AND status = %s", 'install', 'active'));
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal
+	$open_tickets    = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$lgp_tickets_table} WHERE status = %s", 'open'));
+} else {
+	// Fallback metrics
+	$total_companies = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$lgp_companies_table}");
+	$total_units     = 0;
+	$active_installs = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$lgp_service_requests_table} WHERE request_type = %s AND status = %s", 'install', 'active'));
+	$open_tickets    = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$lgp_tickets_table} WHERE status = %s", 'open'));
+}
 
 // Recent tickets
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared -- table names are trusted internal
@@ -67,42 +84,59 @@ $recent_tickets = $wpdb->get_results(
 
 // Top 5 Metrics - Most used colors
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared -- table names are trusted internal
-$top_colors = $wpdb->get_results(
-	"SELECT color_tag, COUNT(*) as count
-	FROM {$lgp_units_table}
-	WHERE color_tag IS NOT NULL AND color_tag != ''
-	GROUP BY color_tag
-	ORDER BY count DESC
-	LIMIT 5"
-);
+if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table ) ) {
+	$top_colors = $wpdb->get_results(
+		"SELECT color_tag, COUNT(*) as count
+		FROM {$lgp_units_table}
+		WHERE color_tag IS NOT NULL AND color_tag != ''
+		GROUP BY color_tag
+		ORDER BY count DESC
+		LIMIT 5"
+	);
+} else {
+	$top_colors = array();
+}
 
 // Top 5 Metrics - Most used lock brands
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared -- table names are trusted internal
-$top_lock_brands = $wpdb->get_results(
-	"SELECT lock_brand, COUNT(*) as count
-	FROM {$lgp_units_table}
-	WHERE lock_brand IS NOT NULL AND lock_brand != ''
-	GROUP BY lock_brand
-	ORDER BY count DESC
-	LIMIT 5"
-);
+if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table ) ) {
+	$top_lock_brands = $wpdb->get_results(
+		"SELECT lock_brand, COUNT(*) as count
+		FROM {$lgp_units_table}
+		WHERE lock_brand IS NOT NULL AND lock_brand != ''
+		GROUP BY lock_brand
+		ORDER BY count DESC
+		LIMIT 5"
+	);
+} else {
+	$top_lock_brands = array();
+}
 
 // Top 5 Metrics - Venue types
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared -- table names are trusted internal
-$top_venues = $wpdb->get_results(
-	"SELECT venue_type, COUNT(*) as count
-	FROM {$lgp_units_table}
-	WHERE venue_type IS NOT NULL AND venue_type != ''
-	GROUP BY venue_type
-	ORDER BY count DESC
-	LIMIT 5"
-);
+if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table ) ) {
+	$top_venues = $wpdb->get_results(
+		"SELECT venue_type, COUNT(*) as count
+		FROM {$lgp_units_table}
+		WHERE venue_type IS NOT NULL AND venue_type != ''
+		GROUP BY venue_type
+		ORDER BY count DESC
+		LIMIT 5"
+	);
+} else {
+	$top_venues = array();
+}
 
 // Season breakdown
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal
-$seasonal_units  = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$lgp_units_table} WHERE season = %s", 'seasonal'));
-// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal
-$yearround_units = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$lgp_units_table} WHERE season = %s", 'year-round'));
+if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table ) ) {
+	$seasonal_units  = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$lgp_units_table} WHERE season = %s", 'seasonal'));
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal
+	$yearround_units = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$lgp_units_table} WHERE season = %s", 'year-round'));
+} else {
+	$seasonal_units  = 0;
+	$yearround_units = 0;
+}
 
 ?>
 
