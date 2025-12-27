@@ -152,7 +152,7 @@
 2. `/lgp/v1/units` - Unit management
 3. `/lgp/v1/tickets` - Ticket system
 4. `/lgp/v1/gateways` - Gateway config
-5. `/lgp/v1/help-guides` - Training content
+5. `/lgp/v1/knowledge-center` - Training content (legacy alias `/lgp/v1/help-guides`)
 6. `/lgp/v1/attachments` - File uploads
 7. `/lgp/v1/service-notes` - Field notes
 8. `/lgp/v1/audit-log` - Audit trail

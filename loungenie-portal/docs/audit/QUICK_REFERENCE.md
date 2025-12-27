@@ -13,7 +13,7 @@
 **Change:** `@version 1.8.0` → `@version 1.8.1`
 
 ### 2️⃣ Add Global $wpdb (20 minutes)  
-**Files:** api/companies.php, units.php, tickets.php, dashboard.php, map.php, support.php, attachments.php, help-guides.php  
+**Files:** api/companies.php, units.php, tickets.php, dashboard.php, map.php, support.php, attachments.php, knowledge-center.php (formerly help-guides.php)  
 **Add at start of each method:** `global $wpdb;`
 
 ### 3️⃣ Class Guards (30 minutes)
@@ -21,7 +21,7 @@
 **Add:** `if ( class_exists( 'ClassName' ) )` before each init() call
 
 ### 4️⃣ Replace in_array (20 minutes)
-**Files:** api/dashboard.php, map.php, help-guides.php  
+**Files:** api/dashboard.php, map.php, knowledge-center.php  
 **Replace:** `in_array( $role, ['lgp_support'] )` with `LGP_Auth::is_support()`
 
 ### 5️⃣ Remove function_exists Check (2 minutes)
@@ -58,7 +58,7 @@ composer run cs                           # Check standards
 | 0:00-0:01 | Fix #1 | loungenie-portal.php |
 | 0:01-0:25 | Fix #2 | api/*.php (8 files) |
 | 0:25-1:00 | Fix #3 | class-lgp-loader.php |
-| 1:00-1:20 | Fix #4 | api/dashboard.php, map.php, help-guides.php |
+| 1:00-1:20 | Fix #4 | api/dashboard.php, map.php, knowledge-center.php |
 | 1:20-1:25 | Fix #5 | api/tickets.php |
 | 1:25-1:40 | Fix #6 | class-lgp-assets.php, portal.js |
 | 1:40-2:00 | Fix #7 | api/map.php, dashboard.php |

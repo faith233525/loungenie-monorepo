@@ -172,7 +172,7 @@ class LGP_File_Validator {
 		foreach ( glob( $upload_dir . '/*' ) as $file ) {
 			if ( is_file( $file ) ) {
 				$total_size += filesize( $file );
-				$file_count++;
+				++$file_count;
 			}
 		}
 

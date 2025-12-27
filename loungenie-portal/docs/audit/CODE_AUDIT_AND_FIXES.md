@@ -38,11 +38,11 @@ This audit identifies all code quality issues, security risks, and best-practice
 | 2e | Global $wpdb missing | api/map.php | 15,25... | Undefined | 🔴 CRITICAL | 3m |
 | 2f | Global $wpdb missing | api/support.php | 15... | Undefined | 🔴 CRITICAL | 2m |
 | 2g | Global $wpdb missing | api/attachments.php | 15... | Undefined | 🔴 CRITICAL | 2m |
-| 2h | Global $wpdb missing | api/help-guides.php | 15... | Undefined | 🔴 CRITICAL | 2m |
+| 2h | Global $wpdb missing | api/knowledge-center.php (formerly api/help-guides.php) | 15... | Undefined | 🔴 CRITICAL | 2m |
 | 3 | Missing class guards | includes/class-lgp-loader.php | 25-60 | Logic | 🔴 CRITICAL | 30m |
 | 4 | Unsafe in_array() checks | api/dashboard.php | 45 | Security | 🟠 HIGH | 8m |
 | 4b | Unsafe in_array() checks | api/map.php | 38 | Security | 🟠 HIGH | 8m |
-| 4c | Unsafe in_array() checks | api/help-guides.php | 42 | Security | 🟠 HIGH | 8m |
+| 4c | Unsafe in_array() checks | api/knowledge-center.php | 42 | Security | 🟠 HIGH | 8m |
 | 5 | Redundant function check | api/tickets.php | 304-305 | Quality | 🟠 HIGH | 2m |
 | 6 | JS global scope pollution | assets/js/portal.js | 10 | Safety | 🟠 HIGH | 10m |
 | 7 | Missing null checks | api/map.php | 50-60 | Safety | 🟡 MEDIUM | 7m |
@@ -50,7 +50,7 @@ This audit identifies all code quality issues, security risks, and best-practice
 | 9 | Missing return types | includes/class-lgp-auth.php | 30-45 | Quality | 🟡 MEDIUM | 5m |
 | 10 | Missing return types | api/tickets.php | 200-210 | Quality | 🟡 MEDIUM | 5m |
 | 11 | Variable initialization | templates/dashboard-support.php | 25 | Quality | 🟡 MEDIUM | 3m |
-| 12 | Hardcoded URLs | api/help-guides.php | 60 | Maintainability | 🟡 MEDIUM | 5m |
+| 12 | Hardcoded URLs | api/knowledge-center.php | 60 | Maintainability | 🟡 MEDIUM | 5m |
 | 13 | Dead code | includes/class-lgp-auth.php | 140-145 | Cleanup | 🟢 LOW | 3m |
 | 14 | Missing JSDoc | assets/js/portal.js | 50-70 | Documentation | 🟢 LOW | 5m |
 
@@ -165,7 +165,7 @@ public function get_companies( $request ) {
 5. **api/map.php** - Lines ~15, 25 (2 methods)
 6. **api/support.php** - Line ~15 (1 method)
 7. **api/attachments.php** - Lines ~15, 25, 35 (3 methods)
-8. **api/help-guides.php** - Lines ~15, 25 (2 methods)
+8. **api/knowledge-center.php** (formerly api/help-guides.php) - Lines ~15, 25 (2 methods)
 
 ### Fix Template
 
@@ -320,7 +320,7 @@ public static function init() {
 **Files:** 3 files  
   - api/dashboard.php (line 45)
   - api/map.php (line 38)
-  - api/help-guides.php (line 42)
+  - api/knowledge-center.php (line 42)  
 
 ### Problem
 
@@ -386,7 +386,7 @@ if ( ! LGP_Auth::is_support() ) {
 + if ( ! LGP_Auth::is_support() ) {
 ```
 
-**api/help-guides.php (line 42)**
+**api/knowledge-center.php (line 42)**
 ```diff
 - if ( in_array( $role, array( 'lgp_support' ) ) ) {
 + if ( LGP_Auth::is_support() ) {
@@ -643,13 +643,13 @@ $count = $result ? (int) $result : 0;
 ```
 
 ### Issue #10: Hardcoded URLs
-**File:** api/help-guides.php  
+**File:** api/knowledge-center.php (formerly api/help-guides.php)  
 **Fix:** Use WordPress URL functions
 
 **Example:**
 ```diff
 - $url = "https://example.com/help-guides/" . $guide_id;
-+ $url = home_url( '/help-guides/' . $guide_id );
++ $url = home_url( '/knowledge-center/' . $guide_id );
 ```
 
 ### Issue #11: Dead Code

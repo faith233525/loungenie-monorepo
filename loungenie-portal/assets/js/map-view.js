@@ -98,13 +98,9 @@
 
 			// Fetch units for map via REST API
 			const restUrl = '/wp-json/lgp/v1/map/units';
-			const headers = {};
-			// Prefer core wpApiSettings nonce; fallback to localized lgpData.restNonce if available
-			if (typeof window.wpApiSettings !== 'undefined' && wpApiSettings.nonce) {
-				headers['X-WP-Nonce'] = wpApiSettings.nonce;
-			} else if (typeof window.lgpData !== 'undefined' && lgpData.restNonce) {
-				headers['X-WP-Nonce'] = lgpData.restNonce;
-			}
+			const headers = {
+				'X-WP-Nonce': lgpMapData && lgpMapData.restNonce ? lgpMapData.restNonce : '',
+			};
 
 			fetch(restUrl, {
 				method: 'GET',
@@ -121,12 +117,12 @@
 						this.renderList();
 						if (loading) loading.textContent = '';
 					} else {
-						console.error('Failed to load map data (unexpected shape):', data);
+						// Failed to load map data (unexpected shape) - show user error
 						if (loading) loading.textContent = 'Failed to load data';
 					}
 				})
 				.catch(error => {
-					console.error('Error loading map data:', error);
+					// Error loading map data - show user error
 					if (loading) loading.textContent = 'Error loading data';
 				});
 		},

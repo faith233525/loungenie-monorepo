@@ -2,8 +2,8 @@
 <ruleset name="LounGenie Portal Standards">
     <description>PHP Coding Standards for LounGenie Portal - Enterprise-ready, WordPress-safe</description>
 
-    <!-- Ensure WPCS is available from Composer vendor path -->
-    <config name="installed_paths" value="vendor/wp-coding-standards/wpcs"/>
+        <!-- Installed paths are managed by Composer plugin (dealerdirect/phpcodesniffer-composer-installer).
+            Do not override here to ensure PHPCS can load WPCS + PHPCSUtils + PHPCSExtra. -->
 
     <!-- Base standards: WordPress (includes Core + Docs) -->
     <rule ref="WordPress"/>

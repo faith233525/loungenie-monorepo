@@ -257,7 +257,7 @@ class LGP_Email_Notifications {
 		}
 		foreach ( $partner_role_users as $user ) {
 			$company = get_user_meta( $user->ID, '_lgp_company_id', true );
-			if ( $company == $company_id ) {
+			if ( (int) $company_id === (int) $company ) {
 				$users_by_id[ $user->ID ] = $user;
 			}
 		}

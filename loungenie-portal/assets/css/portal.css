@@ -168,14 +168,14 @@ a:hover {
 }
 
 .lgp-nav-link:hover {
-    background: rgba(58, 166, 185, 0.12) !important;
-    color: var(--primary) !important;
+    background: rgba(58, 166, 185, 0.12);
+    color: var(--primary);
     transform: translateX(4px);
 }
 
 .lgp-nav-link.active {
-    background: rgba(58, 166, 185, 0.15) !important;
-    color: var(--primary) !important;
+    background: rgba(58, 166, 185, 0.15);
+    color: var(--primary);
     font-weight: 600;
 }
 
@@ -244,7 +244,7 @@ a:hover {
 }
 
 .lgp-table tbody tr:hover {
-    background: var(--lgp-color-background) !important;
+    background: var(--lgp-color-background);
     transform: translateX(4px);
     box-shadow: -4px 0 0 var(--lgp-color-brand);
 }
@@ -1038,7 +1038,7 @@ a:hover {
 /* Show sidebar toggle on smaller screens */
 @media (max-width: 1024px) {
     #lgp-sidebar-toggle {
-        display: block !important;
+        display: block; /* Override inline styles */
     }
 }
 
@@ -1598,7 +1598,7 @@ a:hover {
 }
 
 .lgp-card.collapsed .lgp-card-body {
-    max-height: 0 !important;
+    max-height: 0; /* Collapse animation */
     overflow: hidden;
 }
 
@@ -1748,8 +1748,8 @@ a:hover {
 }
 
 .lgp-nav-link:hover {
-    background: rgba(255, 255, 255, 0.12) !important;
-    color: var(--primary) !important;
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--primary);
     transform: translateX(4px);
 }
 
@@ -1765,8 +1765,8 @@ a:hover {
 }
 
 .lgp-nav-link.active {
-    background: rgba(58, 166, 185, 0.15) !important;
-    color: var(--primary) !important;
+    background: rgba(58, 166, 185, 0.15);
+    color: var(--primary);
     border-left: 3px solid var(--primary);
     padding-left: 11px;
 }
@@ -2241,16 +2241,16 @@ a:hover {
     }
 
     #lgp-sidebar-toggle {
-        display: block !important;
+        display: block; /* Mobile override */
     }
 
     .lgp-main {
-        margin-left: 0 !important;
+        margin-left: 0; /* Full width on mobile */
     }
 
     .lgp-header-actions {
         flex-wrap: wrap;
-        gap: 8px !important;
+        gap: 8px;
     }
 
     .lgp-user-menu span {
@@ -2267,14 +2267,14 @@ a:hover {
     }
 
     .lgp-card-grid {
-        grid-template-columns: 1fr !important;
+        grid-template-columns: 1fr;
     }
 }
 
 /* Tablet */
 @media (max-width: 1024px) and (min-width: 769px) {
     .lgp-card-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -2381,13 +2381,13 @@ a:hover {
 }
 
 .lgp-nav-link:hover {
-    background: rgba(255, 255, 255, 0.1) !important;
-    color: #fff !important;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
 }
 
 .lgp-nav-link.active {
-    background: rgba(255, 255, 255, 0.15) !important;
-    color: #fff !important;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
     font-weight: 600;
 }
 
@@ -2437,12 +2437,12 @@ html {
     .lgp-header,
     .lgp-btn,
     button {
-        display: none !important;
+        display: none;
     }
 
     .lgp-main {
-        margin-left: 0 !important;
-        margin-top: 0 !important;
+        margin-left: 0;
+        margin-top: 0;
     }
 }
 

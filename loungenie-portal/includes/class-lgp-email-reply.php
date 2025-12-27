@@ -336,7 +336,7 @@ class LGP_Email_Reply {
 
 					// Add as comment
 					$this->record_outlook_reply( $ticket_id, $post );
-					$count++;
+					++$count;
 				}
 			}
 		} catch ( Exception $e ) {

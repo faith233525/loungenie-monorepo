@@ -3,14 +3,15 @@
 ## Feature 1: Enhanced Knowledge Center
 
 ### What's New
-- Filter help guides by **type** (maintenance, repair, inspection, cleaning)
-- Filter help guides by **tags** (multiple tag selection)
+- Filter knowledge center guides by **type** (maintenance, repair, inspection, cleaning)
+- Filter knowledge center guides by **tags** (multiple tag selection)
 - Combined filtering (type + tags + search)
 
 ### API Endpoint
 ```
-GET /lgp/v1/help-guides?type=maintenance&tags=filter,pool&search=guide
+GET /lgp/v1/knowledge-center?type=maintenance&tags=filter,pool&search=guide
 ```
+(Legacy alias `/lgp/v1/help-guides` remains for backward compatibility.)
 
 ### Example Usage (PHP)
 ```php
@@ -23,9 +24,10 @@ $guides = LGP_Help_Guide::get_all([
 
 ### Example Usage (JavaScript)
 ```javascript
-fetch('/wp-json/lgp/v1/help-guides?type=maintenance&tags=filter,pool')
+fetch('/wp-json/lgp/v1/knowledge-center?type=maintenance&tags=filter,pool')
     .then(r => r.json())
     .then(guides => console.log(guides));
+// Legacy alias: /wp-json/lgp/v1/help-guides
 ```
 
 ---
@@ -147,8 +149,8 @@ Override in your theme's `style.css`:
 6. Verify pagination/scrolling works
 7. Test on mobile (responsive)
 
-### Test Help Guide Filtering
-1. Open API endpoint: `/lgp/v1/help-guides`
+### Test Knowledge Center Filtering
+1. Open API endpoint: `/lgp/v1/knowledge-center` (legacy alias `/lgp/v1/help-guides` still works)
 2. Add `?type=maintenance` to filter
 3. Add `?tags=filter,pool` to filter by tags
 4. Combine: `?type=maintenance&tags=filter,pool&search=guide`
@@ -195,7 +197,7 @@ console.log(lgpMapData);  // Should show { ajaxUrl, nonce, ... }
 - Verify units have latitude/longitude values
 
 ### Filters Not Working?
-- Check help guides table has `type` and `tags` columns
+- Check knowledge center table (`wp_lgp_help_guides`) has `type` and `tags` columns
 - Verify tags are stored as JSON: `["tag1", "tag2"]`
 
 ### Performance Issues?
@@ -216,8 +218,8 @@ console.log(lgpMapData);  // Should show { ajaxUrl, nonce, ... }
 - `ENHANCEMENTS_SUMMARY.md` - Full documentation
 
 ### Modified Files
-- `includes/class-lgp-help-guide.php` - Added type/tag filtering
-- `api/help-guides.php` - Added filter parameters to API
+- `includes/class-lgp-knowledge-guide.php` (class `LGP_Help_Guide`) - Added type/tag filtering
+- `api/knowledge-center.php` - Added filter parameters to API (legacy alias `/help-guides`)
 - `api/units.php` - Added AJAX endpoint for map data
 
 ---

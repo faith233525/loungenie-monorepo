@@ -154,7 +154,7 @@ function lgp_render_stat_card( $args = array() ) {
 
 		<?php if ( $args['change'] ) : ?>
 		<div class="lgp-stat-change lgp-text-xs lgp-font-medium" 
-			 style="--lgp-stat-change-color: <?php echo strpos( $args['change'], '-' ) === 0 ? 'var(--lgp-danger)' : 'var(--lgp-success)'; ?>;">
+			style="--lgp-stat-change-color: <?php echo strpos( $args['change'], '-' ) === 0 ? 'var(--lgp-danger)' : 'var(--lgp-success)'; ?>;">
 			<?php echo esc_html( $args['change'] ); ?>
 		</div>
 		<?php endif; ?>
@@ -203,8 +203,8 @@ function lgp_render_button( $args = array() ) {
 
 	?>
 	<a href="<?php echo esc_url( $args['url'] ); ?>" 
-	   class="<?php echo implode( ' ', $button_classes ); ?>"
-	   <?php echo $attrs_string; ?>>
+		class="<?php echo implode( ' ', $button_classes ); ?>"
+		<?php echo $attrs_string; ?>>
 		<?php if ( $args['icon'] ) : ?>
 		<span class="lgp-btn-icon"><?php echo $args['icon']; ?></span>
 		<?php endif; ?>

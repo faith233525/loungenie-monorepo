@@ -20,7 +20,7 @@ function lgp_register_audit_log_rest_route() {
 		array(
 			'methods'             => 'GET',
 			'callback'            => 'lgp_get_audit_log',
-			'permission_callback' => function() {
+			'permission_callback' => function () {
 				return LGP_Auth::is_support();
 			},
 		)

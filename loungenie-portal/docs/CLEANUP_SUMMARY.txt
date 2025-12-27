@@ -97,7 +97,7 @@ ACTIVE PLUGIN STRUCTURE
    - attachments.php                    File uploads
    - dashboard.php                      Dashboard data
    - map.php                            Map functionality
-   - help-guides.php                    Help system
+   - knowledge-center.php (legacy alias help-guides.php)   Help system
    - audit-log.php                      Audit logs
 
 ✅ Templates (templates/)
@@ -109,7 +109,7 @@ ACTIVE PLUGIN STRUCTURE
    - dashboard-partner.php              Partner dashboard
    - units-view.php                     Units display
    - map-view.php                       Map display
-   - help-guides-view.php               Help system
+   - knowledge-center-view.php          Help system (legacy help-guides alias)
    - custom-login-enhanced.php          Enhanced option
    - custom-login-modern.php            Modern option
 

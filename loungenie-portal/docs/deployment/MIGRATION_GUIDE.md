@@ -279,9 +279,9 @@ loungenie-portal/
 │       └── map-view.js (NEW)
 ├── api/
 │   ├── units.php (UPDATED)
-│   └── help-guides.php (UPDATED)
+│   └── knowledge-center.php (UPDATED; legacy alias help-guides.php)
 ├── includes/
-│   └── class-lgp-help-guide.php (UPDATED)
+│   └── class-lgp-knowledge-guide.php (UPDATED; class `LGP_Help_Guide`)
 ├── tests/
 │   └── MapViewTest.php (NEW)
 ├── FEATURES.md (NEW)
@@ -338,7 +338,7 @@ wp transient delete-all
 - [ ] Click marker to see popup
 - [ ] Click "View Details" to see modal
 - [ ] Modal displays tickets for unit
-- [ ] Help guides API responds: `GET /lgp/v1/help-guides?type=maintenance`
+- [ ] Knowledge Center API responds: `GET /lgp/v1/knowledge-center?type=maintenance` (legacy alias `/lgp/v1/help-guides` ok)
 - [ ] Type filtering works
 - [ ] Tag filtering works
 - [ ] Partner users see only their company's data

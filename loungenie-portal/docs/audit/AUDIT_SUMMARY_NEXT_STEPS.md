@@ -100,7 +100,7 @@ grep "@version" loungenie-portal/loungenie-portal.php
 - `api/map.php`
 - `api/support.php`
 - `api/attachments.php`
-- `api/help-guides.php`
+- `api/knowledge-center.php` (formerly `api/help-guides.php`)
 
 **Problem:** Global variable `$wpdb` not declared before use
 
@@ -209,7 +209,7 @@ foreach ( $required_classes as $class_file ) {
 **Files:** 3 files
 - `api/dashboard.php`
 - `api/map.php`
-- `api/help-guides.php`
+- `api/knowledge-center.php` (formerly `api/help-guides.php`)
 
 **Problem:** Using `in_array()` instead of `current_user_can()`
 
@@ -355,7 +355,7 @@ if ( typeof lgpData !== 'undefined' ) {
 
 4. **Hardcoded URLs (1 issue)**
    - Using hardcoded site URLs instead of WordPress functions
-   - File: `api/help-guides.php`
+   - File: `api/knowledge-center.php` (formerly `api/help-guides.php`)
    - Impact: Breaks if site URL changes
    - Fix: Use `home_url()`, `site_url()`, `admin_url()`
 

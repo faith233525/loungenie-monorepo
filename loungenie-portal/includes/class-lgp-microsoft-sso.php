@@ -124,10 +124,10 @@ class LGP_Microsoft_SSO {
 						</th>
 						<td>
 							<input type="text" 
-								   name="<?php echo esc_attr( self::OPTION_CLIENT_ID ); ?>" 
-								   id="<?php echo esc_attr( self::OPTION_CLIENT_ID ); ?>" 
-								   value="<?php echo esc_attr( $client_id ); ?>" 
-								   class="regular-text" />
+									name="<?php echo esc_attr( self::OPTION_CLIENT_ID ); ?>" 
+									id="<?php echo esc_attr( self::OPTION_CLIENT_ID ); ?>" 
+									value="<?php echo esc_attr( $client_id ); ?>" 
+									class="regular-text" />
 							<p class="description"><?php esc_html_e( 'Application (client) ID from Azure AD', 'loungenie-portal' ); ?></p>
 						</td>
 					</tr>
@@ -139,10 +139,10 @@ class LGP_Microsoft_SSO {
 						</th>
 						<td>
 							<input type="password" 
-								   name="<?php echo esc_attr( self::OPTION_CLIENT_SECRET ); ?>" 
-								   id="<?php echo esc_attr( self::OPTION_CLIENT_SECRET ); ?>" 
-								   value="<?php echo esc_attr( $client_secret ); ?>" 
-								   class="regular-text" />
+									name="<?php echo esc_attr( self::OPTION_CLIENT_SECRET ); ?>" 
+									id="<?php echo esc_attr( self::OPTION_CLIENT_SECRET ); ?>" 
+									value="<?php echo esc_attr( $client_secret ); ?>" 
+									class="regular-text" />
 							<p class="description"><?php esc_html_e( 'Client secret value (not the ID)', 'loungenie-portal' ); ?></p>
 						</td>
 					</tr>
@@ -154,10 +154,10 @@ class LGP_Microsoft_SSO {
 						</th>
 						<td>
 							<input type="text" 
-								   name="<?php echo esc_attr( self::OPTION_TENANT_ID ); ?>" 
-								   id="<?php echo esc_attr( self::OPTION_TENANT_ID ); ?>" 
-								   value="<?php echo esc_attr( $tenant_id ); ?>" 
-								   class="regular-text" />
+									name="<?php echo esc_attr( self::OPTION_TENANT_ID ); ?>" 
+									id="<?php echo esc_attr( self::OPTION_TENANT_ID ); ?>" 
+									value="<?php echo esc_attr( $tenant_id ); ?>" 
+									class="regular-text" />
 							<p class="description"><?php esc_html_e( 'Directory (tenant) ID from Azure AD', 'loungenie-portal' ); ?></p>
 						</td>
 					</tr>
@@ -173,11 +173,11 @@ class LGP_Microsoft_SSO {
 						</th>
 						<td>
 							<input type="url" 
-								   name="lgp_custom_logo_url" 
-								   id="lgp_custom_logo_url" 
-								   value="<?php echo esc_attr( $logo_url ); ?>" 
-								   class="regular-text" 
-								   placeholder="https://yourdomain.com/logo.png" />
+									name="lgp_custom_logo_url" 
+									id="lgp_custom_logo_url" 
+									value="<?php echo esc_attr( $logo_url ); ?>" 
+									class="regular-text" 
+									placeholder="https://yourdomain.com/logo.png" />
 							<p class="description">
 								<?php esc_html_e( 'Upload your logo to WordPress Media Library, then paste the URL here. Recommended size: 280x80px (PNG with transparent background).', 'loungenie-portal' ); ?>
 								<br>

@@ -62,7 +62,7 @@ grep -n "@version 1.8.1" loungenie-portal/loungenie-portal.php
 
 **Priority:** CRITICAL  
 **Time:** 20-30 minutes  
-**Files:** 8 API files (companies.php, units.php, tickets.php, dashboard.php, map.php, support.php, attachments.php, help-guides.php)
+**Files:** 8 API files (companies.php, units.php, tickets.php, dashboard.php, map.php, support.php, attachments.php, knowledge-center.php)
 
 ---
 
@@ -163,7 +163,7 @@ public function create_ticket( $request ) {
 
 ---
 
-### 2h: api/help-guides.php
+### 2h: api/knowledge-center.php (formerly api/help-guides.php)
 
 **Methods to update:**
 - `get_help_guides()`
@@ -279,7 +279,7 @@ grep -n "class_exists" loungenie-portal/includes/class-lgp-loader.php | wc -l
 
 **Priority:** HIGH (Security)  
 **Time:** 15-20 minutes  
-**Files:** 3 files (dashboard.php, map.php, help-guides.php)
+**Files:** 3 files (dashboard.php, map.php, knowledge-center.php)
 
 ---
 
@@ -327,13 +327,13 @@ grep -n "in_array.*role" loungenie-portal/api/map.php
 
 ---
 
-### 4c: api/help-guides.php
+### 4c: api/knowledge-center.php (legacy alias api/help-guides.php)
 
 **Same pattern as 4a**
 
 **Find:**
 ```bash
-grep -n "in_array.*role" loungenie-portal/api/help-guides.php
+grep -n "in_array.*role" loungenie-portal/api/knowledge-center.php
 ```
 
 ---

@@ -319,7 +319,7 @@ class LGP_User_Creator {
 			$user_id = self::get_or_create_user( $email, $company_id );
 
 			if ( is_wp_error( $user_id ) ) {
-				$results['failed']++;
+				++$results['failed'];
 				$results['errors'][] = array(
 					'email' => $email,
 					'error' => $user_id->get_error_message(),
@@ -330,9 +330,9 @@ class LGP_User_Creator {
 				$user_registered = strtotime( $user->user_registered );
 
 				if ( time() - $user_registered < 60 ) {
-					$results['created']++;
+					++$results['created'];
 				} else {
-					$results['exists']++;
+					++$results['exists'];
 				}
 			}
 		}

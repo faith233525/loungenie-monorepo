@@ -2,25 +2,26 @@
 
 ## Overview
 This document outlines the implementation of three key feature enhancements to the LounGenie Portal:
-1. **Knowledge Center Enhancements** - Type and tag filtering for help guides
+1. **Knowledge Center Enhancements** - Type and tag filtering for Knowledge Center guides
 2. **Map & Service Tickets** - Visual map view with location-based service management
 3. **Contract Status Workflows** - Status-aware filtering and color-coding
 
 ## 1. Knowledge Center Enhancements
 
 ### What's Changed
-- **Help Guide Filtering**: Extended `LGP_Help_Guide::get_all()` to support filtering by:
+- **Knowledge Center Guide Filtering**: Extended `LGP_Help_Guide::get_all()` to support filtering by:
   - `type` (e.g., 'maintenance', 'repair', 'inspection')
   - `tags` (array of tag strings)
 
 ### Files Modified
-- `includes/class-lgp-help-guide.php` - Updated `get_all()` method with type and tag filtering
-- `api/help-guides.php` - API endpoint now accepts `type` and `tags` query parameters
+- `includes/class-lgp-knowledge-guide.php` (class `LGP_Help_Guide`) - Updated `get_all()` method with type and tag filtering
+- `api/knowledge-center.php` - API endpoint now accepts `type` and `tags` query parameters (legacy alias `/help-guides`)
 
 ### API Usage
 ```
-GET /lgp/v1/help-guides?type=maintenance&tags=filter,pool
+GET /lgp/v1/knowledge-center?type=maintenance&tags=filter,pool
 ```
+(Legacy alias `/lgp/v1/help-guides` remains supported.)
 
 ### Role-Based Access
 - **Support**: See all guides across all companies

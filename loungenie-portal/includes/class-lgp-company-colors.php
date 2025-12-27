@@ -23,7 +23,7 @@ class LGP_Company_Colors {
 	 * Initialize hooks
 	 */
 	public static function init() {
-		 // Invalidate cache when units change
+		// Invalidate cache when units change
 		add_action( 'lgp_unit_created', array( __CLASS__, 'invalidate_cache' ), 10, 2 );
 		add_action( 'lgp_unit_updated', array( __CLASS__, 'invalidate_cache' ), 10, 2 );
 		add_action( 'lgp_unit_deleted', array( __CLASS__, 'invalidate_cache' ), 10, 2 );
@@ -153,13 +153,22 @@ class LGP_Company_Colors {
 
 		$colors = self::calculate_colors( $company_id );
 
-		$wpdb->update(
+		$result = $wpdb->update(
 			$wpdb->prefix . 'lgp_companies',
 			array( 'top_colors' => wp_json_encode( $colors ) ),
 			array( 'id' => $company_id ),
 			array( '%s' ),
 			array( '%d' )
 		);
+
+		if ( false === $result ) {
+			// Log update failure for observability.
+			if ( class_exists( 'LGP_Logger' ) ) {
+				LGP_Logger::log_event( get_current_user_id(), 'company_colors_update_failed', (int) $company_id, array( 'error' => $wpdb->last_error ) );
+			} else {
+				error_log( 'LGP: Failed to update company top_colors for company_id=' . (int) $company_id . ' error=' . $wpdb->last_error );
+			}
+		}
 	}
 
 	/**
@@ -208,7 +217,7 @@ class LGP_Company_Colors {
 		$updated = 0;
 		foreach ( $company_ids as $company_id ) {
 			self::refresh_company_colors( $company_id );
-			$updated++;
+			++$updated;
 		}
 
 		return $updated;

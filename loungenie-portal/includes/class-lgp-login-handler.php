@@ -314,7 +314,7 @@ class Login_Handler {
 		// Ensure uniqueness
 		while ( username_exists( $username ) ) {
 			$username = $base . $counter;
-			$counter++;
+			++$counter;
 		}
 
 		return $username;

@@ -36,7 +36,7 @@ grep "@version" loungenie-portal/loungenie-portal.php | grep 1.8.1
 - api/map.php
 - api/support.php
 - api/attachments.php
-- api/help-guides.php
+- api/knowledge-center.php (formerly api/help-guides.php)
 
 **Fix:** Add `global $wpdb;` at start of each method using `$wpdb`
 
@@ -98,7 +98,7 @@ public static function init() {
 **Files:** 3 files
 - api/dashboard.php
 - api/map.php
-- api/help-guides.php
+- api/knowledge-center.php
 
 **Find:**
 ```bash
@@ -201,7 +201,7 @@ const userId = window.lgpData?.userId || null;
 | 0:00-0:01 | Fix #1: Version | loungenie-portal.php |
 | 0:01-0:25 | Fix #2: Global $wpdb | api/*.php (8 files) |
 | 0:25-1:00 | Fix #3: Class guards | class-lgp-loader.php |
-| 1:00-1:20 | Fix #4: in_array() → is_support() | api/dashboard.php, map.php, help-guides.php |
+| 1:00-1:20 | Fix #4: in_array() → is_support() | api/dashboard.php, map.php, knowledge-center.php |
 | 1:20-1:25 | Fix #5: Remove function_exists | api/tickets.php |
 | 1:25-1:40 | Fix #6: JavaScript safety | class-lgp-assets.php, portal.js |
 | 1:40-2:00 | Fix #7: Null checks | api/map.php, dashboard.php |

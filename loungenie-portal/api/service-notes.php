@@ -20,7 +20,7 @@ function lgp_register_service_notes_rest_route() {
 		array(
 			'methods'             => array( 'GET', 'POST' ),
 			'callback'            => 'lgp_handle_service_notes',
-			'permission_callback' => function() {
+			'permission_callback' => function () {
 				return LGP_Auth::is_support();
 			},
 		)

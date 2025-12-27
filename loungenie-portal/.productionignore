@@ -1,0 +1,16 @@
+# Production package exclusions (for ZIP creation)
+/tests
+/docs
+/vendor
+/node_modules
+/.git
+/.github
+.phpunit.result.cache
+.gitignore
+.productionignore
+package-lock.json
+composer.lock
+phpunit.xml
+phpcs.xml
+*.log
+*.tmp

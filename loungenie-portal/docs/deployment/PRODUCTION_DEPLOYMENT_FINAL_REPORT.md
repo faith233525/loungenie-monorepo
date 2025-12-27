@@ -260,8 +260,8 @@ const restRoot = hasLgpData ? lgpData.restUrl : '';
 ```
 **Reason:** Prevent undefined variable errors
 
-### Fix #5: Help Guides Auth Refactor
-**File:** api/help-guides.php  
+### Fix #5: Knowledge Center Auth Refactor
+**File:** api/knowledge-center.php (legacy alias api/help-guides.php)  
 **Before:**
 ```php
 $role = get_user_meta($user_id, 'role', true);

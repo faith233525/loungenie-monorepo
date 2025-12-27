@@ -404,10 +404,10 @@ class LGP_HubSpot {
 						</th>
 						<td>
 							<input type="text" 
-								   id="lgp_hubspot_api_key" 
-								   name="lgp_hubspot_api_key" 
-								   value="<?php echo esc_attr( get_option( 'lgp_hubspot_api_key' ) ); ?>" 
-								   class="regular-text" />
+									id="lgp_hubspot_api_key" 
+									name="lgp_hubspot_api_key" 
+									value="<?php echo esc_attr( get_option( 'lgp_hubspot_api_key' ) ); ?>" 
+									class="regular-text" />
 							<p class="description">
 								<?php esc_html_e( 'Enter your HubSpot Private App Access Token. Get it from HubSpot Settings → Integrations → Private Apps.', 'loungenie-portal' ); ?>
 							</p>

@@ -7,18 +7,17 @@
  * @package LounGenie Portal
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class LGP_Assets
-{
+class LGP_Assets {
+
 
 	/**
 	 * Initialize assets management
 	 */
-	public static function init()
-	{
+	public static function init() {
 		// Assets are enqueued by router when needed
 	}
 
@@ -26,24 +25,23 @@ class LGP_Assets
 	 * Enqueue portal assets (CSS and JS)
 	 * Called by router when loading portal
 	 */
-	public static function enqueue_portal_assets()
-	{
+	public static function enqueue_portal_assets() {
 		// Safety check: don't enqueue in WordPress admin
-		if (is_admin()) {
+		if ( is_admin() ) {
 			return;
 		}
 		// Resource hints for faster connections to external CDNs used by the portal
 		add_filter(
 			'wp_resource_hints',
-			function ($hints, $relation_type) {
+			function ( $hints, $relation_type ) {
 				$domains = array(
 					'fonts.googleapis.com',
 					'fonts.gstatic.com',
 					'cdnjs.cloudflare.com',
 					'unpkg.com',
 				);
-				if ('preconnect' === $relation_type || 'dns-prefetch' === $relation_type) {
-					$hints = array_unique(array_merge($hints, $domains));
+				if ( 'preconnect' === $relation_type || 'dns-prefetch' === $relation_type ) {
+					$hints = array_unique( array_merge( $hints, $domains ) );
 				}
 				return $hints;
 			},
@@ -62,7 +60,7 @@ class LGP_Assets
 		wp_enqueue_style(
 			'font-awesome',
 			'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
-			array('lgp-font-montserrat'),
+			array( 'lgp-font-montserrat' ),
 			'6.5.1',
 			'all'
 		);
@@ -71,7 +69,7 @@ class LGP_Assets
 		wp_enqueue_style(
 			'lgp-design-tokens',
 			LGP_ASSETS_URL . 'css/design-tokens.css',
-			array('font-awesome'),
+			array( 'font-awesome' ),
 			LGP_VERSION,
 			'all'
 		);
@@ -80,7 +78,7 @@ class LGP_Assets
 		wp_enqueue_style(
 			'lgp-portal-components',
 			LGP_ASSETS_URL . 'css/portal-components.css',
-			array('lgp-design-tokens'),
+			array( 'lgp-design-tokens' ),
 			LGP_VERSION,
 			'all'
 		);
@@ -89,7 +87,7 @@ class LGP_Assets
 		wp_enqueue_style(
 			'lgp-design-system',
 			LGP_ASSETS_URL . 'css/design-system-refactored.css',
-			array('lgp-portal-components'),
+			array( 'lgp-portal-components' ),
 			LGP_VERSION,
 			'all'
 		);
@@ -98,7 +96,7 @@ class LGP_Assets
 		wp_enqueue_style(
 			'lgp-portal',
 			LGP_ASSETS_URL . 'css/portal.css',
-			array('lgp-design-system'),
+			array( 'lgp-design-system' ),
 			LGP_VERSION,
 			'all'
 		);
@@ -107,13 +105,13 @@ class LGP_Assets
 		wp_enqueue_style(
 			'lgp-role-switcher',
 			LGP_ASSETS_URL . 'css/role-switcher.css',
-			array('lgp-portal'),
+			array( 'lgp-portal' ),
 			LGP_VERSION,
 			'all'
 		);
 
 		// Leaflet assets for support-only map
-		if (LGP_Auth::is_support()) {
+		if ( LGP_Auth::is_support() ) {
 			wp_enqueue_style(
 				'leaflet',
 				'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
@@ -142,14 +140,14 @@ class LGP_Assets
 		wp_enqueue_script(
 			'lgp-portal',
 			LGP_ASSETS_URL . 'js/portal.js',
-			array('lgp-utils'),
+			array( 'lgp-utils' ),
 			LGP_VERSION,
 			true
 		);
 
 		// Ensure WordPress REST API settings (wpApiSettings) are available for nonces
 		// This provides wpApiSettings.root and wpApiSettings.nonce used by our JS
-		wp_enqueue_script('wp-api');
+		wp_enqueue_script( 'wp-api' );
 
 		// Enqueue portal initialization (sidebar toggle, CSP-compliant)
 		wp_enqueue_script(
@@ -178,11 +176,11 @@ class LGP_Assets
 			true
 		);
 
-		if (LGP_Auth::is_support()) {
+		if ( LGP_Auth::is_support() ) {
 			wp_enqueue_script(
 				'lgp-company-map',
 				LGP_ASSETS_URL . 'js/lgp-map.js',
-				array('leaflet'),
+				array( 'leaflet' ),
 				LGP_VERSION,
 				true
 			);
@@ -192,7 +190,7 @@ class LGP_Assets
 		wp_enqueue_script(
 			'lgp-responsive-sidebar',
 			LGP_ASSETS_URL . 'js/responsive-sidebar.js',
-			array('lgp-portal'),
+			array( 'lgp-portal' ),
 			LGP_VERSION,
 			true
 		);
@@ -201,24 +199,24 @@ class LGP_Assets
 		wp_enqueue_script(
 			'lgp-portal-demo',
 			LGP_ASSETS_URL . 'js/portal-demo.js',
-			array('lgp-portal'),
+			array( 'lgp-portal' ),
 			LGP_VERSION,
 			true
 		);
 
 		// Prepare localized data for portal
-		$company_name = method_exists('LGP_Auth', 'get_company_name') ? LGP_Auth::get_company_name() : '';
+		$company_name = method_exists( 'LGP_Auth', 'get_company_name' ) ? LGP_Auth::get_company_name() : '';
 		$current_user = wp_get_current_user();
-		$rest_nonce   = wp_create_nonce('wp_rest');
+		$rest_nonce   = wp_create_nonce( 'wp_rest' );
 
 		// Localize script with AJAX data
 		wp_localize_script(
 			'lgp-portal',
 			'lgpData',
 			array(
-				'ajaxUrl'     => admin_url('admin-ajax.php'),
-				'restUrl'     => rest_url('lgp/v1/'),
-				'nonce'       => wp_create_nonce('lgp_portal_nonce'),
+				'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
+				'restUrl'     => rest_url( 'lgp/v1/' ),
+				'nonce'       => wp_create_nonce( 'lgp_portal_nonce' ),
 				'restNonce'   => $rest_nonce,
 				'isSupport'   => LGP_Auth::is_support(),
 				'isPartner'   => LGP_Auth::is_partner(),
@@ -229,8 +227,8 @@ class LGP_Assets
 		);
 
 		// Support-only map data
-		if (LGP_Auth::is_support()) {
-			$markers = class_exists('LGP_Geocode') ? LGP_Geocode::get_company_markers_for_map() : array();
+		if ( LGP_Auth::is_support() ) {
+			$markers = class_exists( 'LGP_Geocode' ) ? LGP_Geocode::get_company_markers_for_map() : array();
 			wp_localize_script(
 				'lgp-company-map',
 				'lgpCompanyMap',

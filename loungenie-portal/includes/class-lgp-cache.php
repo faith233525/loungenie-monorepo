@@ -205,7 +205,7 @@ class LGP_Cache {
 			// Warm dashboard stats
 			self::get_or_set(
 				'dashboard_stats_' . $user_id,
-				function() {
+				function () {
 					global $wpdb;
 					return array(
 						'total_companies' => $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}lgp_companies" ),
@@ -219,7 +219,7 @@ class LGP_Cache {
 			// Warm top metrics
 			self::get_or_set(
 				'top_colors',
-				function() {
+				function () {
 					global $wpdb;
 					return $wpdb->get_results(
 						"SELECT color, COUNT(*) as count FROM {$wpdb->prefix}lgp_units WHERE color != '' GROUP BY color ORDER BY count DESC LIMIT 5",
@@ -231,7 +231,7 @@ class LGP_Cache {
 
 			self::get_or_set(
 				'top_venues',
-				function() {
+				function () {
 					global $wpdb;
 					return $wpdb->get_results(
 						"SELECT venue_type, COUNT(*) as count FROM {$wpdb->prefix}lgp_units WHERE venue_type != '' GROUP BY venue_type ORDER BY count DESC LIMIT 5",
@@ -243,7 +243,7 @@ class LGP_Cache {
 
 			self::get_or_set(
 				'top_lock_brands',
-				function() {
+				function () {
 					global $wpdb;
 					return $wpdb->get_results(
 						"SELECT lock_brand, COUNT(*) as count FROM {$wpdb->prefix}lgp_units WHERE lock_brand != '' GROUP BY lock_brand ORDER BY count DESC LIMIT 5",

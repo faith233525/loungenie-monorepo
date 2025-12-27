@@ -385,19 +385,19 @@ class LGP_System_Health {
 		$warnings        = 0;
 
 		if ( ! $system_data['php_ok'] || ! $system_data['wp_ok'] || ! $system_data['curl_enabled'] ) {
-			$critical_issues++;
+			++$critical_issues;
 		}
 		if ( $outlook_data['configured'] && ! $outlook_data['has_token'] ) {
-			$warnings++;
+			++$warnings;
 		}
 		if ( $outlook_data['expires_at'] && $outlook_data['expires_at'] < time() ) {
-			$warnings++;
+			++$warnings;
 		}
 		if ( ! $system_data['https_enabled'] ) {
-			$warnings++;
+			++$warnings;
 		}
 		if ( ! $system_data['memory_ok'] || ! $system_data['execution_time_ok'] ) {
-			$warnings++;
+			++$warnings;
 		}
 
 		$overall_status = 'healthy';

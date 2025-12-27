@@ -1,4 +1,4 @@
-#!/bin/bash
+n#!/bin/bash
 
 # LounGenie Portal - Complete Plugin Installation Script
 # Run this on your WordPress server to auto-install the complete plugin

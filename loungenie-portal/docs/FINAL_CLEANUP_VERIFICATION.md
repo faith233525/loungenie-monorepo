@@ -70,7 +70,7 @@ templates/custom-login.php → REMOVED ✅
 ✅ templates/dashboard-partner.php       Partner dashboard
 ✅ templates/units-view.php              Units display
 ✅ templates/map-view.php                Map display
-✅ templates/help-guides-view.php        Help system
+✅ templates/knowledge-center-view.php   Help system (legacy route alias help-guides)
 ✅ templates/custom-login-enhanced.php   Enhanced login option
 ✅ templates/custom-login-modern.php     Modern login option
 ```

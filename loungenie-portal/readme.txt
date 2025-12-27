@@ -65,7 +65,7 @@ LounGenie Portal is a comprehensive WordPress plugin providing:
 - /wp-json/lgp/v1/units
 - /wp-json/lgp/v1/tickets
 - /wp-json/lgp/v1/gateways
-- /wp-json/lgp/v1/help-guides
+- /wp-json/lgp/v1/knowledge-center (legacy alias: /wp-json/lgp/v1/help-guides)
 - /wp-json/lgp/v1/attachments
 - /wp-json/lgp/v1/audit-log
 - /wp-json/lgp/v1/service-notes

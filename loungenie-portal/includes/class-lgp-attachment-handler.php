@@ -197,7 +197,7 @@ HTACCESS;
 
 		if ( ! $result ) {
 			// Clean up file if database insert fails
-			unlink( $destination );
+			wp_delete_file( $destination );
 			return false;
 		}
 
@@ -341,14 +341,14 @@ HTACCESS;
 			if ( $chunk === false ) {
 				fclose( $source_handle );
 				fclose( $dest_handle );
-				unlink( $destination );
+				wp_delete_file( $destination );
 				return false;
 			}
 
 			if ( fwrite( $dest_handle, $chunk ) === false ) {
 				fclose( $source_handle );
 				fclose( $dest_handle );
-				unlink( $destination );
+				wp_delete_file( $destination );
 				return false;
 			}
 		}
@@ -422,7 +422,7 @@ HTACCESS;
 
 		// Delete file
 		if ( file_exists( $attachment->file_path ) ) {
-			unlink( $attachment->file_path );
+			wp_delete_file( $attachment->file_path );
 		}
 
 		// Delete database record

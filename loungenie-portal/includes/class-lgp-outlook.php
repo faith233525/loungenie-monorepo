@@ -613,10 +613,10 @@ class LGP_Outlook {
 						</th>
 						<td>
 							<input type="text" 
-								   id="lgp_outlook_client_id" 
-								   name="lgp_outlook_client_id" 
-								   value="<?php echo esc_attr( get_option( 'lgp_outlook_client_id' ) ); ?>" 
-								   class="regular-text" />
+									id="lgp_outlook_client_id" 
+									name="lgp_outlook_client_id" 
+									value="<?php echo esc_attr( get_option( 'lgp_outlook_client_id' ) ); ?>" 
+									class="regular-text" />
 							<p class="description">
 								<?php esc_html_e( 'Get this from Azure Portal → App Registrations', 'loungenie-portal' ); ?>
 							</p>
@@ -628,10 +628,10 @@ class LGP_Outlook {
 						</th>
 						<td>
 							<input type="password" 
-								   id="lgp_outlook_client_secret" 
-								   name="lgp_outlook_client_secret" 
-								   value="<?php echo esc_attr( get_option( 'lgp_outlook_client_secret' ) ); ?>" 
-								   class="regular-text" />
+									id="lgp_outlook_client_secret" 
+									name="lgp_outlook_client_secret" 
+									value="<?php echo esc_attr( get_option( 'lgp_outlook_client_secret' ) ); ?>" 
+									class="regular-text" />
 							<p class="description">
 								<?php esc_html_e( 'Create a client secret in Azure Portal', 'loungenie-portal' ); ?>
 							</p>

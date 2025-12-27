@@ -8,34 +8,32 @@ use LounGenie\Portal\LGP_Auth;
  * @package LounGenie Portal
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class LGP_Companies_API
-{
+class LGP_Companies_API {
+
 
 	/**
 	 * Initialize API endpoints
 	 */
-	public static function init()
-	{
-		add_action('rest_api_init', array(__CLASS__, 'register_routes'));
+	public static function init() {
+		add_action( 'rest_api_init', array( __CLASS__, 'register_routes' ) );
 	}
 
 	/**
 	 * Register REST API routes
 	 */
-	public static function register_routes()
-	{
+	public static function register_routes() {
 		// Get all companies (Support only)
 		register_rest_route(
 			'lgp/v1',
 			'/companies',
 			array(
 				'methods'             => 'GET',
-				'callback'            => array(__CLASS__, 'get_companies'),
-				'permission_callback' => array(__CLASS__, 'check_support_permission'),
+				'callback'            => array( __CLASS__, 'get_companies' ),
+				'permission_callback' => array( __CLASS__, 'check_support_permission' ),
 			)
 		);
 
@@ -45,8 +43,8 @@ class LGP_Companies_API
 			'/companies/(?P<id>\d+)',
 			array(
 				'methods'             => 'GET',
-				'callback'            => array(__CLASS__, 'get_company'),
-				'permission_callback' => array(__CLASS__, 'check_company_permission'),
+				'callback'            => array( __CLASS__, 'get_company' ),
+				'permission_callback' => array( __CLASS__, 'check_company_permission' ),
 			)
 		);
 
@@ -56,8 +54,8 @@ class LGP_Companies_API
 			'/companies',
 			array(
 				'methods'             => 'POST',
-				'callback'            => array(__CLASS__, 'create_company'),
-				'permission_callback' => array(__CLASS__, 'check_support_permission'),
+				'callback'            => array( __CLASS__, 'create_company' ),
+				'permission_callback' => array( __CLASS__, 'check_support_permission' ),
 			)
 		);
 
@@ -67,8 +65,8 @@ class LGP_Companies_API
 			'/companies/(?P<id>\d+)',
 			array(
 				'methods'             => 'PUT',
-				'callback'            => array(__CLASS__, 'update_company'),
-				'permission_callback' => array(__CLASS__, 'check_support_permission'),
+				'callback'            => array( __CLASS__, 'update_company' ),
+				'permission_callback' => array( __CLASS__, 'check_support_permission' ),
 			)
 		);
 	}
@@ -76,14 +74,13 @@ class LGP_Companies_API
 	/**
 	 * Get all companies
 	 */
-	public static function get_companies($request)
-	{
+	public static function get_companies( $request ) {
 		global $wpdb;
 
 		$table    = $wpdb->prefix . 'lgp_companies';
-		$page     = $request->get_param('page') ?: 1;
-		$per_page = $request->get_param('per_page') ?: 20;
-		$offset   = ($page - 1) * $per_page;
+		$page     = $request->get_param( 'page' ) ?: 1;
+		$per_page = $request->get_param( 'per_page' ) ?: 20;
+		$offset   = ( $page - 1 ) * $per_page;
 
 		$companies = $wpdb->get_results(
 			$wpdb->prepare(
@@ -93,7 +90,7 @@ class LGP_Companies_API
 			)
 		);
 
-		$total = $wpdb->get_var("SELECT COUNT(*) FROM $table");
+		$total = $wpdb->get_var( "SELECT COUNT(*) FROM $table" );
 
 		return rest_ensure_response(
 			array(
@@ -108,11 +105,10 @@ class LGP_Companies_API
 	/**
 	 * Get single company
 	 */
-	public static function get_company($request)
-	{
+	public static function get_company( $request ) {
 		global $wpdb;
 
-		$id    = (int) $request->get_param('id');
+		$id    = (int) $request->get_param( 'id' );
 		$table = $wpdb->prefix . 'lgp_companies';
 
 		$company = $wpdb->get_row(
@@ -122,36 +118,35 @@ class LGP_Companies_API
 			)
 		);
 
-		if (! $company) {
-			return new WP_Error('not_found', __('Company not found', 'loungenie-portal'), array('status' => 404));
+		if ( ! $company ) {
+			return new WP_Error( 'not_found', __( 'Company not found', 'loungenie-portal' ), array( 'status' => 404 ) );
 		}
 
-		return rest_ensure_response($company);
+		return rest_ensure_response( $company );
 	}
 
 	/**
 	 * Create company
 	 */
-	public static function create_company($request)
-	{
+	public static function create_company( $request ) {
 		global $wpdb;
 
 		$table = $wpdb->prefix . 'lgp_companies';
 
 		$data = array(
-			'name'                  => sanitize_text_field($request->get_param('name')),
-			'address'               => sanitize_textarea_field($request->get_param('address')),
-			'state'                 => sanitize_text_field($request->get_param('state')),
-			'contact_name'          => sanitize_text_field($request->get_param('contact_name')),
-			'contact_email'         => sanitize_email($request->get_param('contact_email')),
-			'contact_phone'         => sanitize_text_field($request->get_param('contact_phone')),
-			'management_company_id' => absint($request->get_param('management_company_id')),
+			'name'                  => sanitize_text_field( $request->get_param( 'name' ) ),
+			'address'               => sanitize_textarea_field( $request->get_param( 'address' ) ),
+			'state'                 => sanitize_text_field( $request->get_param( 'state' ) ),
+			'contact_name'          => sanitize_text_field( $request->get_param( 'contact_name' ) ),
+			'contact_email'         => sanitize_email( $request->get_param( 'contact_email' ) ),
+			'contact_phone'         => sanitize_text_field( $request->get_param( 'contact_phone' ) ),
+			'management_company_id' => absint( $request->get_param( 'management_company_id' ) ),
 		);
 
-		$inserted = $wpdb->insert($table, $data);
+		$inserted = $wpdb->insert( $table, $data );
 
-		if ($inserted === false) {
-			return new WP_Error('db_error', __('Failed to create company', 'loungenie-portal'), array('status' => 500));
+		if ( $inserted === false ) {
+			return new WP_Error( 'db_error', __( 'Failed to create company', 'loungenie-portal' ), array( 'status' => 500 ) );
 		}
 
 		$company_id = $wpdb->insert_id;
@@ -169,12 +164,12 @@ class LGP_Companies_API
 		);
 
 		// Fire action for integrations
-		do_action('lgp_company_created', $company_id);
+		do_action( 'lgp_company_created', $company_id );
 
 		return rest_ensure_response(
 			array(
 				'id'      => $company_id,
-				'message' => __('Company created successfully', 'loungenie-portal'),
+				'message' => __( 'Company created successfully', 'loungenie-portal' ),
 			)
 		);
 	}
@@ -182,27 +177,26 @@ class LGP_Companies_API
 	/**
 	 * Update company
 	 */
-	public static function update_company($request)
-	{
+	public static function update_company( $request ) {
 		global $wpdb;
 
-		$id    = (int) $request->get_param('id');
+		$id    = (int) $request->get_param( 'id' );
 		$table = $wpdb->prefix . 'lgp_companies';
 
 		$data = array(
-			'name'                  => sanitize_text_field($request->get_param('name')),
-			'address'               => sanitize_textarea_field($request->get_param('address')),
-			'state'                 => sanitize_text_field($request->get_param('state')),
-			'contact_name'          => sanitize_text_field($request->get_param('contact_name')),
-			'contact_email'         => sanitize_email($request->get_param('contact_email')),
-			'contact_phone'         => sanitize_text_field($request->get_param('contact_phone')),
-			'management_company_id' => absint($request->get_param('management_company_id')),
+			'name'                  => sanitize_text_field( $request->get_param( 'name' ) ),
+			'address'               => sanitize_textarea_field( $request->get_param( 'address' ) ),
+			'state'                 => sanitize_text_field( $request->get_param( 'state' ) ),
+			'contact_name'          => sanitize_text_field( $request->get_param( 'contact_name' ) ),
+			'contact_email'         => sanitize_email( $request->get_param( 'contact_email' ) ),
+			'contact_phone'         => sanitize_text_field( $request->get_param( 'contact_phone' ) ),
+			'management_company_id' => absint( $request->get_param( 'management_company_id' ) ),
 		);
 
-		$updated = $wpdb->update($table, $data, array('id' => $id));
+		$updated = $wpdb->update( $table, $data, array( 'id' => $id ) );
 
-		if ($updated === false) {
-			return new WP_Error('db_error', __('Failed to update company', 'loungenie-portal'), array('status' => 500));
+		if ( $updated === false ) {
+			return new WP_Error( 'db_error', __( 'Failed to update company', 'loungenie-portal' ), array( 'status' => 500 ) );
 		}
 
 		// Audit logging
@@ -213,13 +207,13 @@ class LGP_Companies_API
 			$id,
 			array(
 				'company_name'   => $data['name'],
-				'fields_updated' => array_keys($data),
+				'fields_updated' => array_keys( $data ),
 			)
 		);
 
 		return rest_ensure_response(
 			array(
-				'message' => __('Company updated successfully', 'loungenie-portal'),
+				'message' => __( 'Company updated successfully', 'loungenie-portal' ),
 			)
 		);
 	}
@@ -227,8 +221,7 @@ class LGP_Companies_API
 	/**
 	 * Check if user is Support
 	 */
-	public static function check_support_permission()
-	{
+	public static function check_support_permission() {
 		return LGP_Auth::is_support();
 	}
 
@@ -236,15 +229,14 @@ class LGP_Companies_API
 	 * Check if user can access company
 	 * Support can access all, Partners can access their own
 	 */
-	public static function check_company_permission($request)
-	{
-		if (LGP_Auth::is_support()) {
+	public static function check_company_permission( $request ) {
+		if ( LGP_Auth::is_support() ) {
 			return true;
 		}
 
-		if (LGP_Auth::is_partner()) {
+		if ( LGP_Auth::is_partner() ) {
 			$company_id   = LGP_Auth::get_user_company_id();
-			$requested_id = (int) $request->get_param('id');
+			$requested_id = (int) $request->get_param( 'id' );
 			return (int) $company_id === $requested_id;
 		}
 

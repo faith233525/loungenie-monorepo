@@ -21,7 +21,7 @@ class LGP_Migrations {
 	 * Initialize migrations system
 	 */
 	public static function init() {
-		 add_action( 'plugins_loaded', array( __CLASS__, 'run_pending_migrations' ), 10 );
+		add_action( 'plugins_loaded', array( __CLASS__, 'run_pending_migrations' ), 10 );
 	}
 
 	/**

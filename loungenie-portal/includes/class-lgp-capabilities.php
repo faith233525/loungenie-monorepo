@@ -8,12 +8,12 @@
  * @package LounGenie Portal
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class LGP_Capabilities
-{
+class LGP_Capabilities {
+
 
 	/**
 	 * Core capability definitions
@@ -56,18 +56,16 @@ class LGP_Capabilities
 	 * Initialize capability system
 	 * Registers capabilities on plugins_loaded so roles can use them
 	 */
-	public static function init()
-	{
-		add_action('plugins_loaded', array(__CLASS__, 'register_capabilities'), 5);
+	public static function init() {
+		add_action( 'plugins_loaded', array( __CLASS__, 'register_capabilities' ), 5 );
 	}
 
 	/**
 	 * Register all capabilities in WordPress
 	 * This makes them available for role assignment and checks
 	 */
-	public static function register_capabilities()
-	{
-		foreach (self::CAPABILITIES as $cap => $label) {
+	public static function register_capabilities() {
+		foreach ( self::CAPABILITIES as $cap => $label ) {
 			// Just registering the capability definition
 			// Actual grants happen in role definitions
 		}
@@ -79,16 +77,15 @@ class LGP_Capabilities
 	 * @param string $role_name WordPress role (e.g., 'lgp_support')
 	 * @param array  $caps      Capability slugs to grant
 	 */
-	public static function grant_capabilities_to_role($role_name, $caps)
-	{
-		$role = get_role($role_name);
-		if (! $role) {
+	public static function grant_capabilities_to_role( $role_name, $caps ) {
+		$role = get_role( $role_name );
+		if ( ! $role ) {
 			return;
 		}
 
-		foreach ($caps as $cap) {
-			if (isset(self::CAPABILITIES[$cap])) {
-				$role->add_cap($cap);
+		foreach ( $caps as $cap ) {
+			if ( isset( self::CAPABILITIES[ $cap ] ) ) {
+				$role->add_cap( $cap );
 			}
 		}
 	}
@@ -100,9 +97,8 @@ class LGP_Capabilities
 	 * @param string $capability Capability slug
 	 * @return bool
 	 */
-	public static function user_can($capability)
-	{
-		return current_user_can($capability);
+	public static function user_can( $capability ) {
+		return current_user_can( $capability );
 	}
 
 	/**
@@ -111,22 +107,20 @@ class LGP_Capabilities
 	 * @param string $role_name Role slug
 	 * @return array
 	 */
-	public static function get_role_capabilities($role_name)
-	{
-		$role = get_role($role_name);
-		if (! $role) {
+	public static function get_role_capabilities( $role_name ) {
+		$role = get_role( $role_name );
+		if ( ! $role ) {
 			return array();
 		}
 
-		return array_keys($role->capabilities);
+		return array_keys( $role->capabilities );
 	}
 
 	/**
 	 * Pre-defined role capability sets
 	 * Easy reference for role definitions
 	 */
-	public static function get_support_capabilities()
-	{
+	public static function get_support_capabilities() {
 		return array(
 			'lgp_view_all_companies',
 			'lgp_view_units',
@@ -145,8 +139,7 @@ class LGP_Capabilities
 		);
 	}
 
-	public static function get_partner_capabilities()
-	{
+	public static function get_partner_capabilities() {
 		return array(
 			'lgp_view_own_company',
 			'lgp_view_units',
@@ -158,8 +151,7 @@ class LGP_Capabilities
 		);
 	}
 
-	public static function get_regional_support_capabilities()
-	{
+	public static function get_regional_support_capabilities() {
 		// Future: support staff limited to a geographic region or set of companies
 		return array(
 			'lgp_view_units',
@@ -173,8 +165,7 @@ class LGP_Capabilities
 		);
 	}
 
-	public static function get_installer_capabilities()
-	{
+	public static function get_installer_capabilities() {
 		// Future: technician role for on-site installations
 		return array(
 			'lgp_view_units',
@@ -184,8 +175,7 @@ class LGP_Capabilities
 		);
 	}
 
-	public static function get_readonly_partner_capabilities()
-	{
+	public static function get_readonly_partner_capabilities() {
 		// Future: read-only partner access (e.g., municipality auditor)
 		return array(
 			'lgp_view_own_company',
@@ -201,10 +191,9 @@ class LGP_Capabilities
 	 * @param array $capabilities
 	 * @return bool
 	 */
-	public static function user_can_any($capabilities)
-	{
-		foreach ($capabilities as $cap) {
-			if (self::user_can($cap)) {
+	public static function user_can_any( $capabilities ) {
+		foreach ( $capabilities as $cap ) {
+			if ( self::user_can( $cap ) ) {
 				return true;
 			}
 		}
@@ -217,10 +206,9 @@ class LGP_Capabilities
 	 * @param array $capabilities
 	 * @return bool
 	 */
-	public static function user_can_all($capabilities)
-	{
-		foreach ($capabilities as $cap) {
-			if (! self::user_can($cap)) {
+	public static function user_can_all( $capabilities ) {
+		foreach ( $capabilities as $cap ) {
+			if ( ! self::user_can( $cap ) ) {
 				return false;
 			}
 		}

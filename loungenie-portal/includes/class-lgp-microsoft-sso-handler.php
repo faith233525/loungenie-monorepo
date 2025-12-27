@@ -362,7 +362,7 @@ class Microsoft_SSO {
 // Handle SSO callback
 add_action(
 	'init',
-	function() {
+	function () {
 		if ( isset( $_GET['action'] ) && $_GET['action'] === 'lgp_sso_callback' ) {
 			Microsoft_SSO::handle_callback();
 		}

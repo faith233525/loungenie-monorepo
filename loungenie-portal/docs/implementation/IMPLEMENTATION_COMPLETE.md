@@ -36,8 +36,8 @@ All features are production-ready, fully tested, and documented.
 9. **IMPLEMENTATION_COMPLETE.md** - This file
 
 ### Files Modified
-1. **includes/class-lgp-help-guide.php** - Added type and tag filtering
-2. **api/help-guides.php** - Extended API with filter parameters
+1. **includes/class-lgp-knowledge-guide.php** (class `LGP_Help_Guide`) - Added type and tag filtering
+2. **api/knowledge-center.php** - Extended API with filter parameters (legacy alias `/help-guides`)
 3. **api/units.php** - Added AJAX endpoint for map data
 
 ---
@@ -62,7 +62,7 @@ wp cache flush
 # 5. Test features
 # - Visit ?view=map
 # - Test filters and sorting
-# - Check help guide API
+# - Check knowledge center API (legacy /help-guides alias still works)
 ```
 
 ### For End Users
@@ -72,7 +72,7 @@ wp cache flush
 2. View all units with service tickets
 3. Use filters to find urgent issues
 4. Click unit to view detailed ticket information
-5. Access help guides with improved filtering
+5. Access Knowledge Center guides with improved filtering
 ```
 
 ---
@@ -82,14 +82,15 @@ wp cache flush
 ### 1. Knowledge Center Enhancements
 
 **What Changed:**
-- Help guides can now be filtered by type (maintenance, repair, inspection, cleaning)
-- Help guides can be filtered by tags (multiple selection)
+- Knowledge Center guides can now be filtered by type (maintenance, repair, inspection, cleaning)
+- Knowledge Center guides can be filtered by tags (multiple selection)
 - Filters can be combined with search and category filters
 
 **API Usage:**
 ```
-GET /lgp/v1/help-guides?type=maintenance&tags=filter,pool&search=replacement
+GET /lgp/v1/knowledge-center?type=maintenance&tags=filter,pool&search=replacement
 ```
+(Legacy alias `/lgp/v1/help-guides` remains for backward compatibility.)
 
 **PHP Usage:**
 ```php
@@ -195,9 +196,10 @@ CREATE INDEX idx_help_guides_type ON wp_lgp_help_guides(type);
 }
 ```
 
-### REST: Help Guides
+### REST: Knowledge Center
 
-**Endpoint:** `GET /lgp/v1/help-guides`
+**Endpoint:** `GET /lgp/v1/knowledge-center`
+(Legacy alias: `GET /lgp/v1/help-guides`)
 
 **Query Parameters:**
 - `category` - Filter by category

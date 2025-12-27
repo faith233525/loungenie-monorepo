@@ -10,7 +10,7 @@
 // Register custom cron schedules for 5 and 10 minutes
 add_filter(
 	'cron_schedules',
-	function( $schedules ) {
+	function ( $schedules ) {
 		if ( ! isset( $schedules['5-minute'] ) ) {
 			$schedules['5-minute'] = array(
 				'interval' => 5 * MINUTE_IN_SECONDS,
@@ -32,7 +32,7 @@ add_filter(
 // Register scheduled sync
 add_action(
 	'wp_loaded',
-	function() {
+	function () {
 		if ( ! wp_next_scheduled( 'lgp_sync_emails' ) ) {
 			wp_schedule_event( time(), '5-minute', 'lgp_sync_emails' );
 		}
@@ -54,7 +54,7 @@ add_action(
  */
 add_action(
 	'lgp_sync_emails',
-	function() {
+	function () {
 		try {
 			$ingest = new LGP_Email_Ingest();
 			$stats  = $ingest->sync_messages();
@@ -74,7 +74,7 @@ add_action(
  */
 add_action(
 	'lgp_detect_outlook_replies',
-	function() {
+	function () {
 		try {
 			$reply_handler = new LGP_Email_Reply();
 			$count         = $reply_handler->detect_outlook_replies();
@@ -95,7 +95,7 @@ add_action(
  */
 add_action(
 	'comment_post',
-	function( $comment_id, $comment ) {
+	function ( $comment_id, $comment ) {
 		// Only handle ticket replies
 		if ( 'ticket_reply' !== $comment->comment_type ) {
 			return;
@@ -154,7 +154,7 @@ add_action(
  */
 add_filter(
 	'lgp_ticket_meta',
-	function( $meta, $ticket_id ) {
+	function ( $meta, $ticket_id ) {
 		$email_source = get_post_meta( $ticket_id, '_email_source', true );
 
 		if ( $email_source ) {
@@ -180,7 +180,7 @@ add_filter(
  */
 add_filter(
 	'lgp_get_ticket_email_status',
-	function( $ticket_id ) {
+	function ( $ticket_id ) {
 		$status = array(
 			'is_email_ticket'     => (bool) get_post_meta( $ticket_id, '_email_source', true ),
 			'sender_email'        => get_post_meta( $ticket_id, '_sender_email', true ),
@@ -222,14 +222,14 @@ add_filter(
  */
 add_action(
 	'rest_api_init',
-	function() {
+	function () {
 		// Sync emails manually
 		register_rest_route(
 			'lgp/v1',
 			'/email/sync',
 			array(
 				'methods'             => 'POST',
-				'callback'            => function() {
+				'callback'            => function () {
 					// Check permissions
 					if ( ! current_user_can( 'manage_options' ) ) {
 						return new WP_Error( 'forbidden', 'You do not have permission', array( 'status' => 403 ) );
@@ -243,7 +243,7 @@ add_action(
 						return new WP_Error( 'sync_error', $e->getMessage() );
 					}
 				},
-				'permission_callback' => function() {
+				'permission_callback' => function () {
 					return current_user_can( 'manage_options' );
 				},
 			)
@@ -255,7 +255,7 @@ add_action(
 			'/email/send-reply',
 			array(
 				'methods'             => 'POST',
-				'callback'            => function( WP_REST_Request $request ) {
+				'callback'            => function ( WP_REST_Request $request ) {
 					$ticket_id = $request->get_param( 'ticket_id' );
 					$content = $request->get_param( 'content' );
 
@@ -281,7 +281,7 @@ add_action(
 						return new WP_Error( 'send_error', $e->getMessage() );
 					}
 				},
-				'permission_callback' => function() {
+				'permission_callback' => function () {
 					return is_user_logged_in();
 				},
 			)
@@ -293,7 +293,7 @@ add_action(
 			'/email/ticket-status/(?P<ticket_id>\d+)',
 			array(
 				'methods'             => 'GET',
-				'callback'            => function( WP_REST_Request $request ) {
+				'callback'            => function ( WP_REST_Request $request ) {
 					$ticket_id = $request->get_param( 'ticket_id' );
 
 					if ( ! current_user_can( 'read_post', $ticket_id ) ) {
@@ -303,7 +303,7 @@ add_action(
 					$status = apply_filters( 'lgp_get_ticket_email_status', $ticket_id );
 					return rest_ensure_response( $status );
 				},
-				'permission_callback' => function() {
+				'permission_callback' => function () {
 					return is_user_logged_in();
 				},
 			)
@@ -316,7 +316,7 @@ add_action(
  */
 add_action(
 	'admin_notices',
-	function() {
+	function () {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}

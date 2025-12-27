@@ -59,7 +59,7 @@ cd ../..
 
 # Keep only essential JS
 cd assets/js
-KEEP_JS="portal.js portal-init.js lgp-utils.js map-view.js help-guides-view.js tickets-view.js gateway-view.js training-view.js company-profile-enhancements.js company-profile-partner-polish.js attachments.js"
+KEEP_JS="portal.js portal-init.js lgp-utils.js map-view.js knowledge-center-view.js tickets-view.js gateway-view.js training-view.js company-profile-enhancements.js company-profile-partner-polish.js attachments.js"
 for file in *.js; do
     if ! echo "$KEEP_JS" | grep -w "$file" > /dev/null; then
         echo "  Removing extra JS: $file"
@@ -73,9 +73,9 @@ cd templates
 rm -f custom-login-modern.php custom-login-enhanced.php portal-login.php partner-login.php support-login.php 2>/dev/null || true
 cd ..
 
-# Remove test/demo files from includes
+# Remove test/demo files from includes (keep admin helpers needed by loader)
 cd includes
-rm -f class-shared-server-diagnostics.php class-lgp-shared-server-optimizer.php class-lgp-role-switcher.php class-lgp-user-creator.php 2>/dev/null || true
+rm -f class-shared-server-diagnostics.php class-lgp-shared-server-optimizer.php 2>/dev/null || true
 cd ..
 
 echo "→ Cleaning complete!"

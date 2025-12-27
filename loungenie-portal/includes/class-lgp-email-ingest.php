@@ -70,19 +70,19 @@ class LGP_Email_Ingest {
 
 			// Process each message
 			foreach ( $response['messages'] as $message ) {
-				$stats['total']++;
+				++$stats['total'];
 
 				try {
 					$result = $this->process_message( $message );
 					if ( 'created' === $result ) {
-						$stats['created']++;
+						++$stats['created'];
 					} elseif ( 'updated' === $result ) {
-						$stats['updated']++;
+						++$stats['updated'];
 					} elseif ( 'skipped' === $result ) {
-						$stats['skipped']++;
+						++$stats['skipped'];
 					}
 				} catch ( Exception $e ) {
-					$stats['errors']++;
+					++$stats['errors'];
 					$stats['error_list'][] = $e->getMessage();
 					$this->logger->error(
 						'Failed to process message',
@@ -103,7 +103,7 @@ class LGP_Email_Ingest {
 
 		} catch ( Exception $e ) {
 			$this->logger->error( 'Sync failed', array( 'error' => $e->getMessage() ) );
-			$stats['errors']++;
+			++$stats['errors'];
 			$stats['error_list'][] = $e->getMessage();
 		}
 

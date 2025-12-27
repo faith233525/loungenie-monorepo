@@ -64,7 +64,7 @@ cd ../..
 cd assets/js
 for file in *.js; do
     case "$file" in
-        portal.js|portal-init.js|lgp-utils.js|map-view.js|help-guides-view.js|tickets-view.js|gateway-view.js|training-view.js|company-profile-enhancements.js|company-profile-partner-polish.js|attachments.js)
+        portal.js|portal-init.js|lgp-utils.js|map-view.js|knowledge-center-view.js|tickets-view.js|gateway-view.js|training-view.js|company-profile-enhancements.js|company-profile-partner-polish.js|attachments.js)
             echo "  Keeping: $file"
             ;;
         *)
@@ -81,12 +81,10 @@ rm -f custom-login-modern.php custom-login-enhanced.php portal-login.php partner
 rm -f training-view.php 2>/dev/null || true
 cd ..
 
-# Remove development-only includes
+# Remove development-only includes (keep admin helpers needed by loader)
 cd includes
 rm -f class-shared-server-diagnostics.php 2>/dev/null || true
 rm -f class-lgp-shared-server-optimizer.php 2>/dev/null || true
-rm -f class-lgp-role-switcher.php 2>/dev/null || true
-rm -f class-lgp-user-creator.php 2>/dev/null || true
 cd ..
 
 # Remove any test directories from assets
