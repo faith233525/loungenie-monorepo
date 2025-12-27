@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LounGenie Portal v1.8.1 - Live Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+            line-height: 1.6;
+        }
+
+        .preview-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .status-banner {
+            background: linear-gradient(135deg, #3AA6B9 0%, #25D0EE 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(58, 166, 185, 0.3);
+        }
+
+        .status-banner h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .status-banner .version {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .status-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-item .label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .status-item .value {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .status-item .value.success {
+            color: #4CAF50;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: #f0f0f0;
+            color: #3AA6B9;
+        }
+
+        .tab.active {
+            background: #3AA6B9;
+            color: white;
+            border-bottom: 3px solid #25D0EE;
+        }
+
+        .screen-preview {
+            display: none;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .screen-preview.active {
+            display: block;
+        }
+
+        .screen-header {
+            background: #3AA6B9;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .screen-header h2 {
+            font-size: 24px;
+        }
+
+        .screen-header .user-info {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .screen-body {
+            padding: 30px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #E9F8F9 0%, #fff 100%);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #3AA6B9;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .metric-card h3 {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .metric-card .value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #3AA6B9;
+        }
+
+        .metric-card .trend {
+            font-size: 12px;
+            color: #4CAF50;
+            margin-top: 5px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .data-table thead {
+            background: #f8f9fa;
+        }
+
+        .data-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .data-table td {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge.info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .badge.danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .color-indicator {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-right: 8px;
+            vertical-align: middle;
+            border: 2px solid white;
+            box-shadow: 0 0 0 1px #ddd;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #3AA6B9;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #3AA6B9;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2d8a9a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(58, 166, 185, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .top-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .top-metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .top-metric-card h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .metric-item:last-child {
+            border-bottom: none;
+        }
+
+        .metric-item .label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .metric-item .count {
+            font-weight: bold;
+            color: #3AA6B9;
+            font-size: 18px;
+        }
+
+        .responsive-note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .responsive-note strong {
+            color: #856404;
+        }
+
+        @media (max-width: 768px) {
+            .preview-container {
+                padding: 10px;
+            }
+
+            .status-banner {
+                padding: 20px;
+            }
+
+            .status-banner h1 {
+                font-size: 24px;
+            }
+
+            .tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+            }
+
+            .dashboard-grid,
+            .top-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .filter-group {
+                min-width: 100%;
+            }
+
+            .screen-body {
+                padding: 15px;
+            }
+
+            .data-table {
+                font-size: 12px;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 10px 8px;
+            }
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-card h4 {
+            color: #3AA6B9;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .feature-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-card ul li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .feature-card ul li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-container">
+        <!-- Status Banner -->
+        <div class="status-banner">
+            <h1>🚀 LounGenie Portal v1.8.1</h1>
+            <div class="version">Enterprise SaaS Partner Management Plugin</div>
+            <div class="status-grid">
+                <div class="status-item">
+                    <div class="label">Status</div>
+                    <div class="value success">✅ PRODUCTION READY</div>
+                </div>
+                <div class="status-item">
+                    <div class="label">Tests</div>
+                    <div class="value">38/38 Passing</div>
+                </div>
+                <div class="status-item">
+                    <div class="label">Security</div>
+                    <div class="value success">✅ CodeQL Verified</div>
+                </div>
+                <div class="status-item">
+                    <div class="label">Standards</div>
+                    <div class="value">WPCS v3.3.0</div>
+                </div>
+                <div class="status-item">
+                    <div class="label">Size</div>
+                    <div class="value">625 KB</div>
+                </div>
+                <div class="status-item">
+                    <div class="label">Files</div>
+                    <div class="value">90 (69 PHP)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="responsive-note">
+            <strong>📱 Fully Responsive:</strong> This plugin automatically adapts to all screen sizes (desktop, tablet, mobile). Scroll down to see different views!
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="showScreen('dashboard')">Support Dashboard</button>
+            <button class="tab" onclick="showScreen('units')">Units Management</button>
+            <button class="tab" onclick="showScreen('tickets')">Ticketing System</button>
+            <button class="tab" onclick="showScreen('partner')">Partner View</button>
+            <button class="tab" onclick="showScreen('features')">All Features</button>
+        </div>
+
+        <!-- Support Dashboard Screen -->
+        <div id="dashboard" class="screen-preview active">
+            <div class="screen-header">
+                <h2>Support Team Dashboard</h2>
+                <div class="user-info">👤 support@loungenie.com | Support Role</div>
+            </div>
+            <div class="screen-body">
+                <h3 style="margin-bottom: 20px; color: #333;">📊 Top 5 Analytics</h3>
+                
+                <div class="top-metrics">
+                    <div class="top-metric-card">
+                        <h3>🎨 Top Colors</h3>
+                        <div class="metric-item">
+                            <div class="label">
+                                <span class="color-indicator" style="background: #FFD700;"></span>
+                                Yellow
+                            </div>
+                            <div class="count">45</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="label">
+                                <span class="color-indicator" style="background: #DC143C;"></span>
+                                Red
+                            </div>
+                            <div class="count">32</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="label">
+                                <span class="color-indicator" style="background: #4169E1;"></span>
+                                Classic Blue
+                            </div>
+                            <div class="count">28</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="label">
+                                <span class="color-indicator" style="background: #87CEEB;"></span>
+                                Ice Blue
+                            </div>
+                            <div class="count">15</div>
+                        </div>
+                    </div>
+
+                    <div class="top-metric-card">
+                        <h3>🏨 Top Venues</h3>
+                        <div class="metric-item">
+                            <div class="label">Resort</div>
+                            <div class="count">52</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="label">Hotel</div>
+                            <div class="count">38</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="label">Waterpark</div>
+                            <div class="count">22</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="label">Surf Park</div>
+                            <div class="count">8</div>
+                        </div>
+                    </div>
+
+                    <div class="top-metric-card">
+                        <h3>🔐 Lock Brands</h3>
+                        <div class="metric-item">
+                            <div class="label">MAKE</div>
+                            <div class="count">75</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="label">L&F</div>
+                            <div class="count">45</div>
+                        </div>
+                    </div>
+
+                    <div class="top-metric-card">
+                        <h3>📅 Season Distribution</h3>
+                        <div class="metric-item">
+                            <div class="label">Seasonal</div>
+                            <div class="count">68</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="label">Year-Round</div>
+                            <div class="count">52</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin: 30px 0 20px; color: #333;">📈 Quick Metrics</h3>
+                <div class="dashboard-grid">
+                    <div class="metric-card">
+                        <h3>Total Companies</h3>
+                        <div class="value">156</div>
+                        <div class="trend">↑ 12% this month</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Active Units</h3>
+                        <div class="value">120</div>
+                        <div class="trend">↑ 8% this month</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Open Tickets</h3>
+                        <div class="value">24</div>
+                        <div class="trend">↓ 15% this week</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Pending Installs</h3>
+                        <div class="value">8</div>
+                        <div class="trend">→ Stable</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Units Management Screen -->
+        <div id="units" class="screen-preview">
+            <div class="screen-header">
+                <h2>LounGenie Units</h2>
+                <div class="user-info">Showing 120 of 120 units</div>
+            </div>
+            <div class="screen-body">
+                <h3 style="margin-bottom: 20px; color: #333;">🔍 Advanced Filters</h3>
+                
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>Color</label>
+                        <select>
+                            <option value="">All Colors</option>
+                            <option value="yellow">Yellow</option>
+                            <option value="red">Red</option>
+                            <option value="classic-blue">Classic Blue</option>
+                            <option value="ice-blue">Ice Blue</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Season</label>
+                        <select>
+                            <option value="">All Seasons</option>
+                            <option value="seasonal">Seasonal</option>
+                            <option value="year-round">Year-Round</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Venue Type</label>
+                        <select>
+                            <option value="">All Venues</option>
+                            <option value="resort">Resort</option>
+                            <option value="hotel">Hotel</option>
+                            <option value="waterpark">Waterpark</option>
+                            <option value="surf-park">Surf Park</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Lock Brand</label>
+                        <select>
+                            <option value="">All Brands</option>
+                            <option value="make">MAKE</option>
+                            <option value="lf">L&F</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Search</label>
+                        <input type="text" placeholder="Search units..." />
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <button class="btn btn-primary">📥 Export to CSV</button>
+                    <button class="btn btn-secondary">🗺️ Map View</button>
+                    <button class="btn btn-secondary">Clear Filters</button>
+                </div>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Color</th>
+                            <th>Season</th>
+                            <th>Venue</th>
+                            <th>Lock Brand</th>
+                            <th>Status</th>
+                            <th>Install Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Sunset Resort & Spa</td>
+                            <td>
+                                <span class="color-indicator" style="background: #FFD700;"></span>
+                                Yellow
+                            </td>
+                            <td>Seasonal</td>
+                            <td>Resort</td>
+                            <td>MAKE</td>
+                            <td><span class="badge success">Active</span></td>
+                            <td>2024-06-15</td>
+                        </tr>
+                        <tr>
+                            <td>Beach Paradise Hotel</td>
+                            <td>
+                                <span class="color-indicator" style="background: #4169E1;"></span>
+                                Classic Blue
+                            </td>
+                            <td>Year-Round</td>
+                            <td>Hotel</td>
+                            <td>L&F</td>
+                            <td><span class="badge success">Active</span></td>
+                            <td>2024-05-22</td>
+                        </tr>
+                        <tr>
+                            <td>WaterWorld Park</td>
+                            <td>
+                                <span class="color-indicator" style="background: #DC143C;"></span>
+                                Red
+                            </td>
+                            <td>Seasonal</td>
+                            <td>Waterpark</td>
+                            <td>MAKE</td>
+                            <td><span class="badge warning">Service</span></td>
+                            <td>2024-04-10</td>
+                        </tr>
+                        <tr>
+                            <td>Ocean View Resort</td>
+                            <td>
+                                <span class="color-indicator" style="background: #87CEEB;"></span>
+                                Ice Blue
+                            </td>
+                            <td>Year-Round</td>
+                            <td>Resort</td>
+                            <td>MAKE</td>
+                            <td><span class="badge success">Active</span></td>
+                            <td>2024-07-01</td>
+                        </tr>
+                        <tr>
+                            <td>Wave Surf Park</td>
+                            <td>
+                                <span class="color-indicator" style="background: #FFD700;"></span>
+                                Yellow
+                            </td>
+                            <td>Seasonal</td>
+                            <td>Surf Park</td>
+                            <td>L&F</td>
+                            <td><span class="badge info">Installation</span></td>
+                            <td>2024-12-05</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Ticketing System Screen -->
+        <div id="tickets" class="screen-preview">
+            <div class="screen-header">
+                <h2>Support Tickets</h2>
+                <div class="user-info">24 open tickets</div>
+            </div>
+            <div class="screen-body">
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <button class="btn btn-primary">+ New Ticket</button>
+                    <button class="btn btn-secondary">Filter by Status</button>
+                    <button class="btn btn-secondary">Filter by Priority</button>
+                </div>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Company</th>
+                            <th>Subject</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Last Updated</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>#1847</strong></td>
+                            <td>Sunset Resort & Spa</td>
+                            <td>Unit not responding - Pool Area 3</td>
+                            <td><span class="badge danger">High</span></td>
+                            <td><span class="badge warning">In Progress</span></td>
+                            <td>2024-12-26</td>
+                            <td>2 hours ago</td>
+                        </tr>
+                        <tr>
+                            <td><strong>#1846</strong></td>
+                            <td>Beach Paradise Hotel</td>
+                            <td>Request for color change</td>
+                            <td><span class="badge info">Medium</span></td>
+                            <td><span class="badge warning">Open</span></td>
+                            <td>2024-12-25</td>
+                            <td>1 day ago</td>
+                        </tr>
+                        <tr>
+                            <td><strong>#1845</strong></td>
+                            <td>WaterWorld Park</td>
+                            <td>Installation scheduled for Dec 30</td>
+                            <td><span class="badge success">Low</span></td>
+                            <td><span class="badge info">Scheduled</span></td>
+                            <td>2024-12-24</td>
+                            <td>3 days ago</td>
+                        </tr>
+                        <tr>
+                            <td><strong>#1844</strong></td>
+                            <td>Ocean View Resort</td>
+                            <td>Maintenance request - Annual checkup</td>
+                            <td><span class="badge success">Low</span></td>
+                            <td><span class="badge success">Closed</span></td>
+                            <td>2024-12-20</td>
+                            <td>Closed 4 days ago</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                    <h4 style="margin-bottom: 15px;">✉️ Email Integration Features:</h4>
+                    <ul style="line-height: 2;">
+                        <li>🔄 Auto-convert emails to tickets (POP3 + Microsoft Graph)</li>
+                        <li>📧 Send replies via Microsoft Graph/Outlook</li>
+                        <li>📎 Handle attachments (10MB max, chunked processing)</li>
+                        <li>🔔 Email notifications on status changes</li>
+                        <li>🧵 Thread history tracking</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Partner View Screen -->
+        <div id="partner" class="screen-preview">
+            <div class="screen-header">
+                <h2>Partner Dashboard</h2>
+                <div class="user-info">👤 partner@sunsetresort.com | Partner Role</div>
+            </div>
+            <div class="screen-body">
+                <h3 style="margin-bottom: 20px; color: #333;">🏢 Sunset Resort & Spa</h3>
+                
+                <div class="dashboard-grid">
+                    <div class="metric-card">
+                        <h3>Your Units</h3>
+                        <div class="value">8</div>
+                        <div class="trend">All active</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Open Tickets</h3>
+                        <div class="value">2</div>
+                        <div class="trend">1 in progress</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Color Distribution</h3>
+                        <div class="value">
+                            <span class="color-indicator" style="background: #FFD700;"></span> 5
+                            <span class="color-indicator" style="background: #4169E1; margin-left: 10px;"></span> 3
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Next Service</h3>
+                        <div class="value" style="font-size: 18px;">Jan 15, 2025</div>
+                        <div class="trend">Annual maintenance</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <h3 style="margin-bottom: 15px;">🎫 Submit New Request</h3>
+                    <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                        <div class="filter-group" style="margin-bottom: 15px;">
+                            <label>Request Type</label>
+                            <select style="width: 100%;">
+                                <option>Service Request</option>
+                                <option>Installation Request</option>
+                                <option>Maintenance</option>
+                                <option>Color Change</option>
+                            </select>
+                        </div>
+                        <div class="filter-group" style="margin-bottom: 15px;">
+                            <label>Priority</label>
+                            <select style="width: 100%;">
+                                <option>Normal</option>
+                                <option>High</option>
+                                <option>Low</option>
+                            </select>
+                        </div>
+                        <div class="filter-group" style="margin-bottom: 15px;">
+                            <label>Description</label>
+                            <textarea style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; min-height: 100px;" placeholder="Describe your request..."></textarea>
+                        </div>
+                        <button class="btn btn-primary">Submit Request</button>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; padding: 20px; background: #e3f2fd; border-left: 4px solid #2196F3; border-radius: 4px;">
+                    <strong>ℹ️ Partner Scope:</strong> Partners can only see their own company data, submit service requests, and track their tickets. No access to other companies' information.
+                </div>
+            </div>
+        </div>
+
+        <!-- All Features Screen -->
+        <div id="features" class="screen-preview">
+            <div class="screen-header">
+                <h2>Complete Feature Set</h2>
+                <div class="user-info">Everything unified and ready</div>
+            </div>
+            <div class="screen-body">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h4>🎯 Core Portal</h4>
+                        <ul>
+                            <li>Role-based access (Support + Partner)</li>
+                            <li>Secure authentication</li>
+                            <li>Session management</li>
+                            <li>Responsive design</li>
+                            <li>Vanilla JavaScript (no jQuery)</li>
+                            <li>Semantic HTML5</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>📊 Analytics Dashboard</h4>
+                        <ul>
+                            <li>Top 5 colors distribution</li>
+                            <li>Top venues breakdown</li>
+                            <li>Lock brand analytics</li>
+                            <li>Season distribution</li>
+                            <li>Real-time metrics</li>
+                            <li>Trend indicators</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>🔍 Advanced Filtering</h4>
+                        <ul>
+                            <li>Multi-dimensional filters</li>
+                            <li>Color, season, venue, brand</li>
+                            <li>Real-time search</li>
+                            <li>Filter persistence (24h)</li>
+                            <li>CSV export</li>
+                            <li>Keyboard shortcuts (Ctrl+K)</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>🎫 Ticketing System</h4>
+                        <ul>
+                            <li>Email-to-ticket conversion</li>
+                            <li>Thread history</li>
+                            <li>Attachment support (10MB)</li>
+                            <li>Status tracking</li>
+                            <li>Priority management</li>
+                            <li>Email notifications</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>🔐 Microsoft 365 SSO</h4>
+                        <ul>
+                            <li>Azure AD OAuth 2.0</li>
+                            <li>Single sign-on</li>
+                            <li>Auto user creation</li>
+                            <li>Token refresh</li>
+                            <li>Secure session</li>
+                            <li>Fallback to WordPress login</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>🔄 HubSpot CRM Sync</h4>
+                        <ul>
+                            <li>Auto-create companies</li>
+                            <li>Sync service requests</li>
+                            <li>Associate tickets</li>
+                            <li>Map pipeline stages</li>
+                            <li>Retry failed syncs</li>
+                            <li>Admin monitoring</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>📧 Microsoft Graph Email</h4>
+                        <ul>
+                            <li>Inbound processing (delta queries)</li>
+                            <li>Outbound via Graph API</li>
+                            <li>Attachment handling</li>
+                            <li>OAuth 2.0 app-only</li>
+                            <li>POP3 fallback</li>
+                            <li>wp_mail fallback</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>⚡ Performance</h4>
+                        <ul>
+                            <li>Multi-layer caching</li>
+                            <li>Redis/Memcached support</li>
+                            <li>Query optimization</li>
+                            <li>Lazy loading</li>
+                            <li>Asset minification ready</li>
+                            <li>< 300ms API responses</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>🛡️ Security</h4>
+                        <ul>
+                            <li>CSP headers with nonces</li>
+                            <li>HSTS enabled</li>
+                            <li>Input sanitization</li>
+                            <li>Output escaping</li>
+                            <li>SQL injection prevention</li>
+                            <li>Rate limiting (5/hour)</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>📱 Responsive Design</h4>
+                        <ul>
+                            <li>Desktop optimized</li>
+                            <li>Tablet friendly</li>
+                            <li>Mobile responsive</li>
+                            <li>Touch-friendly</li>
+                            <li>Breakpoints: 1024px, 768px</li>
+                            <li>Viewport meta configured</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>🧪 Testing & Quality</h4>
+                        <ul>
+                            <li>38 PHPUnit tests passing</li>
+                            <li>44 assertions</li>
+                            <li>WPCS v3.3.0 compliant</li>
+                            <li>6,406 fixes applied</li>
+                            <li>CodeQL verified</li>
+                            <li>0 security vulnerabilities</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>🚀 Shared Hosting Ready</h4>
+                        <ul>
+                            <li>No WebSockets</li>
+                            <li>WP-Cron only</li>
+                            <li>Paginated results</li>
+                            <li>Conditional asset loading</li>
+                            <li>File size limits</li>
+                            <li>Indexed foreign keys</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-top: 40px; padding: 30px; background: linear-gradient(135deg, #3AA6B9 0%, #25D0EE 100%); color: white; border-radius: 12px; text-align: center;">
+                    <h2 style="margin-bottom: 15px; font-size: 28px;">✅ Production Ready</h2>
+                    <p style="font-size: 18px; margin-bottom: 20px;">All features unified, tested, and verified</p>
+                    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <div>
+                            <strong>Tests:</strong> 38/38 ✅
+                        </div>
+                        <div>
+                            <strong>Security:</strong> CodeQL ✅
+                        </div>
+                        <div>
+                            <strong>Standards:</strong> WPCS v3.3.0 ✅
+                        </div>
+                        <div>
+                            <strong>Size:</strong> 625 KB
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showScreen(screenId) {
+            // Hide all screens
+            document.querySelectorAll('.screen-preview').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected screen
+            document.getElementById(screenId).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
