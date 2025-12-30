@@ -1,0 +1,2 @@
+company_name,company_email,status,primary_contact_name,primary_contact_title,primary_contact_email,primary_contact_phone,secondary_contact_name,secondary_contact_title,secondary_contact_email,secondary_contact_phone
+Example Resort,reservations@example.com,active,Alex Kim,GM,alex.kim@example.com,+1-555-123-4567,Sam Rivera,Ops Lead,sam.rivera@example.com,+1-555-222-3333

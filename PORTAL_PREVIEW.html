@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LounGenie Portal - Interactive Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #3AA6B9;
+            --primary-light: #25D0EE;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #0EA5E9;
+            --bg: #F8FAFC;
+            --text: #1E293B;
+            --border: #E2E8F0;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .lgp-portal-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .lgp-header {
+            grid-column: 1 / -1;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            z-index: 100;
+        }
+
+        .lgp-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .lgp-logo-loungenie { color: var(--primary); }
+        .lgp-logo-separator { color: #999; margin: 0 0.5rem; }
+        .lgp-logo-poolsafe { color: var(--text); font-weight: 600; }
+        .lgp-logo-suffix { color: #999; font-size: 0.9rem; }
+
+        .lgp-header-actions {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .lgp-user-menu {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .lgp-user-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .lgp-user-role {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* SIDEBAR */
+        .lgp-sidebar {
+            background: white;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 1.5rem 0;
+        }
+
+        .lgp-nav {
+            list-style: none;
+        }
+
+        .lgp-nav-item {
+            padding: 0;
+        }
+
+        .lgp-nav-link {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.95rem;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .lgp-nav-link:hover {
+            background: var(--bg);
+            border-left-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .lgp-nav-link.active {
+            background: rgba(58, 166, 185, 0.1);
+            border-left-color: var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .lgp-nav-icon {
+            font-size: 1.25rem;
+        }
+
+        /* MAIN CONTENT */
+        .lgp-content {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        /* DASHBOARD HEADER */
+        .lgp-dashboard-header {
+            margin-bottom: 2rem;
+        }
+
+        .lgp-dashboard-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .lgp-dashboard-header p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        /* CARDS */
+        .lgp-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .lgp-card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .lgp-card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text);
+            margin: 0;
+        }
+
+        .lgp-card-body {
+            padding: 1.5rem;
+        }
+
+        /* STATS GRID */
+        .lgp-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        .lgp-stat-card {
+            background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .lgp-stat-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .lgp-stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .lgp-stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* ORIENTATION CARD */
+        .lgp-orientation-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .lgp-orientation-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .lgp-orientation-subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .lgp-orientation-metric-group {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .lgp-orientation-metric {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .lgp-orientation-metric-label {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin: 0.5rem 0 0;
+        }
+
+        /* BUTTONS */
+        .lgp-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lgp-btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .lgp-btn-primary:hover {
+            background: #2d8a9c;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .lgp-btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .lgp-btn-secondary:hover {
+            background: white;
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* FORMS */
+        .lgp-form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .lgp-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+
+        .lgp-input,
+        .lgp-select,
+        .lgp-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+
+        .lgp-input:focus,
+        .lgp-select:focus,
+        .lgp-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(58, 166, 185, 0.1);
+        }
+
+        .lgp-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* TABLES */
+        .lgp-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .lgp-table thead {
+            background: var(--bg);
+            border-bottom: 2px solid var(--border);
+        }
+
+        .lgp-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .lgp-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .lgp-table tbody tr:hover {
+            background: rgba(58, 166, 185, 0.05);
+        }
+
+        /* BADGES */
+        .lgp-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .lgp-badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .lgp-badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .lgp-badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .lgp-badge-info {
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--info);
+        }
+
+        /* UTILITIES */
+        .lgp-flex {
+            display: flex;
+        }
+
+        .lgp-flex-center {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .lgp-hidden {
+            display: none;
+        }
+
+        .lgp-text-muted {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .lgp-empty-state {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: #999;
+        }
+
+        .lgp-loading-spinner {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .lgp-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .lgp-portal-container {
+                grid-template-columns: 1fr;
+            }
+
+            .lgp-sidebar {
+                display: none;
+            }
+
+            .lgp-stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+
+            .lgp-orientation-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+            }
+
+            .lgp-filters {
+                grid-template-columns: 1fr;
+            }
+
+            .lgp-table {
+                font-size: 0.85rem;
+            }
+
+            .lgp-table th,
+            .lgp-table td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+
+        /* PAGE TABS */
+        .page-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .page-tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.2s;
+        }
+
+        .page-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .page-content {
+            display: none;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .thread-message {
+            background: var(--bg);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .thread-message.support {
+            background: rgba(58, 166, 185, 0.05);
+            border-left-color: var(--primary);
+        }
+
+        .thread-author {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .thread-date {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .thread-content {
+            margin-top: 0.75rem;
+            color: var(--text);
+        }
+    </style>
+</head>
+<body>
+
+<div class="lgp-portal-container">
+    
+    <!-- HEADER -->
+    <div class="lgp-header">
+        <div class="lgp-logo">
+            <span class="lgp-logo-loungenie">LounGenie</span>
+            <span class="lgp-logo-separator">×</span>
+            <span class="lgp-logo-poolsafe">MyPOOLSAFE</span>
+            <span class="lgp-logo-suffix">Inc.</span>
+        </div>
+        <div class="lgp-header-actions">
+            <div class="lgp-notification-icon">🔔</div>
+            <div class="lgp-user-menu">
+                <div>
+                    <div class="lgp-user-name">John Smith</div>
+                    <div class="lgp-user-role">(Support)</div>
+                </div>
+                <button class="lgp-btn lgp-btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="lgp-sidebar">
+        <nav class="lgp-nav">
+            <li class="lgp-nav-item"><a href="#" class="lgp-nav-link active" onclick="showPage('dashboard')"><span class="lgp-nav-icon">📊</span> Dashboard</a></li>
+            <li class="lgp-nav-item"><a href="#" class="lgp-nav-link" onclick="showPage('companies')"><span class="lgp-nav-icon">🏢</span> Companies</a></li>
+            <li class="lgp-nav-item"><a href="#" class="lgp-nav-link" onclick="showPage('units')"><span class="lgp-nav-icon">📦</span> Units & Gateways</a></li>
+            <li class="lgp-nav-item"><a href="#" class="lgp-nav-link" onclick="showPage('tickets')"><span class="lgp-nav-icon">🎫</span> Tickets</a></li>
+            <li class="lgp-nav-item"><a href="#" class="lgp-nav-link" onclick="showPage('map')"><span class="lgp-nav-icon">🗺️</span> Map View</a></li>
+            <li class="lgp-nav-item"><a href="#" class="lgp-nav-link" onclick="showPage('knowledge')"><span class="lgp-nav-icon">📚</span> Knowledge Center</a></li>
+        </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="lgp-content">
+
+        <!-- DASHBOARD PAGE -->
+        <div id="dashboard" class="page-content active">
+            <div class="lgp-dashboard-header">
+                <h1>Support Dashboard</h1>
+                <p>Overview of all companies, units, and support tickets</p>
+            </div>
+
+            <div class="lgp-orientation-card">
+                <div>
+                    <div class="lgp-orientation-title">Support Team Operations</div>
+                    <div class="lgp-orientation-subtitle">Miami, Florida</div>
+                </div>
+                <div class="lgp-orientation-metric-group">
+                    <div>
+                        <p class="lgp-orientation-metric">45</p>
+                        <p class="lgp-orientation-metric-label">Companies</p>
+                    </div>
+                    <div>
+                        <p class="lgp-orientation-metric">1,200</p>
+                        <p class="lgp-orientation-metric-label">Units</p>
+                    </div>
+                    <div>
+                        <p class="lgp-orientation-metric">8</p>
+                        <p class="lgp-orientation-metric-label">Open Tickets</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lgp-card">
+                <div class="lgp-card-body" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; padding: 1.5rem;">
+                    <div class="lgp-stat-card">
+                        <div class="lgp-stat-label">Partner Companies</div>
+                        <div class="lgp-stat-value">45</div>
+                    </div>
+                    <div class="lgp-stat-card">
+                        <div class="lgp-stat-label">Pool Units</div>
+                        <div class="lgp-stat-value">1.2K</div>
+                    </div>
+                    <div class="lgp-stat-card">
+                        <div class="lgp-stat-label">Open Tickets</div>
+                        <div class="lgp-stat-value">8</div>
+                    </div>
+                    <div class="lgp-stat-card">
+                        <div class="lgp-stat-label">Active Installations</div>
+                        <div class="lgp-stat-value">42</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="lgp-card">
+                    <div class="lgp-card-header">
+                        <h3 class="lgp-card-title">Top Unit Colors</h3>
+                    </div>
+                    <div class="lgp-card-body">
+                        <div style="margin-bottom: 1rem;"><strong>Yellow</strong> - 456 units</div>
+                        <div style="margin-bottom: 1rem;"><strong>Red</strong> - 234 units</div>
+                        <div style="margin-bottom: 1rem;"><strong>Classic Blue</strong> - 189 units</div>
+                        <div><strong>Ice Blue</strong> - 145 units</div>
+                    </div>
+                </div>
+
+                <div class="lgp-card">
+                    <div class="lgp-card-header">
+                        <h3 class="lgp-card-title">Recent Tickets</h3>
+                    </div>
+                    <div class="lgp-card-body">
+                        <div style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+                            <strong>#T001</strong> - ABC Company <br>
+                            <span class="lgp-badge lgp-badge-danger">Urgent</span>
+                        </div>
+                        <div style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+                            <strong>#T002</strong> - XYZ Corp <br>
+                            <span class="lgp-badge lgp-badge-warning">High</span>
+                        </div>
+                        <div>
+                            <strong>#T003</strong> - Tech Solutions <br>
+                            <span class="lgp-badge lgp-badge-info">Normal</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TICKETS PAGE -->
+        <div id="tickets" class="page-content">
+            <div class="lgp-dashboard-header">
+                <h1>Support Tickets</h1>
+                <p>Track, triage, and reply to all partner tickets</p>
+            </div>
+
+            <div class="lgp-card">
+                <div class="lgp-card-body lgp-stats-grid">
+                    <div class="lgp-stat-card">
+                        <div class="lgp-stat-label">Open</div>
+                        <div class="lgp-stat-value">5</div>
+                    </div>
+                    <div class="lgp-stat-card">
+                        <div class="lgp-stat-label">Pending</div>
+                        <div class="lgp-stat-value">3</div>
+                    </div>
+                    <div class="lgp-stat-card">
+                        <div class="lgp-stat-label">Closed</div>
+                        <div class="lgp-stat-value">24</div>
+                    </div>
+                    <div class="lgp-stat-card">
+                        <div class="lgp-stat-label">Total</div>
+                        <div class="lgp-stat-value">32</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lgp-card">
+                <div class="lgp-card-header">
+                    <h2 class="lgp-card-title">Tickets</h2>
+                    <div class="lgp-flex-center">
+                        <button class="lgp-btn lgp-btn-secondary">➕ New Request</button>
+                        <button class="lgp-btn lgp-btn-secondary">↻ Refresh</button>
+                    </div>
+                </div>
+                <div class="lgp-card-body">
+                    <div class="lgp-filters">
+                        <div class="lgp-form-group">
+                            <label class="lgp-label">Search</label>
+                            <input class="lgp-input" type="text" placeholder="Search by ID, type, or text...">
+                        </div>
+                        <div class="lgp-form-group">
+                            <label class="lgp-label">Status</label>
+                            <select class="lgp-select">
+                                <option>All statuses</option>
+                                <option>Open</option>
+                                <option>Pending</option>
+                                <option>Closed</option>
+                            </select>
+                        </div>
+                        <div class="lgp-form-group">
+                            <label class="lgp-label">Priority</label>
+                            <select class="lgp-select">
+                                <option>All priorities</option>
+                                <option>Urgent</option>
+                                <option>High</option>
+                                <option>Normal</option>
+                            </select>
+                        </div>
+                        <div class="lgp-form-group">
+                            <label class="lgp-label">Company</label>
+                            <select class="lgp-select">
+                                <option>All companies</option>
+                                <option>ABC Company</option>
+                                <option>XYZ Corp</option>
+                                <option>Tech Solutions</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <table class="lgp-table">
+                        <thead>
+                            <tr>
+                                <th>Ticket</th>
+                                <th>Type</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Company</th>
+                                <th>Unit</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>#T001</strong></td>
+                                <td>Maintenance</td>
+                                <td><span class="lgp-badge lgp-badge-danger">Urgent</span></td>
+                                <td><span class="lgp-badge lgp-badge-info">Open</span></td>
+                                <td>ABC Company</td>
+                                <td>#U042</td>
+                                <td>Dec 28, 2025</td>
+                                <td><button class="lgp-btn lgp-btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>#T002</strong></td>
+                                <td>Repair</td>
+                                <td><span class="lgp-badge lgp-badge-warning">High</span></td>
+                                <td><span class="lgp-badge lgp-badge-warning">Pending</span></td>
+                                <td>XYZ Corp</td>
+                                <td>#U156</td>
+                                <td>Dec 27, 2025</td>
+                                <td><button class="lgp-btn lgp-btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>#T003</strong></td>
+                                <td>Installation</td>
+                                <td><span class="lgp-badge" style="background: rgba(16,185,129,0.1); color: #10B981;">Normal</span></td>
+                                <td><span class="lgp-badge lgp-badge-success">Closed</span></td>
+                                <td>Tech Solutions</td>
+                                <td>#U089</td>
+                                <td>Dec 26, 2025</td>
+                                <td><button class="lgp-btn lgp-btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Ticket Detail -->
+            <div class="lgp-card" style="margin-top: 2rem;">
+                <div class="lgp-card-header">
+                    <div>
+                        <span class="lgp-badge lgp-badge-danger">Open</span>
+                        <h3 class="lgp-card-title" style="margin-top: 0.5rem;">Critical: Pool gate lock malfunction</h3>
+                        <p class="lgp-text-muted">Ticket #T001 • ABC Company • Unit #U042</p>
+                    </div>
+                </div>
+                <div class="lgp-card-body">
+                    <div style="margin-bottom: 2rem;">
+                        <strong>Metadata:</strong>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                            <div><strong>Type:</strong> Maintenance</div>
+                            <div><strong>Priority:</strong> Urgent</div>
+                            <div><strong>Unit ID:</strong> #U042</div>
+                            <div><strong>Created:</strong> Dec 28, 2025 at 2:30 PM</div>
+                        </div>
+                    </div>
+
+                    <h4>Thread Conversation</h4>
+                    <div style="margin-bottom: 2rem;">
+                        <div class="thread-message">
+                            <div class="thread-author">Partner: ABC Company</div>
+                            <div class="thread-date">Dec 28, 2025 at 2:30 PM</div>
+                            <div class="thread-content">
+                                The lock on the gate is stuck. We can't get it open. This is urgent - the residents are waiting to access the pool.
+                            </div>
+                        </div>
+
+                        <div class="thread-message support">
+                            <div class="thread-author">🔧 Support: LounGenie</div>
+                            <div class="thread-date">Dec 28, 2025 at 3:15 PM</div>
+                            <div class="thread-content">
+                                We received your ticket. Our technician is on the way. ETA: 45 minutes. We'll update you shortly.
+                            </div>
+                        </div>
+
+                        <div class="thread-message">
+                            <div class="thread-author">Partner: ABC Company</div>
+                            <div class="thread-date">Dec 28, 2025 at 4:00 PM</div>
+                            <div class="thread-content">
+                                Great! Technician arrived. Please keep us updated on progress.
+                            </div>
+                        </div>
+                    </div>
+
+                    <form style="border-top: 1px solid var(--border); padding-top: 1.5rem;">
+                        <div class="lgp-form-group">
+                            <label class="lgp-label">Reply to Partner</label>
+                            <textarea class="lgp-textarea" rows="4" placeholder="Type your reply..."></textarea>
+                        </div>
+                        <button type="button" class="lgp-btn lgp-btn-primary">Send Reply</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- UNITS PAGE -->
+        <div id="units" class="page-content">
+            <div class="lgp-dashboard-header">
+                <h1>LounGenie Units</h1>
+                <p>View and filter all LounGenie units</p>
+            </div>
+
+            <div class="lgp-card">
+                <div class="lgp-card-header">
+                    <h2 class="lgp-card-title">Filters</h2>
+                    <button class="lgp-btn lgp-btn-secondary">Clear All Filters</button>
+                </div>
+                <div class="lgp-card-body">
+                    <div class="lgp-filters">
+                        <div class="lgp-form-group">
+                            <label class="lgp-label">Color</label>
+                            <select class="lgp-select">
+                                <option>All Colors</option>
+                                <option>Yellow</option>
+                                <option>Red</option>
+                                <option>Classic Blue</option>
+                                <option>Ice Blue</option>
+                            </select>
+                        </div>
+                        <div class="lgp-form-group">
+                            <label class="lgp-label">Season</label>
+                            <select class="lgp-select">
+                                <option>All Seasons</option>
+                                <option>Seasonal</option>
+                                <option>Year-Round</option>
+                            </select>
+                        </div>
+                        <div class="lgp-form-group">
+                            <label class="lgp-label">Venue Type</label>
+                            <select class="lgp-select">
+                                <option>All Venues</option>
+                                <option>Apartment Complex</option>
+                                <option>Residential Community</option>
+                                <option>Commercial</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lgp-card">
+                <div class="lgp-card-body">
+                    <table class="lgp-table">
+                        <thead>
+                            <tr>
+                                <th>Unit ID</th>
+                                <th>Color</th>
+                                <th>Lock Brand</th>
+                                <th>Season</th>
+                                <th>Venue</th>
+                                <th>Company</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>#U001</strong></td>
+                                <td>
+                                    <span style="display: inline-block; width: 20px; height: 20px; background: #FFD700; border-radius: 3px; margin-right: 0.5rem;"></span>
+                                    Yellow
+                                </td>
+                                <td>Master Lock</td>
+                                <td>Year-Round</td>
+                                <td>Apartment Complex</td>
+                                <td>ABC Company</td>
+                                <td><span class="lgp-badge lgp-badge-success">Active</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>#U002</strong></td>
+                                <td>
+                                    <span style="display: inline-block; width: 20px; height: 20px; background: #DC2626; border-radius: 3px; margin-right: 0.5rem;"></span>
+                                    Red
+                                </td>
+                                <td>Brinks</td>
+                                <td>Seasonal</td>
+                                <td>Residential Community</td>
+                                <td>XYZ Corp</td>
+                                <td><span class="lgp-badge lgp-badge-success">Active</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>#U003</strong></td>
+                                <td>
+                                    <span style="display: inline-block; width: 20px; height: 20px; background: #2563EB; border-radius: 3px; margin-right: 0.5rem;"></span>
+                                    Classic Blue
+                                </td>
+                                <td>Kwikset</td>
+                                <td>Year-Round</td>
+                                <td>Commercial</td>
+                                <td>Tech Solutions</td>
+                                <td><span class="lgp-badge lgp-badge-success">Active</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMPANIES PAGE -->
+        <div id="companies" class="page-content">
+            <div class="lgp-dashboard-header">
+                <h1>Partner Companies</h1>
+                <p>Manage and view all partner companies</p>
+            </div>
+
+            <div class="lgp-card">
+                <div class="lgp-card-body">
+                    <table class="lgp-table">
+                        <thead>
+                            <tr>
+                                <th>Company Name</th>
+                                <th>Units</th>
+                                <th>Open Tickets</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>ABC Company</strong></td>
+                                <td>45</td>
+                                <td>2</td>
+                                <td><span class="lgp-badge lgp-badge-success">Active</span></td>
+                                <td><button class="lgp-btn lgp-btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>XYZ Corp</strong></td>
+                                <td>67</td>
+                                <td>1</td>
+                                <td><span class="lgp-badge lgp-badge-success">Active</span></td>
+                                <td><button class="lgp-btn lgp-btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tech Solutions</strong></td>
+                                <td>23</td>
+                                <td>0</td>
+                                <td><span class="lgp-badge lgp-badge-success">Active</span></td>
+                                <td><button class="lgp-btn lgp-btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAP PAGE -->
+        <div id="map" class="page-content">
+            <div class="lgp-dashboard-header">
+                <h1>Service Map</h1>
+                <p>Manage units and service tickets by location</p>
+            </div>
+
+            <div class="lgp-card">
+                <div class="lgp-card-body" style="text-align: center; padding: 3rem;">
+                    <div style="background: var(--bg); padding: 2rem; border-radius: 0.75rem; color: #999;">
+                        <p style="font-size: 1.25rem; margin-bottom: 0.5rem;">🗺️</p>
+                        <p>Interactive Leaflet map with poolside locations</p>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Markers color-coded by urgency • Service ticket overview • Click for details</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KNOWLEDGE CENTER PAGE -->
+        <div id="knowledge" class="page-content">
+            <div class="lgp-dashboard-header">
+                <h1>Knowledge Center</h1>
+                <p>Training videos and installation guides</p>
+            </div>
+
+            <div class="lgp-card">
+                <div class="lgp-card-body">
+                    <div class="lgp-filters">
+                        <div class="lgp-form-group">
+                            <label class="lgp-label">Search</label>
+                            <input class="lgp-input" type="text" placeholder="Search videos...">
+                        </div>
+                        <div class="lgp-form-group">
+                            <label class="lgp-label">Category</label>
+                            <select class="lgp-select">
+                                <option>All Categories</option>
+                                <option>Installation</option>
+                                <option>Maintenance</option>
+                                <option>Troubleshooting</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="lgp-card">
+                    <div style="background: var(--bg); padding: 2rem; text-align: center; border-radius: 0.5rem 0.5rem 0 0; color: #999;">
+                        <p style="font-size: 2rem;">🎥</p>
+                        <p>Installation Guide</p>
+                    </div>
+                    <div class="lgp-card-body">
+                        <p><strong>How to Install LounGenie Lock</strong></p>
+                        <p class="lgp-text-muted">Step-by-step installation tutorial for pool gate locks</p>
+                        <button class="lgp-btn lgp-btn-primary" style="width: 100%; margin-top: 1rem;">Watch Video</button>
+                    </div>
+                </div>
+
+                <div class="lgp-card">
+                    <div style="background: var(--bg); padding: 2rem; text-align: center; border-radius: 0.5rem 0.5rem 0 0; color: #999;">
+                        <p style="font-size: 2rem;">🔧</p>
+                        <p>Maintenance Guide</p>
+                    </div>
+                    <div class="lgp-card-body">
+                        <p><strong>Seasonal Maintenance Tips</strong></p>
+                        <p class="lgp-text-muted">Keep your LounGenie system running smoothly year-round</p>
+                        <button class="lgp-btn lgp-btn-primary" style="width: 100%; margin-top: 1rem;">Watch Video</button>
+                    </div>
+                </div>
+
+                <div class="lgp-card">
+                    <div style="background: var(--bg); padding: 2rem; text-align: center; border-radius: 0.5rem 0.5rem 0 0; color: #999;">
+                        <p style="font-size: 2rem;">⚙️</p>
+                        <p>Troubleshooting</p>
+                    </div>
+                    <div class="lgp-card-body">
+                        <p><strong>Common Issues & Solutions</strong></p>
+                        <p class="lgp-text-muted">Fix connection problems and common errors</p>
+                        <button class="lgp-btn lgp-btn-primary" style="width: 100%; margin-top: 1rem;">Watch Video</button>
+                    </div>
+                </div>
+
+                <div class="lgp-card">
+                    <div style="background: var(--bg); padding: 2rem; text-align: center; border-radius: 0.5rem 0.5rem 0 0; color: #999;">
+                        <p style="font-size: 2rem;">📞</p>
+                        <p>Support Video</p>
+                    </div>
+                    <div class="lgp-card-body">
+                        <p><strong>Contacting LounGenie Support</strong></p>
+                        <p class="lgp-text-muted">Learn how to get help when you need it</p>
+                        <button class="lgp-btn lgp-btn-primary" style="width: 100%; margin-top: 1rem;">Watch Video</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+function showPage(pageId) {
+    // Hide all pages
+    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+    
+    // Show selected page
+    document.getElementById(pageId).classList.add('active');
+    
+    // Update nav links
+    document.querySelectorAll('.lgp-nav-link').forEach(link => link.classList.remove('active'));
+    event.target.closest('.lgp-nav-link').classList.add('active');
+    
+    // Scroll to top
+    document.querySelector('.lgp-content').scrollTop = 0;
+}
+</script>
+
+</body>
+</html>
