@@ -128,45 +128,45 @@ a:focus {
 }
 
 /* Heading Hierarchy - WCAG 1.3.1 */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+.lgp-portal h1,
+.lgp-portal h2,
+.lgp-portal h3,
+.lgp-portal h4,
+.lgp-portal h5,
+.lgp-portal h6 {
     color: var(--lgp-text-primary);
     font-weight: 700;
     margin-bottom: 12px;
     line-height: 1.2;
 }
 
-h1 {
+.lgp-portal h1 {
     font-size: 32px;
 }
 
-h2 {
+.lgp-portal h2 {
     font-size: 28px;
 }
 
-h3 {
+.lgp-portal h3 {
     font-size: 24px;
 }
 
-h4 {
+.lgp-portal h4 {
     font-size: 20px;
 }
 
-h5 {
+.lgp-portal h5 {
     font-size: 18px;
 }
 
-h6 {
+.lgp-portal h6 {
     font-size: 16px;
 }
 
 /* Text Spacing - WCAG 1.4.12 */
-p,
-li {
+.lgp-portal p,
+.lgp-portal li {
     line-height: 1.5;
     letter-spacing: 0.02em;
     color: var(--lgp-text-secondary);

@@ -324,7 +324,7 @@ if ($company->management_company_id) {
 									<td><?php echo esc_html($gateway->channel_number ?? 'N/A'); ?></td>
 									<td><?php echo esc_html($gateway->gateway_address ?? 'N/A'); ?></td>
 									<td><?php echo esc_html($gateway->unit_capacity ?? '0'); ?></td>
-									<td><?php echo $gateway->call_button ? '✓' : '✗'; ?></td>
+									<td><?php echo esc_html($gateway->call_button ? '✓' : '✗'); ?></td>
 								</tr>
 							<?php endforeach; ?>
 						</tbody>

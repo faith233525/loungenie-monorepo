@@ -51,13 +51,13 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 	?>
 </head>
 
-<body class="lgp-portal-body" data-role="<?php echo $is_support ? 'support' : 'partner'; ?>">
+<body class="lgp-portal-body" data-role="<?php echo esc_attr($is_support ? 'support' : 'partner'); ?>">
 
 	<!-- Skip to main content for accessibility -->
 	<a href="#main-content" class="lgp-skip-link"><?php esc_html_e('Skip to main content', 'loungenie-portal'); ?></a>
 
 	<!-- Hard-isolated container: All portal styles scoped under this class -->
-	<div class="lgp-portal-container" data-role="<?php echo $is_support ? 'support' : 'partner'; ?>">
+	<div class="lgp-portal-container" data-role="<?php echo esc_attr($is_support ? 'support' : 'partner'); ?>">
 
 		<!-- Header with HubSpot-style spacing -->
 		<header class="lgp-header">

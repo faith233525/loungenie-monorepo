@@ -57,7 +57,7 @@ $ticket_types      = function_exists('lgp_get_request_types') ? (array) lgp_get_
 	class="lgp-layout"
 	data-rest-url="<?php echo esc_url($rest_url); ?>"
 	data-rest-nonce="<?php echo esc_attr($rest_nonce); ?>"
-	data-is-support="<?php echo $is_support ? '1' : '0'; ?>"
+	data-is-support="<?php echo esc_attr($is_support ? '1' : '0'); ?>"
 	data-company-name="<?php echo esc_attr($company_name); ?>">
 
 	<header class="lgp-page-header">
