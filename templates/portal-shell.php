@@ -31,20 +31,20 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 	<?php
 	// Failsafe: If CSS didn't load via wp_enqueue, inline critical CSS.
 	// This ensures styles display even if enqueue hook fails on shared hosting.
-	if ( ! wp_style_is( 'lgp-portal', 'done' ) ) {
+	if (! wp_style_is('lgp-portal', 'done')) {
 		echo '<style>';
 		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 		// Critical CSS files are hardcoded from plugin, safe to output raw.
-		
+
 		// Reset and layout isolation.
-		echo file_get_contents( LGP_PLUGIN_DIR . 'assets/css/lgp-reset.css' );
-		
+		echo file_get_contents(LGP_PLUGIN_DIR . 'assets/css/lgp-reset.css');
+
 		// Design tokens (colors, spacing, typography).
-		echo file_get_contents( LGP_PLUGIN_DIR . 'assets/css/design-tokens.css' );
-		
+		echo file_get_contents(LGP_PLUGIN_DIR . 'assets/css/design-tokens.css');
+
 		// Component styling (buttons, cards, forms).
-		echo file_get_contents( LGP_PLUGIN_DIR . 'assets/css/portal-components.css' );
-		
+		echo file_get_contents(LGP_PLUGIN_DIR . 'assets/css/portal-components.css');
+
 		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '</style>';
 	}
