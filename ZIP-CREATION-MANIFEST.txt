@@ -1,0 +1,416 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║            📦 WORDPRESS PLUGIN ZIP - CREATION MANIFEST 📦                ║
+║                                                                           ║
+║                 LounGenie Portal v2.0.0 - Production Ready               ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+═══════════════════════════════════════════════════════════════════════════
+
+📋 EXACT ZIP CONTENTS - COPY THIS LIST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ZIP FILE NAME: loungenie-portal.zip
+
+Inside the ZIP, create this folder structure:
+
+loungenie-portal/
+│
+├── loungenie-portal.php                      [FILE - Required]
+├── uninstall.php                             [FILE - Required]
+├── readme.txt                                [FILE - Required]
+│
+├── includes/                                 [FOLDER - All PHP files]
+│   ├── class-lgp-loader.php
+│   ├── class-lgp-auth.php
+│   ├── class-lgp-database.php
+│   ├── class-lgp-cache.php
+│   ├── class-lgp-router.php
+│   ├── class-lgp-assets.php
+│   ├── class-lgp-logger.php
+│   ├── class-lgp-security.php
+│   ├── class-lgp-capabilities.php
+│   ├── class-lgp-email-ingest.php
+│   ├── class-lgp-email-reply.php
+│   ├── class-lgp-email-handler.php
+│   ├── class-lgp-api-docs.php
+│   ├── class-lgp-attachments.php
+│   ├── class-lgp-cache-invalidation.php
+│   ├── class-lgp-company-colors.php
+│   ├── class-lgp-geocode.php
+│   ├── class-lgp-shared-hosting-rules.php
+│   ├── class-lgp-support-ticket-handler.php
+│   ├── class-lgp-system-health.php
+│   ├── class-lgp-user-creator.php
+│   ├── class-lgp-user-manager.php
+│   ├── class-lgp-csv-company-location-import.php
+│   ├── class-lgp-csv-partner-import.php
+│   ├── class-lgp-csv-units-import.php
+│   ├── class-lgp-shared-server-diagnostics.php
+│   ├── class-lgp-rate-limiter.php
+│   ├── class-lgp-query-monitor.php
+│   ├── class-lgp-attachment-handler.php
+│   ├── class-lgp-password-manager.php
+│   ├── class-lgp-microsoft-sso.php
+│   ├── class-lgp-hubspot.php
+│   ├── class-lgp-outlook.php
+│   ├── class-lgp-shared-mailbox.php
+│   ├── class-lgp-i18n.php
+│   ├── class-lgp-admin-credentials-ui.php
+│   ├── class-lgp-company-credentials.php
+│   ├── class-lgp-notification.php
+│   ├── class-lgp-security-audit.php
+│   ├── class-lgp-sanitizer.php
+│   ├── class-lgp-validator.php
+│   ├── class-lgp-error-handler.php
+│   ├── class-lgp-event-logger.php
+│   ├── class-lgp-feature-flags.php
+│   ├── class-lgp-performance-monitor.php
+│   ├── class-lgp-accessibility.php
+│   ├── class-lgp-environment.php
+│   ├── class-lgp-request-handler.php
+│   ├── class-lgp-response-formatter.php
+│   ├── class-lgp-exceptions.php
+│   ├── class-lgp-service-locator.php
+│   ├── class-lgp-dependency-injection.php
+│   ├── email-integration.php
+│   └── [All other PHP files in /includes/]
+│
+├── api/                                      [FOLDER - REST Endpoints]
+│   ├── dashboard.php
+│   ├── tickets.php
+│   ├── units.php
+│   ├── companies.php
+│   ├── credentials.php
+│   ├── gateways.php
+│   ├── attachments.php
+│   ├── audit-log.php
+│   ├── service-notes.php
+│   ├── knowledge-center.php
+│   └── map.php
+│
+├── templates/                                [FOLDER - Frontend Templates]
+│   ├── portal-shell.php
+│   ├── portal-login.php
+│   ├── support-login.php
+│   ├── partner-login.php
+│   ├── custom-login-modern.php
+│   ├── custom-login-enhanced.php
+│   ├── dashboard-support.php
+│   ├── dashboard-partner.php
+│   ├── tickets-view.php
+│   ├── units-view.php
+│   ├── companies-view.php
+│   ├── gateway-view.php
+│   ├── map-view.php
+│   ├── knowledge-center-view.php
+│   ├── company-profile.php
+│   └── [All template files]
+│
+├── assets/                                   [FOLDER - CSS & JS]
+│   │
+│   ├── css/                                  [CSS Stylesheets]
+│   │   ├── design-tokens.css
+│   │   ├── design-system-refactored.css
+│   │   ├── portal.css
+│   │   ├── portal-components.css
+│   │   ├── login.css
+│   │   ├── login-page.css
+│   │   ├── login-page-modern.css
+│   │   ├── accessibility.css
+│   │   ├── dashboard.css
+│   │   ├── tickets.css
+│   │   ├── map-view.css
+│   │   ├── attachments.css
+│   │   ├── csv-import.css
+│   │   ├── admin-credentials.css
+│   │   ├── component-company-colors.css
+│   │   ├── lgp-reset.css
+│   │   └── [All CSS files]
+│   │
+│   └── js/                                   [JavaScript Modules]
+│       ├── portal.js
+│       ├── api-client.js
+│       ├── dashboard.js
+│       ├── tickets.js
+│       ├── units.js
+│       ├── companies.js
+│       ├── gateways.js
+│       ├── map.js
+│       ├── attachments.js
+│       ├── forms.js
+│       ├── validation.js
+│       ├── auth.js
+│       ├── notifications.js
+│       ├── ui-components.js
+│       ├── performance.js
+│       ├── accessibility.js
+│       └── [All JavaScript files]
+│
+├── roles/                                    [FOLDER - Role Definitions]
+│   ├── support.php
+│   └── partner.php
+│
+└── wp-cli/                                   [FOLDER - Optional CLI Tools]
+    └── lgp-backfill-geocode.php
+
+═══════════════════════════════════════════════════════════════════════════
+
+📝 FILES TO INCLUDE - CHECKLIST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Required Core Files:
+  ☐ loungenie-portal.php
+  ☐ uninstall.php
+  ☐ readme.txt
+
+Required Directories:
+  ☐ includes/                (52+ PHP files)
+  ☐ api/                     (11 endpoint files)
+  ☐ templates/               (15+ template files)
+  ☐ assets/css/              (17+ CSS files)
+  ☐ assets/js/               (18+ JS files)
+  ☐ roles/                   (2 role files)
+
+Optional:
+  ☐ wp-cli/                  (1 CLI tool)
+
+═══════════════════════════════════════════════════════════════════════════
+
+❌ DO NOT INCLUDE - DELETE THESE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Do NOT include in ZIP:
+
+❌ /tests/                              (Test directory)
+❌ /vendor/                             (Composer files)
+❌ /bin/                                (Binary files)
+❌ .git/                                (Git history)
+❌ .github/                             (GitHub config - EXCEPT keep if needed)
+❌ .gitignore
+❌ .editorconfig
+❌ .eslintrc.json
+❌ composer.json
+❌ composer.lock
+❌ package.json
+❌ package-lock.json
+❌ phpunit.xml
+❌ phpcs.xml
+❌ phpcs.xml.dist
+❌ PORTAL_PREVIEW.html
+❌ All *.md files (documentation)
+❌ All *.txt documentation files (except readme.txt)
+❌ All configuration files
+❌ All test files (*TEST*.php)
+❌ All documentation files
+❌ QUICK_*.* files
+❌ DEPLOYMENT_*.* files
+❌ README_*.md files
+❌ Any file starting with: ✅, 📋, 📦
+
+═══════════════════════════════════════════════════════════════════════════
+
+🔧 HOW TO CREATE THE ZIP FILE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+WINDOWS (Using File Explorer):
+──────────────────────────────
+
+1. Open File Explorer
+2. Navigate to: loungenie-portal-production (4)\loungenie-portal-production\
+3. Create a NEW FOLDER (if not exists): loungenie-portal
+4. Copy INTO this folder:
+   ✓ loungenie-portal.php
+   ✓ uninstall.php
+   ✓ readme.txt
+   ✓ includes/ folder
+   ✓ api/ folder
+   ✓ templates/ folder
+   ✓ assets/ folder (with css/ and js/ subfolders)
+   ✓ roles/ folder
+   ✓ wp-cli/ folder (optional)
+
+5. Right-click the "loungenie-portal" folder
+6. Select: "Send to" → "Compressed (zipped) folder"
+7. This creates: loungenie-portal.zip
+
+8. Your ZIP file is ready! ✅
+
+
+WINDOWS (Using 7-Zip - Alternative):
+──────────────────────────────────────
+
+1. Install 7-Zip (if not installed)
+2. Create folder: loungenie-portal
+3. Copy required items into it
+4. Right-click folder → 7-Zip → Add to archive
+5. Create as loungenie-portal.zip
+
+Done! ✅
+
+
+WINDOWS (Using PowerShell):
+────────────────────────────
+
+1. Open PowerShell
+2. Run:
+
+$SourceFolder = "C:\Users\pools\Downloads\loungenie-portal-production (4)\loungenie-portal-production"
+$ZipPath = "C:\Users\pools\Downloads\loungenie-portal.zip"
+
+$ItemsToZip = @(
+    "$SourceFolder\loungenie-portal.php",
+    "$SourceFolder\uninstall.php",
+    "$SourceFolder\readme.txt",
+    "$SourceFolder\includes",
+    "$SourceFolder\api",
+    "$SourceFolder\templates",
+    "$SourceFolder\assets",
+    "$SourceFolder\roles",
+    "$SourceFolder\wp-cli"
+)
+
+# Create the ZIP
+Compress-Archive -Path $ItemsToZip -DestinationPath $ZipPath -Force
+
+Write-Host "ZIP created: $ZipPath"
+
+3. Done! ✅
+
+
+MAC (Using Finder):
+────────────────────
+
+1. Open Finder
+2. Navigate to plugin folder
+3. Create folder: loungenie-portal
+4. Copy required items into it
+5. Right-click → Compress
+6. Creates: loungenie-portal.zip
+
+Done! ✅
+
+
+MAC (Using Terminal):
+──────────────────────
+
+mkdir -p loungenie-portal
+cp loungenie-portal.php loungenie-portal/
+cp uninstall.php loungenie-portal/
+cp readme.txt loungenie-portal/
+cp -r includes loungenie-portal/
+cp -r api loungenie-portal/
+cp -r templates loungenie-portal/
+cp -r assets loungenie-portal/
+cp -r roles loungenie-portal/
+cp -r wp-cli loungenie-portal/
+
+zip -r loungenie-portal.zip loungenie-portal/
+
+Done! ✅
+
+
+LINUX (Using Terminal):
+──────────────────────
+
+mkdir -p loungenie-portal
+cp loungenie-portal.php loungenie-portal/
+cp uninstall.php loungenie-portal/
+cp readme.txt loungenie-portal/
+cp -r includes loungenie-portal/
+cp -r api loungenie-portal/
+cp -r templates loungenie-portal/
+cp -r assets loungenie-portal/
+cp -r roles loungenie-portal/
+cp -r wp-cli loungenie-portal/
+
+zip -r loungenie-portal.zip loungenie-portal/
+
+Done! ✅
+
+═══════════════════════════════════════════════════════════════════════════
+
+📦 ZIP FILE SPECIFICATIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ZIP Filename:          loungenie-portal.zip
+Contents:              loungenie-portal/ folder with all items above
+Estimated Size:        2-3 MB
+Compression:           Standard ZIP
+Format:                .zip (WordPress compatible)
+
+═══════════════════════════════════════════════════════════════════════════
+
+✅ UPLOAD TO WORDPRESS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Log in to WordPress Admin
+
+2. Go to: Plugins → Add New
+
+3. Click: "Upload Plugin"
+
+4. Select: loungenie-portal.zip
+
+5. Click: "Install Now"
+
+6. Click: "Activate Plugin"
+
+DONE! ✅ Plugin is now active!
+
+═══════════════════════════════════════════════════════════════════════════
+
+🔍 VERIFY YOUR ZIP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Before uploading, verify your ZIP contains:
+
+Open the ZIP file and check:
+
+✓ loungenie-portal/loungenie-portal.php exists
+✓ loungenie-portal/uninstall.php exists
+✓ loungenie-portal/readme.txt exists
+✓ loungenie-portal/includes/ exists (with files)
+✓ loungenie-portal/api/ exists (with 11 files)
+✓ loungenie-portal/templates/ exists (with files)
+✓ loungenie-portal/assets/css/ exists (with files)
+✓ loungenie-portal/assets/js/ exists (with files)
+✓ loungenie-portal/roles/ exists (2 files)
+✓ No extra documentation files
+✓ No test files
+✓ No vendor or node_modules folders
+
+If all ✓, your ZIP is ready for WordPress! 🎉
+
+═══════════════════════════════════════════════════════════════════════════
+
+⚡ FILE COUNT VERIFICATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Your ZIP should contain approximately:
+
+Total Files:           ~125+ files
+├─ PHP Files:         ~60+ files
+├─ CSS Files:         ~17 files
+├─ JS Files:          ~18+ files
+├─ Template Files:    ~15+ files
+├─ Config Files:      3 files (loungenie-portal.php, uninstall.php, readme.txt)
+└─ Other Files:       Minimal
+
+═══════════════════════════════════════════════════════════════════════════
+
+🚀 YOU'RE READY!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Follow the steps above to create your ZIP file.
+Once created, upload to WordPress.
+Your plugin will be active and ready to use!
+
+═══════════════════════════════════════════════════════════════════════════
+
+Questions? The ZIP should contain EXACTLY what's listed in this manifest.
+
+Good luck! 🎉
+
+═══════════════════════════════════════════════════════════════════════════

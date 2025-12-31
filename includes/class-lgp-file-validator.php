@@ -21,10 +21,6 @@ class LGP_File_Validator {
 		'text/plain'         => 'txt',
 		'application/msword' => 'doc',
 		'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
-		'video/mp4'          => 'mp4',
-		'video/quicktime'    => 'mov|qt',
-		'video/webm'         => 'webm',
-		'video/ogg'          => 'ogg',
 	);
 	const UPLOAD_DIR           = 'lgp-attachments';
 	const RETENTION_DAYS       = 90;

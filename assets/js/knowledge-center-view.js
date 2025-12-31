@@ -1,50 +1,58 @@
 /**
- * Knowledge Center View
- * Support: manage guides, Partners: view and watch guides
+ * Help and Guides View JavaScript
+ * Handles video management for Support and viewing for Partners
+ * 
+ * @package LounGenie Portal
  */
 
 (function () {
     'use strict';
 
-    const isSupport = (document.body?.dataset?.role === 'support') || (window.lgpData?.isSupport ?? false);
+    // Detect support role via body data-role or localized data
+    const isSupport = (document.body && document.body.dataset && document.body.dataset.role === 'support')
+        || (typeof window.lgpData !== 'undefined' && !!lgpData.isSupport);
     let videos = [];
     let companies = [];
     let currentVideoId = null;
 
-    const knowledgeApiBases = ['/wp-json/lgp/v1/knowledge-center', '/wp-json/lgp/v1/help-guides'];
+    // API base paths (new preferred, legacy fallback) - MUST be declared before apiFetch
+    const knowledgeApiBases = [
+        '/wp-json/lgp/v1/knowledge-center',
+        '/wp-json/lgp/v1/help-guides'
+    ];
 
-    const els = {
-        grid: document.getElementById('lgp-help-guides-grid'),
-        noVideos: document.getElementById('lgp-no-videos'),
-        searchInput: document.getElementById('lgp-help-guides-search'),
-        categoryFilter: document.getElementById('lgp-category-filter'),
-        addVideoBtn: document.getElementById('lgp-add-video-btn'),
-        videoModal: document.getElementById('lgp-video-modal'),
-        playerModal: document.getElementById('lgp-player-modal'),
-        videoForm: document.getElementById('lgp-video-form'),
-        companyList: document.getElementById('lgp-company-list'),
-        allCompaniesToggle: document.getElementById('lgp-all-companies'),
-        fileInput: document.getElementById('lgp-video-file'),
-    };
-
-    // --- Core helpers ----------------------------------------------------
+    /**
+     * Core API fetch with knowledge-center first and legacy help-guides fallback
+     */
     async function apiFetch(path = '', options = {}) {
         const headers = new Headers(options.headers || {});
-        const restNonce = window.wpApiSettings?.nonce || window.lgpData?.restNonce || '';
 
-        if (restNonce && !headers.has('X-WP-Nonce')) {
-            headers.set('X-WP-Nonce', restNonce);
+        // Inject REST nonce if available
+        if (!headers.has('X-WP-Nonce')) {
+            if (typeof window.wpApiSettings !== 'undefined' && wpApiSettings.nonce) {
+                headers.set('X-WP-Nonce', wpApiSettings.nonce);
+            } else if (typeof window.lgpData !== 'undefined' && lgpData.restNonce) {
+                headers.set('X-WP-Nonce', lgpData.restNonce);
+            }
         }
 
-        const opts = { ...options, credentials: 'same-origin', headers };
+        const opts = Object.assign({}, options, {
+            credentials: 'same-origin',
+            headers
+        });
+
         let lastResponse = null;
 
         for (const base of knowledgeApiBases) {
-            const response = await fetch(`${base}${path}`, opts);
+            const url = `${base}${path}`;
+            const response = await fetch(url, opts);
             if (response.ok) {
                 return response;
             }
+
             lastResponse = response;
+
+            // Try legacy base on 404; otherwise break early
             if (response.status !== 404) {
                 break;
             }
@@ -53,101 +61,126 @@
         return lastResponse || new Response(null, { status: 500 });
     }
 
-    // --- UI wiring -------------------------------------------------------
+    // DOM Elements
+    const grid = document.getElementById('lgp-help-guides-grid');
+    const noVideos = document.getElementById('lgp-no-videos');
+    const searchInput = document.getElementById('lgp-help-guides-search');
+    const categoryFilter = document.getElementById('lgp-category-filter');
+    const addVideoBtn = document.getElementById('lgp-add-video-btn');
+    const videoModal = document.getElementById('lgp-video-modal');
+    const playerModal = document.getElementById('lgp-player-modal');
+    const videoForm = document.getElementById('lgp-video-form');
+
+    /**
+     * Initialize
+     */
     function init() {
-        bindEvents();
         loadVideos();
+        bindEvents();
+
         if (isSupport) {
             loadCompanies();
         }
     }
 
+    /**
+     * Bind event listeners
+     */
     function bindEvents() {
-        els.searchInput?.addEventListener('input', debounce(filterVideos, 250));
-        els.categoryFilter?.addEventListener('change', filterVideos);
-        els.addVideoBtn?.addEventListener('click', () => openVideoModal());
-        els.videoForm?.addEventListener('submit', handleFormSubmit);
-        els.allCompaniesToggle?.addEventListener('change', toggleCompanyList);
+        // Search and filter
+        if (searchInput) {
+            searchInput.addEventListener('input', debounce(filterVideos, 300));
+        }
 
-        // Close modals
-        document.querySelectorAll('.lgp-modal-close').forEach(btn => {
-            btn.addEventListener('click', () => closeModal(btn.closest('.lgp-modal-overlay') || btn.closest('.lgp-modal')));
-        });
+        if (categoryFilter) {
+            categoryFilter.addEventListener('change', filterVideos);
+        }
 
-        els.videoModal?.addEventListener('click', (e) => {
-            if (e.target === els.videoModal) {
-                closeModal(els.videoModal);
-            }
-        });
-
-        els.playerModal?.addEventListener('click', (e) => {
-            if (e.target === els.playerModal) {
-                closeModal(els.playerModal);
-            }
-        });
-    }
-
-    function closeModal(modal) {
-        if (modal) {
-            modal.classList.add('hidden');
+        // Add video button (support only)
+        if (addVideoBtn) {
+            addVideoBtn.addEventListener('click', () => openVideoModal());
         }
     }
 
-    // --- Data loading ----------------------------------------------------
+    /**
+     * Load videos from API
+     */
     async function loadVideos(filters = {}) {
         try {
             const params = new URLSearchParams();
-            if (filters.category) params.append('category', filters.category);
-            if (filters.search) params.append('search', filters.search);
-            const query = params.toString();
 
-            const response = await apiFetch(query ? `/?${query}` : '', { method: 'GET' });
-            if (!response.ok) throw new Error(`Failed to load videos (${response.status})`);
+            if (filters.category) {
+                params.append('category', filters.category);
+            }
+            if (filters.search) {
+                params.append('search', filters.search);
+            }
+
+            const query = params.toString() ? `?${params.toString()}` : '';
+
+            const response = await apiFetch(query ? `/${query}` : '', {
+                method: 'GET'
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to load videos (${response.status})`);
+            }
 
             videos = await response.json();
             renderVideos(videos);
-        } catch (err) {
-            console.error('Error loading videos:', err);
+
+        } catch (error) {
+            console.error('Error loading videos:', error);
             showError('Failed to load knowledge guides');
         }
     }
 
+    /**
+     * Load companies for target selection (support only)
+     */
     async function loadCompanies() {
         try {
-            const response = await fetch('/wp-json/lgp/v1/companies', { credentials: 'same-origin' });
+            const response = await fetch('/wp-json/lgp/v1/companies', {
+                credentials: 'same-origin'
+            });
+
             if (response.ok) {
                 companies = await response.json();
-                renderCompanySelector();
             }
-        } catch (err) {
-            console.error('Error loading companies:', err);
+        } catch (error) {
+            console.error('Error loading companies:', error);
         }
     }
 
-    // --- Rendering -------------------------------------------------------
-    function renderVideos(list) {
-        if (!els.grid) return;
+    /**
+            const url = videoId
+                ? `/${videoId}`
+                : '';
+        if (!grid) return;
 
-        els.grid.innerHTML = '';
-        if (!list || list.length === 0) {
-            els.grid.style.display = 'none';
-            if (els.noVideos) {
-                els.noVideos.style.display = 'block';
-            }
-            return;
+        grid.innerHTML = '';
+            const response = await apiFetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+
+        grid.style.display = 'grid';
+        if (noVideos) {
+            noVideos.style.display = 'none';
         }
 
-        els.grid.style.display = 'grid';
-        if (els.noVideos) {
-            els.noVideos.style.display = 'none';
-        }
-
-        list.forEach(video => {
+        videoList.forEach(video => {
             const card = createVideoCard(video);
-            els.grid.appendChild(card);
+            grid.appendChild(card);
         });
     }
 
+    /**
+     * Create video card element
+     */
     function createVideoCard(video) {
         const card = document.createElement('div');
         card.className = 'lgp-video-card';
@@ -156,7 +189,9 @@
         const category = video.category || 'general';
 
         card.innerHTML = `
-            <div class="lgp-video-thumbnail" data-video-id="${video.id}">🎬</div>
+            <div class="lgp-video-thumbnail" data-video-id="${video.id}">
+                🎬
+            </div>
             <div class="lgp-video-card-body">
                 <h3 class="lgp-video-card-title">${escapeHtml(video.title)}</h3>
                 <div class="lgp-video-card-meta">
@@ -165,117 +200,152 @@
                 </div>
                 ${video.description ? `<p class="lgp-video-card-description">${escapeHtml(video.description)}</p>` : ''}
                 <div class="lgp-video-card-actions">
-                    <button class="lgp-btn lgp-btn-primary lgp-watch-btn" data-video-id="${video.id}">Watch</button>
+                    <button class="lgp-btn lgp-btn-primary lgp-watch-btn" data-video-id="${video.id}">
+                        Watch
+                    </button>
                     ${isSupport ? `
-                        <button class="lgp-btn lgp-btn-secondary lgp-edit-btn" data-video-id="${video.id}">Edit</button>
-                        <button class="lgp-btn lgp-btn-danger lgp-delete-btn" data-video-id="${video.id}">Delete</button>
+                        <button class="lgp-btn lgp-btn-secondary lgp-edit-btn" data-video-id="${video.id}">
+                            Edit
+                        </button>
+                        <button class="lgp-btn lgp-btn-danger lgp-delete-btn" data-video-id="${video.id}">
+                            Delete
+                        </button>
                     ` : ''}
                 </div>
-            </div>`;
+            </div>
+        `;
 
-        card.querySelector('.lgp-video-thumbnail')?.addEventListener('click', () => playVideo(video.id));
-        card.querySelector('.lgp-watch-btn')?.addEventListener('click', () => playVideo(video.id));
+        // Bind events
+        card.querySelector('.lgp-video-thumbnail').addEventListener('click', () => playVideo(video.id));
+        card.querySelector('.lgp-watch-btn').addEventListener('click', () => playVideo(video.id));
 
         if (isSupport) {
-            card.querySelector('.lgp-edit-btn')?.addEventListener('click', () => editVideo(video.id));
-            card.querySelector('.lgp-delete-btn')?.addEventListener('click', () => deleteVideo(video.id));
+            card.querySelector('.lgp-edit-btn').addEventListener('click', () => editVideo(video.id));
+            card.querySelector('.lgp-delete-btn').addEventListener('click', () => deleteVideo(video.id));
         }
 
         return card;
     }
 
+    /**
+     * Filter videos based on search and category
+     */
     function filterVideos() {
-        const search = els.searchInput?.value?.toLowerCase() || '';
-        const category = els.categoryFilter?.value || '';
+        const search = searchInput ? searchInput.value.toLowerCase() : '';
+        const category = categoryFilter ? categoryFilter.value : '';
 
         const filtered = videos.filter(video => {
             const matchesSearch = !search ||
-                video.title?.toLowerCase().includes(search) ||
-                video.description?.toLowerCase().includes(search);
+                video.title.toLowerCase().includes(search) ||
+                (video.description && video.description.toLowerCase().includes(search));
+
             const matchesCategory = !category || video.category === category;
+
             return matchesSearch && matchesCategory;
         });
 
         renderVideos(filtered);
     }
 
-    // --- Modal + form ----------------------------------------------------
+    /**
+     * Open video modal for add/edit
+     */
     function openVideoModal(videoId = null) {
-        if (!els.videoModal || !els.videoForm) return;
+        if (!videoModal) return;
 
         currentVideoId = videoId;
         const modalTitle = document.getElementById('lgp-modal-title');
 
         if (videoId) {
-            modalTitle.textContent = 'Edit Knowledge Guide';
+            modalTitle.textContent = 'Edit Training Video';
             loadVideoData(videoId);
         } else {
-            modalTitle.textContent = 'Add Knowledge Guide';
-            els.videoForm.reset();
+            modalTitle.textContent = 'Add Training Video';
+            videoForm.reset();
             document.getElementById('lgp-video-id').value = '';
-            if (els.allCompaniesToggle) {
-                els.allCompaniesToggle.checked = true;
-            }
+            document.getElementById('lgp-all-companies').checked = true;
             toggleCompanyList();
         }
 
+        videoModal.classList.remove('hidden');
         renderCompanySelector();
-        els.videoModal.classList.remove('hidden');
     }
 
-    function loadVideoData(videoId) {
+    /**
+     * Load video data for editing
+     */
+    async function loadVideoData(videoId) {
         const video = videos.find(v => v.id == videoId);
         if (!video) return;
 
         document.getElementById('lgp-video-id').value = video.id;
         document.getElementById('lgp-video-title').value = video.title;
         document.getElementById('lgp-video-description').value = video.description || '';
-        document.getElementById('lgp-video-url').value = video.content_url || '';
+        document.getElementById('lgp-video-url').value = video.content_url;
         document.getElementById('lgp-video-category').value = video.category || 'general';
         document.getElementById('lgp-video-duration').value = video.duration || '';
 
+        // Handle target companies
         const targets = video.target_companies ? JSON.parse(video.target_companies) : [];
-        const allCompanies = els.allCompaniesToggle;
+        const allCompanies = document.getElementById('lgp-all-companies');
 
-        if (allCompanies) {
-            allCompanies.checked = targets.length === 0;
-        }
-
-        if (els.companyList) {
-            els.companyList.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-                cb.checked = targets.includes(parseInt(cb.value));
+        if (targets.length === 0) {
+            allCompanies.checked = true;
+        } else {
+            allCompanies.checked = false;
+            // Check specific companies
+            targets.forEach(companyId => {
+                const checkbox = document.querySelector(`input[name="target_companies"][value="${companyId}"]`);
+                if (checkbox) {
+                    checkbox.checked = true;
+                }
             });
         }
 
         toggleCompanyList();
     }
 
+    /**
+     * Render company selector checkboxes
+     */
     function renderCompanySelector() {
-        if (!els.companyList || !companies.length) return;
+        const list = document.getElementById('lgp-company-list');
+        if (!list || companies.length === 0) return;
 
-        els.companyList.innerHTML = companies.map(company => `
+        list.innerHTML = companies.map(company => `
             <label>
                 <input type="checkbox" name="target_companies" value="${company.id}" />
                 ${escapeHtml(company.name)}
-            </label>`).join('');
+            </label>
+        `).join('');
     }
 
+    /**
+     * Toggle company list visibility
+     */
     function toggleCompanyList() {
-        if (!els.companyList || !els.allCompaniesToggle) return;
+        const allCompanies = document.getElementById('lgp-all-companies');
+        const list = document.getElementById('lgp-company-list');
 
-        const showList = !els.allCompaniesToggle.checked;
-        els.companyList.style.display = showList ? 'flex' : 'none';
-        if (!showList) {
-            els.companyList.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+        if (allCompanies && list) {
+            list.style.display = allCompanies.checked ? 'none' : 'flex';
+
+            // Uncheck all company checkboxes when "All Companies" is checked
+            if (allCompanies.checked) {
+                list.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            }
         }
     }
 
+    /**
+     * Handle form submission
+     */
     async function handleFormSubmit(e) {
         e.preventDefault();
 
         const videoId = document.getElementById('lgp-video-id').value;
-        const allCompanies = !!els.allCompaniesToggle?.checked;
-        const fileInput = els.fileInput;
+        const allCompanies = document.getElementById('lgp-all-companies').checked;
+        const fileInput = document.getElementById('lgp-video-file');
 
         const targetCompanies = allCompanies ? [] : Array.from(
             document.querySelectorAll('input[name="target_companies"]:checked')
@@ -283,9 +353,10 @@
 
         let contentUrl = document.getElementById('lgp-video-url').value.trim();
 
-        if (fileInput?.files?.[0]) {
+        // If a file is selected, upload it first and use returned URL
+        if (fileInput && fileInput.files && fileInput.files[0]) {
             const uploadResult = await uploadVideoFile(fileInput.files[0]);
-            if (!uploadResult?.url) {
+            if (!uploadResult || !uploadResult.url) {
                 showError('Upload failed');
                 return;
             }
@@ -297,32 +368,36 @@
             return;
         }
 
-        const payload = {
+        const data = {
             title: document.getElementById('lgp-video-title').value,
             description: document.getElementById('lgp-video-description').value,
             content_url: contentUrl,
             category: document.getElementById('lgp-video-category').value,
             duration: parseInt(document.getElementById('lgp-video-duration').value) || 0,
-            target_companies: targetCompanies,
+            target_companies: targetCompanies
         };
 
         try {
             const url = videoId ? `/${videoId}` : '';
             const method = videoId ? 'PUT' : 'POST';
+
             const response = await apiFetch(url, {
-                method,
+                method: method,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
+                body: JSON.stringify(data)
             });
 
-            if (!response.ok) throw new Error('Failed to save video');
+            if (!response.ok) {
+                throw new Error('Failed to save video');
+            }
 
-            closeModal(els.videoModal);
-            if (fileInput) fileInput.value = '';
+            videoModal.classList.add('hidden');
+            fileInput.value = '';
             showSuccess(videoId ? 'Video updated successfully' : 'Video added successfully');
             loadVideos();
-        } catch (err) {
-            console.error('Error saving video:', err);
+
+        } catch (error) {
+            console.error('Error saving video:', error);
             showError('Failed to save video');
         }
     }
@@ -330,99 +405,154 @@
     async function uploadVideoFile(file) {
         const formData = new FormData();
         formData.append('file', file);
-        const response = await apiFetch('/upload', { method: 'POST', body: formData });
+
+        const response = await apiFetch('/upload', {
+            method: 'POST',
+            body: formData
+        });
+
         if (!response.ok) {
-            console.error('Upload failed', await response.text());
+            const errText = await response.text();
+            console.error('Upload failed', errText);
             return null;
         }
-        return response.json();
+
+        return await response.json();
     }
 
-    // --- CRUD helpers ----------------------------------------------------
+    /**
+     * Edit video
+     */
     function editVideo(videoId) {
         openVideoModal(videoId);
     }
 
+    /**
+     * Delete video
+     */
     async function deleteVideo(videoId) {
-        if (!confirm('Are you sure you want to delete this video?')) return;
+        if (!confirm('Are you sure you want to delete this video?')) {
+            return;
+        }
 
         try {
-            const response = await apiFetch(`/${videoId}`, { method: 'DELETE' });
-            if (!response.ok) throw new Error('Failed to delete video');
+            const response = await apiFetch(`/${videoId}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete video');
+            }
+
             showSuccess('Video deleted successfully');
             loadVideos();
-        } catch (err) {
-            console.error('Error deleting video:', err);
+
+        } catch (error) {
+            console.error('Error deleting video:', error);
             showError('Failed to delete video');
         }
     }
 
-    // --- Player ---------------------------------------------------------
-    function playVideo(videoId) {
+    /**
+     * Play video in modal
+     */
+    async function playVideo(videoId) {
         const video = videos.find(v => v.id == videoId);
-        if (!video || !els.playerModal) return;
+        if (!video) return;
 
         const player = document.getElementById('lgp-video-player');
         const title = document.getElementById('lgp-player-title');
         const description = document.getElementById('lgp-video-description');
 
-        if (title) title.textContent = video.title;
-        if (description) description.textContent = video.description || '';
-        if (player) player.innerHTML = embedVideo(video.content_url);
+        if (!player || !title || !description) return;
 
-        els.playerModal.classList.remove('hidden');
+        title.textContent = video.title;
+        description.textContent = video.description || '';
+
+        // Embed video based on URL
+        player.innerHTML = embedVideo(video.content_url);
+
+        playerModal.classList.remove('hidden');
     }
 
+    /**
+     * Embed video from URL
+     */
     function embedVideo(url) {
-        if (!url) return '<p>Invalid video URL</p>';
+        // YouTube
         if (url.includes('youtube.com') || url.includes('youtu.be')) {
             const videoId = extractYouTubeId(url);
             return `<iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>`;
         }
+
+        // Vimeo
         if (url.includes('vimeo.com')) {
             const videoId = url.split('/').pop();
             return `<iframe src="https://player.vimeo.com/video/${videoId}" allowfullscreen></iframe>`;
         }
+
+        // Direct video
         return `<video controls src="${url}" style="width:100%;height:auto;"></video>`;
     }
 
+    /**
+     * Extract YouTube video ID from URL
+     */
     function extractYouTubeId(url) {
         const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
-        return url.match(regex)?.[1] || '';
+        const match = url.match(regex);
+        return match ? match[1] : '';
     }
 
-    // --- Utilities ------------------------------------------------------
+    /**
+     * Format duration in seconds to MM:SS
+     */
     function formatDuration(seconds) {
-        const mins = Math.floor(seconds / 60) || 0;
-        const secs = Math.max(0, seconds % 60);
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     }
 
-    function debounce(fn, wait) {
+    /**
+     * Debounce function
+     */
+    function debounce(func, wait) {
         let timeout;
-        return (...args) => {
+        return function (...args) {
             clearTimeout(timeout);
-            timeout = setTimeout(() => fn.apply(null, args), wait);
+            timeout = setTimeout(() => func.apply(this, args), wait);
         };
     }
 
+    /**
+     * Escape HTML
+     */
     function escapeHtml(text) {
         const div = document.createElement('div');
-        div.textContent = text ?? '';
+        div.textContent = text;
         return div.innerHTML;
     }
 
+    /**
+     * Show success message
+     */
     function showSuccess(message) {
+        // Simple alert for now - can be replaced with toast notification
         alert(message);
     }
 
+    /**
+     * Show error message
+     */
     function showError(message) {
         alert('Error: ' + message);
     }
 
+    // Initialize when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
         init();
     }
+
 })();

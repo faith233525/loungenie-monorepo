@@ -1,24 +1,9 @@
 /**
- * CSV Company Location Import - LounGenie Portal Design
- * Matches portal design system: Teal (#3AA6B9) & Cyan (#25D0EE)
- * 
+ * CSV Partner Import - Styles
+ * Clean, professional styling for WordPress admin
+ *
  * @package LounGenie Portal
- * @version 1.9.1
  */
-
-:root {
-    --lgp-brand-teal: #3AA6B9;
-    --lgp-brand-teal-dark: #3393A3;
-    --lgp-brand-cyan: #25D0EE;
-    --lgp-brand-cyan-dark: #1AB9D4;
-    --lgp-atmosphere-primary: #E9F8F9;
-    --lgp-structure-navy: #0F172A;
-    --lgp-structure-headline: #0F172A;
-    --lgp-structure-body: #454F5E;
-    --lgp-structure-secondary: #7A8699;
-    --lgp-structure-tertiary: #94A3B8;
-    --lgp-atmosphere-border: #D8E9EC;
-}
 
 /* Import Page Layout */
 .lgp-csv-import-page {
@@ -35,11 +20,11 @@
 .lgp-csv-upload-card,
 .lgp-csv-results {
     background: #fff;
-    border: 1px solid var(--lgp-atmosphere-border);
-    border-radius: 6px;
-    padding: 30px;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px 30px;
     margin-bottom: 20px;
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
 }
 
 .lgp-csv-format-card h2,
@@ -47,20 +32,17 @@
 .lgp-csv-results h2 {
     margin-top: 0;
     margin-bottom: 20px;
-    font-size: 20px;
-    color: var(--lgp-structure-headline);
-    border-bottom: 2px solid var(--lgp-atmosphere-border);
-    padding-bottom: 15px;
-    font-weight: 700;
-    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 18px;
+    color: #1d2327;
+    border-bottom: 1px solid #dcdcde;
+    padding-bottom: 10px;
 }
 
 .lgp-csv-format-card h3 {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
-    color: var(--lgp-structure-headline);
-    margin: 25px 0 12px;
-    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: #2c3338;
+    margin: 20px 0 10px;
 }
 
 /* Column Lists */
@@ -69,100 +51,71 @@
     padding: 0;
     margin: 0 0 20px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 8px;
 }
 
 .lgp-column-list li {
-    padding: 12px 16px;
-    background: linear-gradient(135deg, var(--lgp-atmosphere-primary) 0%, #F5FBFC 100%);
-    border-left: 4px solid var(--lgp-brand-teal);
-    border-radius: 6px;
+    padding: 8px 12px;
+    background: #f6f7f7;
+    border-left: 3px solid #2271b1;
+    border-radius: 3px;
     font-size: 13px;
-    color: var(--lgp-structure-body);
-    transition: all 0.2s ease;
-}
-
-.lgp-column-list li:hover {
-    border-left-color: var(--lgp-brand-cyan);
-    box-shadow: 0 2px 6px rgba(58, 166, 185, 0.15);
 }
 
 .lgp-column-list.lgp-optional li {
-    border-left-color: var(--lgp-structure-secondary);
-    background: linear-gradient(135deg, #F5FBFC 0%, #FFFFFF 100%);
+    border-left-color: #646970;
+    background: #fafafa;
 }
 
 .lgp-column-list code {
-    font-weight: 700;
-    color: var(--lgp-brand-teal);
+    font-weight: 600;
+    color: #2271b1;
     background: transparent;
-    padding: 0 4px;
-    font-family: 'Monaco', 'Courier New', monospace;
+    padding: 0;
 }
 
 .lgp-column-list.lgp-optional code {
-    color: var(--lgp-structure-secondary);
+    color: #646970;
 }
 
 /* CSV Notes */
 .lgp-csv-notes {
-    background: linear-gradient(135deg, var(--lgp-atmosphere-primary) 0%, #F5FBFC 100%);
-    border-left: 4px solid var(--lgp-brand-teal);
-    padding: 20px 24px;
-    margin: 25px 0;
-    border-radius: 6px;
+    background: #f0f6fc;
+    border-left: 4px solid #2271b1;
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 3px;
 }
 
 .lgp-csv-notes strong {
-    color: var(--lgp-structure-headline);
-    font-weight: 600;
+    color: #1d2327;
 }
 
 .lgp-csv-notes ul {
-    margin: 12px 0 0;
+    margin: 10px 0 0;
     padding-left: 20px;
 }
 
 .lgp-csv-notes li {
-    margin-bottom: 6px;
-    color: var(--lgp-structure-body);
+    margin-bottom: 5px;
+    color: #2c3338;
     font-size: 13px;
-    line-height: 1.5;
 }
 
 /* Sample Download */
 .lgp-sample-download {
-    margin-top: 25px;
+    margin-top: 20px;
     padding-top: 20px;
-    border-top: 1px solid var(--lgp-atmosphere-border);
-}
-
-.lgp-sample-download .button {
-    background: var(--lgp-brand-teal);
-    border-color: var(--lgp-brand-teal);
-    color: #FFFFFF;
-    font-weight: 600;
-    padding: 10px 24px;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-}
-
-.lgp-sample-download .button:hover {
-    background: var(--lgp-brand-teal-dark);
-    border-color: var(--lgp-brand-teal-dark);
-    box-shadow: 0 2px 8px rgba(58, 166, 185, 0.25);
+    border-top: 1px solid #dcdcde;
 }
 
 /* File Upload */
 .lgp-file-input-wrapper {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 25px;
-    padding: 20px;
-    background: var(--lgp-atmosphere-primary);
-    border-radius: 6px;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
 #lgp-csv-file {
@@ -170,54 +123,33 @@
 }
 
 .lgp-file-input-wrapper label {
-    background: var(--lgp-brand-teal);
-    border: 2px solid var(--lgp-brand-teal);
-    color: #FFFFFF;
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
     margin: 0;
 }
 
-.lgp-file-input-wrapper label:hover {
-    background: var(--lgp-brand-teal-dark);
-    border-color: var(--lgp-brand-teal-dark);
-    box-shadow: 0 2px 8px rgba(58, 166, 185, 0.25);
-}
-
 .lgp-file-name {
-    color: var(--lgp-structure-secondary);
+    color: #646970;
     font-size: 13px;
     font-style: italic;
-    margin-left: 8px;
 }
 
 /* Import Options */
 .lgp-import-options {
-    margin-bottom: 25px;
-    padding: 16px 20px;
-    background: #F5FBFC;
-    border: 1px solid var(--lgp-atmosphere-border);
-    border-radius: 6px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f6f7f7;
+    border-radius: 3px;
 }
 
 .lgp-import-options label {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     cursor: pointer;
     font-size: 14px;
-    color: var(--lgp-structure-body);
-    margin: 0;
 }
 
 .lgp-import-options input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    accent-color: var(--lgp-brand-teal);
+    margin: 0;
 }
 
 /* Form Actions */
@@ -228,31 +160,12 @@
 }
 
 #lgp-upload-btn {
-    background: var(--lgp-brand-cyan);
-    border-color: var(--lgp-brand-cyan);
-    color: #FFFFFF;
-    padding: 12px 32px;
-    font-weight: 600;
-    border-radius: 4px;
-    min-width: 200px;
-    transition: all 0.2s ease;
-}
-
-#lgp-upload-btn:hover {
-    background: var(--lgp-brand-cyan-dark);
-    border-color: var(--lgp-brand-cyan-dark);
-    box-shadow: 0 2px 8px rgba(37, 208, 238, 0.25);
-}
-
-#lgp-upload-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+    min-width: 180px;
 }
 
 .lgp-form-actions .spinner {
     float: none;
     margin: 0;
-    margin-left: 10px;
 }
 
 /* Results Display */
@@ -264,106 +177,69 @@
 }
 
 .lgp-stat {
-    background: linear-gradient(135deg, #FFFFFF 0%, #F5FBFC 100%);
-    padding: 25px;
-    border-radius: 8px;
+    background: #f6f7f7;
+    padding: 20px;
+    border-radius: 4px;
     text-align: center;
-    border: 2px solid var(--lgp-atmosphere-border);
-    transition: all 0.2s ease;
-}
-
-.lgp-stat:hover {
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+    border: 2px solid #dcdcde;
 }
 
 .lgp-stat-success {
-    border-color: #10B981;
-    background: linear-gradient(135deg, #F0FDF4 0%, #FFFFFF 100%);
+    border-color: #00a32a;
+    background: #f0f6fc;
 }
 
 .lgp-stat-error {
-    border-color: #EF4444;
-    background: linear-gradient(135deg, #FEF2F2 0%, #FFFFFF 100%);
+    border-color: #d63638;
+    background: #fcf0f1;
 }
 
 .lgp-stat-label {
     display: block;
-    font-size: 12px;
-    color: var(--lgp-structure-secondary);
-    font-weight: 700;
-    margin-bottom: 10px;
+    font-size: 13px;
+    color: #646970;
+    font-weight: 600;
+    margin-bottom: 8px;
     text-transform: uppercase;
-    letter-spacing: 0.6px;
-    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    letter-spacing: 0.5px;
 }
 
 .lgp-stat-value {
     display: block;
-    font-size: 36px;
+    font-size: 32px;
     font-weight: 700;
-    color: var(--lgp-brand-teal);
+    color: #1d2327;
     line-height: 1;
-    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 .lgp-stat-success .lgp-stat-value {
-    color: #10B981;
+    color: #00a32a;
 }
 
 .lgp-stat-error .lgp-stat-value {
-    color: #EF4444;
+    color: #d63638;
 }
 
 /* Results Tables */
 .lgp-error-details,
 .lgp-success-details {
     margin-top: 30px;
-    padding: 20px;
-    background: #FFFFFF;
-    border: 1px solid var(--lgp-atmosphere-border);
-    border-radius: 8px;
 }
 
 .lgp-error-details h3,
 .lgp-success-details h3 {
-    color: var(--lgp-structure-headline);
-    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 16px;
-    font-weight: 700;
-    margin: 0 0 20px;
+    margin-bottom: 15px;
+    color: #1d2327;
 }
 
 .lgp-error-details table,
 .lgp-success-details table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.lgp-error-details th,
-.lgp-success-details th {
-    background: var(--lgp-atmosphere-primary);
-    color: var(--lgp-structure-headline);
-    padding: 12px;
-    text-align: left;
-    font-weight: 600;
-    border-bottom: 2px solid var(--lgp-atmosphere-border);
-}
-
-.lgp-error-details td,
-.lgp-success-details td {
-    padding: 12px;
-    border-bottom: 1px solid var(--lgp-atmosphere-border);
-    color: var(--lgp-structure-body);
-    font-size: 13px;
-}
-
-.lgp-error-details tr:hover,
-.lgp-success-details tr:hover {
-    background: var(--lgp-atmosphere-primary);
+    margin-top: 10px;
 }
 
 .lgp-error-message {
-    color: #EF4444;
+    color: #d63638;
     font-weight: 500;
 }
 
@@ -377,20 +253,20 @@
 }
 
 .lgp-status-active {
-    background: #D8EFF3;
-    color: var(--lgp-brand-teal);
+    background: #00a32a;
+    color: #fff;
 }
 
 .lgp-status-inactive {
-    background: #F3F4F6;
-    color: var(--lgp-structure-secondary);
+    background: #646970;
+    color: #fff;
 }
 
 .lgp-action-label {
     display: block;
     margin-top: 4px;
     font-size: 11px;
-    color: var(--lgp-structure-secondary);
+    color: #646970;
     font-style: italic;
 }
 
@@ -400,7 +276,7 @@
     .lgp-csv-format-card,
     .lgp-csv-upload-card,
     .lgp-csv-results {
-        padding: 20px;
+        padding: 15px;
     }
 
     .lgp-column-list {
@@ -429,7 +305,8 @@
 
 /* Loading States */
 .lgp-csv-upload-card.is-loading {
-    opacity: 0.7;
+    opacity: 0.6;
+    pointer-events: none;
 }
 
 .spinner.is-active {
@@ -438,13 +315,13 @@
 
 /* Accessibility */
 .lgp-csv-import-page :focus-visible {
-    outline: 2px solid var(--lgp-brand-teal);
+    outline: 2px solid #2271b1;
     outline-offset: 2px;
 }
 
 .lgp-csv-import-page button:focus-visible,
 .lgp-csv-import-page input:focus-visible {
-    box-shadow: 0 0 0 3px rgba(58, 166, 185, 0.2);
+    box-shadow: 0 0 0 2px #2271b1;
 }
 
 /* Print Styles */

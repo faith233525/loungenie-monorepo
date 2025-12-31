@@ -9,22 +9,6 @@
  */
 
 /* ============================================================================
-   BASE RESET FOR LOGIN PAGE
-   ============================================================================ */
-
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-}
-
-body.lgp-portal {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-}
-
-/* ============================================================================
    LOGIN CONTAINER LAYOUT
    ============================================================================ */
 
@@ -39,11 +23,6 @@ body.lgp-login-page.lgp-screen-center {
     background: linear-gradient(135deg, var(--lgp-color-surface) 0%, #f0fafb 100%);
 }
 
-.lgp-screen-center {
-    padding: var(--lgp-space-6);
-    box-sizing: border-box;
-}
-
 .lgp-card {
     width: 100%;
     max-width: 520px;
@@ -52,28 +31,16 @@ body.lgp-login-page.lgp-screen-center {
     border-radius: var(--lgp-radius-lg);
     box-shadow: var(--lgp-shadow-lg);
     border: 1px solid var(--lgp-color-border);
-    box-sizing: border-box;
 }
 
 .lgp-card.lgp-card-wide {
-    max-width: 90vw;
-    width: 100%;
-}
-
-@media (min-width: 1024px) {
-    .lgp-card.lgp-card-wide {
-        max-width: 980px;
-    }
+    max-width: 720px;
 }
 
 @media (max-width: 640px) {
     .lgp-card {
         margin: var(--lgp-space-4);
         padding: var(--lgp-space-6);
-    }
-
-    .lgp-screen-center {
-        padding: var(--lgp-space-4);
     }
 }
 
@@ -131,26 +98,11 @@ body.lgp-login-page.lgp-screen-center {
 }
 
 .lgp-login-logo {
-    max-width: 550px;
-    max-height: 140px;
+    max-width: 380px;
+    max-height: 80px;
     height: auto;
-    margin-bottom: var(--lgp-space-6);
+    margin-bottom: var(--lgp-space-4);
     display: block;
-    object-fit: contain;
-}
-
-@media (max-width: 768px) {
-    .lgp-login-logo {
-        max-width: 400px;
-        max-height: 100px;
-    }
-}
-
-@media (max-width: 480px) {
-    .lgp-login-logo {
-        max-width: 280px;
-        max-height: 70px;
-    }
 }
 
 /* ============================================================================
@@ -282,7 +234,6 @@ p {
     font-size: var(--lgp-font-size-sm);
     color: var(--lgp-color-text-secondary);
     cursor: pointer;
-    -webkit-user-select: none;
     user-select: none;
     margin-bottom: 0;
     font-weight: normal;
@@ -460,19 +411,13 @@ p {
 
 .lgp-login-card {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1.2fr;
     gap: 0;
     border-radius: var(--lgp-radius-lg);
     overflow: hidden;
     box-shadow: var(--lgp-shadow-lg);
     background: var(--lgp-color-surface-raised);
     border: 1px solid var(--lgp-color-border);
-}
-
-@media (min-width: 769px) {
-    .lgp-login-card {
-        grid-template-columns: 1fr 1.2fr;
-    }
 }
 
 .lgp-login-card.lgp-login-card-flat {
@@ -488,9 +433,6 @@ p {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    min-width: 0;
 }
 
 .lgp-login-sidebar.lgp-login-sidebar-rounded {
@@ -551,9 +493,6 @@ p {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    min-width: 0;
 }
 
 .lgp-login-main h2 {
@@ -566,9 +505,12 @@ p {
 }
 
 @media (max-width: 768px) {
+    .lgp-login-card {
+        grid-template-columns: 1fr;
+    }
+
     .lgp-login-sidebar {
         padding: var(--lgp-space-6);
-        border-radius: var(--lgp-radius-lg) var(--lgp-radius-lg) 0 0;
     }
 
     .lgp-login-main {
@@ -611,13 +553,5 @@ p {
 
     .lgp-btn-lg {
         padding: 12px 18px;
-    }
-
-    .lgp-login-sidebar {
-        padding: var(--lgp-space-5);
-    }
-
-    .lgp-login-main {
-        padding: var(--lgp-space-5);
     }
 }

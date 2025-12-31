@@ -18,20 +18,12 @@ class LGP_Rate_Limiter {
 	/**
 	 * Check if user has exceeded rate limit
 	 *
-	 * DISABLED BY DEFAULT - Set LGP_ENABLE_RATE_LIMITING to true to activate
-	 *
 	 * @param string $action      Action identifier (e.g., 'ticket_create')
 	 * @param int    $limit       Max actions allowed
 	 * @param int    $window_secs Time window in seconds
 	 * @return bool True if limit exceeded, false otherwise
 	 */
 	public static function is_limited( $action, $limit = 5, $window_secs = 3600 ) {
-		// Rate limiting is disabled by default
-		// To enable, add to wp-config.php: define('LGP_ENABLE_RATE_LIMITING', true);
-		if ( ! defined( 'LGP_ENABLE_RATE_LIMITING' ) || ! LGP_ENABLE_RATE_LIMITING ) {
-			return false;
-		}
-
 		$user_id = get_current_user_id();
 		$ip      = self::get_client_ip();
 

@@ -208,9 +208,9 @@ class LGP_Email_To_Ticket {
 	 */
 	private static function is_support_email( $email ) {
 		$support_emails = array(
-			'support@poolsafeinc.com',
-			'tickets@poolsafeinc.com',
-			'help@poolsafeinc.com',
+			'support@loungenie.com',
+			'tickets@loungenie.com',
+			'help@poolsafe.com',
 		);
 
 		return in_array( strtolower( $email ), array_map( 'strtolower', $support_emails ), true );

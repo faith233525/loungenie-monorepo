@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Authentication Class
  * Handles user authentication and session management
@@ -9,7 +8,7 @@
 
 namespace LounGenie\Portal;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -22,33 +21,24 @@ use WP_Error;
  *
  * @package LounGenie\Portal
  */
-class LGP_Auth
-{
+class LGP_Auth {
 
 	/**
-	 * Initialize authentication system.
-	 *
-	 * Sets up all authentication-related hooks including login redirects,
-	 * admin access control, and comprehensive audit logging for authentication
-	 * events (logins, logouts, password changes).
-	 *
-	 * @since 2.0.0
-	 * @return void
+	 * Initialize authentication system
 	 */
-	public static function init()
-	{
+	public static function init() {
 		// Redirect after login to /portal if user has portal role.
-		add_filter('login_redirect', array(__CLASS__, 'redirect_after_login'), 10, 3);
+		add_filter( 'login_redirect', array( __CLASS__, 'redirect_after_login' ), 10, 3 );
 
 		// Audit logging for authentication events.
-		add_action('wp_login', array(__CLASS__, 'log_login_success'), 10, 2);
-		add_action('wp_login_failed', array(__CLASS__, 'log_login_failed'), 10, 2);
-		add_action('wp_logout', array(__CLASS__, 'log_logout'));
-		add_action('password_reset', array(__CLASS__, 'log_password_reset'), 10, 2);
-		add_action('profile_update', array(__CLASS__, 'log_password_change'), 10, 2);
+		add_action( 'wp_login', array( __CLASS__, 'log_login_success' ), 10, 2 );
+		add_action( 'wp_login_failed', array( __CLASS__, 'log_login_failed' ), 10, 2 );
+		add_action( 'wp_logout', array( __CLASS__, 'log_logout' ) );
+		add_action( 'password_reset', array( __CLASS__, 'log_password_reset' ), 10, 2 );
+		add_action( 'profile_update', array( __CLASS__, 'log_password_change' ), 10, 2 );
 
 		// Prevent partners from landing in WordPress admin; send to /portal instead.
-		add_action('admin_init', array(__CLASS__, 'maybe_redirect_admin_to_portal'));
+		add_action( 'admin_init', array( __CLASS__, 'maybe_redirect_admin_to_portal' ) );
 	}
 
 	/**
@@ -59,16 +49,15 @@ class LGP_Auth
 	 * @param WP_User|WP_Error $user User object.
 	 * @return string Redirect URL.
 	 */
-	public static function redirect_after_login($redirect_to, $request, $user)
-	{
-		if (! isset($user->roles) || ! is_array($user->roles)) {
+	public static function redirect_after_login( $redirect_to, $request, $user ) {
+		if ( ! isset( $user->roles ) || ! is_array( $user->roles ) ) {
 			return $redirect_to;
 		}
 
 		// Check if user has portal access.
-		$portal_roles = array('lgp_support', 'lgp_partner');
-		if (array_intersect($portal_roles, (array) $user->roles)) {
-			return home_url('/portal');
+		$portal_roles = array( 'lgp_support', 'lgp_partner' );
+		if ( array_intersect( $portal_roles, (array) $user->roles ) ) {
+			return home_url( '/portal' );
 		}
 
 		return $redirect_to;
@@ -76,42 +65,34 @@ class LGP_Auth
 
 	/**
 	 * Redirect non-admin portal users away from /wp-admin to /portal.
-	 *
-	 * Prevents Partners and Support users (without admin capabilities) from
-	 * accessing the WordPress admin area. Instead, redirects them to the
-	 * custom portal interface. Allows AJAX requests to function normally.
-	 *
-	 * @since 2.0.0
-	 * @return void
 	 */
-	public static function maybe_redirect_admin_to_portal()
-	{
-		if (defined('DOING_AJAX') && DOING_AJAX) {
+	public static function maybe_redirect_admin_to_portal() {
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			return; // Allow AJAX.
 		}
 
-		if (! is_user_logged_in()) {
+		if ( ! is_user_logged_in() ) {
 			return;
 		}
 
 		// Only act on dashboard/admin pages.
-		if (! is_admin()) {
+		if ( ! is_admin() ) {
 			return;
 		}
 
 		$current_user = wp_get_current_user();
-		if (empty($current_user->ID)) {
+		if ( empty( $current_user->ID ) ) {
 			return;
 		}
 
 		// Allow users with management capabilities to access admin.
-		if (user_can($current_user, 'manage_options')) {
+		if ( user_can( $current_user, 'manage_options' ) ) {
 			return;
 		}
 
-		$portal_roles = array('lgp_support', 'lgp_partner');
-		if (array_intersect($portal_roles, (array) $current_user->roles)) {
-			wp_safe_redirect(home_url('/portal'));
+		$portal_roles = array( 'lgp_support', 'lgp_partner' );
+		if ( array_intersect( $portal_roles, (array) $current_user->roles ) ) {
+			wp_safe_redirect( home_url( '/portal' ) );
 			exit;
 		}
 	}
@@ -119,76 +100,52 @@ class LGP_Auth
 	/**
 	 * Check if current user has Support Team role.
 	 *
-	 * Verifies that the user is logged in and has the lgp_support role.
-	 * Support users have elevated privileges for managing tickets, units,
-	 * and company credentials.
-	 *
-	 * @since 2.0.0
-	 * @return bool True if user is logged in with Support role, false otherwise.
+	 * @return bool True if user is support.
 	 */
-	public static function is_support()
-	{
-		if (! is_user_logged_in()) {
+	public static function is_support() {
+		if ( ! is_user_logged_in() ) {
 			return false;
 		}
 
 		$current_user = wp_get_current_user();
-		return in_array('lgp_support', (array) $current_user->roles, true);
+		return in_array( 'lgp_support', (array) $current_user->roles, true );
 	}
 
 	/**
 	 * Check if current user has Partner Company role.
 	 *
-	 * Verifies that the user is logged in and has the lgp_partner role.
-	 * Partners have access to their company's data and can create tickets.
-	 *
-	 * @since 2.0.0
-	 * @return bool True if user is logged in with Partner role, false otherwise.
+	 * @return bool True if user is partner.
 	 */
-	public static function is_partner()
-	{
-		if (! is_user_logged_in()) {
+	public static function is_partner() {
+		if ( ! is_user_logged_in() ) {
 			return false;
 		}
 
 		$current_user = wp_get_current_user();
-		return in_array('lgp_partner', (array) $current_user->roles, true);
+		return in_array( 'lgp_partner', (array) $current_user->roles, true );
 	}
 
 	/**
-	 * Get current user's company ID.
+	 * Get current user's company ID (for partners)
 	 *
-	 * Retrieves the company ID associated with the current user's account.
-	 * This is primarily used for Partner users to filter data by company.
-	 * Returns null for users without company association (e.g., Support).
-	 *
-	 * @since 2.0.0
-	 * @return int|null Company ID if set, null if user not logged in or no company assigned.
+	 * @return int|null
 	 */
-	public static function get_user_company_id()
-	{
-		if (! is_user_logged_in()) {
+	public static function get_user_company_id() {
+		if ( ! is_user_logged_in() ) {
 			return null;
 		}
 
 		$current_user = wp_get_current_user();
-		return get_user_meta($current_user->ID, 'lgp_company_id', true);
+		return get_user_meta( $current_user->ID, 'lgp_company_id', true );
 	}
 
 	/**
-	 * Log successful login event.
+	 * Log successful login
 	 *
-	 * Records successful authentication to the audit log including user
-	 * details, role, and IP address for security monitoring and compliance.
-	 *
-	 * @since 2.0.0
-	 * @param string  $user_login Username that logged in.
-	 * @param WP_User $user WordPress user object.
-	 * @return void
-	 * @see LGP_Logger::log_event()
+	 * @param string  $user_login Username
+	 * @param WP_User $user User object
 	 */
-	public static function log_login_success($user_login, $user)
-	{
+	public static function log_login_success( $user_login, $user ) {
 		$company_id = self::get_user_company_id();
 
 		LGP_Logger::log_event(
@@ -198,27 +155,19 @@ class LGP_Auth
 			array(
 				'user_login' => $user_login,
 				'user_email' => $user->user_email,
-				'role'       => implode(', ', $user->roles),
+				'role'       => implode( ', ', $user->roles ),
 				'ip_address' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
 			)
 		);
 	}
 
 	/**
-	 * Log failed login attempt.
+	 * Log failed login attempt
 	 *
-	 * Records failed authentication attempts to the audit log for security
-	 * monitoring. Helps identify brute force attacks and unauthorized access
-	 * attempts. Includes attempted username, error details, and IP address.
-	 *
-	 * @since 2.0.0
-	 * @param string   $username Username that was attempted.
-	 * @param WP_Error $error WordPress error object containing failure details.
-	 * @return void
-	 * @see LGP_Logger::log_event()
+	 * @param string   $username Username attempted
+	 * @param WP_Error $error Error object
 	 */
-	public static function log_login_failed($username, $error)
-	{
+	public static function log_login_failed( $username, $error ) {
 		LGP_Logger::log_event(
 			0,
 			'login_failed',
@@ -232,20 +181,12 @@ class LGP_Auth
 	}
 
 	/**
-	 * Log user logout event.
-	 *
-	 * Records user logout to the audit log for session tracking and
-	 * compliance purposes. Captures user identity and role at logout time.
-	 *
-	 * @since 2.0.0
-	 * @return void
-	 * @see LGP_Logger::log_event()
+	 * Log user logout
 	 */
-	public static function log_logout()
-	{
+	public static function log_logout() {
 		$user = wp_get_current_user();
-		if ($user->ID) {
-			$company_id = get_user_meta($user->ID, 'lgp_company_id', true);
+		if ( $user->ID ) {
+			$company_id = get_user_meta( $user->ID, 'lgp_company_id', true );
 
 			LGP_Logger::log_event(
 				$user->ID,
@@ -253,28 +194,20 @@ class LGP_Auth
 				$company_id,
 				array(
 					'user_login' => $user->user_login,
-					'role'       => implode(', ', $user->roles),
+					'role'       => implode( ', ', $user->roles ),
 				)
 			);
 		}
 	}
 
 	/**
-	 * Log password reset event.
+	 * Log password reset
 	 *
-	 * Records password reset via email link to the audit log for security
-	 * tracking. Password resets are security-sensitive events that should
-	 * be monitored for unauthorized account access attempts.
-	 *
-	 * @since 2.0.0
-	 * @param WP_User $user WordPress user object.
-	 * @param string  $new_pass New password (not logged for security).
-	 * @return void
-	 * @see LGP_Logger::log_event()
+	 * @param WP_User $user User object
+	 * @param string  $new_pass New password
 	 */
-	public static function log_password_reset($user, $new_pass)
-	{
-		$company_id = get_user_meta($user->ID, 'lgp_company_id', true);
+	public static function log_password_reset( $user, $new_pass ) {
+		$company_id = get_user_meta( $user->ID, 'lgp_company_id', true );
 
 		LGP_Logger::log_event(
 			$user->ID,
@@ -288,25 +221,17 @@ class LGP_Auth
 	}
 
 	/**
-	 * Log password change on profile update.
+	 * Log password change (on profile update)
 	 *
-	 * Detects and logs password changes made through profile updates.
-	 * Compares old and new password hashes to determine if password was
-	 * actually changed. Essential for security auditing and compliance.
-	 *
-	 * @since 2.0.0
-	 * @param int     $user_id User ID being updated.
-	 * @param WP_User $old_user_data Previous user data object for comparison.
-	 * @return void
-	 * @see LGP_Logger::log_event()
+	 * @param int     $user_id User ID
+	 * @param WP_User $old_user_data Old user data
 	 */
-	public static function log_password_change($user_id, $old_user_data)
-	{
-		$user = get_userdata($user_id);
+	public static function log_password_change( $user_id, $old_user_data ) {
+		$user = get_userdata( $user_id );
 
 		// Check if password changed
-		if ($user && $user->user_pass !== $old_user_data->user_pass) {
-			$company_id = get_user_meta($user_id, 'lgp_company_id', true);
+		if ( $user && $user->user_pass !== $old_user_data->user_pass ) {
+			$company_id = get_user_meta( $user_id, 'lgp_company_id', true );
 
 			LGP_Logger::log_event(
 				$user_id,
@@ -322,6 +247,6 @@ class LGP_Auth
 }
 
 // Provide global alias for legacy references
-if (! class_exists('\\LGP_Auth', false)) {
-	class_alias(__NAMESPACE__ . '\\LGP_Auth', 'LGP_Auth');
+if ( ! class_exists( '\\LGP_Auth', false ) ) {
+	class_alias( __NAMESPACE__ . '\\LGP_Auth', 'LGP_Auth' );
 }

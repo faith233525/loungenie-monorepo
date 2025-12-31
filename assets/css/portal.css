@@ -332,7 +332,6 @@ a:hover {
     right: 0;
     z-index: 1000;
     color: var(--lgp-color-sidebar);
-    -webkit-backdrop-filter: blur(6px);
     backdrop-filter: blur(6px);
     height: var(--header-height);
     width: 100%;
@@ -1039,8 +1038,7 @@ a:hover {
 /* Show sidebar toggle on smaller screens */
 @media (max-width: 1024px) {
     #lgp-sidebar-toggle {
-        display: block;
-        /* Override inline styles */
+        display: block; /* Override inline styles */
     }
 }
 
@@ -1557,7 +1555,6 @@ a:hover {
 /* Collapsible Section Headers */
 .lgp-card-header.collapsible {
     cursor: pointer;
-    -webkit-user-select: none;
     user-select: none;
     display: flex;
     align-items: center;
@@ -1601,8 +1598,7 @@ a:hover {
 }
 
 .lgp-card.collapsed .lgp-card-body {
-    max-height: 0;
-    /* Collapse animation */
+    max-height: 0; /* Collapse animation */
     overflow: hidden;
 }
 
@@ -1901,6 +1897,7 @@ a:hover {
 /* Responsive Tables - Base */
 .lgp-table-wrapper {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     border-radius: var(--lgp-border-radius);
 }
 
@@ -2201,7 +2198,10 @@ a:hover {
 }
 
 /* Smooth scrolling for sidebar */
-.lgp-sidebar {}
+.lgp-sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--lgp-color-border) transparent;
+}
 
 .lgp-sidebar::-webkit-scrollbar {
     width: 6px;
@@ -2241,13 +2241,11 @@ a:hover {
     }
 
     #lgp-sidebar-toggle {
-        display: block;
-        /* Mobile override */
+        display: block; /* Mobile override */
     }
 
     .lgp-main {
-        margin-left: 0;
-        /* Full width on mobile */
+        margin-left: 0; /* Full width on mobile */
     }
 
     .lgp-header-actions {
@@ -2478,10 +2476,9 @@ html {
 }
 
 .lgp-logo-image {
-    max-height: 80px;
+    max-height: 56px;
     width: auto;
     display: block;
-    transition: max-height 0.3s ease;
 }
 
 .lgp-logo-loungenie,
@@ -2490,12 +2487,11 @@ html {
 .lgp-logo-suffix {
     font-weight: 600;
     white-space: nowrap;
-    transition: font-size 0.3s ease;
 }
 
 .lgp-logo-loungenie {
     color: var(--lgp-color-brand);
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 800;
 }
 
@@ -2506,50 +2502,19 @@ html {
 
 .lgp-logo-poolsafe {
     color: var(--lgp-color-text-primary);
-    font-size: 19px;
+    font-size: 17px;
     font-weight: 700;
 }
 
 .lgp-logo-suffix {
     color: var(--lgp-color-text-tertiary);
-    font-size: 15px;
+    font-size: 14px;
 }
 
-/* Responsive: Tablet screens */
-@media (max-width: 768px) {
-    .lgp-logo-image {
-        max-height: 70px;
-    }
-
-    .lgp-logo-loungenie {
-        font-size: 18px;
-    }
-
-    .lgp-logo-poolsafe {
-        font-size: 17px;
-    }
-
-    .lgp-logo-suffix {
-        font-size: 14px;
-    }
-}
-
-/* Responsive: Mobile screens */
+/* Ensure logo image scales down slightly on small screens */
 @media (max-width: 640px) {
     .lgp-logo-image {
-        max-height: 60px;
-    }
-
-    .lgp-logo-loungenie {
-        font-size: 16px;
-    }
-
-    .lgp-logo-poolsafe {
-        font-size: 15px;
-    }
-
-    .lgp-logo-suffix {
-        font-size: 13px;
+        max-height: 44px;
     }
 }
 
