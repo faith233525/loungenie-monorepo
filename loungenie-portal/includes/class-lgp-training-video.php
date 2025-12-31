@@ -10,14 +10,15 @@
  * @package LounGenie Portal
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if (! defined('ABSPATH') ) {
+    exit;
 }
 
 // Only define if missing to avoid collisions in future updates.
-if ( ! class_exists( 'LGP_Training_Video' ) && class_exists( 'LGP_Help_Guide' ) ) {
-	class LGP_Training_Video extends LGP_Help_Guide {
+if (! class_exists('LGP_Training_Video') && class_exists('LGP_Help_Guide') ) {
+    class LGP_Training_Video extends LGP_Help_Guide
+    {
 
-		// Intentionally empty: inherits all static helpers from LGP_Help_Guide.
-	}
+        // Intentionally empty: inherits all static helpers from LGP_Help_Guide.
+    }
 }

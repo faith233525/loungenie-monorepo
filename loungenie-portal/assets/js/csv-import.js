@@ -33,21 +33,24 @@
             const $fileInput = $('#lgp-csv-file');
             const $fileName = $('.lgp-file-name');
 
-            $fileInput.on('change', function () {
-                const fileName = this.files.length > 0 ? this.files[0].name : lgpCsvImport.translations.noFileChosen || 'No file chosen';
-                $fileName.text(fileName);
-            });
+            $fileInput.on(
+                'change', function () {
+                    const fileName = this.files.length > 0 ? this.files[0].name : lgpCsvImport.translations.noFileChosen || 'No file chosen';
+                    $fileName.text(fileName);
+                }
+            );
         },
 
         /**
          * Setup sample CSV download
          */
         setupSampleDownload: function () {
-            $('#lgp-download-sample-csv').on('click', function (e) {
-                e.preventDefault();
+            $('#lgp-download-sample-csv').on(
+                'click', function (e) {
+                    e.preventDefault();
 
-                // Generate sample CSV content
-                const headers = [
+                    // Generate sample CSV content
+                    const headers = [
                     'company_name',
                     'company_email',
                     'status',
@@ -59,9 +62,9 @@
                     'secondary_contact_title',
                     'secondary_contact_email',
                     'secondary_contact_phone'
-                ];
+                    ];
 
-                const sampleRows = [
+                    const sampleRows = [
                     [
                         'Acme Corporation',
                         'contact@acme.com',
@@ -88,24 +91,27 @@
                         '',
                         ''
                     ]
-                ];
+                    ];
 
-                // Create CSV content
-                let csvContent = 'data:text/csv;charset=utf-8,';
-                csvContent += headers.join(',') + '\n';
-                sampleRows.forEach(function (row) {
-                    csvContent += row.map(field => `"${field}"`).join(',') + '\n';
-                });
+                    // Create CSV content
+                    let csvContent = 'data:text/csv;charset=utf-8,';
+                    csvContent += headers.join(',') + '\n';
+                    sampleRows.forEach(
+                        function (row) {
+                            csvContent += row.map(field => `"${field}"`).join(',') + '\n';
+                        }
+                    );
 
-                // Trigger download
-                const encodedUri = encodeURI(csvContent);
-                const link = document.createElement('a');
-                link.setAttribute('href', encodedUri);
-                link.setAttribute('download', 'partner-import-sample.csv');
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            });
+                    // Trigger download
+                    const encodedUri = encodeURI(csvContent);
+                    const link = document.createElement('a');
+                    link.setAttribute('href', encodedUri);
+                    link.setAttribute('download', 'partner-import-sample.csv');
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            );
         },
 
         /**
@@ -171,23 +177,25 @@
             }
 
             // Upload and process
-            $.ajax({
-                url: lgpCsvImport.ajaxUrl + 'partners',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader('X-WP-Nonce', lgpCsvImport.nonce);
-                },
-                success: this.handleUploadSuccess.bind(this),
-                error: this.handleUploadError.bind(this),
-                complete: function () {
-                    $submitBtn.prop('disabled', false);
-                    $spinner.removeClass('is-active');
-                    $submitBtn.text(dryRun ? 'Preview Import' : 'Upload and Process');
+            $.ajax(
+                {
+                    url: lgpCsvImport.ajaxUrl + 'partners',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('X-WP-Nonce', lgpCsvImport.nonce);
+                    },
+                    success: this.handleUploadSuccess.bind(this),
+                    error: this.handleUploadError.bind(this),
+                    complete: function () {
+                        $submitBtn.prop('disabled', false);
+                        $spinner.removeClass('is-active');
+                        $submitBtn.text(dryRun ? 'Preview Import' : 'Upload and Process');
+                    }
                 }
-            });
+            );
         },
 
         /**
@@ -220,9 +228,11 @@
             }
 
             // Scroll to results
-            $('html, body').animate({
-                scrollTop: $('#lgp-csv-results').offset().top - 100
-            }, 500);
+            $('html, body').animate(
+                {
+                    scrollTop: $('#lgp-csv-results').offset().top - 100
+                }, 500
+            );
 
             // Clear form
             $('#lgp-csv-file').val('');
@@ -259,29 +269,31 @@
             const $successList = $('#lgp-success-list');
             $successList.empty();
 
-            imported.forEach(function (item) {
-                const actionLabel = isDryRun
+            imported.forEach(
+                function (item) {
+                    const actionLabel = isDryRun
                     ? 'Would Import'
                     : (item.action === 'created' ? 'Created' : 'Updated');
 
-                const row = `
-					<tr>
-						<td>${this.escapeHtml(item.name)}</td>
-						<td>${this.escapeHtml(item.email)}</td>
-						<td>
-							<span class="lgp-status-badge lgp-status-${item.status}">
-								${this.escapeHtml(item.status)}
-							</span>
-						</td>
-						<td>
-							${this.escapeHtml(item.primary_contact)}
-							<span class="lgp-action-label">${actionLabel}</span>
-						</td>
-					</tr>
-				`;
+                    const row = `
+                    <tr>
+                    <td>${this.escapeHtml(item.name)}</td>
+                    <td>${this.escapeHtml(item.email)}</td>
+                    <td>
+                    <span class="lgp-status-badge lgp-status-${item.status}">
+                    ${this.escapeHtml(item.status)}
+                    </span>
+                    </td>
+                    <td>
+                    ${this.escapeHtml(item.primary_contact)}
+                    <span class="lgp-action-label">${actionLabel}</span>
+                    </td>
+                    </tr>
+                    `;
 
-                $successList.append(row);
-            }.bind(this));
+                    $successList.append(row);
+                }.bind(this)
+            );
 
             $('#lgp-success-details').show();
         },
@@ -293,17 +305,19 @@
             const $errorList = $('#lgp-error-list');
             $errorList.empty();
 
-            failed.forEach(function (item) {
-                const row = `
-					<tr>
-						<td><strong>Line ${item.line}</strong></td>
-						<td>${this.escapeHtml(item.company || 'N/A')}</td>
-						<td class="lgp-error-message">${this.escapeHtml(item.error)}</td>
-					</tr>
-				`;
+            failed.forEach(
+                function (item) {
+                    const row = `
+                    <tr>
+                    <td><strong>Line ${item.line}</strong></td>
+                    <td>${this.escapeHtml(item.company || 'N/A')}</td>
+                    <td class="lgp-error-message">${this.escapeHtml(item.error)}</td>
+                    </tr>
+                    `;
 
-                $errorList.append(row);
-            }.bind(this));
+                    $errorList.append(row);
+                }.bind(this)
+            );
 
             $('#lgp-error-details').show();
         },
@@ -326,28 +340,38 @@
                 .html('<p>' + this.escapeHtml(message) + '</p>');
 
             // Add dismiss button functionality
-            $notice.on('click', '.notice-dismiss', function () {
-                $notice.fadeOut(300, function () {
-                    $(this).remove();
-                });
-            });
+            $notice.on(
+                'click', '.notice-dismiss', function () {
+                    $notice.fadeOut(
+                        300, function () {
+                            $(this).remove();
+                        }
+                    );
+                }
+            );
 
             // Insert at top of page
             $('.lgp-csv-import-page').prepend($notice);
 
             // Auto-dismiss after 5 seconds (except errors)
             if (type !== 'error') {
-                setTimeout(function () {
-                    $notice.fadeOut(300, function () {
-                        $(this).remove();
-                    });
-                }, 5000);
+                setTimeout(
+                    function () {
+                        $notice.fadeOut(
+                            300, function () {
+                                $(this).remove();
+                            }
+                        );
+                    }, 5000
+                );
             }
 
             // Scroll to notice
-            $('html, body').animate({
-                scrollTop: $notice.offset().top - 100
-            }, 300);
+            $('html, body').animate(
+                {
+                    scrollTop: $notice.offset().top - 100
+                }, 300
+            );
         },
 
         /**
@@ -361,10 +385,12 @@
     };
 
     // Initialize when document ready
-    $(document).ready(function () {
-        if ($('.lgp-csv-import-page').length) {
-            CSVImport.init();
+    $(document).ready(
+        function () {
+            if ($('.lgp-csv-import-page').length) {
+                CSVImport.init();
+            }
         }
-    });
+    );
 
 })(jQuery);

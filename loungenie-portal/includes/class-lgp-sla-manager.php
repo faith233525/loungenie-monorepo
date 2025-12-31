@@ -5,7 +5,7 @@
  * Service Level Agreement tracking and enforcement
  *
  * @package LounGenie Portal
- * @since 1.9.0
+ * @since   1.9.0
  */
 
 if (! defined('ABSPATH')) {
@@ -28,8 +28,8 @@ class LGP_SLA_Manager
     /**
      * Calculate SLA due date
      *
-     * @param string $priority Priority level
-     * @param string $created_at Creation timestamp
+     * @param  string $priority   Priority level
+     * @param  string $created_at Creation timestamp
      * @return string Due date in MySQL format
      */
     public static function calculate_due_date($priority, $created_at = null)
@@ -46,7 +46,7 @@ class LGP_SLA_Manager
     /**
      * Get time remaining until SLA breach
      *
-     * @param string $sla_due_date SLA due date
+     * @param  string $sla_due_date SLA due date
      * @return array Array with hours, minutes, status
      */
     public static function get_time_remaining($sla_due_date)
@@ -100,7 +100,7 @@ class LGP_SLA_Manager
     /**
      * Check if ticket is breaching SLA
      *
-     * @param string $sla_due_date SLA due date
+     * @param  string $sla_due_date SLA due date
      * @return bool
      */
     public static function is_breaching($sla_due_date)
@@ -111,7 +111,7 @@ class LGP_SLA_Manager
     /**
      * Get SLA status badge HTML
      *
-     * @param string $sla_due_date SLA due date
+     * @param  string $sla_due_date SLA due date
      * @return string HTML badge
      */
     public static function get_status_badge($sla_due_date)
@@ -130,7 +130,7 @@ class LGP_SLA_Manager
      * Update ticket SLA on creation
      *
      * @param int    $ticket_id Ticket ID
-     * @param string $priority Priority level
+     * @param string $priority  Priority level
      */
     public static function set_ticket_sla($ticket_id, $priority)
     {

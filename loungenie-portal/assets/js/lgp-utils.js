@@ -25,29 +25,32 @@
      * Debounce function - Delays execution until after wait time has elapsed
      * Prevents excessive function calls (e.g., during rapid scroll/resize)
      * 
-     * @param {Function} func - Function to debounce
-     * @param {Number} wait - Milliseconds to wait
-     * @param {Boolean} immediate - Trigger on leading edge
+     * @param   {Function} func - Function to debounce
+     * @param   {Number} wait - Milliseconds to wait
+     * @param   {Boolean} immediate - Trigger on leading edge
      * @returns {Function} Debounced function
      */
     LGP_Utils.debounce = function (func, wait, immediate) {
         var timeout;
         wait = wait || 300;
 
-        return function executedFunction() {
+        return function executedFunction()
+        {
             var context = this;
             var args = arguments;
 
             var later = function () {
                 timeout = null;
-                if (!immediate) func.apply(context, args);
+                if (!immediate) { func.apply(context, args);
+                }
             };
 
             var callNow = immediate && !timeout;
             clearTimeout(timeout);
             timeout = setTimeout(later, wait);
 
-            if (callNow) func.apply(context, args);
+            if (callNow) { func.apply(context, args);
+            }
         };
     };
 
@@ -55,8 +58,8 @@
      * Throttle function - Ensures function is only called once per time period
      * Useful for continuous events like scroll/resize
      * 
-     * @param {Function} func - Function to throttle
-     * @param {Number} limit - Milliseconds between calls
+     * @param   {Function} func - Function to throttle
+     * @param   {Number} limit - Milliseconds between calls
      * @returns {Function} Throttled function
      */
     LGP_Utils.throttle = function (func, limit) {
@@ -70,9 +73,11 @@
             if (!inThrottle) {
                 func.apply(context, args);
                 inThrottle = true;
-                setTimeout(function () {
-                    inThrottle = false;
-                }, limit);
+                setTimeout(
+                    function () {
+                        inThrottle = false;
+                    }, limit
+                );
             }
         };
     };
@@ -84,15 +89,17 @@
     /**
      * Format date for display
      * 
-     * @param {String|Date} date - Date to format
-     * @param {String} format - Format type: 'short', 'long', 'relative'
+     * @param   {String|Date} date - Date to format
+     * @param   {String} format - Format type: 'short', 'long', 'relative'
      * @returns {String} Formatted date string
      */
     LGP_Utils.formatDate = function (date, format) {
-        if (!date) return '';
+        if (!date) { return '';
+        }
 
         var d = new Date(date);
-        if (isNaN(d.getTime())) return date; // Invalid date
+        if (isNaN(d.getTime())) { return date; // Invalid date
+        }
 
         format = format || 'short';
 
@@ -129,7 +136,7 @@
     /**
      * Get relative time string (e.g., "2 hours ago", "just now")
      * 
-     * @param {Date} date - Date to compare
+     * @param   {Date} date - Date to compare
      * @returns {String} Relative time string
      */
     LGP_Utils.getRelativeTime = function (date) {
@@ -140,12 +147,18 @@
         var hours = Math.floor(minutes / 60);
         var days = Math.floor(hours / 24);
 
-        if (seconds < 60) return 'just now';
-        if (minutes < 60) return minutes + ' minute' + (minutes !== 1 ? 's' : '') + ' ago';
-        if (hours < 24) return hours + ' hour' + (hours !== 1 ? 's' : '') + ' ago';
-        if (days < 7) return days + ' day' + (days !== 1 ? 's' : '') + ' ago';
-        if (days < 30) return Math.floor(days / 7) + ' week' + (Math.floor(days / 7) !== 1 ? 's' : '') + ' ago';
-        if (days < 365) return Math.floor(days / 30) + ' month' + (Math.floor(days / 30) !== 1 ? 's' : '') + ' ago';
+        if (seconds < 60) { return 'just now';
+        }
+        if (minutes < 60) { return minutes + ' minute' + (minutes !== 1 ? 's' : '') + ' ago';
+        }
+        if (hours < 24) { return hours + ' hour' + (hours !== 1 ? 's' : '') + ' ago';
+        }
+        if (days < 7) { return days + ' day' + (days !== 1 ? 's' : '') + ' ago';
+        }
+        if (days < 30) { return Math.floor(days / 7) + ' week' + (Math.floor(days / 7) !== 1 ? 's' : '') + ' ago';
+        }
+        if (days < 365) { return Math.floor(days / 30) + ' month' + (Math.floor(days / 30) !== 1 ? 's' : '') + ' ago';
+        }
         return Math.floor(days / 365) + ' year' + (Math.floor(days / 365) !== 1 ? 's' : '') + ' ago';
     };
 
@@ -156,19 +169,20 @@
     /**
      * Truncate string with ellipsis
      * 
-     * @param {String} str - String to truncate
-     * @param {Number} maxLength - Maximum length
+     * @param   {String} str - String to truncate
+     * @param   {Number} maxLength - Maximum length
      * @returns {String} Truncated string
      */
     LGP_Utils.truncate = function (str, maxLength) {
-        if (!str || str.length <= maxLength) return str;
+        if (!str || str.length <= maxLength) { return str;
+        }
         return str.substring(0, maxLength - 3) + '...';
     };
 
     /**
      * Escape HTML to prevent XSS
      * 
-     * @param {String} text - Text to escape
+     * @param   {String} text - Text to escape
      * @returns {String} Escaped text
      */
     LGP_Utils.escapeHtml = function (text) {
@@ -179,13 +193,16 @@
             '"': '&quot;',
             "'": '&#039;'
         };
-        return text.replace(/[&<>"']/g, function (m) { return map[m]; });
+        return text.replace(
+            /[&<>"']/g, function (m) {
+                return map[m]; }
+        );
     };
 
     /**
      * Generate unique ID
      * 
-     * @param {String} prefix - Optional prefix
+     * @param   {String} prefix - Optional prefix
      * @returns {String} Unique ID
      */
     LGP_Utils.uniqueId = function (prefix) {
@@ -227,19 +244,25 @@
         document.body.appendChild(notification);
 
         // Trigger animation
-        setTimeout(function () {
-            notification.classList.add('lgp-notification-show');
-        }, 10);
+        setTimeout(
+            function () {
+                notification.classList.add('lgp-notification-show');
+            }, 10
+        );
 
         // Close button
-        notification.querySelector('.lgp-notification-close').addEventListener('click', function () {
-            LGP_Utils.closeNotification(notification);
-        });
+        notification.querySelector('.lgp-notification-close').addEventListener(
+            'click', function () {
+                LGP_Utils.closeNotification(notification);
+            }
+        );
 
         // Auto-close
-        setTimeout(function () {
-            LGP_Utils.closeNotification(notification);
-        }, duration);
+        setTimeout(
+            function () {
+                LGP_Utils.closeNotification(notification);
+            }, duration
+        );
     };
 
     /**
@@ -249,17 +272,19 @@
      */
     LGP_Utils.closeNotification = function (notification) {
         notification.classList.remove('lgp-notification-show');
-        setTimeout(function () {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 300);
+        setTimeout(
+            function () {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300
+        );
     };
 
     /**
      * Get icon for notification type
      * 
-     * @param {String} type - Notification type
+     * @param   {String} type - Notification type
      * @returns {String} Icon HTML
      */
     LGP_Utils.getNotificationIcon = function (type) {
@@ -279,8 +304,8 @@
     /**
      * Safely query DOM element
      * 
-     * @param {String} selector - CSS selector
-     * @param {HTMLElement} context - Context element (default: document)
+     * @param   {String} selector - CSS selector
+     * @param   {HTMLElement} context - Context element (default: document)
      * @returns {HTMLElement|null} Found element or null
      */
     LGP_Utils.$ = function (selector, context) {
@@ -291,8 +316,8 @@
     /**
      * Safely query multiple DOM elements
      * 
-     * @param {String} selector - CSS selector
-     * @param {HTMLElement} context - Context element (default: document)
+     * @param   {String} selector - CSS selector
+     * @param   {HTMLElement} context - Context element (default: document)
      * @returns {Array} Array of elements
      */
     LGP_Utils.$$ = function (selector, context) {
@@ -303,17 +328,18 @@
     /**
      * Add event listener with cleanup
      * 
-     * @param {HTMLElement|String} element - Element or selector
-     * @param {String} event - Event type
-     * @param {Function} handler - Event handler
-     * @param {Object} options - Event options
+     * @param   {HTMLElement|String} element - Element or selector
+     * @param   {String} event - Event type
+     * @param   {Function} handler - Event handler
+     * @param   {Object} options - Event options
      * @returns {Function} Cleanup function
      */
     LGP_Utils.on = function (element, event, handler, options) {
         if (typeof element === 'string') {
             element = LGP_Utils.$(element);
         }
-        if (!element) return function () { };
+        if (!element) { return function () { };
+        }
 
         element.addEventListener(event, handler, options);
 
@@ -331,11 +357,13 @@
      * @param {Object} detail - Event detail data
      */
     LGP_Utils.trigger = function (element, eventName, detail) {
-        var event = new CustomEvent(eventName, {
-            detail: detail || {},
-            bubbles: true,
-            cancelable: true
-        });
+        var event = new CustomEvent(
+            eventName, {
+                detail: detail || {},
+                bubbles: true,
+                cancelable: true
+            }
+        );
         element.dispatchEvent(event);
     };
 
@@ -346,54 +374,56 @@
     /**
      * Make AJAX request
      * 
-     * @param {Object} options - Request options
+     * @param   {Object} options - Request options
      * @returns {Promise} Promise that resolves with response
      */
     LGP_Utils.ajax = function (options) {
-        return new Promise(function (resolve, reject) {
-            var xhr = new XMLHttpRequest();
-            var method = (options.method || 'GET').toUpperCase();
-            var url = options.url;
-            var data = options.data || null;
-            var headers = options.headers || {};
+        return new Promise(
+            function (resolve, reject) {
+                var xhr = new XMLHttpRequest();
+                var method = (options.method || 'GET').toUpperCase();
+                var url = options.url;
+                var data = options.data || null;
+                var headers = options.headers || {};
 
-            xhr.open(method, url, true);
+                xhr.open(method, url, true);
 
-            // Set default headers
-            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                // Set default headers
+                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-            // Set custom headers
-            for (var key in headers) {
-                if (headers.hasOwnProperty(key)) {
-                    xhr.setRequestHeader(key, headers[key]);
-                }
-            }
-
-            // Handle JSON data
-            if (data && typeof data === 'object' && !(data instanceof FormData)) {
-                xhr.setRequestHeader('Content-Type', 'application/json');
-                data = JSON.stringify(data);
-            }
-
-            xhr.onload = function () {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    try {
-                        var response = JSON.parse(xhr.responseText);
-                        resolve(response);
-                    } catch (e) {
-                        resolve(xhr.responseText);
+                // Set custom headers
+                for (var key in headers) {
+                    if (headers.hasOwnProperty(key)) {
+                        xhr.setRequestHeader(key, headers[key]);
                     }
-                } else {
-                    reject(new Error('Request failed with status ' + xhr.status));
                 }
-            };
 
-            xhr.onerror = function () {
-                reject(new Error('Network error'));
-            };
+                // Handle JSON data
+                if (data && typeof data === 'object' && !(data instanceof FormData)) {
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    data = JSON.stringify(data);
+                }
 
-            xhr.send(data);
-        });
+                xhr.onload = function () {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        try {
+                            var response = JSON.parse(xhr.responseText);
+                            resolve(response);
+                        } catch (e) {
+                            resolve(xhr.responseText);
+                        }
+                    } else {
+                        reject(new Error('Request failed with status ' + xhr.status));
+                    }
+                };
+
+                xhr.onerror = function () {
+                    reject(new Error('Network error'));
+                };
+
+                xhr.send(data);
+            }
+        );
     };
 
     /* ============================================================================
@@ -403,7 +433,7 @@
     /**
      * Validate email format
      * 
-     * @param {String} email - Email to validate
+     * @param   {String} email - Email to validate
      * @returns {Boolean} Is valid email
      */
     LGP_Utils.isValidEmail = function (email) {
@@ -414,7 +444,7 @@
     /**
      * Validate phone number
      * 
-     * @param {String} phone - Phone to validate
+     * @param   {String} phone - Phone to validate
      * @returns {Boolean} Is valid phone
      */
     LGP_Utils.isValidPhone = function (phone) {
@@ -425,7 +455,7 @@
     /**
      * Validate URL
      * 
-     * @param {String} url - URL to validate
+     * @param   {String} url - URL to validate
      * @returns {Boolean} Is valid URL
      */
     LGP_Utils.isValidUrl = function (url) {
@@ -444,11 +474,12 @@
     /**
      * Format file size for display
      * 
-     * @param {Number} bytes - File size in bytes
+     * @param   {Number} bytes - File size in bytes
      * @returns {String} Formatted size (e.g., "1.5 MB")
      */
     LGP_Utils.formatFileSize = function (bytes) {
-        if (bytes === 0) return '0 Bytes';
+        if (bytes === 0) { return '0 Bytes';
+        }
 
         var k = 1024;
         var sizes = ['Bytes', 'KB', 'MB', 'GB'];
@@ -460,7 +491,7 @@
     /**
      * Get file extension
      * 
-     * @param {String} filename - Filename
+     * @param   {String} filename - Filename
      * @returns {String} File extension (lowercase)
      */
     LGP_Utils.getFileExtension = function (filename) {
@@ -470,8 +501,8 @@
     /**
      * Check if file type is allowed
      * 
-     * @param {String} filename - Filename
-     * @param {Array} allowedTypes - Array of allowed extensions
+     * @param   {String} filename - Filename
+     * @param   {Array} allowedTypes - Array of allowed extensions
      * @returns {Boolean} Is file type allowed
      */
     LGP_Utils.isAllowedFileType = function (filename, allowedTypes) {
@@ -493,7 +524,8 @@
         if (typeof element === 'string') {
             element = LGP_Utils.$(element);
         }
-        if (!element) return;
+        if (!element) { return;
+        }
 
         element.classList.add('lgp-loading');
         element.disabled = true;
@@ -514,7 +546,8 @@
         if (typeof element === 'string') {
             element = LGP_Utils.$(element);
         }
-        if (!element) return;
+        if (!element) { return;
+        }
 
         element.classList.remove('lgp-loading');
         element.disabled = false;
@@ -547,8 +580,8 @@
     /**
      * Get data from localStorage
      * 
-     * @param {String} key - Storage key
-     * @param {*} defaultValue - Default value if not found
+     * @param   {String} key - Storage key
+     * @param   {*} defaultValue - Default value if not found
      * @returns {*} Stored value or default
      */
     LGP_Utils.getFromStorage = function (key, defaultValue) {

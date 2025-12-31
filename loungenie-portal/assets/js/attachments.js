@@ -35,26 +35,32 @@
         setupDragDrop: function () {
             var self = this;
 
-            $(document).on('dragover', '.lgp-attachment-zone', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                $(this).addClass('drag-over');
-            });
+            $(document).on(
+                'dragover', '.lgp-attachment-zone', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $(this).addClass('drag-over');
+                }
+            );
 
-            $(document).on('dragleave', '.lgp-attachment-zone', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                $(this).removeClass('drag-over');
-            });
+            $(document).on(
+                'dragleave', '.lgp-attachment-zone', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $(this).removeClass('drag-over');
+                }
+            );
 
-            $(document).on('drop', '.lgp-attachment-zone', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                $(this).removeClass('drag-over');
+            $(document).on(
+                'drop', '.lgp-attachment-zone', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $(this).removeClass('drag-over');
 
-                var files = e.originalEvent.dataTransfer.files;
-                self.uploadFiles(files, $(this));
-            });
+                    var files = e.originalEvent.dataTransfer.files;
+                    self.uploadFiles(files, $(this));
+                }
+            );
         },
 
         /**
@@ -130,27 +136,29 @@
             formData.append('nonce', lgpAttachments.nonce);
             formData.append('file', file);
 
-            $.ajax({
-                url: lgpAttachments.ajaxUrl,
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                beforeSend: function () {
-                    self.showUploading($zone, file.name);
-                },
-                success: function (response) {
-                    if (response.success) {
-                        self.addAttachmentToList($zone, response.data);
-                        self.showSuccess($zone, file.name + ' uploaded successfully');
-                    } else {
-                        self.showError($zone, response.data.message);
+            $.ajax(
+                {
+                    url: lgpAttachments.ajaxUrl,
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function () {
+                        self.showUploading($zone, file.name);
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            self.addAttachmentToList($zone, response.data);
+                            self.showSuccess($zone, file.name + ' uploaded successfully');
+                        } else {
+                            self.showError($zone, response.data.message);
+                        }
+                    },
+                    error: function () {
+                        self.showError($zone, 'Failed to upload ' + file.name);
                     }
-                },
-                error: function () {
-                    self.showError($zone, 'Failed to upload ' + file.name);
                 }
-            });
+            );
         },
 
         /**
@@ -205,9 +213,11 @@
             var fileId = $btn.data('file-id');
             var $item = $btn.closest('.lgp-attachment-item');
 
-            $item.fadeOut(function () {
-                $(this).remove();
-            });
+            $item.fadeOut(
+                function () {
+                    $(this).remove();
+                }
+            );
 
             // Remove hidden input
             $('input[name="lgp_attachment_ids[]"][value="' + fileId + '"]').remove();
@@ -243,11 +253,15 @@
 
             $message.html('✓ ' + message);
 
-            setTimeout(function () {
-                $message.fadeOut(function () {
-                    $(this).remove();
-                });
-            }, 3000);
+            setTimeout(
+                function () {
+                    $message.fadeOut(
+                        function () {
+                            $(this).remove();
+                        }
+                    );
+                }, 3000
+            );
         },
 
         /**
@@ -263,11 +277,15 @@
 
             $message.html('✗ ' + message);
 
-            setTimeout(function () {
-                $message.fadeOut(function () {
-                    $(this).remove();
-                });
-            }, 5000);
+            setTimeout(
+                function () {
+                    $message.fadeOut(
+                        function () {
+                            $(this).remove();
+                        }
+                    );
+                }, 5000
+            );
         },
 
         /**
@@ -300,7 +318,8 @@
          * Format file size
          */
         formatFileSize: function (bytes) {
-            if (bytes === 0) return '0 Bytes';
+            if (bytes === 0) { return '0 Bytes';
+            }
 
             var k = 1024;
             var sizes = ['Bytes', 'KB', 'MB', 'GB'];
@@ -315,35 +334,45 @@
         setupLogoHoverEffects: function () {
             var $logo = $('.lgp-logo');
 
-            $logo.on('mouseenter', function () {
-                $(this).css({
-                    'transform': 'scale(1.02)',
-                    'transition': 'transform 150ms cubic-bezier(0.4, 0, 0.2, 1)'
-                });
-            });
+            $logo.on(
+                'mouseenter', function () {
+                    $(this).css(
+                        {
+                            'transform': 'scale(1.02)',
+                            'transition': 'transform 150ms cubic-bezier(0.4, 0, 0.2, 1)'
+                        }
+                    );
+                }
+            );
 
-            $logo.on('mouseleave', function () {
-                $(this).css({
-                    'transform': 'scale(1)',
-                    'transition': 'transform 150ms cubic-bezier(0.4, 0, 0.2, 1)'
-                });
-            });
+            $logo.on(
+                'mouseleave', function () {
+                    $(this).css(
+                        {
+                            'transform': 'scale(1)',
+                            'transition': 'transform 150ms cubic-bezier(0.4, 0, 0.2, 1)'
+                        }
+                    );
+                }
+            );
         }
     };
 
     /**
      * Initialize when DOM is ready
      */
-    $(function () {
-        LGPAttachments.init();
+    $(
+        function () {
+            LGPAttachments.init();
 
-        // Add CSS for spinner animation
-        if (!$('#lgp-spinner-css').length) {
-            $('<style id="lgp-spinner-css">').text(
-                '@keyframes lgpSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }' +
-                '.lgp-spinner { display: inline-block; animation: lgpSpin 1s linear infinite; }'
-            ).appendTo('head');
+            // Add CSS for spinner animation
+            if (!$('#lgp-spinner-css').length) {
+                $('<style id="lgp-spinner-css">').text(
+                    '@keyframes lgpSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }' +
+                    '.lgp-spinner { display: inline-block; animation: lgpSpin 1s linear infinite; }'
+                ).appendTo('head');
+            }
         }
-    });
+    );
 
 })(jQuery);

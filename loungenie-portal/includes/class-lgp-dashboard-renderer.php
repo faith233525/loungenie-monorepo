@@ -27,7 +27,7 @@ class LGP_Dashboard_Renderer
         $stats = self::get_dashboard_stats();
         $tickets = self::get_active_tickets();
 
-?>
+        ?>
         <div class="lgp-dashboard-support">
             <h1 class="lgp-page-title">Support Dashboard</h1>
             <p class="lgp-page-subtitle">Real-time monitoring • SLA tracking • Ticket management</p>
@@ -36,7 +36,7 @@ class LGP_Dashboard_Renderer
             <?php self::render_tickets_table($tickets); ?>
             <?php self::render_features_section(); ?>
         </div>
-    <?php
+        <?php
     }
 
     /**
@@ -47,7 +47,7 @@ class LGP_Dashboard_Renderer
         $partner_stats = self::get_partner_stats();
         $partner_tickets = self::get_partner_tickets();
 
-    ?>
+        ?>
         <div class="lgp-dashboard-partner">
             <h1 class="lgp-page-title">Partner Dashboard</h1>
             <p class="lgp-page-subtitle">Your company data • Real-time updates</p>
@@ -55,7 +55,7 @@ class LGP_Dashboard_Renderer
             <?php self::render_stats_grid($partner_stats); ?>
             <?php self::render_tickets_table($partner_tickets); ?>
         </div>
-    <?php
+        <?php
     }
 
     /**
@@ -221,11 +221,11 @@ class LGP_Dashboard_Renderer
      */
     private static function render_stats_grid($stats)
     {
-    ?>
+        ?>
         <div class="lgp-stats-grid">
             <?php
             foreach ($stats as $stat) {
-            ?>
+                ?>
                 <div class="lgp-stat-card">
                     <div class="lgp-stat-icon-box lgp-stat-icon-<?php echo esc_attr($stat['color']); ?>">
                         <?php echo esc_html($stat['icon']); ?>
@@ -236,11 +236,11 @@ class LGP_Dashboard_Renderer
                         <div class="lgp-stat-change"><?php echo esc_html($stat['change']); ?></div>
                     </div>
                 </div>
-            <?php
+                <?php
             }
             ?>
         </div>
-    <?php
+        <?php
     }
 
     /**
@@ -250,7 +250,7 @@ class LGP_Dashboard_Renderer
      */
     private static function render_tickets_table($tickets)
     {
-    ?>
+        ?>
         <div class="lgp-card">
             <div class="lgp-card-header">
                 <h3 class="lgp-card-title">
@@ -274,7 +274,7 @@ class LGP_Dashboard_Renderer
                         <tbody>
                             <?php
                             if (empty($tickets)) {
-                            ?>
+                                ?>
                                 <tr>
                                     <td colspan="5" style="text-align: center; padding: 40px; color: #7A8699;">
                                         No open tickets at this time.
@@ -285,7 +285,7 @@ class LGP_Dashboard_Renderer
                                 foreach ($tickets as $ticket) {
                                     $priority_color = self::get_priority_badge_class($ticket->priority_level);
                                     $sla_badge = self::get_sla_badge($ticket->sla_due_date);
-                                ?>
+                                    ?>
                                     <tr>
                                         <td><strong>#TK-<?php echo esc_html(str_pad($ticket->id, 4, '0', STR_PAD_LEFT)); ?></strong></td>
                                         <td><?php echo esc_html($ticket->company_name); ?></td>
@@ -293,7 +293,7 @@ class LGP_Dashboard_Renderer
                                         <td><?php echo wp_kses_post($sla_badge); ?></td>
                                         <td><span class="lgp-badge lgp-badge-warning"><?php echo esc_html(ucfirst($ticket->status)); ?></span></td>
                                     </tr>
-                            <?php
+                                    <?php
                                 }
                             }
                             ?>
@@ -302,7 +302,7 @@ class LGP_Dashboard_Renderer
                 </div>
             </div>
         </div>
-    <?php
+        <?php
     }
 
     /**
@@ -310,7 +310,7 @@ class LGP_Dashboard_Renderer
      */
     private static function render_features_section()
     {
-    ?>
+        ?>
         <div class="lgp-card">
             <div class="lgp-card-header">
                 <h3 class="lgp-card-title">
@@ -348,33 +348,33 @@ class LGP_Dashboard_Renderer
                 </div>
             </div>
         </div>
-<?php
+        <?php
     }
 
     /**
      * Get priority badge CSS class.
      *
-     * @param string $priority Priority level.
+     * @param  string $priority Priority level.
      * @return string CSS class.
      */
     private static function get_priority_badge_class($priority)
     {
         switch (strtolower($priority)) {
-            case 'critical':
-                return 'lgp-badge-danger';
-            case 'high':
-                return 'lgp-badge-warning';
-            case 'medium':
-            case 'low':
-            default:
-                return 'lgp-badge-info';
+        case 'critical':
+            return 'lgp-badge-danger';
+        case 'high':
+            return 'lgp-badge-warning';
+        case 'medium':
+        case 'low':
+        default:
+            return 'lgp-badge-info';
         }
     }
 
     /**
      * Get SLA badge HTML.
      *
-     * @param string $due_date SLA due date.
+     * @param  string $due_date SLA due date.
      * @return string HTML badge.
      */
     private static function get_sla_badge($due_date)
@@ -401,7 +401,7 @@ class LGP_Dashboard_Renderer
     /**
      * Format time remaining.
      *
-     * @param int $seconds Seconds remaining.
+     * @param  int $seconds Seconds remaining.
      * @return string Formatted time.
      */
     private static function format_time_remaining($seconds)

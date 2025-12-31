@@ -68,7 +68,7 @@ class LGP_Database
     /**
      * Check if a table exists in the database.
      *
-     * @param string $table_name Fully qualified table name.
+     * @param  string $table_name Fully qualified table name.
      * @return bool
      */
     private static function table_exists($table_name)
@@ -91,7 +91,7 @@ class LGP_Database
 
         $charset_collate = $wpdb->get_charset_collate();
 
-        require_once LGP_PLUGIN_DIR . 'includes/lgp-upgrade-shim.php';
+        include_once LGP_PLUGIN_DIR . 'includes/lgp-upgrade-shim.php';
 
         // Companies table
         $companies_table = $wpdb->prefix . 'lgp_companies';

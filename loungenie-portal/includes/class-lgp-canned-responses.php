@@ -5,7 +5,7 @@
  * Template library for quick ticket replies
  *
  * @package LounGenie Portal
- * @since 1.9.0
+ * @since   1.9.0
  */
 
 if (! defined('ABSPATH')) {
@@ -89,7 +89,7 @@ class LGP_Canned_Responses
     /**
      * Get canned response by ID
      *
-     * @param int $id Response ID
+     * @param  int $id Response ID
      * @return array|null
      */
     public static function get_by_id($id)
@@ -106,7 +106,7 @@ class LGP_Canned_Responses
     /**
      * Get responses by category
      *
-     * @param string $category Category name
+     * @param  string $category Category name
      * @return array
      */
     public static function get_by_category($category)
@@ -123,7 +123,7 @@ class LGP_Canned_Responses
     /**
      * Search canned responses
      *
-     * @param string $query Search query
+     * @param  string $query Search query
      * @return array
      */
     public static function search($query)
