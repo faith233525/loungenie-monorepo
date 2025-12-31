@@ -41,26 +41,32 @@
     /* Borders, separators */
 
     /* 10% ACTION: Teal & Cyan (Interactive Elements Only) */
-    --lgp-action-teal: #3AA6B9;
-    /* Primary action */
-    --lgp-action-teal-dark: #2A8A9A;
-    /* Hover state */
-    --lgp-action-teal-light: #D8EFF3;
-    /* Badge/light background */
-    --lgp-action-cyan: #25D0EE;
-    /* Secondary action */
-    --lgp-action-cyan-dark: #1AB9D4;
-    /* Hover state */
-    --lgp-action-cyan-light: #D6F6FC;
-    /* Badge/light background */
+    --lgp-action-teal: #1CAAB6;
+    /* Primary action - UPDATED */
+    --lgp-action-teal-dark: #158A94;
+    /* Hover state - UPDATED */
+    --lgp-action-teal-light: #E3F2F3;
+    /* Badge/light background - UPDATED */
+    --lgp-action-cyan: #67BED9;
+    /* Secondary action - UPDATED */
+    --lgp-action-cyan-dark: #4A9FBE;
+    /* Hover state - UPDATED */
+    --lgp-action-cyan-light: #E8F6FB;
+    /* Badge/light background - UPDATED */
+    
+    /* Accent colors */
+    --lgp-accent-green: #4DA88F;
+    /* Accent green - UPDATED */
+    --lgp-accent-navy: #1A237E;
+    /* Accent navy - UPDATED */
 
-    /* Legacy mapping for compatibility */
-    --lgp-brand-teal: #3AA6B9;
-    --lgp-brand-teal-dark: #2A8A9A;
-    --lgp-brand-teal-light: #D8EFF3;
-    --lgp-brand-cyan: #25D0EE;
-    --lgp-brand-cyan-dark: #1AB9D4;
-    --lgp-brand-cyan-light: #D6F6FC;
+    /* Legacy mapping for compatibility - UPDATED */
+    --lgp-brand-teal: #1CAAB6;
+    --lgp-brand-teal-dark: #158A94;
+    --lgp-brand-teal-light: #E3F2F3;
+    --lgp-brand-cyan: #67BED9;
+    --lgp-brand-cyan-dark: #4A9FBE;
+    --lgp-brand-cyan-light: #E8F6FB;
     --lgp-white: #FFFFFF;
     --lgp-background: #E9F8F9;
     --lgp-surface: #FFFFFF;
@@ -70,7 +76,7 @@
     --lgp-text-tertiary: #7A8699;
     --lgp-text-muted: #94A3B8;
 
-    /* OLD variable compatibility */
+    /* OLD variable compatibility - UPDATED */
     --lgp-color-background: #E9F8F9;
     --lgp-color-surface: #E9F8F9;
     --lgp-color-surface-raised: #FFFFFF;
@@ -80,12 +86,12 @@
     --lgp-color-text-secondary: #454F5E;
     --lgp-color-text-tertiary: #7A8699;
     --lgp-color-text-inverse: #FFFFFF;
-    --lgp-color-brand: #3AA6B9;
-    --lgp-color-brand-hover: #3393A3;
-    --lgp-color-brand-light: #D8EFF3;
-    --lgp-color-accent: #25D0EE;
-    --lgp-color-accent-hover: #1AB9D4;
-    --lgp-color-accent-light: #D6F6FC;
+    --lgp-color-brand: #1CAAB6;
+    --lgp-color-brand-hover: #158A94;
+    --lgp-color-brand-light: #E3F2F3;
+    --lgp-color-accent: #67BED9;
+    --lgp-color-accent-hover: #4A9FBE;
+    --lgp-color-accent-light: #E8F6FB;
 
     /* FEEDBACK COLORS (Status, Sparingly) */
     --lgp-success: #16A34A;
