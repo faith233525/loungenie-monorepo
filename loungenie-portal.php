@@ -4,16 +4,18 @@
  * LounGenie Portal - Enterprise SaaS Partner Management System
  *
  * @package   LounGenie Portal
- * @version   1.9.0
+ * @version   2.0.0
  * @author    LounGenie Team
  * @license   GPL-2.0-or-later
  *
  * Plugin Name: LounGenie Portal
  * Plugin URI: https://loungenie.com/portal
  * Description: Commercial enterprise SaaS portal for LounGenie partner and support management
- * Version: 1.9.0
+ * Version: 2.0.0
  * Requires at least: 5.8
  * Requires PHP: 7.4
+ * Tested up to: 6.4
+ * Tested up to PHP: 8.2
  * Author: LounGenie Team
  * Author URI: https://loungenie.com
  * License: GPLv2 or later
@@ -21,7 +23,7 @@
  * Text Domain: loungenie-portal
  * Domain Path: /languages
  */
-
+ 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // PLUGIN CONSTANTS.
 // ============================================================================
 
-define( 'LGP_VERSION', '1.9.0' );
+define( 'LGP_VERSION', '2.0.0' );
 define( 'LGP_PLUGIN_FILE', __FILE__ );
 
 // Use PHP functions instead of WordPress functions to avoid timing issues during activation.
@@ -122,7 +124,9 @@ function lgp_activate() {
 	}
 
 	if ( ! empty( $activation_output ) ) {
-		error_log( 'LGP activation output suppressed: ' . substr( $activation_output, 0, 500 ) );
+		if ( function_exists( 'error_log' ) ) {
+			error_log( 'LGP activation output suppressed: ' . substr( $activation_output, 0, 500 ) );
+		}
 	}
 }
 
@@ -156,30 +160,15 @@ register_deactivation_hook( __FILE__, 'lgp_deactivate' );
 /**
  * Load plugin text domain for translations
  */
-function lgp_load_textdomain() {
+function lgp_init() {
 	// @phpstan-ignore-next-line load_plugin_textdomain and plugin_basename are WordPress core functions
 	load_plugin_textdomain(
 		'loungenie-portal',
 		false,
 		dirname( plugin_basename( __FILE__ ) ) . '/languages'
 	);
-}
-add_action( 'plugins_loaded', 'lgp_load_textdomain' );
 
-// ============================================================================
-// INITIALIZE PLUGIN
-// ============================================================================
-
-/**
- * Initialize all plugin components
- */
-function lgp_init() {
-	// Load all required classes first
-	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-loader.php';
-	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-database.php';
-	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-router.php';
-	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-auth.php';
-	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-assets.php';
+	// Load core dependencies.
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-cache.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-security.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-microsoft-sso.php';
@@ -195,7 +184,7 @@ function lgp_init() {
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-outlook.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-system-health.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-attachments.php';
-	// Legacy email handler will be conditionally initialized via loader based on feature flag
+	// Legacy email handler will be conditionally initialized via loader based on feature flag.
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-handler.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-capabilities.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-rest-errors.php';
@@ -210,8 +199,13 @@ function lgp_init() {
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-environment.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-query-monitor.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-csv-partner-import.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-csv-company-location-import.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-i18n.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-api-docs.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-company-credentials.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-admin-credentials-ui.php';
 
-	// Conditionally load new Graph-based email pipeline
+	// Conditionally load new Graph-based email pipeline.
 	$use_new_email = false;
 	if ( defined( 'LGP_EMAIL_PIPELINE' ) ) {
 		$use_new_email = ( 'new' === LGP_EMAIL_PIPELINE || true === LGP_EMAIL_PIPELINE || 1 === LGP_EMAIL_PIPELINE );
@@ -223,14 +217,14 @@ function lgp_init() {
 	}
 
 	if ( $use_new_email ) {
-		// New pipeline components
+		// New pipeline components.
 		require_once LGP_PLUGIN_DIR . 'includes/class-lgp-graph-client.php';
 		require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-ingest.php';
 		require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-reply.php';
 		require_once LGP_PLUGIN_DIR . 'includes/email-integration.php';
 	}
 
-	// Load API endpoints
+	// Load API endpoints.
 	require_once LGP_PLUGIN_DIR . 'api/companies.php';
 	require_once LGP_PLUGIN_DIR . 'api/units.php';
 	require_once LGP_PLUGIN_DIR . 'api/tickets.php';
@@ -241,14 +235,15 @@ function lgp_init() {
 	require_once LGP_PLUGIN_DIR . 'api/audit-log.php';
 	require_once LGP_PLUGIN_DIR . 'api/dashboard.php';
 	require_once LGP_PLUGIN_DIR . 'api/map.php';
+	require_once LGP_PLUGIN_DIR . 'api/credentials.php';
 
-	// Load role definitions
+	// Load role definitions.
 	require_once LGP_PLUGIN_DIR . 'roles/support.php';
 	require_once LGP_PLUGIN_DIR . 'roles/partner.php';
 
-	// Initialize all components via centralized loader
+	// Initialize all components via centralized loader.
 	LGP_Loader::init();
-	// Initialize migrations (versioned schema upgrades)
+	// Initialize migrations (versioned schema upgrades).
 	LGP_Migrations::init();
 }
 
@@ -256,6 +251,58 @@ function lgp_init() {
 // that may trigger wp_is_block_theme() notices in WordPress >= 6.8.
 // after_setup_theme runs after setup_theme and before init, which is safe for our loaders.
 add_action( 'after_setup_theme', 'lgp_init', 0 );
+
+// ============================================================================
+// EXTERNALIZED FILTER FUNCTIONS
+// ============================================================================
+
+/**
+ * Get list of ticket statuses
+ * Allows plugins to filter the available ticket statuses
+ *
+ * @return array List of ticket statuses
+ */
+function lgp_get_ticket_statuses() {
+	$statuses = array( 'open', 'pending', 'closed' );
+	/**
+	 * Filter ticket statuses
+	 *
+	 * @param array $statuses List of ticket statuses
+	 */
+	return apply_filters( 'lgp_ticket_statuses', $statuses );
+}
+
+/**
+ * Get list of ticket priorities
+ * Allows plugins to filter the available ticket priorities
+ *
+ * @return array List of ticket priorities
+ */
+function lgp_get_ticket_priorities() {
+	$priorities = array( 'urgent', 'high', 'normal' );
+	/**
+	 * Filter ticket priorities
+	 *
+	 * @param array $priorities List of ticket priorities
+	 */
+	return apply_filters( 'lgp_ticket_priorities', $priorities );
+}
+
+/**
+ * Get list of request types
+ * Allows plugins to filter the available service request types
+ *
+ * @return array List of request types
+ */
+function lgp_get_request_types() {
+	$request_types = array( 'install', 'maintenance', 'repair', 'update', 'general' );
+	/**
+	 * Filter request types
+	 *
+	 * @param array $request_types List of request types
+	 */
+	return apply_filters( 'lgp_request_types', $request_types );
+}
 
 // ============================================================================
 // CUSTOM REWRITE RULES
@@ -289,13 +336,13 @@ add_action( 'init', 'lgp_add_rewrite_rules' );
  * - Skips admin, login, REST, callback, sitemap/robots, and existing portal paths
  */
 function lgp_redirect_root_to_portal() {
-	// Never redirect admin, AJAX, or cron requests..
+	// Never redirect admin, AJAX, or cron requests.
 	// @phpstan-ignore-next-line is_admin, wp_doing_ajax, wp_doing_cron are WordPress core functions
 	if ( is_admin() || wp_doing_ajax() || wp_doing_cron() ) {
 		return;
 	}
 
-	// Explicit check: don't redirect WordPress admin URLs..
+	// Explicit check: don't redirect WordPress admin URLs.
 	// @phpstan-ignore-next-line sanitize_text_field and wp_unslash are WordPress core functions
 	$raw_request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '/';
 	$raw_uri         = strtok( $raw_request_uri, '?' );
@@ -319,7 +366,7 @@ function lgp_redirect_root_to_portal() {
 		'/m365-sso-callback/',
 		'/xmlrpc.php/',
 		'/feed/',
-		'/sitemap', // includes variations
+		'/sitemap', // Includes variations.
 	);
 
 	foreach ( $excluded_prefixes as $prefix ) {
@@ -328,12 +375,12 @@ function lgp_redirect_root_to_portal() {
 		}
 	}
 
-	// Also skip robots and favicon..
+	// Also skip robots and favicon.
 	if ( '/robots.txt/' === $request_uri || '/favicon.ico/' === $request_uri ) {
 		return;
 	}
 
-	// If this is the root/front request, always redirect to /portal (regardless of login state)..
+	// If this is the root/front request, always redirect to /portal (regardless of login state).
 	// @phpstan-ignore-next-line is_front_page and is_home are WordPress core functions
 	if ( '/' === $request_uri || is_front_page() || is_home() ) {
 		// Avoid redirect loop if home_url already ends with /portal.

@@ -119,7 +119,9 @@ class LGP_Loader
 		if (file_exists(LGP_PLUGIN_DIR . 'api/knowledge-center.php')) {
 			require_once LGP_PLUGIN_DIR . 'api/knowledge-center.php';
 		}
-		if (class_exists('LGP_Knowledge_Center_API')) {
+		if (class_exists('LounGenie\Portal\LGP_Knowledge_Center_API')) {
+			LounGenie\Portal\LGP_Knowledge_Center_API::init();
+		} elseif (class_exists('LGP_Knowledge_Center_API')) {
 			LGP_Knowledge_Center_API::init();
 		} elseif (class_exists('LGP_Help_Guides_API')) {
 			// Fallback for legacy class name if present

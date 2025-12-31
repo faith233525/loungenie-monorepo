@@ -394,6 +394,7 @@ body.lgp-login-page {
     font-size: var(--lgp-font-size-sm);
     color: var(--lgp-structure-dark);
     cursor: pointer;
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -631,7 +632,6 @@ body.lgp-login-page {
 @media (max-width: 768px) {
     .lgp-login-container {
         flex-direction: column;
-        min-height: auto;
     }
 
     .lgp-login-panel {
@@ -639,7 +639,6 @@ body.lgp-login-page {
     }
 
     .lgp-login-branding {
-        min-height: auto;
         padding-bottom: var(--lgp-space-lg);
     }
 

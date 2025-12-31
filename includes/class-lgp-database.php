@@ -208,8 +208,7 @@ class LGP_Database
             KEY venue_type (venue_type),
             KEY primary_contract_status (primary_contract_status),
             KEY secondary_contract_status (secondary_contract_status),
-            KEY season (season),
-            KEY partner_username (partner_username)
+            KEY season (season)
         ) $charset_collate;";
 
         // Management Companies table
@@ -452,6 +451,9 @@ class LGP_Database
      * These indexes are not part of the initial CREATE TABLE statements
      * but significantly improve performance for common query patterns.
      * 
+     * Uses MySQL version-safe syntax (compatible with MySQL 5.6+).
+     * Gracefully handles index creation failures on incompatible MySQL versions.
+     * 
      * @since 2.0.0
      * @return void
      */
@@ -464,17 +466,18 @@ class LGP_Database
         $units_table            = $wpdb->prefix . 'lgp_units';
 
         // Add composite index for ticket status queries (speeds up dashboard queries)
-        $wpdb->query("ALTER TABLE {$tickets_table} ADD INDEX IF NOT EXISTS idx_status_created (status, created_at)");
+        // Use version-safe syntax without IF NOT EXISTS for MySQL 5.6 compatibility
+        @$wpdb->query("ALTER TABLE {$tickets_table} ADD INDEX idx_status_created (status, created_at)");
 
         // Add composite index for service request filtering
-        $wpdb->query("ALTER TABLE {$service_requests_table} ADD INDEX IF NOT EXISTS idx_company_status (company_id, status)");
-        $wpdb->query("ALTER TABLE {$service_requests_table} ADD INDEX IF NOT EXISTS idx_company_priority (company_id, priority)");
+        @$wpdb->query("ALTER TABLE {$service_requests_table} ADD INDEX idx_company_status (company_id, status)");
+        @$wpdb->query("ALTER TABLE {$service_requests_table} ADD INDEX idx_company_priority (company_id, priority)");
 
         // Add composite indexes for units filtering and aggregation
-        $wpdb->query("ALTER TABLE {$units_table} ADD INDEX IF NOT EXISTS idx_company_status (company_id, status)");
-        $wpdb->query("ALTER TABLE {$units_table} ADD INDEX IF NOT EXISTS idx_color_count (color_tag)");
-        $wpdb->query("ALTER TABLE {$units_table} ADD INDEX IF NOT EXISTS idx_lock_count (lock_brand)");
-        $wpdb->query("ALTER TABLE {$units_table} ADD INDEX IF NOT EXISTS idx_venue_count (venue_type)");
+        @$wpdb->query("ALTER TABLE {$units_table} ADD INDEX idx_company_status (company_id, status)");
+        @$wpdb->query("ALTER TABLE {$units_table} ADD INDEX idx_color_count (color_tag)");
+        @$wpdb->query("ALTER TABLE {$units_table} ADD INDEX idx_lock_count (lock_brand)");
+        @$wpdb->query("ALTER TABLE {$units_table} ADD INDEX idx_venue_count (venue_type)");
     }
 
     /**

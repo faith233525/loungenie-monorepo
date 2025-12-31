@@ -438,6 +438,22 @@
             to { transform: rotate(360deg); }
         }
 
+        /* UTILITY CLASSES FOR INLINE STYLES */
+        .lgp-btn-small { padding: 0.5rem 1rem; font-size: 0.9rem; }
+        .lgp-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; padding: 1.5rem; }
+        .lgp-margin-bottom { margin-bottom: 1rem; }
+        .lgp-padding-bottom { padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+        .lgp-margin-top-2 { margin-top: 2rem; }
+        .lgp-grid-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
+        .lgp-form-section { margin-bottom: 2rem; }
+        .lgp-border-top { border-top: 1px solid var(--border); padding-top: 1.5rem; }
+        .lgp-color-badge { display: inline-block; width: 20px; height: 20px; border-radius: 3px; margin-right: 0.5rem; }
+        .lgp-card-body-center { text-align: center; padding: 3rem; }
+        .lgp-card-bg-muted { background: var(--bg); padding: 2rem; border-radius: 0.75rem; color: #999; }
+        .lgp-placeholder { background: var(--bg); padding: 2rem; text-align: center; border-radius: 0.5rem 0.5rem 0 0; color: #999; }
+        .lgp-placeholder-icon { font-size: 2rem; }
+        .lgp-btn-full { width: 100%; margin-top: 1rem; }
+
         /* RESPONSIVE */
         @media (max-width: 768px) {
             .lgp-portal-container {
@@ -559,21 +575,21 @@
                     <div class="lgp-user-name">John Smith</div>
                     <div class="lgp-user-role">(Support)</div>
                 </div>
-                <button class="lgp-btn lgp-btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Logout</button>
+                <button class="lgp-btn lgp-btn-secondary lgp-btn-small">Logout</button>
             </div>
         </div>
     </div>
 
     <!-- SIDEBAR -->
     <aside class="lgp-sidebar">
-        <nav class="lgp-nav">
+        <ul class="lgp-nav">
             <li class="lgp-nav-item"><a href="#" class="lgp-nav-link active" onclick="showPage('dashboard')"><span class="lgp-nav-icon">📊</span> Dashboard</a></li>
             <li class="lgp-nav-item"><a href="#" class="lgp-nav-link" onclick="showPage('companies')"><span class="lgp-nav-icon">🏢</span> Companies</a></li>
             <li class="lgp-nav-item"><a href="#" class="lgp-nav-link" onclick="showPage('units')"><span class="lgp-nav-icon">📦</span> Units & Gateways</a></li>
             <li class="lgp-nav-item"><a href="#" class="lgp-nav-link" onclick="showPage('tickets')"><span class="lgp-nav-icon">🎫</span> Tickets</a></li>
             <li class="lgp-nav-item"><a href="#" class="lgp-nav-link" onclick="showPage('map')"><span class="lgp-nav-icon">🗺️</span> Map View</a></li>
             <li class="lgp-nav-item"><a href="#" class="lgp-nav-link" onclick="showPage('knowledge')"><span class="lgp-nav-icon">📚</span> Knowledge Center</a></li>
-        </nav>
+        </ul>
     </aside>
 
     <!-- MAIN CONTENT -->
@@ -608,7 +624,7 @@
             </div>
 
             <div class="lgp-card">
-                <div class="lgp-card-body" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; padding: 1.5rem;">
+                <div class="lgp-card-body lgp-card-grid">
                     <div class="lgp-stat-card">
                         <div class="lgp-stat-label">Partner Companies</div>
                         <div class="lgp-stat-value">45</div>
@@ -634,9 +650,9 @@
                         <h3 class="lgp-card-title">Top Unit Colors</h3>
                     </div>
                     <div class="lgp-card-body">
-                        <div style="margin-bottom: 1rem;"><strong>Yellow</strong> - 456 units</div>
-                        <div style="margin-bottom: 1rem;"><strong>Red</strong> - 234 units</div>
-                        <div style="margin-bottom: 1rem;"><strong>Classic Blue</strong> - 189 units</div>
+                        <div class="lgp-margin-bottom"><strong>Yellow</strong> - 456 units</div>
+                        <div class="lgp-margin-bottom"><strong>Red</strong> - 234 units</div>
+                        <div class="lgp-margin-bottom"><strong>Classic Blue</strong> - 189 units</div>
                         <div><strong>Ice Blue</strong> - 145 units</div>
                     </div>
                 </div>
@@ -771,7 +787,7 @@
                             <tr>
                                 <td><strong>#T003</strong></td>
                                 <td>Installation</td>
-                                <td><span class="lgp-badge" style="background: rgba(16,185,129,0.1); color: #10B981;">Normal</span></td>
+                                <td><span class="lgp-badge lgp-badge-success">Normal</span></td>
                                 <td><span class="lgp-badge lgp-badge-success">Closed</span></td>
                                 <td>Tech Solutions</td>
                                 <td>#U089</td>
@@ -784,18 +800,18 @@
             </div>
 
             <!-- Ticket Detail -->
-            <div class="lgp-card" style="margin-top: 2rem;">
+            <div class="lgp-card lgp-margin-top-2">
                 <div class="lgp-card-header">
                     <div>
                         <span class="lgp-badge lgp-badge-danger">Open</span>
-                        <h3 class="lgp-card-title" style="margin-top: 0.5rem;">Critical: Pool gate lock malfunction</h3>
+                        <h3 class="lgp-card-title">Critical: Pool gate lock malfunction</h3>
                         <p class="lgp-text-muted">Ticket #T001 • ABC Company • Unit #U042</p>
                     </div>
                 </div>
                 <div class="lgp-card-body">
                     <div style="margin-bottom: 2rem;">
                         <strong>Metadata:</strong>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                        <div class="lgp-grid-content">
                             <div><strong>Type:</strong> Maintenance</div>
                             <div><strong>Priority:</strong> Urgent</div>
                             <div><strong>Unit ID:</strong> #U042</div>
@@ -830,7 +846,7 @@
                         </div>
                     </div>
 
-                    <form style="border-top: 1px solid var(--border); padding-top: 1.5rem;">
+                    <form class="lgp-border-top">
                         <div class="lgp-form-group">
                             <label class="lgp-label">Reply to Partner</label>
                             <textarea class="lgp-textarea" rows="4" placeholder="Type your reply..."></textarea>
@@ -904,7 +920,7 @@
                             <tr>
                                 <td><strong>#U001</strong></td>
                                 <td>
-                                    <span style="display: inline-block; width: 20px; height: 20px; background: #FFD700; border-radius: 3px; margin-right: 0.5rem;"></span>
+                                    <span class="lgp-color-badge" style="background: #FFD700;"></span>
                                     Yellow
                                 </td>
                                 <td>Master Lock</td>
@@ -916,7 +932,7 @@
                             <tr>
                                 <td><strong>#U002</strong></td>
                                 <td>
-                                    <span style="display: inline-block; width: 20px; height: 20px; background: #DC2626; border-radius: 3px; margin-right: 0.5rem;"></span>
+                                    <span class="lgp-color-badge" style="background: #DC2626;"></span>
                                     Red
                                 </td>
                                 <td>Brinks</td>
@@ -928,7 +944,7 @@
                             <tr>
                                 <td><strong>#U003</strong></td>
                                 <td>
-                                    <span style="display: inline-block; width: 20px; height: 20px; background: #2563EB; border-radius: 3px; margin-right: 0.5rem;"></span>
+                                    <span class="lgp-color-badge" style="background: #2563EB;"></span>
                                     Classic Blue
                                 </td>
                                 <td>Kwikset</td>
@@ -998,11 +1014,11 @@
             </div>
 
             <div class="lgp-card">
-                <div class="lgp-card-body" style="text-align: center; padding: 3rem;">
-                    <div style="background: var(--bg); padding: 2rem; border-radius: 0.75rem; color: #999;">
-                        <p style="font-size: 1.25rem; margin-bottom: 0.5rem;">🗺️</p>
+                <div class="lgp-card-body lgp-card-body-center">
+                    <div class="lgp-card-bg-muted">
+                        <p>🗺️</p>
                         <p>Interactive Leaflet map with poolside locations</p>
-                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Markers color-coded by urgency • Service ticket overview • Click for details</p>
+                        <p>Markers color-coded by urgency • Service ticket overview • Click for details</p>
                     </div>
                 </div>
             </div>
@@ -1038,7 +1054,7 @@
             <div class="grid-2">
                 <div class="lgp-card">
                     <div style="background: var(--bg); padding: 2rem; text-align: center; border-radius: 0.5rem 0.5rem 0 0; color: #999;">
-                        <p style="font-size: 2rem;">🎥</p>
+                        <p class="lgp-placeholder-icon">🎥</p>
                         <p>Installation Guide</p>
                     </div>
                     <div class="lgp-card-body">
@@ -1050,7 +1066,7 @@
 
                 <div class="lgp-card">
                     <div style="background: var(--bg); padding: 2rem; text-align: center; border-radius: 0.5rem 0.5rem 0 0; color: #999;">
-                        <p style="font-size: 2rem;">🔧</p>
+                        <p class="lgp-placeholder-icon">🔧</p>
                         <p>Maintenance Guide</p>
                     </div>
                     <div class="lgp-card-body">
@@ -1062,7 +1078,7 @@
 
                 <div class="lgp-card">
                     <div style="background: var(--bg); padding: 2rem; text-align: center; border-radius: 0.5rem 0.5rem 0 0; color: #999;">
-                        <p style="font-size: 2rem;">⚙️</p>
+                        <p class="lgp-placeholder-icon">⚙️</p>
                         <p>Troubleshooting</p>
                     </div>
                     <div class="lgp-card-body">
@@ -1074,7 +1090,7 @@
 
                 <div class="lgp-card">
                     <div style="background: var(--bg); padding: 2rem; text-align: center; border-radius: 0.5rem 0.5rem 0 0; color: #999;">
-                        <p style="font-size: 2rem;">📞</p>
+                        <p class="lgp-placeholder-icon">📞</p>
                         <p>Support Video</p>
                     </div>
                     <div class="lgp-card-body">
