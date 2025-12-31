@@ -206,6 +206,7 @@ function lgp_init() {
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-company-colors.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-migrations.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-csv-partner-import.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-theme-independence.php';
 
 	// Conditionally load new Graph-based email pipeline
 	$use_new_email = false;

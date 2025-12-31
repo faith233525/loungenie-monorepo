@@ -1,0 +1,332 @@
+/**
+ * Portal Shell - Theme-Independent Layout
+ * Uses only plugin-defined design tokens
+ * NO theme dependencies
+ *
+ * @package LounGenie Portal
+ * @version 2.0.0
+ */
+
+/* ========================================================================
+ * GLOBAL PORTAL RESET
+ * ======================================================================== */
+.lgp-portal,
+.lgp-portal *,
+.lgp-portal *::before,
+.lgp-portal *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.lgp-portal {
+    font-family: var(--lgp-font-family);
+    font-size: var(--lgp-text-base);
+    line-height: var(--lgp-leading-normal);
+    color: var(--lgp-text-primary);
+    background-color: var(--lgp-background);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Remove WordPress admin bar completely */
+.lgp-portal .admin-bar,
+.lgp-portal #wpadminbar {
+    display: none !important;
+}
+
+/* ========================================================================
+ * PORTAL CONTAINER LAYOUT
+ * ======================================================================== */
+.lgp-portal-container {
+    display: grid;
+    grid-template-columns: var(--lgp-sidebar-width) 1fr;
+    grid-template-rows: var(--lgp-header-height) 1fr;
+    grid-template-areas:
+        "sidebar header"
+        "sidebar main";
+    min-height: 100vh;
+    background-color: var(--lgp-background);
+}
+
+/* ========================================================================
+ * HEADER - Plugin Authority
+ * ======================================================================== */
+.lgp-header {
+    grid-area: header;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--lgp-space-6);
+    background-color: var(--lgp-surface);
+    border-bottom: var(--lgp-border-width) solid var(--lgp-border);
+    box-shadow: var(--lgp-shadow-sm);
+    z-index: var(--lgp-z-sticky);
+}
+
+.lgp-header-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--lgp-space-2);
+    font-size: var(--lgp-text-xl);
+    font-weight: var(--lgp-weight-bold);
+}
+
+.lgp-logo-text {
+    font-weight: var(--lgp-weight-bold);
+}
+
+.lgp-logo-separator {
+    color: var(--lg-secondary);
+    font-weight: var(--lgp-weight-normal);
+}
+
+.lgp-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--lgp-space-4);
+}
+
+.lgp-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--lgp-space-1);
+}
+
+.lgp-user-name {
+    font-weight: var(--lgp-weight-semibold);
+    color: var(--lgp-text-primary);
+}
+
+.lgp-user-role {
+    font-size: var(--lgp-text-sm);
+    color: var(--lgp-text-secondary);
+}
+
+/* ========================================================================
+ * SIDEBAR - Plugin Authority
+ * ======================================================================== */
+.lgp-sidebar {
+    grid-area: sidebar;
+    background-color: var(--lg-structure);
+    padding: var(--lgp-space-6) 0;
+    overflow-y: auto;
+}
+
+.lgp-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--lgp-space-2);
+    padding: 0 var(--lgp-space-4);
+}
+
+.lgp-nav-item {
+    display: flex;
+    align-items: center;
+    gap: var(--lgp-space-3);
+    padding: var(--lgp-space-3) var(--lgp-space-4);
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    border-radius: var(--lgp-radius-md);
+    transition: all var(--lgp-transition-fast);
+    font-size: var(--lgp-text-base);
+    font-weight: var(--lgp-weight-medium);
+}
+
+.lgp-nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--lgp-white);
+}
+
+.lgp-nav-item.active {
+    background-color: var(--lg-primary);
+    color: var(--lgp-white);
+}
+
+.lgp-nav-icon {
+    font-size: var(--lgp-text-lg);
+    width: 24px;
+    text-align: center;
+}
+
+/* ========================================================================
+ * MAIN CONTENT - Plugin Authority
+ * ======================================================================== */
+.lgp-main-content {
+    grid-area: main;
+    padding: var(--lgp-space-8);
+    overflow-y: auto;
+    background-color: var(--lgp-background);
+}
+
+/* ========================================================================
+ * RESPONSIVE - Mobile & Tablet
+ * ======================================================================== */
+@media (max-width: 768px) {
+    .lgp-portal-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: var(--lgp-header-height) 1fr;
+        grid-template-areas:
+            "header"
+            "main";
+    }
+
+    .lgp-sidebar {
+        position: fixed;
+        left: -100%;
+        top: var(--lgp-header-height);
+        width: var(--lgp-sidebar-width);
+        height: calc(100vh - var(--lgp-header-height));
+        z-index: var(--lgp-z-fixed);
+        transition: left var(--lgp-transition-base);
+    }
+
+    .lgp-sidebar.active {
+        left: 0;
+    }
+
+    .lgp-main-content {
+        padding: var(--lgp-space-4);
+    }
+}
+
+/* ========================================================================
+ * PLUGIN-CONTROLLED COMPONENTS
+ * ======================================================================== */
+
+/* Dashboard Cards */
+.lgp-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--lgp-space-6);
+    margin-bottom: var(--lgp-space-8);
+}
+
+.lgp-stat-card {
+    background-color: var(--lgp-surface);
+    border: var(--lgp-border-width) solid var(--lgp-border);
+    border-radius: var(--lgp-radius-lg);
+    padding: var(--lgp-space-6);
+    box-shadow: var(--lgp-shadow-sm);
+}
+
+.lgp-stat-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--lgp-space-4);
+}
+
+.lgp-stat-card-title {
+    font-size: var(--lgp-text-sm);
+    font-weight: var(--lgp-weight-medium);
+    color: var(--lgp-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.lgp-stat-card-value {
+    font-size: var(--lgp-text-3xl);
+    font-weight: var(--lgp-weight-bold);
+    color: var(--lg-primary);
+    margin-bottom: var(--lgp-space-2);
+}
+
+.lgp-stat-card-change {
+    font-size: var(--lgp-text-sm);
+    color: var(--lg-success);
+}
+
+/* Tables */
+.lgp-table-container {
+    background-color: var(--lgp-surface);
+    border: var(--lgp-border-width) solid var(--lgp-border);
+    border-radius: var(--lgp-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--lgp-shadow-sm);
+}
+
+.lgp-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.lgp-table thead {
+    background-color: var(--lgp-background);
+}
+
+.lgp-table th {
+    padding: var(--lgp-space-4);
+    text-align: left;
+    font-size: var(--lgp-text-sm);
+    font-weight: var(--lgp-weight-semibold);
+    color: var(--lgp-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: var(--lgp-border-width) solid var(--lgp-border);
+}
+
+.lgp-table td {
+    padding: var(--lgp-space-4);
+    border-bottom: var(--lgp-border-width) solid var(--lgp-border-light);
+}
+
+.lgp-table tbody tr:hover {
+    background-color: var(--lgp-background);
+}
+
+.lgp-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Badges */
+.lgp-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--lgp-space-1) var(--lgp-space-3);
+    font-size: var(--lgp-text-xs);
+    font-weight: var(--lgp-weight-semibold);
+    border-radius: var(--lgp-radius-full);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.lgp-badge-primary {
+    background-color: var(--lg-primary-light);
+    color: var(--lg-primary);
+}
+
+.lgp-badge-success {
+    background-color: var(--lg-success-light);
+    color: var(--lg-success);
+}
+
+.lgp-badge-warning {
+    background-color: var(--lgp-warning-light);
+    color: var(--lgp-warning);
+}
+
+.lgp-badge-error {
+    background-color: var(--lgp-error-light);
+    color: var(--lgp-error);
+}
+
+/* Error States */
+.lgp-error {
+    padding: var(--lgp-space-8);
+    text-align: center;
+}
+
+.lgp-error h1 {
+    font-size: var(--lgp-text-3xl);
+    font-weight: var(--lgp-weight-bold);
+    color: var(--lgp-text-primary);
+    margin-bottom: var(--lgp-space-4);
+}
+
+.lgp-error p {
+    font-size: var(--lgp-text-lg);
+    color: var(--lgp-text-secondary);
+}

@@ -11,43 +11,30 @@
 
 :root {
     /* ============================================================================
-	 * 60-30-10 COLOR RULE - NUANCED IMPLEMENTATION
+	 * DESIGN TOKENS - PLUGIN-CONTROLLED COLOR SYSTEM
+	 * Theme-independent, fully self-contained design system
 	 * ========================================================================== */
 
-    /* 60% ATMOSPHERE: Soft Cyan & White (Backgrounds & Large Surfaces) */
-    --lgp-atmosphere-primary: #E9F8F9;
-    /* Main background */
-    --lgp-atmosphere-white: #FFFFFF;
-    /* Cards, modals */
-    --lgp-atmosphere-alt: #F5FBFC;
-    /* Alternating card bg */
-    --lgp-atmosphere-border: #D8E9EC;
-    /* Subtle borders */
-    --lgp-atmosphere-hover: #EEF7F9;
-    /* Hover surfaces */
+    /* PRIMARY BRAND COLORS (Plugin Authority) */
+    --lg-primary: #1CAAB6;        /* Primary brand color */
+    --lg-secondary: #67BED9;      /* Secondary brand color */
+    --lg-success: #4DA88F;        /* Success/positive actions */
+    --lg-structure: #1A237E;      /* Structure/navigation */
 
-    /* 30% STRUCTURE: Deep Navy (Text, Headers, Navigation) */
-    --lgp-structure-navy: #0F172A;
-    /* Primary text, sidebar bg */
-    --lgp-structure-headline: #0F172A;
-    /* Headings (h1-h6) */
-    --lgp-structure-body: #454F5E;
-    /* Body text */
-    --lgp-structure-secondary: #7A8699;
-    /* Secondary text */
-    --lgp-structure-tertiary: #94A3B8;
-    /* Tertiary text, hints */
-    --lgp-structure-border: #CFE3E6;
-    /* Borders, separators */
+    /* DERIVED COLORS FROM PRIMARY TOKENS */
+    --lg-primary-hover: #158A94;
+    --lg-primary-light: #E3F2F3;
+    --lg-secondary-hover: #4A9FBE;
+    --lg-secondary-light: #E8F6FB;
+    --lg-success-light: #E0F5F0;
+    --lg-structure-light: #E8EAF6;
 
-    /* 10% ACTION: Teal & Cyan (Interactive Elements Only) */
-    --lgp-action-teal: #1CAAB6;
-    /* Primary action - UPDATED */
-    --lgp-action-teal-dark: #158A94;
-    /* Hover state - UPDATED */
-    --lgp-action-teal-light: #E3F2F3;
-    /* Badge/light background - UPDATED */
-    --lgp-action-cyan: #67BED9;
+    /* NEUTRAL PALETTE (Backgrounds & Surfaces) */
+    --lgp-white: #FFFFFF;
+    --lgp-background: #F8F9FA;
+    --lgp-surface: #FFFFFF;
+    --lgp-border: #E0E0E0;
+    --lgp-border-light: #EEEEEE;
     /* Secondary action - UPDATED */
     --lgp-action-cyan-dark: #4A9FBE;
     /* Hover state - UPDATED */
