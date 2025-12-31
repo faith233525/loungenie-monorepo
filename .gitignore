@@ -1,38 +1,70 @@
-.env
+# WordPress-specific
+wp-config.php
+wp-content/uploads/
+wp-content/plugins/*/
+wp-content/themes/*/
+wp-content/backup-*
+wp-content/upgrade/
+wp-content/cache/
+wp-content/object-cache.php
 
-# Ignore session-generated artifacts and local outputs
-ULTRA_COMPREHENSIVE_TEST_REPORT.md
-ultra_comprehensive_test.sh
-COMPREHENSIVE_TEST_REPORT.md
-comprehensive_validation.sh
-comprehensive_fix.php
-fix_comments.php
+# Database
+*.sql
+*.sql.gz
 
-# Local cache and temporary files
-.phpunit.result.cache
-/tmp/
+# Logs
 *.log
-*.tmp
+logs/
 
-# Node and vendor (if not needed in repo)
-/node_modules/
-/vendor/
+# Node modules
+node_modules/
+package-lock.json
+yarn.lock
 
-# OS/editor noise
-.DS_Store
-Thumbs.db
+# Composer
+vendor/
+composer.lock
+
+# IDE
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.editorconfig
+*.sublime-project
+*.sublime-workspace
 
-# Build artifacts
+# Testing
+phpunit.xml
+phpunit.xml.dist
+.phpunit.result.cache
+coverage/
+
+# Build & Distribution
 dist/
 build/
-coverage/
-*.cache
-*.bak
-*.swp
+*.zip
+loungenie-portal-*.zip
 
-# Composer lock optional (keep if you want exact versions)
-# composer.lock
-wp-deployment/
-deploy-ready/
+# Documentation (repo only, not plugin)
+*.md
+!README.md
+!CHANGELOG.md
+
+# Config files (local)
+.env
+.env.local
+.env.*.local
+
+# OS
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Temporary
+tmp/
+temp/
+*.tmp

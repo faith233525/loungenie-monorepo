@@ -1,0 +1,64 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "includes",
+			"name": "Classes & Logic"
+		},
+		{
+			"path": "api",
+			"name": "REST APIs"
+		},
+		{
+			"path": "templates",
+			"name": "UI Templates"
+		},
+		{
+			"path": "assets",
+			"name": "CSS & JavaScript"
+		},
+		{
+			"path": "roles",
+			"name": "Role Definitions"
+		},
+		{
+			"path": "wp-cli",
+			"name": "CLI Commands"
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"**/.git": false,
+			"**/node_modules": true,
+			"**/.DS_Store": true,
+			"**/__pycache__": true
+		},
+		"search.exclude": {
+			"**/node_modules": true,
+			"**/.git": true
+		},
+		"[php]": {
+			"editor.defaultFormatter": "bmewburn.vscode-intelephense-client",
+			"editor.formatOnSave": true
+		},
+		"[javascript]": {
+			"editor.defaultFormatter": "esbenp.prettier-vscode",
+			"editor.formatOnSave": false
+		},
+		"[css]": {
+			"editor.defaultFormatter": "esbenp.prettier-vscode",
+			"editor.formatOnSave": false
+		}
+	},
+	"extensions": {
+		"recommendations": [
+			"bmewburn.vscode-intelephense-client",
+			"esbenp.prettier-vscode",
+			"dbaeumer.vscode-eslint",
+			"bradlc.vscode-tailwindcss",
+			"eamodio.gitlens"
+		]
+	}
+}

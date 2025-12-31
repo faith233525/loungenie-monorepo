@@ -1,0 +1,25 @@
+{
+    "folders": [
+		{
+			"path": "api"
+		},
+		{
+			"path": "includes"
+		},
+		{
+			"path": "roles"
+		},
+		{
+			"path": "templates"
+		},
+		{
+			"path": "wp-cli"
+		},
+		{
+			"path": "assets"
+		},
+		{
+			"path": "."
+		}
+	]
+}
