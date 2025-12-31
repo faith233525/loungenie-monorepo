@@ -1,0 +1,118 @@
+/**
+ * LounGenie Portal - Unified Brand Design Tokens
+ * Single source of truth for all brand colors across the plugin
+ * 
+ * These tokens MUST be used exclusively throughout the plugin.
+ * No raw hex colors or additional brand colors are permitted.
+ * 
+ * @package LounGenie Portal
+ * @version 1.8.1
+ */
+
+:root {
+    /* ============================================================================
+     * BRAND COLORS - IMMUTABLE
+     * Only these 4 tokens define the entire brand palette
+     * ========================================================================== */
+    
+    /* Primary brand color - pool/teal - used for primary actions and partner portal */
+    --lg-primary: #1CAAB6 !important;
+    
+    /* Secondary brand color - sky blue - used for support portal and secondary elements */
+    --lg-secondary: #67BED9 !important;
+    
+    /* Success status color - sea green - used for completed/success states */
+    --lg-success: #4DA88F !important;
+    
+    /* Structure color - navy - used for branding, structure, and primary text */
+    --lg-structure: #1A237E !important;
+
+    /* ============================================================================
+     * SEMANTIC ALIASES - Build from brand tokens only
+     * Map brand colors to semantic use cases
+     * ========================================================================== */
+    
+    /* Action & Button Colors */
+    --lg-button-primary: var(--lg-primary);
+    --lg-button-primary-hover: color-mix(in srgb, var(--lg-primary) 85%, #000);
+    --lg-button-secondary: var(--lg-secondary);
+    --lg-button-secondary-hover: color-mix(in srgb, var(--lg-secondary) 85%, #000);
+    
+    /* Text & Structure */
+    --lg-text-primary: var(--lg-structure);
+    --lg-text-secondary: color-mix(in srgb, var(--lg-structure) 70%, #fff);
+    --lg-text-tertiary: color-mix(in srgb, var(--lg-structure) 50%, #fff);
+    --lg-text-muted: color-mix(in srgb, var(--lg-structure) 35%, #fff);
+    
+    /* Backgrounds & Surfaces */
+    --lg-bg-primary: #FFFFFF;
+    --lg-bg-secondary: color-mix(in srgb, var(--lg-primary) 8%, #fff);
+    --lg-bg-support: color-mix(in srgb, var(--lg-secondary) 8%, #fff);
+    --lg-bg-success: color-mix(in srgb, var(--lg-success) 10%, #fff);
+    
+    /* Borders & Dividers */
+    --lg-border: color-mix(in srgb, var(--lg-structure) 12%, #fff);
+    --lg-border-primary: var(--lg-primary);
+    --lg-border-secondary: var(--lg-secondary);
+    
+    /* Status Colors */
+    --lg-status-success: var(--lg-success);
+    --lg-status-warning: #D97706;
+    --lg-status-error: #DC2626;
+    --lg-status-info: #0D9488;
+    
+    /* Feedback Backgrounds */
+    --lg-feedback-success-bg: color-mix(in srgb, var(--lg-success) 10%, #fff);
+    --lg-feedback-warning-bg: #FEF3C7;
+    --lg-feedback-error-bg: #FEE2E2;
+    --lg-feedback-info-bg: #CCFBF1;
+}
+
+/* ============================================================================
+ * ENSURE TOKENS OVERRIDE ANY THEME STYLES
+ * ========================================================================== */
+
+* {
+    --lg-primary: #1CAAB6 !important;
+    --lg-secondary: #67BED9 !important;
+    --lg-success: #4DA88F !important;
+    --lg-structure: #1A237E !important;
+}
+
+/* ============================================================================
+ * BACKWARDS COMPATIBILITY ALIASES
+ * Maps old variable names to new unified tokens (support only, do not add)
+ * ========================================================================== */
+
+:root {
+    /* Old teal/brand names -> primary */
+    --lgp-brand-teal: var(--lg-primary);
+    --lgp-action-teal: var(--lg-primary);
+    --lgp-color-brand: var(--lg-primary);
+    
+    /* Old cyan/sky names -> secondary */
+    --lgp-brand-cyan: var(--lg-secondary);
+    --lgp-action-cyan: var(--lg-secondary);
+    --lgp-color-accent: var(--lg-secondary);
+    
+    /* Old navy/structure names -> structure */
+    --lgp-structure-navy: var(--lg-structure);
+    --lgp-color-text-primary: var(--lg-structure);
+    --lgp-color-sidebar: var(--lg-structure);
+    
+    /* Old success -> success */
+    --lgp-success: var(--lg-success);
+    --lgp-color-success: var(--lg-success);
+    
+    /* Light variants (derived) */
+    --lgp-action-teal-light: color-mix(in srgb, var(--lg-primary) 10%, #fff);
+    --lgp-action-cyan-light: color-mix(in srgb, var(--lg-secondary) 10%, #fff);
+    --lgp-brand-teal-light: color-mix(in srgb, var(--lg-primary) 10%, #fff);
+    --lgp-brand-cyan-light: color-mix(in srgb, var(--lg-secondary) 10%, #fff);
+    
+    /* Dark variants (derived) */
+    --lgp-action-teal-dark: color-mix(in srgb, var(--lg-primary) 85%, #000);
+    --lgp-action-cyan-dark: color-mix(in srgb, var(--lg-secondary) 85%, #000);
+    --lgp-brand-teal-dark: color-mix(in srgb, var(--lg-primary) 85%, #000);
+    --lgp-brand-cyan-dark: color-mix(in srgb, var(--lg-secondary) 85%, #000);
+}

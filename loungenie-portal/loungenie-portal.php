@@ -184,6 +184,7 @@ function lgp_init()
     include_once LGP_PLUGIN_DIR . 'includes/class-lgp-database.php';
     include_once LGP_PLUGIN_DIR . 'includes/class-lgp-router.php';
     include_once LGP_PLUGIN_DIR . 'includes/class-lgp-auth.php';
+    include_once LGP_PLUGIN_DIR . 'includes/class-lgp-isolation.php';
     include_once LGP_PLUGIN_DIR . 'includes/class-lgp-assets.php';
     include_once LGP_PLUGIN_DIR . 'includes/class-lgp-cache.php';
     include_once LGP_PLUGIN_DIR . 'includes/class-lgp-security.php';

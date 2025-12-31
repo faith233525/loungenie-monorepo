@@ -1,0 +1,39 @@
+/* Admin Diagnostics Styles - aligns with Pool Safe palette */
+:root {
+    --lgp-admin-bg: #f7f9fc;
+    --lgp-admin-border: #d8e3f2;
+    --lgp-admin-text: #1A237E;
+    --lgp-admin-muted: #5a678d;
+    --lgp-admin-accent: #1caab6;
+    --lgp-admin-warning-bg: #fff7e0;
+    --lgp-admin-warning-border: #ffc107;
+    --lgp-admin-error: #c62828;
+}
+
+.lgp-admin-panel {
+    background: #fff;
+    border: 1px solid var(--lgp-admin-border);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(26, 35, 126, 0.06);
+    color: var(--lgp-admin-text);
+}
+
+.lgp-admin-panel--warning {
+    background: var(--lgp-admin-warning-bg);
+    border-color: var(--lgp-admin-warning-border);
+}
+
+.lgp-admin-form-actions {
+    margin-top: 20px;
+}
+
+.lgp-admin-status {
+    margin: 8px 0;
+    font-weight: 600;
+}
+
+.lgp-admin-status--error {
+    color: var(--lgp-admin-error);
+}

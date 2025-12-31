@@ -38,6 +38,7 @@ class LGP_Loader
 
         // Phase 2: Core
         self::maybe_init_class('LGP_Auth');          // Auth checks (uses capabilities)
+        self::maybe_init_class('LGP_Isolation');     // Theme/role isolation (depends on auth)
         self::maybe_init_class('LGP_Router');        // Route handling (uses auth)
         self::maybe_init_class('LGP_Assets');        // Asset enqueue (conditional on route/auth)
 

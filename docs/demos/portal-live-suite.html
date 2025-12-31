@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LounGenie Portal – Live Preview Suite</title>
+  <style>
+    :root {
+      --primary: #1caab6;
+      --secondary: #67bed9;
+      --success: #4da88f;
+      --structure: #1a237e;
+      --bg: #f6f9fb;
+      --card: #ffffff;
+      --muted: #5f748c;
+      --radius: 14px;
+      --shadow: 0 18px 42px rgba(13, 53, 88, 0.16);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Montserrat','Segoe UI',system-ui; background: var(--bg); color: var(--structure); }
+    a { color: inherit; text-decoration: none; }
+    header { background: linear-gradient(135deg, #0e2339, #13355b); color: #eaf5ff; padding: 18px 22px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+    .brand { display: flex; gap: 10px; align-items: center; font-weight: 700; letter-spacing: 0.3px; }
+    .pill { display: inline-flex; align-items: center; gap: 6px; padding: 7px 11px; border-radius: 999px; background: rgba(103,190,217,0.22); color: #0e2339; font-weight: 700; }
+    .section-nav { display: flex; gap: 10px; flex-wrap: wrap; }
+    .section-nav a { padding: 8px 12px; border-radius: 10px; background: rgba(255,255,255,0.12); color: #eaf5ff; font-weight: 600; }
+    .section-nav a:hover { background: rgba(255,255,255,0.22); }
+    main { padding: 24px; display: grid; gap: 22px; }
+    section { background: var(--card); border-radius: 16px; box-shadow: var(--shadow); padding: 20px 22px; border: 1px solid rgba(19,53,91,0.08); }
+    h2 { margin: 0 0 6px; letter-spacing: -0.2px; }
+    p { margin: 6px 0 12px; color: var(--muted); }
+    .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); }
+    .card { background: #fdfefe; border-radius: 14px; padding: 14px 16px; border: 1px solid #e1eaf2; box-shadow: 0 10px 22px rgba(14,35,57,0.08); }
+    .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; font-weight: 700; background: rgba(28,170,182,0.12); color: #0e2339; }
+    .muted { color: var(--muted); font-size: 14px; }
+    .list { display: grid; gap: 10px; }
+    .item { padding: 12px 14px; border: 1px solid #e1eaf2; border-radius: 12px; background: #fff; }
+    .map { height: 320px; border-radius: 14px; border: 1px solid #b2d5ef; background: linear-gradient(135deg, #dff1ff, #b7e3ff); position: relative; overflow: hidden; }
+    .map::after { content: 'Leaflet map placeholder (interactive in plugin)'; position: absolute; inset: 0; display: grid; place-items: center; font-weight: 700; color: #0e2339; background: repeating-linear-gradient(45deg, rgba(14,35,57,0.05), rgba(14,35,57,0.05) 12px, rgba(103,190,217,0.08) 12px, rgba(103,190,217,0.08) 24px); }
+    form { display: grid; gap: 10px; }
+    label { font-weight: 700; color: #0e2339; }
+    input, select, textarea { padding: 10px 12px; border-radius: 10px; border: 1px solid #d6e2ef; font-family: inherit; }
+    button { padding: 10px 14px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; background: linear-gradient(145deg, var(--primary), var(--secondary)); color: #0e2339; box-shadow: 0 10px 20px rgba(28,170,182,0.25); }
+    button.secondary { background: #0f2338; color: #eaf5ff; box-shadow: 0 10px 20px rgba(14,35,57,0.25); }
+    .flex { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .tab { padding: 8px 12px; border-radius: 999px; border: 1px solid #d7e6f3; background: #fff; font-weight: 700; font-size: 13px; }
+    .tab.active { background: linear-gradient(145deg, var(--primary), var(--secondary)); color: #082134; border-color: transparent; }
+    .video { background: #0f2338; color: #e9f5ff; border-radius: 14px; padding: 14px; position: relative; overflow: hidden; box-shadow: 0 10px 22px rgba(14,35,57,0.2); }
+    .video span { font-size: 13px; color: #9fc7f3; }
+    .upload { border: 1px dashed #b5cfe6; background: #f7fbff; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">LounGenie Portal • Live Preview Suite</div>
+    <div class="section-nav">
+      <a href="#login">Login</a>
+      <a href="#support">Support Portal</a>
+      <a href="#partner">Partner Portal</a>
+    </div>
+    <div class="pill">Theme-free · Brand locked · Demo only</div>
+  </header>
+  <main>
+
+    <!-- Login Experience -->
+    <section id="login">
+      <div class="flex" style="justify-content: space-between; align-items: flex-start;">
+        <div>
+          <h2>Login experience</h2>
+          <p>Single, role-aware login. Support and Partner paths shown; SSO button included. Fully self-contained (no theme).</p>
+          <div class="pill">Route targets: /portal/login · /support-login · /partner-login</div>
+        </div>
+      </div>
+      <div class="grid" style="margin-top:12px;">
+        <div class="card">
+          <div class="badge">Unified login form</div>
+          <form>
+            <label>Email</label>
+            <input placeholder="you@company.com" type="email">
+            <label>Password</label>
+            <input placeholder="••••••••" type="password">
+            <button type="button">Sign in</button>
+            <button type="button" class="secondary">Sign in with Microsoft 365</button>
+          </form>
+          <p class="muted">Support and Partner users are redirected to /portal; wp-admin is blocked for these roles.</p>
+        </div>
+        <div class="card">
+          <div class="badge">Role previews</div>
+          <div class="list">
+            <div class="item"><strong>Support login</strong> sees full fleet, tickets, requests, map, uploads.</div>
+            <div class="item"><strong>Partner login</strong> sees scoped data (their companies only).</div>
+            <div class="item"><strong>SSO (Azure/M365)</strong> button styled via portal-login.css (no inline CSS).</div>
+            <div class="item"><strong>Admin isolation</strong> wp-admin redirect + admin bar hidden for portal roles.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Support Portal -->
+    <section id="support">
+      <div class="flex" style="justify-content: space-between; align-items: flex-start;">
+        <div>
+          <h2>Support portal (full access)</h2>
+          <p>Everything enabled: tickets, requests, map, videos, audit log, CSV/Excel imports, and document uploads.</p>
+          <div class="pill">Role: lgp_support · full data scope</div>
+        </div>
+      </div>
+      <div class="grid" style="margin-top:14px;">
+        <div class="card">
+          <div class="badge">Operations KPIs</div>
+          <div class="list">
+            <div class="item">Active tickets: 42 · Median response: 12m · CSAT: 4.8</div>
+            <div class="item">Gateways online: 118 · Offline under watch: 4</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="badge">CSV / Excel upload</div>
+          <div class="item upload">
+            <strong>Bulk import</strong>
+            <p class="muted">Upload .csv/.xlsx for units, companies, or tickets. (In plugin: validated, nonce-protected.)</p>
+            <input type="file" accept=".csv,.xlsx">
+            <button type="button">Simulate upload</button>
+          </div>
+          <p class="muted">Supports: partner imports, unit inventory, ticket templates.</p>
+        </div>
+        <div class="card" style="grid-column: span 2;">
+          <div class="badge">Map (Leaflet-ready)</div>
+          <p class="muted">Full-company map. In the plugin, markers load via REST with role-based filters.</p>
+          <div class="map"></div>
+        </div>
+        <div class="card">
+          <div class="badge">Tickets & requests</div>
+          <div class="list">
+            <div class="item"><strong>#3481 · Gateway offline</strong> SLA: 42m · Owner: Alex</div>
+            <div class="item"><strong>#3480 · Heater alert spike</strong> SLA: 1h12m · Partner: Bluewave</div>
+            <div class="item"><strong>#907 · Firmware roll-out</strong> Scheduled 11pm-1am</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="badge">Videos & media</div>
+          <div class="video">
+            <h4>Gateway troubleshooting</h4>
+            <span>Duration: 08:45 · Internal</span>
+          </div>
+          <div class="video" style="margin-top:10px;">
+            <h4>Field escalation playbook</h4>
+            <span>Duration: 05:10 · Internal</span>
+          </div>
+          <p class="muted">CSP allows YouTube/Vimeo embeds in production.</p>
+        </div>
+        <div class="card">
+          <div class="badge">Documents & uploads</div>
+          <div class="list">
+            <div class="item">Upload: Contracts, compliance PDFs, site photos</div>
+            <div class="item">Download: Reports, CSV exports, ticket bundles</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="badge">Audit log</div>
+          <div class="list">
+            <div class="item"><strong>12:04</strong> Support updated ticket #3481 → In progress</div>
+            <div class="item"><strong>11:58</strong> Partner added site photo to Unit-430</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Partner Portal -->
+    <section id="partner">
+      <div class="flex" style="justify-content: space-between; align-items: flex-start;">
+        <div>
+          <h2>Partner portal (scoped)</h2>
+          <p>Scoped to the partner’s companies. Map is filtered; uploads are allowed for their org only.</p>
+          <div class="pill">Role: lgp_partner · scoped data</div>
+        </div>
+      </div>
+      <div class="grid" style="margin-top:14px;">
+        <div class="card">
+          <div class="badge">Company profile</div>
+          <div class="list">
+            <div class="item"><strong>Profile</strong> Address, contacts, SLAs, preferences</div>
+            <div class="item"><strong>Documents</strong> Contracts, compliance, site photos</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="badge">CSV upload (partner-scoped)</div>
+          <div class="item upload">
+            <strong>Import units or contacts</strong>
+            <p class="muted">Upload .csv/.xlsx for your companies only.</p>
+            <input type="file" accept=".csv,.xlsx">
+            <button type="button">Simulate upload</button>
+          </div>
+          <p class="muted">Server validates ownership and nonce before saving.</p>
+        </div>
+        <div class="card" style="grid-column: span 2;">
+          <div class="badge">Map (scoped)</div>
+          <p class="muted">Only partner’s markers appear. Support sees the full fleet; partners see theirs.</p>
+          <div class="map"></div>
+        </div>
+        <div class="card">
+          <div class="badge">Tickets (scoped)</div>
+          <div class="list">
+            <div class="item"><strong>#422 · Heater alert spike</strong> Status: In progress · SLA: 1h12m</div>
+            <div class="item"><strong>#418 · Training request</strong> Status: Scheduled</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="badge">Videos</div>
+          <div class="video">
+            <h4>Partner: Submitting great tickets</h4>
+            <span>Duration: 05:05</span>
+          </div>
+          <p class="muted">Embeds permitted; scoped visibility for partners.</p>
+        </div>
+        <div class="card">
+          <div class="badge">Exports</div>
+          <div class="list">
+            <div class="item">Download ticket CSV (scoped)</div>
+            <div class="item">Download unit inventory CSV (scoped)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

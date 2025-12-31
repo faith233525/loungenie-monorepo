@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Partner Portal – Demo</title>
+  <style>
+    :root {
+      --teal: #1caab6;
+      --sky: #67bed9;
+      --sea: #4da88f;
+      --navy: #0e2339;
+      --bg: #f6f9fb;
+      --card: #ffffff;
+      --muted: #5f748c;
+      --radius: 16px;
+      --shadow: 0 16px 32px rgba(13, 53, 88, 0.16);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Montserrat','Segoe UI',system-ui; background: var(--bg); color: var(--navy); }
+    header { background: linear-gradient(135deg, #0f253d, #16375b); color: #eaf5ff; padding: 18px 24px; display: flex; align-items: center; gap: 14px; }
+    header .badge { padding: 8px 12px; background: rgba(255,255,255,0.1); border-radius: 12px; font-weight: 700; letter-spacing: 0.3px; }
+    .layout { display: grid; grid-template-columns: 240px 1fr; min-height: calc(100vh - 72px); }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } nav { flex-direction: row; overflow-x: auto; } }
+    nav { background: #0f243b; color: #c2d7ef; padding: 20px 16px; display: flex; flex-direction: column; gap: 10px; }
+    nav a { color: #c2d7ef; text-decoration: none; padding: 11px 13px; border-radius: 11px; font-weight: 600; }
+    nav a.active { background: rgba(28,170,182,0.14); color: #fff; }
+    nav a:hover { background: rgba(255,255,255,0.08); }
+    main { padding: 24px; display: grid; gap: 16px; background: linear-gradient(180deg, #fafdff, #f3f7fb); }
+    .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 20px; }
+    .flex { display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    h2 { margin: 0 0 6px; }
+    p { margin: 6px 0; color: var(--muted); }
+    .pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; background: rgba(103,190,217,0.18); color: #0e2339; font-weight: 700; }
+    .kpi { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px,1fr)); gap: 12px; }
+    .kpi .item { background: #0f2338; color: #e9f5ff; border-radius: 14px; padding: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
+    .kpi small { opacity: 0.78; }
+    .kpi strong { display: block; font-size: 22px; margin-top: 6px; }
+    .map-summary { height: 240px; border-radius: 14px; border: 1px dashed #b7d6ea; background: linear-gradient(135deg, #e8f6ff, #d4ecf8); display: grid; place-items: center; color: #0e2339; font-weight: 700; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 12px; }
+    .video { background: #0f2338; color: #e9f5ff; border-radius: 14px; padding: 14px; position: relative; }
+    .video h4 { margin: 0 0 6px; }
+    .video span { font-size: 13px; color: #9fc7f3; }
+    .list { display: grid; gap: 10px; }
+    .ticket { border: 1px solid #e1eaf2; border-radius: 12px; padding: 12px 14px; background: #fff; }
+    .ticket strong { display: block; margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="badge">LounGenie Portal • Partner</div>
+    <div>Read-only map + training videos preview (demo)</div>
+  </header>
+  <div class="layout">
+    <nav>
+      <a class="active" href="#">Dashboard</a>
+      <a href="#">Units</a>
+      <a href="#">Tickets</a>
+      <a href="#">Requests</a>
+      <a href="#">Training Videos</a>
+      <a href="#">Knowledge Center</a>
+    </nav>
+    <main>
+      <div class="card">
+        <div class="flex">
+          <div>
+            <h2>Welcome back, Partner</h2>
+            <p>Overview of your locations, tickets, and learning resources.</p>
+          </div>
+          <span class="pill">Partner role • scoped</span>
+        </div>
+        <div class="kpi" style="margin-top:12px;">
+          <div class="item"><small>Locations</small><strong>28</strong></div>
+          <div class="item"><small>Open tickets</small><strong>6</strong></div>
+          <div class="item"><small>Avg response</small><strong>34m</strong></div>
+          <div class="item"><small>Training progress</small><strong>82%</strong></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="flex">
+          <div>
+            <h2>Map summary (read-only)</h2>
+            <p>In the plugin, partners see a filtered map for their companies only; here we show a visual placeholder.</p>
+          </div>
+          <span class="pill">Map (summary)</span>
+        </div>
+        <div class="map-summary">Map placeholder (partner-scoped)</div>
+      </div>
+
+      <div class="card">
+        <div class="flex">
+          <div>
+            <h2>Training videos</h2>
+            <p>Same shell as support, but scoped to partner-facing videos.</p>
+          </div>
+          <span class="pill">Media ready</span>
+        </div>
+        <div class="grid" style="margin-top:12px;">
+          <div class="video">
+            <h4>Getting started for managers</h4>
+            <span>Duration: 04:50 · Partner</span>
+          </div>
+          <div class="video">
+            <h4>Using the Knowledge Center</h4>
+            <span>Duration: 03:20 · Partner</span>
+          </div>
+          <div class="video">
+            <h4>Submitting great tickets</h4>
+            <span>Duration: 05:05 · Partner</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="flex">
+          <h2>Recent tickets</h2>
+          <span class="pill">Read/update</span>
+        </div>
+        <div class="list" style="margin-top:12px;">
+          <div class="ticket">
+            <strong>#4821 · Heater alert</strong>
+            Status: In progress · SLA: 1h 10m
+          </div>
+          <div class="ticket">
+            <strong>#4813 · Firmware update</strong>
+            Status: Scheduled · SLA: n/a
+          </div>
+          <div class="ticket">
+            <strong>#4801 · New unit onboarding</strong>
+            Status: Completed · SLA: met
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

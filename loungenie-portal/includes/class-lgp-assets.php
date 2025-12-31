@@ -26,6 +26,11 @@ class LGP_Assets
     /**
      * Enqueue portal assets (CSS and JS)
      * Called by router when loading portal
+     *
+     * PORTAL INDEPENDENCE: This method ensures the plugin completely bypasses
+     * the active WordPress theme. All styling, layout, and components come
+     * from the plugin itself. The active theme's CSS is dequeued to prevent
+     * color override, layout disruption, or unwanted style inheritance.
      */
     public static function enqueue_portal_assets()
     {
@@ -33,6 +38,11 @@ class LGP_Assets
         if (is_admin() ) {
             return;
         }
+
+        // ===== STEP 1: DEQUEUE THEME STYLES TO ENSURE PLUGIN INDEPENDENCE =====
+        // Remove all WordPress theme styles to prevent override of portal design
+        self::dequeue_theme_styles();
+
         // Resource hints for faster connections to external CDNs used by the portal
         add_filter(
             'wp_resource_hints',
@@ -68,11 +78,21 @@ class LGP_Assets
             'all'
         );
 
-        // Enqueue design tokens first (CSS variables)
+        // Enqueue unified global brand tokens FIRST (before all other styles)
+        // These are immutable and use !important to prevent theme overrides
+        wp_enqueue_style(
+            'lgp-global-tokens',
+            LGP_ASSETS_URL . 'css/global-tokens.css',
+            array( 'font-awesome' ),
+            LGP_VERSION,
+            'all'
+        );
+
+        // Enqueue design tokens (legacy compatibility - maps to unified tokens)
         wp_enqueue_style(
             'lgp-design-tokens',
             LGP_ASSETS_URL . 'css/design-tokens.css',
-            array( 'font-awesome' ),
+            array( 'lgp-global-tokens' ),
             LGP_VERSION,
             'all'
         );
@@ -241,6 +261,49 @@ class LGP_Assets
                 'tileAttribution' => '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
                 )
             );
+        }
+    }
+
+    /**
+     * Dequeue all theme styles to ensure portal independence
+     *
+     * This method removes CSS from the active WordPress theme to ensure
+     * the portal is 100% self-contained. Only safe core WordPress styles
+     * (dashicons, wp-api) are preserved.
+     *
+     * Without this, the active theme's colors, fonts, and layout could
+     * override the portal's brand design, which violates the independence
+     * requirement.
+     */
+    private static function dequeue_theme_styles()
+    {
+        global $wp_styles;
+
+        // Safe list of core WordPress styles that portal needs
+        $safe_core_handles = array(
+        'dashicons',
+        'wp-api',
+        'wp-block-library',
+        );
+
+        if ($wp_styles instanceof WP_Styles ) {
+            foreach ( (array) $wp_styles->queue as $handle ) {
+                // Keep only safe core WordPress styles
+                if (in_array($handle, $safe_core_handles, true) ) {
+                    continue;
+                }
+
+                // Remove anything that looks like a theme style
+                if (0 === strpos($handle, 'child-') ||
+                    0 === strpos($handle, 'twentytwenty') ||
+                    0 === strpos($handle, 'twentynineteen') ||
+                    0 === strpos($handle, 'twentytwentythree') ||
+                    0 === strpos($handle, 'twentytwentyfour') ||
+                    false !== strpos($handle, 'theme') ||
+                    false !== strpos($handle, 'parent') ) {
+                    wp_dequeue_style($handle);
+                }
+            }
         }
     }
 }

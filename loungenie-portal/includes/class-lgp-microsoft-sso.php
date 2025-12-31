@@ -454,31 +454,8 @@ class LGP_Microsoft_SSO
 
         $auth_url = self::get_authorization_url();
 
+        wp_enqueue_style('lgp-portal-login', LGP_ASSETS_URL . 'css/portal-login.css', array(), LGP_VERSION);
         ?>
-        <style>
-            .lgp-sso-button {
-                display: block;
-                width: 100%;
-                padding: 12px;
-                margin: 20px 0;
-                background: #0078d4;
-                color: #fff;
-                text-align: center;
-                text-decoration: none;
-                border-radius: 4px;
-                font-weight: 500;
-                transition: background 0.2s;
-            }
-            .lgp-sso-button:hover {
-                background: #106ebe;
-                color: #fff;
-            }
-            .lgp-sso-divider {
-                text-align: center;
-                margin: 20px 0;
-                color: #666;
-            }
-        </style>
         <a href="<?php echo esc_url($auth_url); ?>" class="lgp-sso-button">
         <?php esc_html_e('Sign in with Microsoft 365', 'loungenie-portal'); ?>
         </a>

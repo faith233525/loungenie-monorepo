@@ -18,6 +18,7 @@ class SharedServerDiagnostics
     {
         add_action('admin_menu', array( $this, 'add_diagnostics_menu' ));
         add_action('admin_init', array( $this, 'handle_download' ));
+        add_action('admin_enqueue_scripts', array( $this, 'enqueue_assets' ));
     }
 
     /**
@@ -47,6 +48,23 @@ class SharedServerDiagnostics
     }
 
     /**
+     * Enqueue admin assets for diagnostics page
+     */
+    public function enqueue_assets( $hook )
+    {
+        if (! isset($_GET['page']) || 'lgp_diagnostics' !== sanitize_text_field(wp_unslash($_GET['page'])) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            return;
+        }
+
+        wp_enqueue_style(
+            'lgp-admin-diagnostics',
+            LGP_ASSETS_URL . 'css/admin-diagnostics.css',
+            array(),
+            LGP_VERSION
+        );
+    }
+
+    /**
      * Display diagnostics page
      */
     public function display_diagnostics()
@@ -67,7 +85,7 @@ class SharedServerDiagnostics
         <?php $this->display_database_info(); ?>
         <?php $this->display_recommendations(); ?>
             
-            <form method="post" style="margin-top: 20px;">
+            <form method="post" class="lgp-admin-form-actions">
         <?php wp_nonce_field('lgp_diagnostics_nonce'); ?>
                 <button type="submit" name="lgp_download_report" class="button button-primary">
                     📥 Download Diagnostic Report
@@ -82,7 +100,7 @@ class SharedServerDiagnostics
      */
     private function display_server_info()
     {
-        echo '<div style="background: #f9f9f9; border: 1px solid #ccc; padding: 20px; margin: 20px 0; border-radius: 5px;">';
+        echo '<div class="lgp-admin-panel">';
         echo '<h2>🖥️ Server Environment</h2>';
         echo '<table class="widefat">';
 
@@ -114,7 +132,7 @@ class SharedServerDiagnostics
     {
         global $wp_version;
 
-        echo '<div style="background: #f9f9f9; border: 1px solid #ccc; padding: 20px; margin: 20px 0; border-radius: 5px;">';
+        echo '<div class="lgp-admin-panel">';
         echo '<h2>📦 WordPress Installation</h2>';
         echo '<table class="widefat">';
 
@@ -145,7 +163,7 @@ class SharedServerDiagnostics
      */
     private function display_plugin_info()
     {
-        echo '<div style="background: #f9f9f9; border: 1px solid #ccc; padding: 20px; margin: 20px 0; border-radius: 5px;">';
+        echo '<div class="lgp-admin-panel">';
         echo '<h2>🧩 LounGenie Portal Information</h2>';
 
         $plugin_file = WP_PLUGIN_DIR . '/loungenie-portal/loungenie-portal.php';
@@ -159,7 +177,7 @@ class SharedServerDiagnostics
             'Author'            => $plugin_data['Author'] ?? 'Unknown',
             'Status'            => is_plugin_active('loungenie-portal/loungenie-portal.php') ? 'Active' : 'Inactive',
             'PHP Required'      => '7.4.0+',
-            'Namespace Support' => class_exists('\LounGenie\Portal\LGP_Loader') ? '✓ Yes' : '✗ No',
+            'Namespace Support' => class_exists('\\LounGenie\\Portal\\LGP_Loader') ? '✓ Yes' : '✗ No',
             );
 
             foreach ( $plugin_info as $key => $value ) {
@@ -168,7 +186,7 @@ class SharedServerDiagnostics
 
             echo '</table>';
         } else {
-            echo '<p style="color: red;">❌ Plugin not found</p>';
+            echo '<p class="lgp-admin-status lgp-admin-status--error">❌ Plugin not found</p>';
         }
 
         echo '</div>';
@@ -181,7 +199,7 @@ class SharedServerDiagnostics
     {
         global $wpdb;
 
-        echo '<div style="background: #f9f9f9; border: 1px solid #ccc; padding: 20px; margin: 20px 0; border-radius: 5px;">';
+        echo '<div class="lgp-admin-panel">';
         echo '<h2>🗄️ Database Status</h2>';
         echo '<table class="widefat">';
 
@@ -210,7 +228,7 @@ class SharedServerDiagnostics
      */
     private function display_recommendations()
     {
-        echo '<div style="background: #fff3cd; border: 1px solid #ffc107; padding: 20px; margin: 20px 0; border-radius: 5px;">';
+        echo '<div class="lgp-admin-panel lgp-admin-panel--warning">';
         echo '<h2>⚡ Recommendations for Shared Server</h2>';
 
         $recommendations = array();

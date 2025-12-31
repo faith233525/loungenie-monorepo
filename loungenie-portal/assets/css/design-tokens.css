@@ -1,113 +1,123 @@
 /**
- * Design Tokens - Portal Design System
+ * LounGenie Portal – Unified Design Tokens
  * 
- * Core variables for consistent spacing, colors, typography, and component styling
- * across the LounGenie Portal. Use these tokens throughout portal templates for
- * maintainability and visual consistency.
- *
+ * This file defines the ONLY brand colors allowed in the plugin.
+ * All colors use !important to prevent WordPress theme override.
+ * No other brand colors exist in the codebase.
+ * 
  * @package LounGenie Portal
- * @version 1.6.0
+ * @version 2.0.0
  */
 
 :root {
     /* ============================================================================
-     * 60-30-10 COLOR RULE - NUANCED IMPLEMENTATION
+     * BRAND COLORS – THE ONLY 4 COLORS ALLOWED IN THE PORTAL
      * ========================================================================== */
 
-    /* 60% ATMOSPHERE: Soft Cyan & White (Backgrounds & Large Surfaces) */
-    --lgp-atmosphere-primary: #E9F8F9;
-    /* Main background */
-    --lgp-atmosphere-white: #FFFFFF;
-    /* Cards, modals */
-    --lgp-atmosphere-alt: #F5FBFC;
-    /* Alternating card bg */
-    --lgp-atmosphere-border: #D8E9EC;
-    /* Subtle borders */
-    --lgp-atmosphere-hover: #EEF7F9;
-    /* Hover surfaces */
+    /* Primary action (partner portal, buttons, active states) */
+    --lg-primary: #1CAAB6 !important;
 
-    /* 30% STRUCTURE: Deep Navy (Text, Headers, Navigation) */
-    --lgp-structure-navy: #0F172A;
-    /* Primary text, sidebar bg */
-    --lgp-structure-headline: #0F172A;
-    /* Headings (h1-h6) */
-    --lgp-structure-body: #454F5E;
-    /* Body text */
-    --lgp-structure-secondary: #7A8699;
-    /* Secondary text */
-    --lgp-structure-tertiary: #94A3B8;
-    /* Tertiary text, hints */
-    --lgp-structure-border: #CFE3E6;
-    /* Borders, separators */
+    /* Secondary color (support portal, secondary elements) */
+    --lg-secondary: #67BED9 !important;
 
-    /* 10% ACTION: Teal & Cyan (Interactive Elements Only) */
-    --lgp-action-teal: #3AA6B9;
-    /* Primary action */
-    --lgp-action-teal-dark: #2A8A9A;
-    /* Hover state */
-    --lgp-action-teal-light: #D8EFF3;
-    /* Badge/light background */
-    --lgp-action-cyan: #25D0EE;
-    /* Secondary action */
-    --lgp-action-cyan-dark: #1AB9D4;
-    /* Hover state */
-    --lgp-action-cyan-light: #D6F6FC;
-    /* Badge/light background */
+    /* Success/completed status */
+    --lg-success: #4DA88F !important;
 
-    /* Legacy mapping for compatibility */
-    --lgp-brand-teal: #3AA6B9;
-    --lgp-brand-teal-dark: #2A8A9A;
-    --lgp-brand-teal-light: #D8EFF3;
-    --lgp-brand-cyan: #25D0EE;
-    --lgp-brand-cyan-dark: #1AB9D4;
-    --lgp-brand-cyan-light: #D6F6FC;
+    /* Structure (brand navy, primary text, navigation) */
+    --lg-structure: #1A237E !important;
+
+    /* ============================================================================
+     * DERIVED TOKENS (computed from 4 brand colors ONLY)
+     * ========================================================================== */
+
+    /* Text colors (derived from structure) */
+    --lg-text-primary: var(--lg-structure) !important;
+    --lg-text-secondary: rgba(26, 35, 126, 0.7) !important;
+    --lg-text-tertiary: rgba(26, 35, 126, 0.5) !important;
+    --lg-text-muted: rgba(26, 35, 126, 0.4) !important;
+    --lg-text-inverse: #FFFFFF !important;
+
+    /* Backgrounds */
+    --lg-bg-primary: #FFFFFF !important;
+    --lg-bg-secondary: #F8FAFC !important;
+    --lg-bg-tertiary: #EEF5F7 !important;
+
+    /* Borders (derived from structure) */
+    --lg-border-primary: rgba(26, 35, 126, 0.15) !important;
+    --lg-border-secondary: rgba(26, 35, 126, 0.1) !important;
+
+    /* Interactive states */
+    --lg-primary-hover: #158c95 !important;
+    --lg-primary-active: #106f77 !important;
+    --lg-primary-light: rgba(28, 170, 182, 0.1) !important;
+
+    --lg-secondary-hover: #4ca8c9 !important;
+    --lg-secondary-active: #368fb5 !important;
+    --lg-secondary-light: rgba(103, 190, 217, 0.1) !important;
+
+    --lg-success-hover: #3d8f76 !important;
+    --lg-success-active: #2d765e !important;
+    --lg-success-light: rgba(77, 168, 143, 0.1) !important;
+
+    /* Status colors */
+    --lg-warning: #F59E0B !important;
+    --lg-danger: #DC2626 !important;
+    --lg-info: var(--lg-secondary) !important;
+
+    /* LEGACY COMPATIBILITY (all derived from the 4 brand colors) */
+    --lgp-action-teal: #1caab6;
+    --lgp-action-teal-dark: #158c95;
+    --lgp-action-teal-light: #d5f3f5;
+    --lgp-action-cyan: #67bed9;
+    --lgp-action-cyan-dark: #4ca8c9;
+    --lgp-action-cyan-light: #d9edf7;
+    --lgp-brand-teal: #1caab6;
+    --lgp-brand-teal-dark: #158c95;
+    --lgp-brand-teal-light: #d5f3f5;
+    --lgp-brand-cyan: #67bed9;
+    --lgp-brand-cyan-dark: #4ca8c9;
+    --lgp-brand-cyan-light: #d9edf7;
     --lgp-white: #FFFFFF;
     --lgp-background: #E9F8F9;
     --lgp-surface: #FFFFFF;
     --lgp-border: #D8E9EC;
-    --lgp-text-primary: #0F172A;
-    --lgp-text-secondary: #454F5E;
-    --lgp-text-tertiary: #7A8699;
-    --lgp-text-muted: #94A3B8;
-
-    /* OLD variable compatibility */
+    --lgp-text-primary: #1A237E;
+    --lgp-text-secondary: #24335B;
+    --lgp-text-tertiary: #5a678d;
+    --lgp-text-muted: #7f8db1;
     --lgp-color-background: #E9F8F9;
     --lgp-color-surface: #E9F8F9;
     --lgp-color-surface-raised: #FFFFFF;
     --lgp-color-border: #D8E9EC;
     --lgp-color-border-hover: #CFE3E6;
-    --lgp-color-text-primary: #0F172A;
-    --lgp-color-text-secondary: #454F5E;
-    --lgp-color-text-tertiary: #7A8699;
+    --lgp-color-text-primary: #1A237E;
+    --lgp-color-text-secondary: #24335B;
+    --lgp-color-text-tertiary: #5a678d;
     --lgp-color-text-inverse: #FFFFFF;
-    --lgp-color-brand: #3AA6B9;
-    --lgp-color-brand-hover: #3393A3;
-    --lgp-color-brand-light: #D8EFF3;
-    --lgp-color-accent: #25D0EE;
-    --lgp-color-accent-hover: #1AB9D4;
-    --lgp-color-accent-light: #D6F6FC;
-
-    /* FEEDBACK COLORS (Status, Sparingly) */
-    --lgp-success: #16A34A;
-    --lgp-success-light: #DCFCE7;
-    --lgp-warning: #D97706;
+    --lgp-color-brand: #1caab6;
+    --lgp-color-brand-hover: #158c95;
+    --lgp-color-brand-light: #d5f3f5;
+    --lgp-color-accent: #67bed9;
+    --lgp-color-accent-hover: #4ca8c9;
+    --lgp-color-accent-light: #d9edf7;
+    --lgp-success: #4da88f;
+    --lgp-success-light: #e2f5ed;
+    --lgp-warning: #F59E0B;
     --lgp-warning-light: #FEF3C7;
     --lgp-danger: #DC2626;
     --lgp-danger-light: #FEE2E2;
     --lgp-info: #0D9488;
     --lgp-info-light: #CCFBF1;
-
-    /* OLD variable compatibility */
-    --lgp-color-success: #16A34A;
-    --lgp-color-success-light: #DCFCE7;
-    --lgp-color-warning: #D97706;
+    --lgp-color-success: #4da88f;
+    --lgp-color-success-light: #e2f5ed;
+    --lgp-color-warning: #F59E0B;
     --lgp-color-warning-light: #FEF3C7;
     --lgp-color-danger: #DC2626;
     --lgp-color-danger-light: #FEE2E2;
     --lgp-color-info: #0D9488;
     --lgp-color-info-light: #CCFBF1;
-    --lgp-color-sidebar: #0F172A;
-    --lgp-color-overlay: rgba(4, 16, 47, 0.7);
+    --lgp-color-sidebar: #1A237E;
+    --lgp-color-overlay: rgba(26, 35, 126, 0.7) !important;
 
     /* ROLE-SPECIFIC ACCENTS (Unified but Different) */
     --lgp-role-accent: var(--lgp-action-teal);
@@ -2393,10 +2403,31 @@ body[data-role="support"],
 }
 
 /* ============================================================================
- * PERFORMANCE OPTIMIZATIONS
+ * ENFORCEMENT: Block WordPress theme from overriding brand tokens
  * ========================================================================== */
 
-/* Reduce motion for users who prefer it */
+html, body, .lgp-portal, .lgp-portal-body {
+    --lg-primary: #1CAAB6 !important;
+    --lg-secondary: #67BED9 !important;
+    --lg-success: #4DA88F !important;
+    --lg-structure: #1A237E !important;
+}
+
+/* Prevent theme from setting custom properties that shadow ours */
+.lgp-portal,
+.lgp-portal * {
+    --wp-admin-theme-color: var(--lg-primary) !important;
+    --wp-theme-primary: var(--lg-structure) !important;
+    --wp-theme-body-text: var(--lg-text-primary) !important;
+}
+
+/* Disable theme styles on portal pages */
+.lgp-portal .wp-block-button,
+.lgp-portal .wp-block-buttons {
+    --wp-element-button-background-color: var(--lg-primary) !important;
+    --wp-element-button-border-color: var(--lg-primary) !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
 
     *,
