@@ -38,13 +38,19 @@
     --lgp-color-accent-light: var(--lgp-brand-cyan-light);
 
     /* ============================================================================
-     * NEUTRAL COLORS
+     * NEUTRAL COLORS (60-30-10 System)
+     * 60% Atmosphere (Light), 30% Structure (Navy/Dark), 10% Action (Teal/Cyan)
      * ============================================================================ */
 
     --lgp-white: #FFFFFF;
     --lgp-background: #E9F8F9;
     --lgp-surface: #FFFFFF;
     --lgp-surface-raised: #FFFFFF;
+
+    /* Structure Colors (30% - Navy for headings and emphasis) */
+    --lgp-navy: #0F172A;
+    --lgp-navy-light: #1E293B;
+    --lgp-navy-lighter: #334155;
 
     /* Borders */
     --lgp-border: #D8E9EC;
