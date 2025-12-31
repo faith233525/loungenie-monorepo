@@ -22,3 +22,6 @@ php vendor/bin/phpunit --no-coverage
 ## Notes
 - Non-essential delivery/audit documents were archived under `docs/archive/` to keep the repository root clean.
 - Demo HTML pages were moved under `docs/demos/`.
+
+# This is a placeholder for the WordPress plugin upload instructions.
+# Please refer to the WORDPRESS_UPLOAD_INSTRUCTIONS.md file for detailed steps.

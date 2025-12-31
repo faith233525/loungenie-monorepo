@@ -308,6 +308,32 @@ After installing the preview:
 
 ---
 
+# WordPress Plugin Upload Instructions
+
+## Prerequisites
+- Ensure you have a WordPress installation ready.
+- Access to the WordPress admin dashboard.
+
+## Steps to Upload the Plugin
+1. **Download the Plugin**: Ensure you have the plugin zip file ready.
+2. **Log in to WordPress Admin**: Go to your WordPress admin dashboard.
+3. **Navigate to Plugins**: Click on 'Plugins' in the left sidebar.
+4. **Add New**: Click on the 'Add New' button at the top.
+5. **Upload Plugin**: Click on the 'Upload Plugin' button.
+6. **Choose File**: Select the plugin zip file you downloaded.
+7. **Install Now**: Click on the 'Install Now' button.
+8. **Activate Plugin**: Once installed, click on 'Activate Plugin' to start using it.
+
+## Troubleshooting
+- If the upload fails, ensure the zip file is not corrupted and is compatible with your WordPress version.
+- Check your server's PHP settings if the file size exceeds the upload limit.
+
+## Additional Resources
+- [WordPress Plugin Developer Handbook](https://developer.wordpress.org/plugins/)
+- [Common Plugin Issues](https://wordpress.org/support/article/common-plugin-issues/)
+
+---
+
 **Last Updated:** December 21, 2025  
 **Version:** 1.0.0  
 **Status:** ✅ Ready for Production

@@ -1,6 +1,0 @@
-company_name,company_email,status,primary_contact_name,primary_contact_title,primary_contact_email,primary_contact_phone,secondary_contact_name,secondary_contact_title,secondary_contact_email,secondary_contact_phone
-"Acme Corporation","contact@acme.com","active","John Smith","Operations Manager","john.smith@acme.com","555-0100","Jane Doe","Assistant Manager","jane.doe@acme.com","555-0101"
-"Tech Solutions Inc","info@techsolutions.com","active","Mike Johnson","Director","mike.j@techsolutions.com","555-0200","","","",""
-"Premium Hotels Co","admin@premiumhotels.com","active","Sarah Williams","General Manager","sarah.w@premiumhotels.com","555-0300","Bob Anderson","Assistant GM","bob.a@premiumhotels.com","555-0301"
-"Global Resorts LLC","support@globalresorts.com","inactive","David Brown","Operations Director","david.brown@globalresorts.com","555-0400","","","",""
-"WaterPark Adventures","info@waterparkadv.com","active","Emily Davis","Park Manager","emily.davis@waterparkadv.com","555-0500","Tom Wilson","Maintenance Lead","tom.wilson@waterparkadv.com","555-0501"
