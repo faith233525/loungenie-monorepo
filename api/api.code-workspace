@@ -18,5 +18,12 @@
 		{
 			"path": "../assets"
 		}
-	]
+	],
+	"settings": {
+		"files.exclude": {
+			"**/.git": true,
+			"**/node_modules": true,
+			"**/.DS_Store": true
+		}
+	}
 }
