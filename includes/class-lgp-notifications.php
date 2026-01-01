@@ -1,27 +1,35 @@
 <?php
 /**
- * Minimal notification helper (test-focused)
+ * Minimal notification helper (test-focused).
+ *
+ * @package LounGenie Portal
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Notification handler for ticket and support events.
+ */
 class LGP_Notifications {
 	/**
-	 * Initialize notifications
+	 * Initialize notifications.
+	 *
+	 * @return void
 	 */
 	public static function init() {
-		// Notifications are passive - triggered by other components
-		// No hooks needed at init time
+		// Notifications are passive - triggered by other components.
+		// No hooks needed at init time.
 	}
 
 	/**
 	 * Notify support and partner on ticket events.
 	 *
-	 * @param array  $ticket   Expect keys: ticket_id, company_id, partner_user_id, partner_email, support_email
-	 * @param string $event    created|updated|replied|closed
-	 * @param string $priority low|medium|high|urgent
+	 * @param array  $ticket   Expect keys: ticket_id, company_id, partner_user_id, partner_email, support_email.
+	 * @param string $event    created|updated|replied|closed.
+	 * @param string $priority low|medium|high|urgent.
+	 * @return void
 	 */
 	public static function notify_ticket_event( $ticket, $event, $priority = 'medium' ) {
 		$ticket_id   = $ticket['ticket_id'] ?? null;
@@ -33,7 +41,7 @@ class LGP_Notifications {
 		$subject = sprintf( 'Ticket %s [%s]', $event, $priority );
 		$message = sprintf( 'Ticket %s for company %s', $event, $company_id );
 
-		// Support email on all events
+		// Support email on all events.
 		wp_mail( $support_to, $subject, $message );
 		if ( class_exists( 'LGP_Logger' ) ) {
 			LGP_Logger::log_notification(
@@ -49,7 +57,7 @@ class LGP_Notifications {
 			);
 		}
 
-		// Partner notifications only for their own company
+		// Partner notifications only for their own company.
 		if ( $partner_to && $partner_uid ) {
 			wp_mail( $partner_to, $subject, $message );
 			if ( function_exists( 'lgp_portal_alert' ) ) {

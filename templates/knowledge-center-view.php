@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Knowledge Center View
  * Support: Upload and manage videos

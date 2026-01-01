@@ -1,14 +1,18 @@
 <?php
-
 /**
- * Lightweight geocoding helper using free Nominatim (OpenStreetMap)
+ * Lightweight geocoding helper using free Nominatim (OpenStreetMap).
  * Caches coordinates on the company record to avoid repeat lookups.
+ *
+ * @package LounGenie Portal
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Geocoding helper for company location coordinates.
+ */
 class LGP_Geocode {
 
 	private const ENDPOINT     = 'https://nominatim.openstreetmap.org/search';
@@ -22,8 +26,9 @@ class LGP_Geocode {
 	public static function get_company_markers() {
 		global $wpdb;
 		$companies_table = $wpdb->prefix . 'lgp_companies';
-		$rows            = $wpdb->get_results( "SELECT id, name, address, state, venue_type FROM $companies_table" );
-		$markers         = array();
+		// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.InterpolatedNotPrepared
+		$rows    = $wpdb->get_results( "SELECT id, name, address, state, venue_type FROM $companies_table" );
+		$markers = array();
 		if ( empty( $rows ) ) {
 			return $markers;
 		}
@@ -54,7 +59,7 @@ class LGP_Geocode {
 	 * @return array
 	 */
 	public static function get_company_markers_for_map() {
-		// Allow when user can manage options (support) or LGP_Auth says support
+		// Allow when user can manage options (support) or LGP_Auth says support.
 		if ( function_exists( 'current_user_can' ) && current_user_can( 'manage_options' ) ) {
 			return self::get_company_markers();
 		}
@@ -69,7 +74,7 @@ class LGP_Geocode {
 	/**
 	 * Geocode a single company row; caches result back to DB when found.
 	 *
-	 * @param object $row
+	 * @param object $row Company row.
 	 * @return array|null
 	 */
 	private static function geocode_company_row( $row ) {
@@ -90,7 +95,7 @@ class LGP_Geocode {
 	/**
 	 * Perform a Nominatim lookup (single result).
 	 *
-	 * @param string $query
+	 * @param string $query Search query.
 	 * @return array|null
 	 */
 	private static function lookup( $query ) {
@@ -129,6 +134,9 @@ class LGP_Geocode {
 
 	/**
 	 * Retrieve cached coordinates from wp_options.
+	 *
+	 * @param int $company_id Company ID.
+	 * @return array|null
 	 */
 	private static function get_cached_location( $company_id ) {
 		$data = get_option( self::CACHE_PREFIX . (int) $company_id );
@@ -143,6 +151,10 @@ class LGP_Geocode {
 
 	/**
 	 * Cache coordinates in wp_options.
+	 *
+	 * @param int   $company_id Company ID.
+	 * @param array $loc        Location coordinates.
+	 * @return void
 	 */
 	private static function set_cached_location( $company_id, $loc ) {
 		update_option(

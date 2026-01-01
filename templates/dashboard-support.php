@@ -1,5 +1,4 @@
-<?php
-
+<?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.ShortPrefix
 /**
  * Support Dashboard Template
  * Shows system-wide statistics and alerts for support users
@@ -38,13 +37,14 @@ if ( ! function_exists( 'lgp_get_color_hex' ) ) {
 
 global $wpdb;
 
-// Fetch statistics (tables are trusted internal names)
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+// Fetch statistics (tables are trusted internal names).
 $lgp_companies_table        = $wpdb->prefix . 'lgp_companies';
 $lgp_units_table            = $wpdb->prefix . 'lgp_units';
 $lgp_tickets_table          = $wpdb->prefix . 'lgp_tickets';
 $lgp_service_requests_table = $wpdb->prefix . 'lgp_service_requests';
 
-// Guard: if units table is missing (e.g., activation skipped), try to create schema and fall back to zero metrics
+// Guard: if units table is missing (e.g., activation skipped), try to create schema and fall back to zero metrics.
 $units_table_exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $lgp_units_table ) );
 if ( strtolower( (string) $units_table_exists ) !== strtolower( $lgp_units_table ) ) {
 	if ( class_exists( 'LGP_Database' ) ) {
@@ -53,25 +53,21 @@ if ( strtolower( (string) $units_table_exists ) !== strtolower( $lgp_units_table
 	}
 }
 
-// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal
 if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table ) ) {
 	$total_companies = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$lgp_companies_table}" );
-	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal
-	$total_units = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$lgp_units_table}" );
-	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal
+	$total_units     = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$lgp_units_table}" );
 	$active_installs = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$lgp_service_requests_table} WHERE request_type = %s AND status = %s", 'install', 'active' ) );
-	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal
-	$open_tickets = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$lgp_tickets_table} WHERE status = %s", 'open' ) );
+	$open_tickets    = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$lgp_tickets_table} WHERE status = %s", 'open' ) );
 } else {
-	// Fallback metrics
+	// Fallback metrics.
 	$total_companies = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$lgp_companies_table}" );
 	$total_units     = 0;
 	$active_installs = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$lgp_service_requests_table} WHERE request_type = %s AND status = %s", 'install', 'active' ) );
 	$open_tickets    = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$lgp_tickets_table} WHERE status = %s", 'open' ) );
 }
 
-// Recent tickets
-// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared -- table names are trusted internal
+// Recent tickets.
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal.
 $recent_tickets = $wpdb->get_results(
 	"SELECT t.*, sr.request_type, c.name as company_name
 	FROM {$lgp_tickets_table} t
@@ -81,8 +77,8 @@ $recent_tickets = $wpdb->get_results(
 	LIMIT 10"
 );
 
-// Top 5 Metrics - Most used colors
-// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared -- table names are trusted internal
+// Top 5 Metrics - Most used colors.
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal.
 if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table ) ) {
 	$top_colors = $wpdb->get_results(
 		"SELECT color_tag, COUNT(*) as count
@@ -96,8 +92,8 @@ if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table
 	$top_colors = array();
 }
 
-// Top 5 Metrics - Most used lock brands
-// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared -- table names are trusted internal
+// Top 5 Metrics - Most used lock brands.
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal.
 if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table ) ) {
 	$top_lock_brands = $wpdb->get_results(
 		"SELECT lock_brand, COUNT(*) as count
@@ -111,8 +107,8 @@ if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table
 	$top_lock_brands = array();
 }
 
-// Top 5 Metrics - Venue types
-// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared -- table names are trusted internal
+// Top 5 Metrics - Venue types.
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal.
 if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table ) ) {
 	$top_venues = $wpdb->get_results(
 		"SELECT venue_type, COUNT(*) as count
@@ -126,8 +122,8 @@ if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table
 	$top_venues = array();
 }
 
-// Season breakdown
-// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal
+// Season breakdown.
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared -- table names are trusted internal.
 if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table ) ) {
 	$seasonal_units = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$lgp_units_table} WHERE season = %s", 'seasonal' ) );
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table names are trusted internal
@@ -136,6 +132,7 @@ if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table
 	$seasonal_units  = 0;
 	$yearround_units = 0;
 }
+// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 
 ?>
 
@@ -177,7 +174,7 @@ if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table
 				</div>
 				<div class="lgp-orientation-metric-item">
 					<p class="lgp-orientation-metric-secondary-number">
-						<?php echo esc_html( $open_tickets ?: '0' ); ?>
+						<?php echo esc_html( $open_tickets ? $open_tickets : '0' ); ?>
 					</p>
 					<p class="lgp-orientation-metric-label">
 						<?php esc_html_e( 'Active Tickets', 'loungenie-portal' ); ?>
@@ -232,9 +229,9 @@ if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table
 		<div class="lgp-welcome-greeting">
 			<?php
 			$hour = (int) gmdate( 'H' );
-			if ( $hour < 12 ) {
+			if ( 12 > $hour ) {
 				esc_html_e( 'Good morning!', 'loungenie-portal' );
-			} elseif ( $hour < 18 ) {
+			} elseif ( 18 > $hour ) {
 				esc_html_e( 'Good afternoon!', 'loungenie-portal' );
 			} else {
 				esc_html_e( 'Good evening!', 'loungenie-portal' );
@@ -243,9 +240,9 @@ if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table
 		</div>
 		<div class="lgp-welcome-user">
 			<?php
-			$current_user = wp_get_current_user();
-			// Translators: %s is the user's display name
-			printf( esc_html__( 'Welcome back, %s', 'loungenie-portal' ), esc_html( $current_user->display_name ) );
+			$current_user_obj = wp_get_current_user();
+			// Translators: %s is the user's display name.
+			printf( esc_html__( 'Welcome back, %s', 'loungenie-portal' ), esc_html( $current_user_obj->display_name ) );
 			?>
 		</div>
 
@@ -257,7 +254,7 @@ if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table
 				<h3><?php esc_html_e( 'Support Operations', 'loungenie-portal' ); ?></h3>
 				<p>
 					<?php
-					// Translators: %d is the number of companies
+					// Translators: %d is the number of companies.
 					printf( esc_html__( 'Managing %d companies', 'loungenie-portal' ), esc_html( $total_companies ) );
 					?>
 				</p>
@@ -268,8 +265,8 @@ if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table
 			<a href="<?php echo esc_url( home_url( '/portal/tickets' ) ); ?>" class="lgp-btn lgp-btn-primary">
 				<i class="fa-solid fa-ticket lgp-icon-action" aria-hidden="true"></i>
 				<?php
-				if ( $open_tickets > 0 ) {
-					// Translators: %d is the number of open tickets
+				if ( 0 < $open_tickets ) {
+					// Translators: %d is the number of open tickets.
 					printf( esc_html__( 'View Tickets (%d)', 'loungenie-portal' ), esc_html( $open_tickets ) );
 				} else {
 					esc_html_e( 'View Tickets', 'loungenie-portal' );
@@ -285,9 +282,9 @@ if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table
 		<div class="lgp-welcome-tip">
 			<strong><?php esc_html_e( 'System Status:', 'loungenie-portal' ); ?></strong>
 			<?php
-			if ( $open_tickets > 5 ) {
+			if ( 5 < $open_tickets ) {
 				esc_html_e( ' Moderate ticket volume. Review priority items.', 'loungenie-portal' );
-			} elseif ( $open_tickets > 0 ) {
+			} elseif ( 0 < $open_tickets ) {
 				esc_html_e( ' Light ticket volume. All systems nominal.', 'loungenie-portal' );
 			} else {
 				esc_html_e( ' No open tickets. Excellent!', 'loungenie-portal' );
@@ -532,9 +529,9 @@ if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table
 									<td>
 										<?php
 										$status_class = 'info';
-										if ( $ticket->status === 'open' ) {
+										if ( 'open' === $ticket->status ) {
 											$status_class = 'warning';
-										} elseif ( $ticket->status === 'closed' ) {
+										} elseif ( 'closed' === $ticket->status ) {
 											$status_class = 'success';
 										}
 										?>

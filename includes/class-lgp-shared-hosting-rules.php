@@ -213,14 +213,17 @@ class LGP_Shared_Hosting_Rules {
 	);
 
 	/**
-	 * Validate incoming code against rules
+	 * Validate incoming code against rules.
 	 *
 	 * Used in code review process to catch violations early.
+	 *
+	 * @param string $code PHP code to validate.
+	 * @return array List of violations found.
 	 */
 	public static function lint_for_violations( $code ) {
 		$violations = array();
 
-		// Check for WebSocket usage
+		// Check for WebSocket usage.
 		if ( preg_match( '/websocket|ws:\/\//i', $code ) ) {
 			$violations[] = array(
 				'rule'    => 1,
@@ -228,7 +231,7 @@ class LGP_Shared_Hosting_Rules {
 			);
 		}
 
-		// Check for async keywords (non-standard in PHP)
+		// Check for async keywords (non-standard in PHP).
 		if ( preg_match( '/Promise|async|await/i', $code ) ) {
 			$violations[] = array(
 				'rule'    => 1,
@@ -236,7 +239,7 @@ class LGP_Shared_Hosting_Rules {
 			);
 		}
 
-		// Check for message queue usage
+		// Check for message queue usage.
 		if ( preg_match( '/queue|celery|bull|rq|rabbitmq|pubsub/i', $code ) ) {
 			$violations[] = array(
 				'rule'    => 9,
@@ -244,7 +247,7 @@ class LGP_Shared_Hosting_Rules {
 			);
 		}
 
-		// Check for SELECT * (performance violation)
+		// Check for SELECT * (performance violation).
 		if ( preg_match( '/SELECT\s+\*|SELECT\s+t\.\*/i', $code ) ) {
 			$violations[] = array(
 				'rule'    => 2,
@@ -256,10 +259,10 @@ class LGP_Shared_Hosting_Rules {
 	}
 
 	/**
-	 * Log a rule violation for auditing
+	 * Log a rule violation for auditing.
 	 *
-	 * @param int    $rule   Rule number
-	 * @param string $reason Reason for violation
+	 * @param int    $rule   Rule number.
+	 * @param string $reason Reason for violation.
 	 */
 	public static function log_violation( $rule, $reason ) {
 		error_log(

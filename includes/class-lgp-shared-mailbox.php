@@ -18,19 +18,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Shared mailbox integration via Microsoft Graph API.
+ */
 class LGP_Shared_Mailbox {
 
 	/**
-	 * Initialize shared mailbox integration
+	 * Initialize shared mailbox integration.
+	 *
+	 * @return void
 	 */
 	public static function init() {
-		// Periodic sync of shared mailbox (via wp-cron or scheduled action)
+		// Periodic sync of shared mailbox (via wp-cron or scheduled action).
 		add_action( 'lgp_sync_shared_mailbox', array( __CLASS__, 'sync_inbox' ) );
 
-		// Hook to send replies via shared mailbox
+		// Hook to send replies via shared mailbox.
 		add_action( 'lgp_ticket_reply_added', array( __CLASS__, 'send_reply_via_graph' ), 10, 3 );
 
-		// Register settings
+		// Register settings.
 		add_action( 'admin_menu', array( __CLASS__, 'add_settings_page' ) );
 		add_action( 'admin_init', array( __CLASS__, 'register_settings' ) );
 	}

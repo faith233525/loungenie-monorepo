@@ -12,24 +12,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * OpenAPI/Swagger API documentation endpoints.
+ */
 class LGP_API_Docs {
 
 	const API_VERSION = '1.0.0';
 	const BASE_PATH   = '/wp-json/lgp/v1';
 
 	/**
-	 * Initialize API docs
+	 * Initialize API docs.
+	 *
+	 * @return void
 	 */
 	public static function init() {
-		// Register OpenAPI endpoint
+		// Register OpenAPI endpoint.
 		add_action( 'rest_api_init', array( __CLASS__, 'register_endpoints' ) );
 
-		// Register admin page
+		// Register admin page.
 		add_action( 'admin_menu', array( __CLASS__, 'register_admin_page' ) );
 	}
 
 	/**
-	 * Register REST endpoints
+	 * Register REST endpoints.
+	 *
+	 * @return void
 	 */
 	public static function register_endpoints() {
 		register_rest_route(
@@ -608,7 +615,7 @@ class LGP_API_Docs {
 				<pre>
 				<?php
 				echo esc_html(
-					json_encode(
+					wp_json_encode(
 						array(
 							'code'    => 'rest_invalid_param',
 							'message' => 'Invalid parameter',

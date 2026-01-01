@@ -96,7 +96,7 @@ ksort( $grouped );
 										<span class="lgp-badge lgp-badge-secondary"><?php esc_html_e( 'No', 'loungenie-portal' ); ?></span>
 									<?php endif; ?>
 								</td>
-								<td><?php echo esc_html( $gw->included_equipment ?: '—' ); ?></td>
+								<td><?php echo esc_html( $gw->included_equipment ? $gw->included_equipment : '—' ); ?></td>
 								<td class="lgp-gateway-actions">
 									<button class="lgp-btn lgp-btn-sm lgp-btn-view-units" data-gateway-id="<?php echo esc_attr( $gw->id ); ?>">
 										<?php esc_html_e( 'View Units', 'loungenie-portal' ); ?>

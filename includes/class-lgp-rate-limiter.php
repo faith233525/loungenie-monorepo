@@ -13,14 +13,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Rate limiting per-user and per-IP to prevent shared hosting abuse.
+ */
 class LGP_Rate_Limiter {
 
 	/**
-	 * Check if user has exceeded rate limit
+	 * Check if user has exceeded rate limit.
 	 *
-	 * @param string $action      Action identifier (e.g., 'ticket_create')
-	 * @param int    $limit       Max actions allowed
-	 * @param int    $window_secs Time window in seconds
+	 * @param string $action      Action identifier (e.g., 'ticket_create').
+	 * @param int    $limit       Max actions allowed.
+	 * @param int    $window_secs Time window in seconds.
 	 * @return bool True if limit exceeded, false otherwise
 	 */
 	public static function is_limited( $action, $limit = 5, $window_secs = 3600 ) {
@@ -32,7 +35,7 @@ class LGP_Rate_Limiter {
 		$count    = (int) get_transient( $key );
 		$ip_count = (int) get_transient( $ip_key );
 
-		// Log attempt
+		// Log attempt.
 		if ( $count >= $limit || $ip_count >= ( $limit * 5 ) ) {
 			self::log_limit_exceeded( $action, $user_id, $ip );
 			return true;
@@ -42,10 +45,10 @@ class LGP_Rate_Limiter {
 	}
 
 	/**
-	 * Increment action counter
+	 * Increment action counter.
 	 *
-	 * @param string $action      Action identifier
-	 * @param int    $window_secs Time window in seconds
+	 * @param string $action      Action identifier.
+	 * @param int    $window_secs Time window in seconds.
 	 */
 	public static function increment( $action, $window_secs = 3600 ) {
 		$user_id = get_current_user_id();
@@ -61,9 +64,9 @@ class LGP_Rate_Limiter {
 	}
 
 	/**
-	 * Reset counter for action
+	 * Reset counter for action.
 	 *
-	 * @param string $action Action identifier
+	 * @param string $action Action identifier.
 	 */
 	public static function reset( $action ) {
 		$user_id = get_current_user_id();
@@ -77,11 +80,11 @@ class LGP_Rate_Limiter {
 	}
 
 	/**
-	 * Get remaining quota
+	 * Get remaining quota.
 	 *
-	 * @param string $action Action identifier
-	 * @param int    $limit  Max allowed
-	 * @return int
+	 * @param string $action Action identifier.
+	 * @param int    $limit  Max allowed.
+	 * @return int Remaining quota.
 	 */
 	public static function get_remaining( $action, $limit = 5 ) {
 		$user_id = get_current_user_id();
@@ -92,23 +95,23 @@ class LGP_Rate_Limiter {
 	}
 
 	/**
-	 * Get safe client IP
+	 * Get safe client IP.
 	 *
-	 * @return string
+	 * @return string Client IP address.
 	 */
 	private static function get_client_ip() {
-		// Check for IP from shared internet
+		// Check for IP from shared internet.
 		if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
 			$ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ) );
 		} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
-			// Handle multiple IPs (take first)
+			// Handle multiple IPs (take first).
 			$ips = explode( ',', sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) );
 			$ip  = trim( $ips[0] );
 		} else {
 			$ip = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0' ) );
 		}
 
-		// Validate IP
+		// Validate IP.
 		if ( ! filter_var( $ip, FILTER_VALIDATE_IP ) ) {
 			$ip = '0.0.0.0';
 		}
@@ -117,11 +120,11 @@ class LGP_Rate_Limiter {
 	}
 
 	/**
-	 * Log rate limit exceeded event
+	 * Log rate limit exceeded event.
 	 *
-	 * @param string $action  Action identifier
-	 * @param int    $user_id User ID
-	 * @param string $ip      Client IP
+	 * @param string $action  Action identifier.
+	 * @param int    $user_id User ID.
+	 * @param string $ip      Client IP.
 	 */
 	private static function log_limit_exceeded( $action, $user_id, $ip ) {
 		LGP_Logger::log_event(

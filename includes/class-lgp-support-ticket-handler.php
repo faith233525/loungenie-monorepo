@@ -1,8 +1,7 @@
 <?php
-
 /**
- * Support Ticket Form Handler
- * Processes form submissions and creates tickets
+ * Support Ticket Form Handler.
+ * Processes form submissions and creates tickets.
  *
  * @package LounGenie Portal
  */
@@ -11,12 +10,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Support ticket submission handler.
+ */
 class LGP_Support_Ticket_Handler {
 
 
 
 	/**
-	 * Initialize hooks
+	 * Initialize hooks.
+	 *
+	 * @return void
 	 */
 	public static function init() {
 		add_action( 'wp_ajax_lgp_submit_support_ticket', array( __CLASS__, 'handle_submission' ) );
@@ -24,25 +28,27 @@ class LGP_Support_Ticket_Handler {
 	}
 
 	/**
-	 * Handle form submission
+	 * Handle form submission.
+	 *
+	 * @return void
 	 */
 	public static function handle_submission() {
 		try {
-			// Verify nonce
-			if ( ! isset( $_POST['lgp_ticket_nonce'] ) || ! wp_verify_nonce( $_POST['lgp_ticket_nonce'], 'lgp_submit_support_ticket' ) ) {
+			// Verify nonce.
+			if ( ! isset( $_POST['lgp_ticket_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lgp_ticket_nonce'] ) ), 'lgp_submit_support_ticket' ) ) {
 				wp_send_json_error( array( 'message' => __( 'Security verification failed.', 'loungenie-portal' ) ) );
 			}
 
-			// Validate required fields
+			// Validate required fields.
 			$validation = self::validate_submission();
 			if ( ! $validation['valid'] ) {
 				wp_send_json_error( array( 'message' => $validation['message'] ) );
 			}
 
-			// Process form data
+			// Process form data.
 			$ticket_data = self::process_form_data();
 
-			// Create ticket in database
+			// Create ticket in database.
 			$ticket_id = self::create_ticket( $ticket_data );
 
 			if ( ! $ticket_id ) {

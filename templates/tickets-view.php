@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.ShortPrefix
 /**
  * Tickets View Template
  * Lists tickets for partners/support with filters and thread detail
@@ -16,17 +16,20 @@ $is_support   = LGP_Auth::is_support();
 $company_id   = LGP_Auth::get_user_company_id();
 $company_name = method_exists( 'LGP_Auth', 'get_company_name' ) ? LGP_Auth::get_company_name() : '';
 
-
 $tickets_table   = $wpdb->prefix . 'lgp_tickets';
 $requests_table  = $wpdb->prefix . 'lgp_service_requests';
 $companies_table = $wpdb->prefix . 'lgp_companies';
 
-// Status counts for quick overview (respect partner scoping)
+// Status counts for quick overview (respect partner scoping).
 if ( $is_support ) {
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared -- table names are trusted internal tables.
 	$counts_raw = $wpdb->get_results( "SELECT status, COUNT(*) AS count FROM {$tickets_table} GROUP BY status" );
 } else {
+	// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- table names are trusted internal tables.
 	$counts_raw = $wpdb->get_results(
 		$wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- table names are trusted internal tables.
 			"SELECT t.status, COUNT(*) AS count
             FROM {$tickets_table} t
             LEFT JOIN {$requests_table} sr ON t.service_request_id = sr.id
@@ -35,6 +38,7 @@ if ( $is_support ) {
 			$company_id
 		)
 	);
+	// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 }
 
 $counts = array(
@@ -47,13 +51,14 @@ foreach ( (array) $counts_raw as $row ) {
 }
 $total_tickets = array_sum( $counts );
 
-// Support can filter by company
+// Support can filter by company.
 $companies = array();
 if ( $is_support ) {
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared -- table names are trusted internal tables.
 	$companies = $wpdb->get_results( "SELECT id, name FROM {$companies_table} ORDER BY name ASC" );
 }
 
-// Prepare filter option lists
+// Prepare filter option lists.
 $priorities    = array( 'urgent', 'high', 'normal' );
 $request_types = array( 'install', 'maintenance', 'repair', 'update', 'general' );
 $statuses      = array( 'open', 'pending', 'closed' );
@@ -117,8 +122,8 @@ $rest_nonce = wp_create_nonce( 'wp_rest' );
 				<label for="lgp-ticket-status-filter" class="lgp-label"><?php esc_html_e( 'Status', 'loungenie-portal' ); ?></label>
 				<select id="lgp-ticket-status-filter" class="lgp-select">
 					<option value="all"><?php esc_html_e( 'All statuses', 'loungenie-portal' ); ?></option>
-					<?php foreach ( $statuses as $status ) : ?>
-						<option value="<?php echo esc_attr( $status ); ?>"><?php echo esc_html( ucfirst( $status ) ); ?></option>
+					<?php foreach ( $statuses as $status_option ) : ?>
+						<option value="<?php echo esc_attr( $status_option ); ?>"><?php echo esc_html( ucfirst( $status_option ) ); ?></option>
 					<?php endforeach; ?>
 				</select>
 			</div>
@@ -137,8 +142,8 @@ $rest_nonce = wp_create_nonce( 'wp_rest' );
 				<label for="lgp-ticket-type-filter" class="lgp-label"><?php esc_html_e( 'Type', 'loungenie-portal' ); ?></label>
 				<select id="lgp-ticket-type-filter" class="lgp-select">
 					<option value="all"><?php esc_html_e( 'All types', 'loungenie-portal' ); ?></option>
-					<?php foreach ( $request_types as $type ) : ?>
-						<option value="<?php echo esc_attr( $type ); ?>"><?php echo esc_html( ucfirst( $type ) ); ?></option>
+					<?php foreach ( $request_types as $request_type_option ) : ?>
+						<option value="<?php echo esc_attr( $request_type_option ); ?>"><?php echo esc_html( ucfirst( $request_type_option ) ); ?></option>
 					<?php endforeach; ?>
 				</select>
 			</div>
@@ -199,8 +204,8 @@ $rest_nonce = wp_create_nonce( 'wp_rest' );
 			<div class="lgp-form-group lgp-ticket-status-form">
 				<label for="lgp-ticket-status-select" class="lgp-label"><?php esc_html_e( 'Update Status', 'loungenie-portal' ); ?></label>
 				<select id="lgp-ticket-status-select" class="lgp-select">
-					<?php foreach ( $statuses as $status ) : ?>
-						<option value="<?php echo esc_attr( $status ); ?>"><?php echo esc_html( ucfirst( $status ) ); ?></option>
+					<?php foreach ( $statuses as $status_option ) : ?>
+						<option value="<?php echo esc_attr( $status_option ); ?>"><?php echo esc_html( ucfirst( $status_option ) ); ?></option>
 					<?php endforeach; ?>
 				</select>
 			<button type="button" class="lgp-btn lgp-btn-primary lgp-ticket-status-btn" id="lgp-ticket-status-apply">

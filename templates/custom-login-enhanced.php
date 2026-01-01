@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Enhanced Modern Login Page
  *
@@ -21,13 +20,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Get login type from URL parameter (ensure unslash + sanitize)
-$login_type_raw = isset( $_GET['login_type'] ) ? wp_unslash( $_GET['login_type'] ) : '';
-$redirect_raw   = isset( $_GET['redirect_to'] ) ? wp_unslash( $_GET['redirect_to'] ) : '';
-$login_type     = $login_type_raw ? sanitize_text_field( $login_type_raw ) : 'partner';
-$redirect_to    = $redirect_raw ? esc_url_raw( $redirect_raw ) : home_url( '/dashboard/' );
+// Get login type from URL parameter (ensure unslash + sanitize).
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- public login view reads safe query params only.
+$login_type = isset( $_GET['login_type'] ) ? sanitize_text_field( wp_unslash( $_GET['login_type'] ) ) : 'partner';
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- public login view reads safe query params only.
+$redirect_to = isset( $_GET['redirect_to'] ) ? esc_url_raw( wp_unslash( $_GET['redirect_to'] ) ) : home_url( '/dashboard/' );
 
-// Enqueue modern styles
+// Enqueue modern styles.
 wp_enqueue_style( 'lgp-login-enhanced', plugin_dir_url( __FILE__ ) . '../assets/css/login-page-enhanced.css', array(), '2.1.0' );
 
 ?>
@@ -70,7 +69,7 @@ wp_enqueue_style( 'lgp-login-enhanced', plugin_dir_url( __FILE__ ) . '../assets/
 		<!-- Role Selector -->
 		<div class="lgp-role-selector">
 			<button type="button"
-				class="lgp-role-btn <?php echo esc_attr( $login_type === 'partner' ? 'active' : '' ); ?>"
+				class="lgp-role-btn <?php echo esc_attr( 'partner' === $login_type ? 'active' : '' ); ?>"
 				onclick="switchLoginType('partner')"
 				data-role="partner">
 				<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
@@ -80,7 +79,7 @@ wp_enqueue_style( 'lgp-login-enhanced', plugin_dir_url( __FILE__ ) . '../assets/
 				<kbd class="lgp-keyboard-hint">Alt+P</kbd>
 			</button>
 			<button type="button"
-				class="lgp-role-btn <?php echo esc_attr( $login_type === 'support' ? 'active' : '' ); ?>"
+				class="lgp-role-btn <?php echo esc_attr( 'support' === $login_type ? 'active' : '' ); ?>"
 				onclick="switchLoginType('support')"
 				data-role="support">
 				<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
@@ -92,7 +91,7 @@ wp_enqueue_style( 'lgp-login-enhanced', plugin_dir_url( __FILE__ ) . '../assets/
 		</div>
 
 		<!-- PARTNER LOGIN FORM -->
-		<div id="partnerForm" style="display: <?php echo esc_attr( ( $login_type === 'partner' ) ? 'block' : 'none' ); ?>;">
+		<div id="partnerForm" style="display: <?php echo esc_attr( ( 'partner' === $login_type ) ? 'block' : 'none' ); ?>;">
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="lgp-login-form" id="lgpPartnerForm">
 				<?php wp_nonce_field( 'lgp_partner_login', 'lgp_partner_nonce' ); ?>
 				<input type="hidden" name="action" value="lgp_partner_login">
@@ -177,7 +176,7 @@ wp_enqueue_style( 'lgp-login-enhanced', plugin_dir_url( __FILE__ ) . '../assets/
 		</div>
 
 		<!-- SUPPORT SSO FORM -->
-		<div id="supportForm" style="display: <?php echo esc_attr( ( $login_type === 'support' ) ? 'block' : 'none' ); ?>;">
+		<div id="supportForm" style="display: <?php echo esc_attr( ( 'support' === $login_type ) ? 'block' : 'none' ); ?>;">
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="lgp-login-form" id="lgpSupportForm">
 				<?php wp_nonce_field( 'lgp_sso_login', 'lgp_sso_nonce' ); ?>
 				<input type="hidden" name="action" value="lgp_sso_login">

@@ -15,32 +15,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Shared Server Optimization Class
+ * Utility functions to optimize plugin for shared server environments.
  */
 class LGP_Shared_Server_Optimizer {
 
 	/**
-	 * Initialize optimizations
+	 * Initialize optimizations.
+	 *
+	 * @return void
 	 */
 	public static function init() {
-		// Enable object caching if available
+		// Enable object caching if available.
 		add_filter( 'lgp_use_object_cache', array( __CLASS__, 'enable_object_cache' ) );
 
-		// Optimize query execution
+		// Optimize query execution.
 		add_filter( 'posts_per_page', array( __CLASS__, 'optimize_pagination' ) );
 
-		// Monitor memory usage
+		// Monitor memory usage.
 		add_action( 'shutdown', array( __CLASS__, 'log_memory_usage' ) );
 
-		// Optimize asset loading
+		// Optimize asset loading.
 		add_filter( 'style_loader_src', array( __CLASS__, 'optimize_css' ) );
 		add_filter( 'script_loader_src', array( __CLASS__, 'optimize_js' ) );
 	}
 
 	/**
-	 * Enable object caching
+	 * Enable object caching.
+	 *
+	 * @return bool True if caching is available.
 	 */
 	public static function enable_object_cache() {
-		// Check if Redis/Memcached available
+		// Check if Redis/Memcached available.
 		if ( function_exists( 'wp_cache_get' ) ) {
 			return true;
 		}
@@ -48,10 +53,13 @@ class LGP_Shared_Server_Optimizer {
 	}
 
 	/**
-	 * Optimize pagination for shared servers
+	 * Optimize pagination for shared servers.
+	 *
+	 * @param int $posts_per_page Items per page.
+	 * @return int Optimized items per page.
 	 */
 	public static function optimize_pagination( $posts_per_page ) {
-		// Limit items per page on shared servers
+		// Limit items per page on shared servers.
 		if ( self::is_shared_server() ) {
 			return min( $posts_per_page, 25 );
 		}
@@ -59,7 +67,9 @@ class LGP_Shared_Server_Optimizer {
 	}
 
 	/**
-	 * Log memory usage for monitoring
+	 * Log memory usage for monitoring.
+	 *
+	 * @return void
 	 */
 	public static function log_memory_usage() {
 		if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
@@ -83,22 +93,28 @@ class LGP_Shared_Server_Optimizer {
 	}
 
 	/**
-	 * Optimize CSS loading
+	 * Optimize CSS loading.
+	 *
+	 * @param string $src Script source URL.
+	 * @return string Optimized URL.
 	 */
 	public static function optimize_css( $src ) {
-		// Add local optimizations
+		// Add local optimizations.
 		if ( strpos( $src, 'loungenie-portal' ) !== false ) {
-			// Add crossorigin for shared server compatibility
+			// Add crossorigin for shared server compatibility.
 			$src = add_query_arg( array(), $src );
 		}
 		return $src;
 	}
 
 	/**
-	 * Optimize JS loading
+	 * Optimize JS loading.
+	 *
+	 * @param string $src Script source URL.
+	 * @return string Optimized URL.
 	 */
 	public static function optimize_js( $src ) {
-		// Similar optimizations for JS
+		// Similar optimizations for JS.
 		if ( strpos( $src, 'loungenie-portal' ) !== false ) {
 			$src = add_query_arg( array(), $src );
 		}
@@ -106,15 +122,19 @@ class LGP_Shared_Server_Optimizer {
 	}
 
 	/**
-	 * Detect if running on shared server
+	 * Detect if running on shared server.
+	 *
+	 * @return bool True if shared server detected.
 	 */
 	public static function is_shared_server() {
 		$memory_limit = wp_convert_hr_to_bytes( WP_MEMORY_LIMIT );
-		return $memory_limit < 134217728; // Less than 128MB
+		return $memory_limit < 134217728; // Less than 128MB.
 	}
 
 	/**
-	 * Get optimization recommendations
+	 * Get optimization recommendations.
+	 *
+	 * @return array List of recommendations.
 	 */
 	public static function get_recommendations() {
 		return array(
@@ -147,12 +167,15 @@ class LGP_Shared_Server_Optimizer {
 	}
 
 	/**
-	 * Check shared server compatibility
+	/**
+	 * Check shared server compatibility.
+	 *
+	 * @return array List of compatibility issues.
 	 */
 	public static function check_compatibility() {
 		$issues = array();
 
-		// Check PHP version
+		// Check PHP version.
 		if ( version_compare( phpversion(), '7.4', '<' ) ) {
 			$issues[] = array(
 				'severity' => 'high',
@@ -160,7 +183,7 @@ class LGP_Shared_Server_Optimizer {
 			);
 		}
 
-		// Check memory limit
+		// Check memory limit.
 		$memory_limit = wp_convert_hr_to_bytes( WP_MEMORY_LIMIT );
 		if ( $memory_limit < 67108864 ) {
 			$issues[] = array(
@@ -169,7 +192,7 @@ class LGP_Shared_Server_Optimizer {
 			);
 		}
 
-		// Check max upload size
+		// Check max upload size.
 		$max_upload = wp_max_upload_size();
 		if ( $max_upload < 5242880 ) {
 			$issues[] = array(
@@ -178,7 +201,7 @@ class LGP_Shared_Server_Optimizer {
 			);
 		}
 
-		// Check database version
+		// Check database version.
 		global $wpdb;
 		$mysql_version = $wpdb->db_version();
 		if ( version_compare( $mysql_version, '5.7', '<' ) && version_compare( $mysql_version, '10.2', '<' ) ) {
@@ -192,11 +215,13 @@ class LGP_Shared_Server_Optimizer {
 	}
 }
 
-// Initialize on WordPress init
+// Initialize on WordPress init.
 add_action( 'init', array( 'LGP_Shared_Server_Optimizer', 'init' ), 1 );
 
 /**
- * Helper function to get optimization status
+ * Helper function to get optimization status.
+ *
+ * @return bool True if optimizations active.
  */
 function lgp_get_shared_server_status() {
 	return array(
