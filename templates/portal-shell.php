@@ -38,9 +38,9 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 	<div class="lgp-portal lgp-container" data-role="<?php echo $is_support ? 'support' : 'partner'; ?>">
 
 		<!-- Header with HubSpot-style spacing -->
-		<header class="lgp-header">
-			<!-- Logo with Hover Effects -->
-			<div class="lgp-logo">
+	<header class="lgp-header" role="banner" aria-label="<?php esc_attr_e( 'Portal Header', 'loungenie-portal' ); ?>">
+		<!-- Logo with Hover Effects -->
+		<div class="lgp-logo" role="img" aria-label="<?php esc_attr_e( 'LounGenie Portal Logo', 'loungenie-portal' ); ?>">
 				<?php
 				// Check for WordPress custom logo
 				$logo_url = get_option( 'lgp_custom_logo_url' );
@@ -60,9 +60,9 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 				<?php endif; ?>
 			</div>
 
-			<div class="lgp-header-actions">
+			<div class="lgp-header-actions" role="region" aria-label="<?php esc_attr_e( 'User Actions', 'loungenie-portal' ); ?>">
 				<!-- Notification Icon with Hover -->
-				<div class="lgp-notification-icon">
+				<div class="lgp-notification-icon" role="button" tabindex="0" aria-label="<?php esc_attr_e( 'Notifications', 'loungenie-portal' ); ?>" aria-pressed="false">
 					<span class="lgp-notification-bell">Notifications</span>
 					<span class="lgp-notification-badge">3</span>
 				</div>
@@ -77,14 +77,14 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 				</div>
 
 				<!-- Mobile Toggle -->
-				<button id="lgp-sidebar-toggle" class="lgp-btn lgp-btn-secondary lgp-sidebar-toggle-btn">
+				<button id="lgp-sidebar-toggle" class="lgp-btn lgp-btn-secondary lgp-sidebar-toggle-btn" aria-label="<?php esc_attr_e( 'Toggle Navigation Menu', 'loungenie-portal' ); ?>" aria-expanded="false" aria-controls="navigation">
 					MENU
 				</button>
 			</div>
 		</header>
 
 		<!-- Sidebar Navigation with HubSpot Spacing -->
-		<aside class="lgp-sidebar" role="navigation" aria-label="<?php esc_attr_e( 'Main Navigation', 'loungenie-portal' ); ?>">
+		<aside class="lgp-sidebar" id="navigation" role="navigation" aria-label="<?php esc_attr_e( 'Main Navigation', 'loungenie-portal' ); ?>" aria-expanded="false">
 			<nav>
 				<ul class="lgp-nav" role="menu">
 					<?php if ( $is_support ) : ?>

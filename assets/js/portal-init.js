@@ -12,13 +12,15 @@
      * Initialize portal functionality
      */
     function initPortal() {
-        // Mobile sidebar toggle
+        // Mobile sidebar toggle with aria-expanded
         const sidebarToggle = document.getElementById('lgp-sidebar-toggle');
         if (sidebarToggle) {
             sidebarToggle.addEventListener('click', function () {
                 const sidebar = document.querySelector('.lgp-sidebar');
                 if (sidebar) {
-                    sidebar.classList.toggle('lgp-sidebar-open');
+                    const isOpen = sidebar.classList.toggle('mobile-open');
+                    sidebarToggle.setAttribute('aria-expanded', isOpen);
+                    sidebar.setAttribute('aria-expanded', isOpen);
                 }
             });
         }
@@ -29,7 +31,9 @@
             link.addEventListener('click', function () {
                 const sidebar = document.querySelector('.lgp-sidebar');
                 if (sidebar && window.innerWidth < 1024) {
-                    sidebar.classList.remove('lgp-sidebar-open');
+                    sidebar.classList.remove('mobile-open');
+                    sidebar.setAttribute('aria-expanded', 'false');
+                    sidebarToggle.setAttribute('aria-expanded', 'false');
                 }
             });
         });

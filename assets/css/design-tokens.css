@@ -84,6 +84,24 @@
     --lgp-color-accent-hover: #4a9fbe;
     --lgp-color-accent-light: #F0F8FC;
 
+    /* 60-30-10 mapped tokens (portal uses these names) */
+    --lgp-atmosphere-primary: #E9F8F9;
+    --lgp-atmosphere-light: #F5FBFC;
+    --lgp-atmosphere-white: #FFFFFF;
+    --lgp-atmosphere-border: #D8E9EC;
+    --lgp-atmosphere-hover: #EEF7F9;
+
+    --lgp-structure-headline: #0F172A;
+    --lgp-structure-body: #454F5E;
+    --lgp-structure-tertiary: #7A8699;
+
+    --lgp-action-teal: #2596be;
+    --lgp-action-teal-dark: #1a7a9e;
+    --lgp-action-teal-light: #E6F2F8;
+    --lgp-action-cyan: #5fb8d5;
+    --lgp-action-cyan-dark: #4a9fbe;
+    --lgp-action-cyan-light: #F0F8FC;
+
     /* FEEDBACK COLORS (Status, Sparingly) */
     --lgp-success: #16A34A;
     --lgp-success-light: #DCFCE7;
@@ -270,6 +288,26 @@ body[data-role="support"],
     --lgp-role-accent: var(--lgp-action-cyan);
     --lgp-role-accent-dark: var(--lgp-action-cyan-dark);
     --lgp-role-accent-light: var(--lgp-action-cyan-light);
+}
+
+/* Role-specific header styling */
+body[data-role="support"] .lgp-header {
+    border-bottom-color: #1AB9D4 !important;
+    border-bottom-width: 3px !important;
+}
+
+body[data-role="partner"] .lgp-header {
+    border-bottom-color: #2596be !important;
+    border-bottom-width: 2px !important;
+}
+
+/* Role-specific sidebar accent */
+body[data-role="support"] .lgp-sidebar {
+    border-right-color: #1AB9D4 !important;
+}
+
+body[data-role="partner"] .lgp-sidebar {
+    border-right-color: #2596be !important;
 }
 
 /* Smooth transitions for role switching */

@@ -624,6 +624,8 @@ a:hover {
         transition: transform 0.3s;
     }
 
+    .lgp-sidebar.mobile-open,
+    .lgp-sidebar.lgp-sidebar-open,
     .lgp-sidebar.open {
         transform: translateX(0);
     }
@@ -2236,7 +2238,9 @@ a:hover {
         z-index: 1000;
     }
 
-    .lgp-sidebar.lgp-sidebar-open {
+    .lgp-sidebar.mobile-open,
+    .lgp-sidebar.lgp-sidebar-open,
+    .lgp-sidebar.open {
         transform: translateX(0);
     }
 
@@ -2663,7 +2667,9 @@ html {
         transform: translateX(-100%);
     }
 
-    .lgp-sidebar.lgp-sidebar-open {
+    .lgp-sidebar.mobile-open,
+    .lgp-sidebar.lgp-sidebar-open,
+    .lgp-sidebar.open {
         transform: translateX(0);
         box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
     }

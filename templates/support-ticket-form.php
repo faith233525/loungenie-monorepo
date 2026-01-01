@@ -50,7 +50,7 @@ $ticket_reference = 'TKT-' . date( 'YmdHis' ) . rand( 100, 999 );
 				<div class="lgp-form-group">
 					<label for="lgp-first-name">
 						<?php _e( 'First Name', 'loungenie-portal' ); ?>
-						<span class="required">*</span>
+						<span class="required" aria-label="<?php esc_attr_e( 'required field', 'loungenie-portal' ); ?>">*</span>
 					</label>
 					<input 
 						type="text" 
@@ -59,15 +59,16 @@ $ticket_reference = 'TKT-' . date( 'YmdHis' ) . rand( 100, 999 );
 						class="lgp-form-control"
 						value="<?php echo esc_attr( $user_data['first_name'] ?? '' ); ?>"
 						<?php echo is_user_logged_in() ? 'readonly' : ''; ?>
+						aria-describedby="lgp-first-name-help"
 						required
 					>
-					<div class="error-message"></div>
+					<div class="error-message" id="lgp-first-name-help" aria-live="polite"></div>
 				</div>
 
 				<div class="lgp-form-group">
 					<label for="lgp-last-name">
 						<?php _e( 'Last Name', 'loungenie-portal' ); ?>
-						<span class="required">*</span>
+						<span class="required" aria-label="<?php esc_attr_e( 'required field', 'loungenie-portal' ); ?>">*</span>
 					</label>
 					<input 
 						type="text" 
@@ -76,6 +77,7 @@ $ticket_reference = 'TKT-' . date( 'YmdHis' ) . rand( 100, 999 );
 						class="lgp-form-control"
 						value="<?php echo esc_attr( $user_data['last_name'] ?? '' ); ?>"
 						<?php echo is_user_logged_in() ? 'readonly' : ''; ?>
+						aria-describedby="lgp-last-name-help"
 						required
 					>
 					<div class="error-message"></div>

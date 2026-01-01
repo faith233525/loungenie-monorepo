@@ -166,13 +166,13 @@
 
         if (toggleBtn && sidebar) {
             toggleBtn.addEventListener('click', function () {
-                sidebar.classList.toggle('open');
+                sidebar.classList.toggle('mobile-open');
             });
 
             // Close sidebar when clicking outside
             document.addEventListener('click', function (e) {
                 if (!sidebar.contains(e.target) && e.target !== toggleBtn) {
-                    sidebar.classList.remove('open');
+                    sidebar.classList.remove('mobile-open');
                 }
             });
         }
