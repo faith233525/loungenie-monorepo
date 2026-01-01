@@ -21,19 +21,19 @@ class LGP_Theme_Independence {
 	public static function init() {
 		// Remove theme dependencies
 		add_action( 'template_redirect', array( __CLASS__, 'intercept_portal_requests' ), 1 );
-		
+
 		// Login redirects for portal roles
 		add_filter( 'login_redirect', array( __CLASS__, 'portal_login_redirect' ), 10, 3 );
-		
+
 		// Hide admin bar for portal roles
 		add_filter( 'show_admin_bar', array( __CLASS__, 'hide_admin_bar_for_portal_roles' ), 20 );
-		
+
 		// Remove admin bar completely for portal roles
 		add_action( 'init', array( __CLASS__, 'disable_admin_bar_for_portal_roles' ) );
-		
+
 		// Block wp-admin access for portal roles
 		add_action( 'admin_init', array( __CLASS__, 'block_wp_admin_access' ) );
-		
+
 		// Enqueue plugin-controlled assets only
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_portal_assets' ), 999 );
 	}
@@ -43,10 +43,10 @@ class LGP_Theme_Independence {
 	 */
 	public static function intercept_portal_requests() {
 		global $wp;
-		
+
 		// Check if this is a portal request
 		$portal_slugs = array( 'portal', 'partner-portal', 'support-portal' );
-		
+
 		foreach ( $portal_slugs as $slug ) {
 			if ( isset( $wp->query_vars['pagename'] ) && $wp->query_vars['pagename'] === $slug ) {
 				self::render_portal_shell();
@@ -66,11 +66,11 @@ class LGP_Theme_Independence {
 		}
 
 		$user = wp_get_current_user();
-		
+
 		// Check if user has portal access
 		$portal_roles = array( 'lg_partner', 'lg_support', 'administrator' );
-		$has_access = false;
-		
+		$has_access   = false;
+
 		foreach ( $portal_roles as $role ) {
 			if ( in_array( $role, $user->roles, true ) ) {
 				$has_access = true;
@@ -84,7 +84,7 @@ class LGP_Theme_Independence {
 
 		// Load portal shell template (theme-independent)
 		$template_path = LGP_PLUGIN_DIR . 'templates/portal-shell.php';
-		
+
 		if ( file_exists( $template_path ) ) {
 			include $template_path;
 		} else {
@@ -95,8 +95,8 @@ class LGP_Theme_Independence {
 	/**
 	 * Redirect portal roles directly to /portal on login
 	 *
-	 * @param string $redirect_to URL to redirect to.
-	 * @param string $request URL the user is coming from.
+	 * @param string           $redirect_to URL to redirect to.
+	 * @param string           $request URL the user is coming from.
 	 * @param WP_User|WP_Error $user User object or error.
 	 * @return string Redirect URL.
 	 */
@@ -108,7 +108,7 @@ class LGP_Theme_Independence {
 
 		// Portal roles that should bypass wp-admin
 		$portal_roles = array( 'lg_partner', 'lg_support' );
-		
+
 		// Check if user has a portal role
 		foreach ( $portal_roles as $role ) {
 			if ( in_array( $role, $user->roles, true ) ) {
@@ -130,9 +130,9 @@ class LGP_Theme_Independence {
 			return $show_admin_bar;
 		}
 
-		$user = wp_get_current_user();
+		$user         = wp_get_current_user();
 		$portal_roles = array( 'lg_partner', 'lg_support' );
-		
+
 		foreach ( $portal_roles as $role ) {
 			if ( in_array( $role, $user->roles, true ) ) {
 				return false;
@@ -150,9 +150,9 @@ class LGP_Theme_Independence {
 			return;
 		}
 
-		$user = wp_get_current_user();
+		$user         = wp_get_current_user();
 		$portal_roles = array( 'lg_partner', 'lg_support' );
-		
+
 		foreach ( $portal_roles as $role ) {
 			if ( in_array( $role, $user->roles, true ) ) {
 				add_filter( 'show_admin_bar', '__return_false' );
@@ -175,9 +175,9 @@ class LGP_Theme_Independence {
 			return;
 		}
 
-		$user = wp_get_current_user();
+		$user         = wp_get_current_user();
 		$portal_roles = array( 'lg_partner', 'lg_support' );
-		
+
 		foreach ( $portal_roles as $role ) {
 			if ( in_array( $role, $user->roles, true ) ) {
 				wp_safe_redirect( home_url( '/portal' ) );
@@ -230,13 +230,13 @@ class LGP_Theme_Independence {
 	 */
 	private static function is_portal_page() {
 		global $wp;
-		
+
 		$portal_slugs = array( 'portal', 'partner-portal', 'support-portal' );
-		
+
 		if ( isset( $wp->query_vars['pagename'] ) ) {
 			return in_array( $wp->query_vars['pagename'], $portal_slugs, true );
 		}
-		
+
 		return false;
 	}
 }
