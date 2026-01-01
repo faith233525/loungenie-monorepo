@@ -16,47 +16,52 @@
 
 namespace LounGenie\Portal;
 
+/**
+ * Custom login handler for WordPress and SSO authentication.
+ */
 class Login_Handler {
 
 	/**
-	 * Hook prefix for this handler
+	 * Hook prefix for this handler.
 	 */
 	const HOOK_PREFIX = 'lgp_';
 
 	/**
-	 * Nonce action names
+	 * Nonce action names.
 	 */
 	const NONCE_PARTNER = 'lgp_partner_login';
 	const NONCE_SSO     = 'lgp_sso_login';
 	const NONCE_LOGOUT  = 'lgp_logout';
 
 	/**
-	 * Login page slug
+	 * Login page slug.
 	 */
 	const LOGIN_PAGE_SLUG = 'lgp-login';
 
 	/**
-	 * Initialize the login handler
+	 * Initialize the login handler.
+	 *
+	 * @return void
 	 */
 	public static function init() {
-		// Register custom login page
+		// Register custom login page.
 		add_action( 'init', array( __CLASS__, 'register_login_page' ) );
 
-		// Handle form submissions
+		// Handle form submissions.
 		add_action( 'init', array( __CLASS__, 'handle_partner_login' ) );
 		add_action( 'init', array( __CLASS__, 'handle_sso_login' ) );
 
-		// Hook into WordPress login redirection
+		// Hook into WordPress login redirection.
 		add_filter( 'login_url', array( __CLASS__, 'custom_login_url' ) );
 		add_filter( 'wp_login_url', array( __CLASS__, 'custom_login_url' ) );
 
-		// Redirect to custom login page
+		// Redirect to custom login page.
 		add_action( 'login_init', array( __CLASS__, 'redirect_to_custom_login' ) );
 
-		// Handle logout
+		// Handle logout.
 		add_action( 'wp_logout', array( __CLASS__, 'handle_logout' ) );
 
-		// Add login page body class
+		// Add login page body class.
 		add_filter( 'body_class', array( __CLASS__, 'add_login_body_class' ) );
 
 		// Add login redirect based on role
@@ -85,24 +90,26 @@ class Login_Handler {
 	}
 
 	/**
-	 * Handle partner (WordPress) login
+	 * Handle partner (WordPress) login.
+	 *
+	 * @return void
 	 */
 	public static function handle_partner_login() {
-		// Check if this is a partner login attempt
+		// Check if this is a partner login attempt.
 		if ( ! isset( $_POST['action'] ) || $_POST['action'] !== 'lgp_partner_login' ) {
 			return;
 		}
 
-		// Verify nonce
+		// Verify nonce.
 		if ( ! isset( $_POST['lgp_login_nonce'] ) ||
-			! wp_verify_nonce( $_POST['lgp_login_nonce'], self::NONCE_PARTNER ) ) {
+			! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lgp_login_nonce'] ) ), self::NONCE_PARTNER ) ) {
 			self::redirect_with_error( 'invalid_nonce', 'partner' );
 			return;
 		}
 
-		// Sanitize and validate inputs
-		$user_login    = isset( $_POST['user_login'] ) ? sanitize_text_field( $_POST['user_login'] ) : '';
-		$user_password = isset( $_POST['user_password'] ) ? $_POST['user_password'] : '';
+		// Sanitize and validate inputs.
+		$user_login    = isset( $_POST['user_login'] ) ? sanitize_text_field( wp_unslash( $_POST['user_login'] ) ) : '';
+		$user_password = isset( $_POST['user_password'] ) ? wp_unslash( $_POST['user_password'] ) : '';
 		$remember      = isset( $_POST['rememberme'] ) ? true : false;
 		$redirect_to   = isset( $_POST['redirect_to'] ) ? esc_url_raw( $_POST['redirect_to'] ) : admin_url( '' );
 
