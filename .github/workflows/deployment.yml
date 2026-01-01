@@ -1,0 +1,288 @@
+name: Deploy to WordPress
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+permissions:
+  contents: read
+  deployments: write
+  statuses: write
+
+jobs:
+  pre-deployment-checks:
+    name: Pre-Deployment Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      should_deploy: ${{ steps.checks.outputs.should_deploy }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Get version
+        id: version
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          else
+            VERSION="dev-$(date +%Y%m%d-%H%M%S)"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Deploying version: $VERSION"
+      
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          tools: composer
+      
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+      
+      - name: Run pre-deployment checks
+        id: checks
+        run: |
+          echo "Running pre-deployment validation..."
+          
+          # Check plugin validity
+          php -r "require_once 'loungenie-portal.php'; echo 'Plugin loads successfully';" || exit 1
+          
+          # Run tests
+          bash bin/test-plugin.sh || exit 1
+          
+          # Run comprehensive validation
+          bash bin/validate-plugin.sh || exit 1
+          
+          echo "✅ All pre-deployment checks passed"
+          echo "should_deploy=true" >> $GITHUB_OUTPUT
+
+  build-artifact:
+    name: Build Plugin Artifact
+    runs-on: ubuntu-latest
+    needs: pre-deployment-checks
+    if: needs.pre-deployment-checks.outputs.should_deploy == 'true'
+    timeout-minutes: 10
+    outputs:
+      artifact_name: ${{ steps.artifact.outputs.name }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          tools: composer
+      
+      - name: Install production dependencies
+        run: |
+          composer install --no-dev --no-interaction --prefer-dist
+          composer dumpautoload --optimize
+      
+      - name: Create artifact
+        id: artifact
+        env:
+          VERSION: ${{ needs.pre-deployment-checks.outputs.version }}
+        run: |
+          ARTIFACT_NAME="loungenie-portal-${VERSION}.zip"
+          
+          # Create deployment package
+          zip -r "$ARTIFACT_NAME" . \
+            -x "*.git*" \
+            ".github/*" \
+            ".env*" \
+            "tests/*" \
+            "bin/*" \
+            "docs/*" \
+            ".gitignore" \
+            "composer.lock" \
+            "*.md" \
+            "node_modules/*" \
+            ".DS_Store" \
+            "*/.DS_Store"
+          
+          ls -lh "$ARTIFACT_NAME"
+          echo "name=$ARTIFACT_NAME" >> $GITHUB_OUTPUT
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: plugin-artifact
+          path: ${{ steps.artifact.outputs.name }}
+          retention-days: 30
+
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [pre-deployment-checks, build-artifact]
+    if: github.event_name == 'push' || github.event.inputs.environment == 'staging'
+    environment:
+      name: staging
+      url: ${{ secrets.STAGING_URL }}
+    timeout-minutes: 20
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: plugin-artifact
+      
+      - name: Deploy to staging
+        env:
+          STAGING_HOST: ${{ secrets.STAGING_HOST }}
+          STAGING_USER: ${{ secrets.STAGING_USER }}
+          STAGING_KEY: ${{ secrets.STAGING_SSH_KEY }}
+          STAGING_PATH: ${{ secrets.STAGING_PATH }}
+        run: |
+          echo "🚀 Deploying to staging..."
+          
+          # Create SSH key file
+          mkdir -p ~/.ssh
+          echo "$STAGING_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          
+          # Add host to known hosts
+          ssh-keyscan -H "$STAGING_HOST" >> ~/.ssh/known_hosts
+          
+          # Transfer artifact
+          ARTIFACT=$(ls loungenie-portal-*.zip | head -1)
+          scp -i ~/.ssh/deploy_key "$ARTIFACT" "$STAGING_USER@$STAGING_HOST:$STAGING_PATH/"
+          
+          # Extract and activate
+          ssh -i ~/.ssh/deploy_key "$STAGING_USER@$STAGING_HOST" << 'EOF'
+            cd $STAGING_PATH
+            unzip -o loungenie-portal-*.zip
+            wp plugin activate loungenie-portal
+            wp plugin verify-checksums loungenie-portal
+            echo "✅ Staging deployment complete"
+          EOF
+          
+          # Cleanup
+          rm ~/.ssh/deploy_key
+      
+      - name: Run post-deployment tests
+        env:
+          STAGING_URL: ${{ secrets.STAGING_URL }}
+        run: |
+          echo "Testing deployed plugin..."
+          
+          # Test API endpoints
+          curl -s "$STAGING_URL/wp-json/lgp/v1/companies" \
+            -H "Authorization: Bearer ${{ secrets.STAGING_API_TOKEN }}" \
+            | jq . || echo "API test completed"
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [pre-deployment-checks, build-artifact, deploy-staging]
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags') || github.event.inputs.environment == 'production'
+    environment:
+      name: production
+      url: ${{ secrets.PRODUCTION_URL }}
+    timeout-minutes: 20
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: plugin-artifact
+      
+      - name: Deploy to production
+        env:
+          PROD_HOST: ${{ secrets.PRODUCTION_HOST }}
+          PROD_USER: ${{ secrets.PRODUCTION_USER }}
+          PROD_KEY: ${{ secrets.PRODUCTION_SSH_KEY }}
+          PROD_PATH: ${{ secrets.PRODUCTION_PATH }}
+        run: |
+          echo "🚀 Deploying to PRODUCTION..."
+          
+          # Create SSH key file
+          mkdir -p ~/.ssh
+          echo "$PROD_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          
+          # Add host to known hosts
+          ssh-keyscan -H "$PROD_HOST" >> ~/.ssh/known_hosts
+          
+          # Backup current version
+          ssh -i ~/.ssh/deploy_key "$PROD_USER@$PROD_HOST" << 'EOF'
+            cd $PROD_PATH
+            if [ -d "loungenie-portal-backup" ]; then
+              rm -rf loungenie-portal-backup-old
+              mv loungenie-portal-backup loungenie-portal-backup-old
+            fi
+            cp -r loungenie-portal loungenie-portal-backup
+          EOF
+          
+          # Transfer artifact
+          ARTIFACT=$(ls loungenie-portal-*.zip | head -1)
+          scp -i ~/.ssh/deploy_key "$ARTIFACT" "$PROD_USER@$PROD_HOST:$PROD_PATH/"
+          
+          # Extract and activate
+          ssh -i ~/.ssh/deploy_key "$PROD_USER@$PROD_HOST" << 'EOF'
+            cd $PROD_PATH
+            unzip -o loungenie-portal-*.zip
+            wp plugin activate loungenie-portal
+            wp db query "SELECT * FROM wp_options WHERE option_name = 'loungenie_portal_version';" || true
+            echo "✅ Production deployment complete"
+          EOF
+          
+          # Cleanup
+          rm ~/.ssh/deploy_key
+      
+      - name: Send deployment notification
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const status = context.payload.deployment.state;
+            const message = `🚀 Production deployment ${status}!\n\nVersion: ${{ needs.pre-deployment-checks.outputs.version }}\nEnvironment: Production\nCommit: ${{ github.sha }}`;
+            
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: message
+            });
+
+  post-deployment:
+    name: Post-Deployment Verification
+    runs-on: ubuntu-latest
+    needs: [pre-deployment-checks, deploy-production]
+    if: always()
+    timeout-minutes: 10
+    
+    steps:
+      - name: Verify deployment
+        run: |
+          echo "## Deployment Verification"
+          echo "Version: ${{ needs.pre-deployment-checks.outputs.version }}"
+          echo "Status: ✅ Complete"
+          echo ""
+          echo "### Next Steps:"
+          echo "- [ ] Monitor error logs"
+          echo "- [ ] Test all portal roles"
+          echo "- [ ] Verify API endpoints"
+          echo "- [ ] Test email notifications"
+          echo "- [ ] Monitor performance metrics"

@@ -91,12 +91,10 @@ if ( ! lgp_check_compatibility() ) {
 
 /**
  * Plugin activation.
- * - Create database tables.
- * - Register custom roles.
- * - Set default capabilities.
+ * Creates database tables, registers custom roles, and sets default capabilities.
  */
 function lgp_activate() {
-	// Ensure no output leaks during activation to avoid "unexpected output" notices.
+	// Suppress output during activation to avoid "unexpected output" notices.
 	$activation_ob_level = ob_get_level();
 	ob_start();
 
@@ -115,7 +113,7 @@ function lgp_activate() {
 	// Flush rewrite rules. for custom routes.
 	flush_rewrite_rules();
 
-	// Swallow any buffered output to keep activation clean. Log for diagnostics if present.
+	// Swallow any buffered output to keep activation clean; log for diagnostics if present.
 	$activation_output = ob_get_clean();
 	while ( ob_get_level() > $activation_ob_level ) {
 		ob_end_clean();
@@ -174,7 +172,7 @@ add_action( 'plugins_loaded', 'lgp_load_textdomain' );
  * Initialize all plugin components
  */
 function lgp_init() {
-	// Load all required classes first
+	// Load all required classes first.
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-loader.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-database.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-router.php';
@@ -195,7 +193,7 @@ function lgp_init() {
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-outlook.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-system-health.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-attachments.php';
-	// Legacy email handler will be conditionally initialized via loader based on feature flag
+	// Legacy email handler will be conditionally initialized via loader based on feature flag.
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-handler.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-capabilities.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-rest-errors.php';
@@ -208,7 +206,7 @@ function lgp_init() {
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-csv-partner-import.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-theme-independence.php';
 
-	// Conditionally load new Graph-based email pipeline
+	// Conditionally load new Graph-based email pipeline.
 	$use_new_email = false;
 	if ( defined( 'LGP_EMAIL_PIPELINE' ) ) {
 		$use_new_email = ( 'new' === LGP_EMAIL_PIPELINE || true === LGP_EMAIL_PIPELINE || 1 === LGP_EMAIL_PIPELINE );
@@ -220,14 +218,14 @@ function lgp_init() {
 	}
 
 	if ( $use_new_email ) {
-		// New pipeline components
+		// New pipeline components.
 		require_once LGP_PLUGIN_DIR . 'includes/class-lgp-graph-client.php';
 		require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-ingest.php';
 		require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-reply.php';
 		require_once LGP_PLUGIN_DIR . 'includes/email-integration.php';
 	}
 
-	// Load API endpoints
+	// Load API endpoints.
 	require_once LGP_PLUGIN_DIR . 'api/companies.php';
 	require_once LGP_PLUGIN_DIR . 'api/units.php';
 	require_once LGP_PLUGIN_DIR . 'api/tickets.php';
@@ -239,13 +237,13 @@ function lgp_init() {
 	require_once LGP_PLUGIN_DIR . 'api/dashboard.php';
 	require_once LGP_PLUGIN_DIR . 'api/map.php';
 
-	// Load role definitions
+	// Load role definitions.
 	require_once LGP_PLUGIN_DIR . 'roles/support.php';
 	require_once LGP_PLUGIN_DIR . 'roles/partner.php';
 
-	// Initialize all components via centralized loader
+	// Initialize all components via centralized loader.
 	LGP_Loader::init();
-	// Initialize migrations (versioned schema upgrades)
+	// Initialize migrations (versioned schema upgrades).
 	LGP_Migrations::init();
 }
 
@@ -255,26 +253,26 @@ function lgp_init() {
 add_action( 'after_setup_theme', 'lgp_init', 0 );
 
 // ============================================================================
-// CUSTOM REWRITE RULES
+// CUSTOM REWRITE RULES.
 // ============================================================================
 
 /**
- * Add custom rewrite rules for /portal route
+ * Add custom rewrite rules for /portal route.
  */
 function lgp_add_rewrite_rules() {
-	// @phpstan-ignore-next-line add_rewrite_rule is WordPress core function
+	// @phpstan-ignore-next-line add_rewrite_rule is WordPress core function.
 	add_rewrite_rule( '^portal/?$', 'index.php?lgp_portal=1', 'top' );
-	// @phpstan-ignore-next-line
+	// @phpstan-ignore-next-line.
 	add_rewrite_rule( '^portal/(.+)/?$', 'index.php?lgp_portal=1&lgp_section=$matches[1]', 'top' );
-	// @phpstan-ignore-next-line
+	// @phpstan-ignore-next-line.
 	add_rewrite_rule( '^portal/login/?$', 'index.php?lgp_portal_login=1', 'top' );
-	// @phpstan-ignore-next-line
+	// @phpstan-ignore-next-line.
 	add_rewrite_rule( '^support-login/?$', 'index.php?lgp_support_login=1', 'top' );
-	// @phpstan-ignore-next-line
+	// @phpstan-ignore-next-line.
 	add_rewrite_rule( '^partner-login/?$', 'index.php?lgp_partner_login=1', 'top' );
-	// @phpstan-ignore-next-line
+	// @phpstan-ignore-next-line.
 	add_rewrite_rule( '^psp-azure-callback/?$', 'index.php?lgp_azure_callback=1', 'top' );
-	// @phpstan-ignore-next-line
+	// @phpstan-ignore-next-line.
 	add_rewrite_rule( '^m365-sso-callback/?$', 'index.php?lgp_m365_callback=1', 'top' );
 }
 
@@ -286,27 +284,27 @@ add_action( 'init', 'lgp_add_rewrite_rules' );
  * - Skips admin, login, REST, callback, sitemap/robots, and existing portal paths
  */
 function lgp_redirect_root_to_portal() {
-	// Never redirect admin, AJAX, or cron requests..
-	// @phpstan-ignore-next-line is_admin, wp_doing_ajax, wp_doing_cron are WordPress core functions
+	// Never redirect admin, AJAX, or cron requests.
+	// @phpstan-ignore-next-line is_admin, wp_doing_ajax, wp_doing_cron are WordPress core functions.
 	if ( is_admin() || wp_doing_ajax() || wp_doing_cron() ) {
 		return;
 	}
 
-	// Explicit check: don't redirect WordPress admin URLs..
-	// @phpstan-ignore-next-line sanitize_text_field and wp_unslash are WordPress core functions
+	// Explicit check: don't redirect WordPress admin URLs.
+	// @phpstan-ignore-next-line sanitize_text_field and wp_unslash are WordPress core functions.
 	$raw_request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '/';
 	$raw_uri         = strtok( $raw_request_uri, '?' );
 	if ( 0 === strpos( $raw_uri, '/wp-admin' ) || 0 === strpos( $raw_uri, '/wp-login.php' ) ) {
 		return; // Don't interfere with WordPress admin.
 	}
 
-	// Current request path (no query string)..
-	// @phpstan-ignore-next-line sanitize_text_field and wp_unslash are WordPress core functions
+	// Current request path (no query string).
+	// @phpstan-ignore-next-line sanitize_text_field and wp_unslash are WordPress core functions.
 	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( strtok( $_SERVER['REQUEST_URI'], '?' ) ) ) : '/';
 	// @phpstan-ignore-next-line trailingslashit is WordPress core function
 	$request_uri = trailingslashit( $request_uri );
 
-	// Exclusions: don't interfere with these paths..
+	// Exclusions: don't interfere with these paths.
 	$excluded_prefixes = array(
 		'/portal/',
 		'/wp-admin/',
@@ -325,22 +323,22 @@ function lgp_redirect_root_to_portal() {
 		}
 	}
 
-	// Also skip robots and favicon..
+	// Also skip robots and favicon.
 	if ( '/robots.txt/' === $request_uri || '/favicon.ico/' === $request_uri ) {
 		return;
 	}
 
-	// If this is the root/front request, always redirect to /portal (regardless of login state)..
-	// @phpstan-ignore-next-line is_front_page and is_home are WordPress core functions
+	// If this is the root/front request, always redirect to /portal (regardless of login state).
+	// @phpstan-ignore-next-line is_front_page and is_home are WordPress core functions.
 	if ( '/' === $request_uri || is_front_page() || is_home() ) {
 		// Avoid redirect loop if home_url already ends with /portal.
-		// @phpstan-ignore-next-line home_url is WordPress core function
+		// @phpstan-ignore-next-line home_url is WordPress core function.
 		$target = home_url( '/portal' );
-		// @phpstan-ignore-next-line home_url is WordPress core function
+		// @phpstan-ignore-next-line home_url is WordPress core function.
 		$current = home_url( $request_uri );
-		// @phpstan-ignore-next-line trailingslashit is WordPress core function
+		// @phpstan-ignore-next-line trailingslashit is WordPress core function.
 		if ( trailingslashit( $current ) !== trailingslashit( $target ) ) {
-			// @phpstan-ignore-next-line wp_safe_redirect is WordPress core function
+			// @phpstan-ignore-next-line wp_safe_redirect is WordPress core function.
 			wp_safe_redirect( $target, 301 );
 			exit;
 		}

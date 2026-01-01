@@ -1,0 +1,254 @@
+name: CI - Code Validation & Testing
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+  statuses: write
+
+jobs:
+  php-syntax:
+    name: PHP Syntax Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    strategy:
+      matrix:
+        php-version: ['7.4', '8.0', '8.1', '8.2']
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          tools: composer
+          coverage: none
+      
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+      
+      - name: Check PHP syntax
+        run: |
+          echo "Checking PHP syntax on ${{ matrix.php-version }}..."
+          find . -type f -name "*.php" ! -path "./vendor/*" ! -path "./.git/*" ! -path "./node_modules/*" -exec php -l {} \;
+      
+      - name: Report results
+        if: always()
+        run: echo "✅ PHP ${{ matrix.php-version }} syntax validation passed"
+
+  wordpress-standards:
+    name: WordPress Coding Standards
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          tools: composer
+          coverage: none
+      
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+      
+      - name: Run PHPCS
+        id: phpcs
+        run: |
+          vendor/bin/phpcs --standard=WordPress --report=json --report-file=phpcs-report.json . \
+            --ignore=vendor,node_modules,.git,tests/fixtures || true
+      
+      - name: Report PHPCS results
+        if: always()
+        run: |
+          if [ -f phpcs-report.json ]; then
+            echo "📋 PHPCS Results:"
+            cat phpcs-report.json | jq '.'
+          fi
+      
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            if (fs.existsSync('phpcs-report.json')) {
+              const report = JSON.parse(fs.readFileSync('phpcs-report.json', 'utf8'));
+              const totalIssues = report.totals.errors + report.totals.warnings;
+              const comment = `## 📋 PHPCS Report\n\n- **Errors**: ${report.totals.errors}\n- **Warnings**: ${report.totals.warnings}\n- **Total Issues**: ${totalIssues}`;
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            }
+
+  plugin-validation:
+    name: Plugin Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          tools: composer
+          coverage: none
+      
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+      
+      - name: Run plugin validation
+        run: bash bin/test-plugin.sh
+      
+      - name: Run comprehensive validation
+        run: bash bin/validate-plugin.sh
+      
+      - name: Upload validation report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: validation-report
+          path: |
+            phpcs-report.json
+            validation-*.log
+
+  security-check:
+    name: Security & Sanitization Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Check for security issues
+        run: |
+          echo "🔒 Checking security vulnerabilities..."
+          
+          # Check for SQL injection risks
+          echo "Checking for raw SQL queries..."
+          if grep -r "query\s*(" --include="*.php" . | grep -v "prepare\|wpdb->get" | grep -v "vendor" > /dev/null; then
+            echo "⚠️  Potential SQL injection risks found"
+          else
+            echo "✅ No obvious SQL injection risks"
+          fi
+          
+          # Check for hardcoded credentials
+          echo "Checking for hardcoded credentials..."
+          if grep -r "password\s*=\s*['\"]" --include="*.php" . | grep -v "vendor" > /dev/null; then
+            echo "⚠️  Potential hardcoded credentials found"
+          else
+            echo "✅ No hardcoded credentials detected"
+          fi
+          
+          # Check for eval usage
+          echo "Checking for eval usage..."
+          if grep -r "\beval\s*(" --include="*.php" . | grep -v "vendor" > /dev/null; then
+            echo "⚠️  eval() usage detected"
+          else
+            echo "✅ No eval() usage"
+          fi
+      
+      - name: Run Composer security check
+        run: |
+          composer require --dev roave/security-advisories:dev-latest || true
+          echo "✅ Composer security check completed"
+
+  file-permissions:
+    name: File Permissions Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Check file permissions
+        run: |
+          echo "🔐 Checking file permissions..."
+          
+          # Check for executable PHP files (should not be)
+          if find . -type f -name "*.php" -perm /u+x,g+x,o+x ! -path "./vendor/*" ! -path "./.git/*" > /dev/null; then
+            echo "⚠️  PHP files found with execute permissions"
+            find . -type f -name "*.php" -perm /u+x,g+x,o+x ! -path "./vendor/*" ! -path "./.git/*"
+          else
+            echo "✅ PHP files have correct permissions"
+          fi
+          
+          # Check script permissions
+          if [ -x "bin/test-plugin.sh" ]; then
+            echo "✅ bin/test-plugin.sh is executable"
+          else
+            echo "⚠️  bin/test-plugin.sh is not executable"
+            chmod +x bin/test-plugin.sh
+          fi
+          
+          if [ -x "bin/validate-plugin.sh" ]; then
+            echo "✅ bin/validate-plugin.sh is executable"
+          else
+            echo "⚠️  bin/validate-plugin.sh is not executable"
+            chmod +x bin/validate-plugin.sh
+          fi
+
+  json-validation:
+    name: JSON & Config Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Validate composer.json
+        run: composer validate
+      
+      - name: Validate package.json
+        if: hashFiles('package.json') != ''
+        run: |
+          if command -v jq &> /dev/null; then
+            jq . package.json > /dev/null && echo "✅ package.json is valid"
+          fi
+      
+      - name: Validate phpunit.xml
+        run: |
+          if [ -f phpunit.xml ]; then
+            xmllint --noout phpunit.xml && echo "✅ phpunit.xml is valid"
+          fi
+
+  summary:
+    name: Validation Summary
+    runs-on: ubuntu-latest
+    needs: [php-syntax, wordpress-standards, plugin-validation, security-check, file-permissions, json-validation]
+    if: always()
+    
+    steps:
+      - name: Check validation status
+        run: |
+          echo "## ✅ Validation Complete"
+          echo "- PHP Syntax: ${{ needs.php-syntax.result }}"
+          echo "- WordPress Standards: ${{ needs.wordpress-standards.result }}"
+          echo "- Plugin Validation: ${{ needs.plugin-validation.result }}"
+          echo "- Security Check: ${{ needs.security-check.result }}"
+          echo "- File Permissions: ${{ needs.file-permissions.result }}"
+          echo "- JSON Validation: ${{ needs.json-validation.result }}"

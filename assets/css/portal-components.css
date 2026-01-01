@@ -19,7 +19,7 @@
 
 .lgp-sidebar {
     width: var(--lgp-sidebar-width);
-    background: var(--lgp-structure-navy);
+    background: #1A237E !important;
     padding: var(--lgp-space-6) var(--lgp-space-4);
     overflow-y: auto;
     position: fixed;
@@ -27,8 +27,8 @@
     top: 0;
     height: 100vh;
     z-index: 100;
-    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-    border-left: 4px solid var(--lgp-role-accent);
+    box-shadow: 2px 0 8px rgba(26, 35, 126, 0.2);
+    border-right: 4px solid #2596be !important;
 }
 
 .lgp-main-content {
@@ -39,13 +39,13 @@
 }
 
 .lgp-header {
-    background: var(--lgp-atmosphere-white);
+    background: #FFFFFF !important;
     padding: var(--lgp-space-4) var(--lgp-space-8);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--lgp-atmosphere-border);
-    box-shadow: var(--lgp-shadow);
+    border-bottom: 2px solid #1A237E !important;
+    box-shadow: 0 2px 8px rgba(26, 35, 126, 0.1);
     position: sticky;
     top: 0;
     z-index: 50;
@@ -77,22 +77,25 @@
 }
 
 .lgp-logo-loungenie {
-    color: var(--lgp-atmosphere-white);
+    color: #1A237E !important;
+    font-weight: 700;
 }
 
 .lgp-logo-separator {
-    color: var(--lgp-action-cyan);
+    color: #2596be !important;
     margin: 0 var(--lgp-space-2);
 }
 
 .lgp-logo-poolsafe {
-    color: var(--lgp-action-cyan);
+    color: #2596be !important;
+    font-weight: 600;
 }
 
 .lgp-logo-suffix {
-    color: rgba(255, 255, 255, 0.7);
+    color: #1A237E !important;
     font-size: var(--lgp-text-base);
     font-weight: 500;
+    opacity: 0.8;
 }
 
 /* ============================================================================
@@ -106,17 +109,18 @@
 }
 
 .lgp-nav-item {
-    margin-bottom: var(--lgp-space-4);
+    margin-bottom: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .lgp-nav-link {
     display: flex;
     align-items: center;
     gap: var(--lgp-space-3);
-    padding: var(--lgp-space-3) var(--lgp-space-4);
-    color: rgba(255, 255, 255, 0.7);
+    padding: 16px 20px;
+    color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
-    border-radius: var(--lgp-radius);
+    border-left: 4px solid transparent;
     transition: all var(--lgp-transition);
     font-size: var(--lgp-text-sm);
     font-weight: 500;
@@ -124,16 +128,16 @@
 }
 
 .lgp-nav-link:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--lgp-atmosphere-white);
-    transform: translateX(4px);
+    background: rgba(28, 170, 182, 0.15);
+    color: #FFFFFF !important;
+    border-left-color: #2596be;
 }
 
 .lgp-nav-link.active {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--lgp-role-accent);
-    border-left: 4px solid var(--lgp-role-accent);
-    padding-left: calc(var(--lgp-space-4) - 4px);
+    background: #2596be !important;
+    color: #FFFFFF !important;
+    border-left-color: #5fb8d5;
+    font-weight: 600;
 }
 
 .lgp-nav-icon {
@@ -142,18 +146,22 @@
     justify-content: center;
     width: 32px;
     height: 32px;
-    font-size: var(--lgp-text-base);
-    background: transparent;
-    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.1);
+    color: #5fb8d5;
+    border-radius: 6px;
     transition: all var(--lgp-transition);
 }
 
 .lgp-nav-link.active .lgp-nav-icon {
-    background: var(--lgp-role-accent-light);
+    background: rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
 }
 
 .lgp-nav-link:hover .lgp-nav-icon {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(0, 229, 204, 0.2);
+    color: #5fb8d5;
 }
 
 /* ============================================================================
@@ -181,15 +189,15 @@
 
 .lgp-notification-icon:hover {
     transform: scale(1.1);
-    color: var(--lgp-role-accent);
+    color: #2596be !important;
 }
 
 .lgp-notification-badge {
     position: absolute;
     top: -8px;
     right: -8px;
-    background: var(--lgp-danger);
-    color: var(--lgp-white);
+    background: #DC2626;
+    color: white;
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -208,17 +216,18 @@
 
 .lgp-user-name {
     font-weight: 600;
-    color: var(--lgp-structure-headline);
+    color: #1A237E !important;
 }
 
 .lgp-user-role {
     font-size: var(--lgp-text-xs);
-    color: var(--lgp-structure-secondary);
-    background: var(--lgp-role-accent-light);
+    color: #1A237E !important;
+    background: #E8EAF6 !important;
     padding: 4px 12px;
     border-radius: 12px;
     display: inline-block;
     font-weight: 600;
+    border: 1px solid #1A237E;
 }
 
 /* ============================================================================
@@ -242,37 +251,37 @@
 }
 
 .lgp-btn-primary {
-    background: var(--lgp-role-accent);
-    color: var(--lgp-atmosphere-white);
+    background: #2596be !important;
+    color: #FFFFFF !important;
 }
 
 .lgp-btn-primary:hover {
-    background: var(--lgp-role-accent-dark);
+    background: #1a7a9e !important;
     transform: translateY(-2px);
-    box-shadow: var(--lgp-shadow-md);
+    box-shadow: 0 4px 12px rgba(37, 150, 190, 0.3) !important;
 }
 
 .lgp-btn-secondary {
-    background: var(--lgp-atmosphere-alt);
-    color: var(--lgp-role-accent);
-    border: 1px solid var(--lgp-role-accent-light);
+    background: #F8F9FA !important;
+    color: #1A237E !important;
+    border: 1px solid #E8EAF6 !important;
 }
 
 .lgp-btn-secondary:hover {
-    background: var(--lgp-role-accent-light);
-    border-color: var(--lgp-role-accent);
-    color: var(--lgp-role-accent-dark);
+    background: #E8EAF6 !important;
+    border-color: #2596be !important;
+    color: #2596be !important;
 }
 
 .lgp-btn-outline {
     background: transparent;
-    border: 2px solid var(--lgp-role-accent);
-    color: var(--lgp-role-accent);
+    border: 2px solid #2596be !important;
+    color: #2596be !important;
 }
 
 .lgp-btn-outline:hover {
-    background: var(--lgp-role-accent);
-    color: var(--lgp-atmosphere-white);
+    background: #2596be;
+    color: #FFFFFF !important;
 }
 
 .lgp-btn-small {
@@ -296,19 +305,20 @@
  * ========================================================================== */
 
 .lgp-card {
-    background: var(--lgp-atmosphere-white);
+    background: #FFFFFF !important;
     border-radius: var(--lgp-radius-md);
     padding: var(--lgp-space-6);
-    box-shadow: var(--lgp-shadow);
+    box-shadow: 0 2px 8px rgba(26, 35, 126, 0.08);
+    border: 1px solid #E8EAF6 !important;
     transition: all var(--lgp-transition);
     margin-bottom: var(--lgp-space-6);
 }
 
 .lgp-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--lgp-shadow-md);
-    background: var(--lgp-atmosphere-alt);
-    border-left: 3px solid var(--lgp-role-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(26, 35, 126, 0.12);
+    background: #F8F9FA !important;
+    border-left: 3px solid #1A237E !important;
 }
 
 .lgp-card-compact {
@@ -319,7 +329,9 @@
     font-size: var(--lgp-text-xl);
     font-weight: 700;
     margin: 0 0 var(--lgp-space-4) 0;
-    color: var(--lgp-structure-headline);
+    color: #1A237E !important;
+    border-bottom: 2px solid #1A237E;
+    padding-bottom: var(--lgp-space-3);
 }
 
 /* ============================================================================
@@ -329,7 +341,7 @@
 .lgp-tabs {
     display: flex;
     gap: var(--lgp-space-4);
-    border-bottom: 2px solid var(--lgp-border);
+    border-bottom: 2px solid #E8EAF6 !important;
     margin-bottom: var(--lgp-space-6);
     flex-wrap: wrap;
 }
@@ -341,19 +353,19 @@
     border-bottom: 3px solid transparent;
     cursor: pointer;
     font-weight: 600;
-    color: var(--lgp-text-tertiary);
+    color: #454F5E;
     transition: all var(--lgp-transition);
     font-family: var(--lgp-font-family);
     font-size: var(--lgp-text-sm);
 }
 
 .lgp-tab:hover {
-    color: var(--lgp-structure-navy);
+    color: #1A237E;
 }
 
 .lgp-tab.active {
-    color: var(--lgp-role-accent);
-    border-bottom-color: var(--lgp-role-accent);
+    color: #2596be !important;
+    border-bottom-color: #2596be !important;
 }
 
 .lgp-tab-content {
@@ -431,13 +443,13 @@
 }
 
 .lgp-badge-brand {
-    background: var(--lgp-role-accent-light);
-    color: var(--lgp-role-accent);
+    background: #E6F2F8 !important;
+    color: #2596be !important;
 }
 
 .lgp-badge-role {
-    background: var(--lgp-role-accent);
-    color: var(--lgp-atmosphere-white);
+    background: #1A237E !important;
+    color: #FFFFFF !important;
     font-weight: 600;
 }
 
@@ -448,24 +460,25 @@
 .lgp-table {
     width: 100%;
     border-collapse: collapse;
-    background: var(--lgp-atmosphere-white);
+    background: #FFFFFF !important;
     border-radius: var(--lgp-radius-md);
     overflow: hidden;
+    border: 1px solid #1A237E !important;
 }
 
 .lgp-table th {
-    background: var(--lgp-atmosphere-alt);
+    background: #1A237E !important;
     padding: var(--lgp-space-4);
     text-align: left;
     font-weight: 600;
-    color: var(--lgp-structure-headline);
-    border-bottom: 2px solid var(--lgp-atmosphere-border);
+    color: #FFFFFF !important;
+    border-bottom: 2px solid #1A237E !important;
 }
 
 .lgp-table td {
     padding: var(--lgp-space-4);
-    color: var(--lgp-structure-body);
-    border-bottom: 1px solid var(--lgp-atmosphere-border);
+    color: #0F172A !important;
+    border-bottom: 1px solid #E8EAF6 !important;
 }
 
 .lgp-table tbody tr {
@@ -473,8 +486,8 @@
 }
 
 .lgp-table tbody tr:hover {
-    background: var(--lgp-atmosphere-hover);
-    border-left: 3px solid var(--lgp-role-accent);
+    background: #F8F9FA !important;
+    border-left: 3px solid #1A237E !important;
 }
 
 /* ============================================================================
@@ -482,17 +495,19 @@
  * ========================================================================== */
 
 .lgp-stat-card {
-    background: var(--lgp-atmosphere-white);
+    background: #FFFFFF !important;
     border-radius: var(--lgp-radius-md);
     padding: var(--lgp-space-6);
     text-align: center;
-    box-shadow: var(--lgp-shadow);
+    box-shadow: 0 2px 8px rgba(26, 35, 126, 0.08);
+    border-top: 3px solid #1A237E !important;
     transition: all var(--lgp-transition);
 }
 
 .lgp-stat-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(26, 35, 126, 0.12);
+    border-top-color: #2596be !important;
 }
 
 .lgp-stat-icon {

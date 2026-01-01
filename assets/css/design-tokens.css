@@ -16,16 +16,20 @@
 	 * ========================================================================== */
 
     /* PRIMARY BRAND COLORS (Plugin Authority) */
-    --lg-primary: #1CAAB6;        /* Primary brand color */
-    --lg-secondary: #67BED9;      /* Secondary brand color */
-    --lg-success: #4DA88F;        /* Success/positive actions */
-    --lg-structure: #1A237E;      /* Structure/navigation */
+    --lg-primary: #2596be;
+    /* Primary brand color - Professional Blue */
+    --lg-secondary: #5fb8d5;
+    /* Secondary brand color - Light Blue */
+    --lg-success: #4DA88F;
+    /* Success/positive actions */
+    --lg-structure: #1A237E;
+    /* Structure/navigation - Navy */
 
     /* DERIVED COLORS FROM PRIMARY TOKENS */
-    --lg-primary-hover: #158A94;
-    --lg-primary-light: #E3F2F3;
-    --lg-secondary-hover: #4A9FBE;
-    --lg-secondary-light: #E8F6FB;
+    --lg-primary-hover: #1a7a9e;
+    --lg-primary-light: #E6F2F8;
+    --lg-secondary-hover: #4a9fbe;
+    --lg-secondary-light: #F0F8FC;
     --lg-success-light: #E0F5F0;
     --lg-structure-light: #E8EAF6;
 
@@ -40,7 +44,7 @@
     /* Hover state - UPDATED */
     --lgp-action-cyan-light: #E8F6FB;
     /* Badge/light background - UPDATED */
-    
+
     /* Accent colors */
     --lgp-accent-green: #4DA88F;
     /* Accent green - UPDATED */
@@ -48,12 +52,12 @@
     /* Accent navy - UPDATED */
 
     /* Legacy mapping for compatibility - UPDATED */
-    --lgp-brand-teal: #1CAAB6;
-    --lgp-brand-teal-dark: #158A94;
-    --lgp-brand-teal-light: #E3F2F3;
-    --lgp-brand-cyan: #67BED9;
-    --lgp-brand-cyan-dark: #4A9FBE;
-    --lgp-brand-cyan-light: #E8F6FB;
+    --lgp-brand-teal: #2596be;
+    --lgp-brand-teal-dark: #1a7a9e;
+    --lgp-brand-teal-light: #E6F2F8;
+    --lgp-brand-cyan: #5fb8d5;
+    --lgp-brand-cyan-dark: #4a9fbe;
+    --lgp-brand-cyan-light: #F0F8FC;
     --lgp-white: #FFFFFF;
     --lgp-background: #E9F8F9;
     --lgp-surface: #FFFFFF;
@@ -73,12 +77,12 @@
     --lgp-color-text-secondary: #454F5E;
     --lgp-color-text-tertiary: #7A8699;
     --lgp-color-text-inverse: #FFFFFF;
-    --lgp-color-brand: #1CAAB6;
-    --lgp-color-brand-hover: #158A94;
-    --lgp-color-brand-light: #E3F2F3;
-    --lgp-color-accent: #67BED9;
-    --lgp-color-accent-hover: #4A9FBE;
-    --lgp-color-accent-light: #E8F6FB;
+    --lgp-color-brand: #2596be;
+    --lgp-color-brand-hover: #1a7a9e;
+    --lgp-color-brand-light: #E6F2F8;
+    --lgp-color-accent: #5fb8d5;
+    --lgp-color-accent-hover: #4a9fbe;
+    --lgp-color-accent-light: #F0F8FC;
 
     /* FEEDBACK COLORS (Status, Sparingly) */
     --lgp-success: #16A34A;

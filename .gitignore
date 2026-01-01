@@ -35,6 +35,7 @@ composer.lock
 .editorconfig
 *.sublime-project
 *.sublime-workspace
+*.code-workspace
 
 # Testing
 phpunit.xml

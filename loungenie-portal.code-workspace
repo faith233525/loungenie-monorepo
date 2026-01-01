@@ -1,31 +1,32 @@
 {
 	"folders": [
 		{
-			"path": "."
+			"path": ".",
+			"name": "LounGenie Portal - WordPress Plugin v1.8.1"
 		},
 		{
 			"path": "includes",
-			"name": "Classes & Logic"
+			"name": "PHP Classes (50+ enterprise classes)"
 		},
 		{
 			"path": "api",
-			"name": "REST APIs"
+			"name": "REST API Endpoints (11 endpoints)"
 		},
 		{
 			"path": "templates",
-			"name": "UI Templates"
+			"name": "UI Templates (12 consolidated views)"
 		},
 		{
 			"path": "assets",
-			"name": "CSS & JavaScript"
+			"name": "Styling & Scripts (CSS + vanilla JS)"
 		},
 		{
 			"path": "roles",
-			"name": "Role Definitions"
+			"name": "User Role Definitions"
 		},
 		{
 			"path": "wp-cli",
-			"name": "CLI Commands"
+			"name": "WP-CLI Command Extensions"
 		}
 	],
 	"settings": {

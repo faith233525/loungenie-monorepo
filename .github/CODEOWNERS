@@ -1,0 +1,37 @@
+# Code Owners for LounGenie Portal
+
+# Default owners for everything
+* @faith233525
+
+# Core plugin files
+loungenie-portal.php @faith233525
+uninstall.php @faith233525
+
+# Authentication & Security
+includes/class-lgp-auth.php @faith233525
+includes/class-lgp-security.php @faith233525
+includes/class-lgp-microsoft-sso.php @faith233525
+
+# Database & Schema
+includes/class-lgp-database.php @faith233525
+includes/class-lgp-migrations.php @faith233525
+
+# API Endpoints
+api/ @faith233525
+
+# Roles & Permissions
+roles/ @faith233525
+
+# Configuration
+composer.json @faith233525
+phpunit.xml @faith233525
+phpcs.xml @faith233525
+
+# Deployment & CI/CD
+.github/ @faith233525
+bin/ @faith233525
+
+# Documentation - notify on changes
+*.md @faith233525
+DEPLOYMENT_READY.md @faith233525
+QUICK_START.md @faith233525

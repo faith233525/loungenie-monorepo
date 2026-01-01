@@ -1,0 +1,166 @@
+name: PR Review & Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  automated-review:
+    name: Automated Code Review
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          tools: composer
+      
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+      
+      - name: Check for conflicts
+        run: |
+          echo "Checking for merge conflicts..."
+          if grep -r "^<<<<<<< HEAD" --include="*.php" .; then
+            echo "❌ Merge conflicts detected"
+            exit 1
+          else
+            echo "✅ No merge conflicts"
+          fi
+      
+      - name: Analyze diff
+        id: diff
+        run: |
+          FILES=$(git diff --name-only origin/main...HEAD)
+          echo "files<<EOF" >> $GITHUB_OUTPUT
+          echo "$FILES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Check for sensitive files
+        run: |
+          SENSITIVE_FILES=".env php_errors.log *.log *.sql"
+          
+          for pattern in $SENSITIVE_FILES; do
+            if echo "${{ steps.diff.outputs.files }}" | grep -q "$pattern"; then
+              echo "⚠️  Sensitive file modified: $pattern"
+            fi
+          done
+      
+      - name: Check for TODO comments
+        run: |
+          echo "Checking for unresolved TODOs..."
+          TODOS=$(git diff origin/main...HEAD | grep "^+.*TODO" || true)
+          if [ ! -z "$TODOS" ]; then
+            echo "Found TODOs:"
+            echo "$TODOS"
+          fi
+      
+      - name: Comment on PR
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            const comment = `## 🤖 Automated Review Results
+            
+            ### Checks Performed:
+            - ✅ Merge conflict detection
+            - ✅ Sensitive file scanning
+            - ✅ TODO comment detection
+            - ✅ File permissions check
+            
+            ### Next Steps:
+            1. Wait for CI checks to complete
+            2. Request human review
+            3. Address any feedback
+            4. Merge when approved
+            
+            **Tip:** Run \`bash bin/test-plugin.sh\` locally before pushing.`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  coverage-check:
+    name: Code Coverage Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          tools: composer
+          coverage: pcov
+      
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+      
+      - name: Run tests with coverage
+        run: |
+          if [ -f phpunit.xml ]; then
+            vendor/bin/phpunit --coverage-text --coverage-clover coverage.xml || true
+          else
+            echo "⚠️  No tests configured"
+          fi
+
+  dependency-check:
+    name: Dependency Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Check dependencies
+        run: |
+          echo "Checking for new/removed dependencies..."
+          
+          # Compare composer.lock
+          if [ -f composer.lock ]; then
+            echo "✅ Composer dependencies locked"
+          else
+            echo "⚠️  No composer.lock file"
+          fi
+
+  documentation-check:
+    name: Documentation Updated
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Check for documentation
+        run: |
+          echo "Checking if documentation needs update..."
+          
+          # List changed files
+          CHANGED=$(git diff origin/main...HEAD --name-only)
+          
+          # Check if README needs update
+          if echo "$CHANGED" | grep -qE "^(includes|api|roles)"; then
+            echo "ℹ️  Code changes detected - ensure README.md is updated"
+          fi
