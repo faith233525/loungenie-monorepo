@@ -361,7 +361,7 @@ class LGP_Email_Reply {
 				'comment_post_ID'      => $ticket_id,
 				'comment_content'      => $post['body']['content'] ?? $post['bodyPreview'] ?? '',
 				'comment_author'       => $from['name'] ?? 'Unknown',
-				'comment_author_email' => $from['address'] ?? 'unknown@example.com',
+				'comment_author_email' => ! empty( $from['address'] ) ? $from['address'] : 'noreply@local',
 				'comment_type'         => 'ticket_reply',
 			)
 		);

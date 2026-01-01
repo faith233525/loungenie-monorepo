@@ -183,6 +183,12 @@ class LGP_Credentials_API
     {
         global $wpdb;
 
+        // Verify nonce
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
+        }
+
         $company_id = (int) $request->get_param('id');
         $username   = sanitize_user($request->get_param('partner_username'));
         // Security: Passwords should be sanitized but not overly stripped

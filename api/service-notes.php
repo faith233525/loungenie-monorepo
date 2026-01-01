@@ -80,6 +80,12 @@ function lgp_get_service_notes( WP_REST_Request $request ) {
 function lgp_create_service_note( WP_REST_Request $request ) {
 	global $wpdb;
 
+	// Verify nonce
+	$nonce = $request->get_header( 'X-WP-Nonce' );
+	if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+		return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
+	}
+
 	$company_id      = $request->get_json_params()['company_id'] ?? null;
 	$unit_id         = $request->get_json_params()['unit_id'] ?? null;
 	$service_type    = $request->get_json_params()['service_type'] ?? null;

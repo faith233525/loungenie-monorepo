@@ -189,6 +189,12 @@ class LGP_Knowledge_Center_API {
 	 * @return WP_REST_Response
 	 */
 	public function create_guide( $request ) {
+		// Verify nonce
+		$nonce = $request->get_header( 'X-WP-Nonce' );
+		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+			return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
+		}
+
 		$data = array(
 			'title'            => $request->get_param( 'title' ),
 			'description'      => $request->get_param( 'description' ),
@@ -225,6 +231,12 @@ class LGP_Knowledge_Center_API {
 	 * @return WP_REST_Response
 	 */
 	public function update_guide( $request ) {
+		// Verify nonce
+		$nonce = $request->get_header( 'X-WP-Nonce' );
+		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+			return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
+		}
+
 		$id = (int) $request->get_param( 'id' );
 
 		$data = array();
@@ -293,6 +305,12 @@ class LGP_Knowledge_Center_API {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function upload_media( $request ) {
+		// Verify nonce
+		$nonce = $request->get_header( 'X-WP-Nonce' );
+		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+			return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
+		}
+
 		if ( ! $this->support_only_permission() ) {
 			return new WP_Error( 'forbidden', 'Not allowed', array( 'status' => 403 ) );
 		}

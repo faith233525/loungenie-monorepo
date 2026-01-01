@@ -262,7 +262,7 @@ class LGP_Email_Ingest {
 
 		// Extract sender info
 		$from         = $message['from']['emailAddress'] ?? array();
-		$sender_email = $from['address'] ?? 'unknown@example.com';
+		$sender_email = ! empty( $from['address'] ) ? $from['address'] : 'noreply@local';
 
 		// Create reply comment
 		$reply_id = wp_insert_comment(

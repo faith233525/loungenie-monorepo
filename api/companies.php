@@ -131,6 +131,12 @@ class LGP_Companies_API {
 	public static function create_company( $request ) {
 		global $wpdb;
 
+		// Verify nonce
+		$nonce = $request->get_header( 'X-WP-Nonce' );
+		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+			return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
+		}
+
 		$table = $wpdb->prefix . 'lgp_companies';
 
 		$data = array(
@@ -179,6 +185,12 @@ class LGP_Companies_API {
 	 */
 	public static function update_company( $request ) {
 		global $wpdb;
+
+		// Verify nonce
+		$nonce = $request->get_header( 'X-WP-Nonce' );
+		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+			return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
+		}
 
 		$id    = (int) $request->get_param( 'id' );
 		$table = $wpdb->prefix . 'lgp_companies';

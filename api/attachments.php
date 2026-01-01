@@ -146,6 +146,12 @@ class LGP_Attachments_API {
 	 * Upload attachment to ticket
 	 */
 	public static function upload_attachment( $request ) {
+		// Verify nonce
+		$nonce = $request->get_header( 'X-WP-Nonce' );
+		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+			return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
+		}
+
 		$ticket_id       = (int) $request->get_param( 'ticket_id' );
 		$current_user_id = get_current_user_id();
 
@@ -317,6 +323,12 @@ class LGP_Attachments_API {
 	 * Delete attachment
 	 */
 	public static function delete_attachment( $request ) {
+		// Verify nonce
+		$nonce = $request->get_header( 'X-WP-Nonce' );
+		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+			return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
+		}
+
 		$id              = (int) $request->get_param( 'id' );
 		$current_user_id = get_current_user_id();
 		global $wpdb;

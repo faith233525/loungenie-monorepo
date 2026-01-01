@@ -134,6 +134,12 @@ class LGP_Gateways_API {
 	 * POST /lgp/v1/gateways
 	 */
 	public static function create_gateway( $request ) {
+		// Verify nonce
+		$nonce = $request->get_header( 'X-WP-Nonce' );
+		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+			return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
+		}
+
 		$data = array(
 			'company_id'         => absint( $request->get_param( 'company_id' ) ),
 			'channel_number'     => sanitize_text_field( $request->get_param( 'channel_number' ) ),
@@ -163,6 +169,12 @@ class LGP_Gateways_API {
 	 * PUT /lgp/v1/gateways/:id
 	 */
 	public static function update_gateway( $request ) {
+		// Verify nonce
+		$nonce = $request->get_header( 'X-WP-Nonce' );
+		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+			return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
+		}
+
 		$id = (int) $request['id'];
 
 		$data = array(

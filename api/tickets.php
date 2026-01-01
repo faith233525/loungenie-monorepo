@@ -182,6 +182,12 @@ class LGP_Tickets_API {
 	public static function create_ticket( $request ) {
 		global $wpdb;
 
+		// Verify nonce
+		$nonce = $request->get_header( 'X-WP-Nonce' );
+		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+			return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
+		}
+
 		$company_id   = LGP_Auth::get_user_company_id();
 		$unit_id      = absint( $request->get_param( 'unit_id' ) );
 		$priority     = sanitize_text_field( $request->get_param( 'priority' ) ?: 'normal' );
@@ -325,6 +331,12 @@ class LGP_Tickets_API {
 	public static function update_ticket( $request ) {
 		global $wpdb;
 
+		// Verify nonce
+		$nonce = $request->get_header( 'X-WP-Nonce' );
+		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+			return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
+		}
+
 		$id         = (int) $request->get_param( 'id' );
 		$new_status = sanitize_text_field( $request->get_param( 'status' ) );
 		$table      = $wpdb->prefix . 'lgp_tickets';
@@ -414,6 +426,12 @@ class LGP_Tickets_API {
 	 */
 	public static function add_reply( $request ) {
 		global $wpdb;
+
+		// Verify nonce
+		$nonce = $request->get_header( 'X-WP-Nonce' );
+		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+			return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
+		}
 
 		$id      = (int) $request->get_param( 'id' );
 		$message = sanitize_textarea_field( $request->get_param( 'message' ) );
