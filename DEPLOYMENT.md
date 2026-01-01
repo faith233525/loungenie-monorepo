@@ -8,7 +8,10 @@
 - [x] XSS prevention (output escaping)
 - [x] CSRF protection (nonces)
 - [x] Input validation & sanitization
-- [x] Rate limiting on API endpoints
+- [x] Rate limiting on API endpoints (tickets 5/hr, attachments 10/hr)
+- [x] Server-side MIME validation for uploads
+- [x] File upload count limits (max 5 per request)
+- [x] Attachment retention/cleanup (90-day cron)
 - [x] Audit logging enabled
 
 ### Performance ✓
@@ -90,11 +93,12 @@ cd plugins/loungenie-portal
 - [ ] Responsive on mobile/tablet
 
 ### Security
-- [ ] HTTPS enabled
-- [ ] Nonces working
-- [ ] Rate limiting active
-- [ ] Audit log recording
-- [ ] No sensitive data in logs
+- [ ] HTTPS enabled and enforced (HSTS headers)
+- [ ] Nonces working on all forms
+- [ ] Rate limiting active (verify logs for limit triggers)
+- [ ] Audit log recording authentication and CRUD events
+- [ ] File cleanup cron running (check transients daily)
+- [ ] No sensitive data in logs or error messages
 
 ## Deployment Environment
 

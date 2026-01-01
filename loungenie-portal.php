@@ -245,6 +245,8 @@ function lgp_init() {
 	LGP_Loader::init();
 	// Initialize migrations (versioned schema upgrades).
 	LGP_Migrations::init();
+	// Initialize file validator (schedules cleanup cron).
+	LGP_File_Validator::init();
 }
 
 // Initialize after the theme directory is registered to avoid early core calls

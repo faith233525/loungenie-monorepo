@@ -189,6 +189,18 @@ class LGP_Tickets_API {
 			return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
 		}
 
+		// Rate limiting: max 5 tickets per hour per user.
+		$user_id  = get_current_user_id();
+		$cache_key = 'lgp_ticket_count_' . (int) $user_id;
+		$count    = (int) get_transient( $cache_key );
+
+		if ( $count >= 5 ) {
+			return new WP_Error( 'rate_limit_exceeded', 'Too many tickets. Maximum 5 per hour.', array( 'status' => 429 ) );
+		}
+
+		// Increment count
+		set_transient( $cache_key, $count + 1, HOUR_IN_SECONDS );
+
 		$company_id   = LGP_Auth::get_user_company_id();
 		$unit_id      = absint( $request->get_param( 'unit_id' ) );
 		$priority     = sanitize_text_field( $request->get_param( 'priority' ) ?: 'normal' );

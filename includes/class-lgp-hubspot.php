@@ -167,17 +167,30 @@ class LGP_HubSpot {
 
 	/**
 	 * Queue object for batch HubSpot sync
+	 * Optimized: Prevents unbounded growth, implements backoff
 	 *
 	 * @param string $type Object type (ticket, company)
 	 * @param int    $object_id Object ID
 	 */
 	private static function queue_sync( $type, $object_id ) {
-		$queue   = get_option( 'lgp_hubspot_sync_queue', array() );
-		$queue[] = array(
+		$queue        = get_option( 'lgp_hubspot_sync_queue', array() );
+		$queue_entry  = array(
 			'type'      => $type,
 			'id'        => $object_id,
 			'queued_at' => time(),
+			'attempts'  => 0,
 		);
+		$queue[]      = $queue_entry;
+
+		// Cap queue to prevent unbounded growth (max 500 items)
+		if ( count( $queue ) > 500 ) {
+			// Remove oldest entries
+			$queue = array_slice( $queue, -500 );
+			if ( class_exists( 'LGP_Logger' ) ) {
+				LGP_Logger::log_event( 0, 'hubspot_queue_capped', 0, array( 'count' => count( $queue ) ) );
+			}
+		}
+
 		update_option( 'lgp_hubspot_sync_queue', $queue );
 
 		// Schedule batch processing if not already scheduled

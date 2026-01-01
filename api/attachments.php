@@ -76,6 +76,22 @@ class LGP_Attachments_API {
 	}
 
 	/**
+	 * Check upload rate limit (max 10 per hour per user)
+	 */
+	private static function check_upload_rate_limit( $user_id ) {
+		$cache_key = 'lgp_upload_count_' . (int) $user_id;
+		$count     = (int) get_transient( $cache_key );
+
+		if ( $count >= 10 ) {
+			return false;
+		}
+
+		// Increment count (transient auto-expires after 1 hour)
+		set_transient( $cache_key, $count + 1, HOUR_IN_SECONDS );
+		return true;
+	}
+
+	/**
 	 * Check if user has access to ticket
 	 */
 	public static function check_ticket_access( $request ) {
@@ -156,6 +172,11 @@ class LGP_Attachments_API {
 		$ticket_id       = (int) $request->get_param( 'ticket_id' );
 		$current_user_id = get_current_user_id();
 
+		// Rate limiting: max 10 attachments per hour per user.
+		if ( ! self::check_upload_rate_limit( $current_user_id ) ) {
+			return new WP_Error( 'rate_limit_exceeded', 'Too many uploads. Maximum 10 per hour.', array( 'status' => 429 ) );
+		}
+
 		// Validate ticket exists
 		global $wpdb;
 		$tickets_table = $wpdb->prefix . 'lgp_tickets';
@@ -176,23 +197,24 @@ class LGP_Attachments_API {
 			return new WP_Error( 'no_files', 'No files uploaded', array( 'status' => 400 ) );
 		}
 
+		// Enforce max files per request (5 files).
+		if ( count( $files ) > LGP_File_Validator::MAX_FILES_PER_UPLOAD ) {
+			return new WP_Error( 'too_many_files', sprintf( 'Maximum %d files per upload', LGP_File_Validator::MAX_FILES_PER_UPLOAD ), array( 'status' => 400 ) );
+		}
+
 		$uploaded = array();
 
 		foreach ( $files as $file_key => $file ) {
-			// Validate file size
-			if ( $file['size'] > self::MAX_FILE_SIZE ) {
-				$uploaded[] = array(
-					'success' => false,
-					'message' => sprintf( 'File %s exceeds maximum size of 10MB', sanitize_file_name( $file['name'] ) ),
-				);
-				continue;
+			// Validate file with LGP_File_Validator (handles size, MIME, filename).
+			if ( ! class_exists( 'LGP_File_Validator' ) ) {
+				require_once LGP_PLUGIN_DIR . 'includes/class-lgp-file-validator.php';
 			}
 
-			// Validate file type
-			if ( ! in_array( $file['type'], self::ALLOWED_TYPES, true ) ) {
+			$validation = LGP_File_Validator::validate( $file );
+			if ( ! $validation['valid'] ) {
 				$uploaded[] = array(
 					'success' => false,
-					'message' => sprintf( 'File type %s not allowed. Allowed types: JPG, PNG, PDF, TXT, DOC, DOCX', $file['type'] ),
+					'message' => implode( '; ', $validation['errors'] ),
 				);
 				continue;
 			}

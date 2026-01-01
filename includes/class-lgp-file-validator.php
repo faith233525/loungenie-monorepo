@@ -12,6 +12,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class LGP_File_Validator {
 
+	/**
+	 * Initialize file validator and schedule cleanup cron
+	 */
+	public static function init() {
+		// Schedule daily cleanup of expired attachments
+		if ( ! wp_next_scheduled( 'lgp_cleanup_expired_attachments' ) ) {
+			wp_schedule_event( time(), 'daily', 'lgp_cleanup_expired_attachments' );
+		}
+		add_action( 'lgp_cleanup_expired_attachments', array( __CLASS__, 'cleanup_expired_files' ) );
+	}
+
 	const MAX_FILE_SIZE        = 10485760; // 10MB
 	const MAX_FILES_PER_UPLOAD = 5;
 	const ALLOWED_MIMES        = array(
