@@ -116,6 +116,7 @@ class LGP_Email_Handler {
 
 	/**
 	 * Process inbound email via Microsoft Graph (app-only)
+	 * Optimization: Batch processing with timeout protection for shared hosting
 	 */
 	private static function process_graph_emails() {
 		if ( ! class_exists( 'LGP_Graph_Client' ) ) {
@@ -124,6 +125,12 @@ class LGP_Email_Handler {
 
 		$settings    = get_option( self::$graph_option_key, array() );
 		$delta_token = $settings['delta_token'] ?? null;
+
+		// Shared hosting timeout protection
+		$start_time       = time();
+		$max_execution    = 25; // Leave 5-second buffer for 30s timeout
+		$max_emails_batch = 50; // Process max 50 emails per run
+		$processed_count  = 0;
 
 		// Concurrency guard: prevent overlapping cron runs (5 min lock)
 		$lock_key = 'lgp_graph_sync_lock';
@@ -156,9 +163,22 @@ class LGP_Email_Handler {
 
 			if ( ! empty( $response['messages'] ) ) {
 				foreach ( $response['messages'] as $message ) {
+					// Timeout protection: check execution time
+					if ( ( time() - $start_time ) > $max_execution ) {
+						error_log( "LGP Email batch timeout: processed {$processed_count} emails, stopping" );
+						break;
+					}
+
+					// Batch limit protection
+					if ( $processed_count >= $max_emails_batch ) {
+						error_log( "LGP Email batch limit reached: {$max_emails_batch} emails" );
+						break;
+					}
+
 					try {
 						$attachments = $client->get_attachments( $message['id'] );
 						LGP_Email_To_Ticket::ingest_graph_message( $message, $attachments );
+						$processed_count++;
 					} catch ( Exception $inner ) {
 						if ( class_exists( 'LGP_Logger' ) ) {
 							LGP_Logger::log_event(

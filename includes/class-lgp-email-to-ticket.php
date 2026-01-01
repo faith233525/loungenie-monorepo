@@ -438,12 +438,26 @@ class LGP_Email_To_Ticket {
 			return false;
 		}
 
+		// Parse attachments if available
+		$attachments = array();
+		if ( ! empty( $email_data['attachments'] ) && is_array( $email_data['attachments'] ) ) {
+			foreach ( $email_data['attachments'] as $attachment ) {
+				if ( isset( $attachment['filename'], $attachment['content'] ) ) {
+					$attachments[] = array(
+						'filename' => sanitize_file_name( $attachment['filename'] ),
+						'content'  => $attachment['content'],
+						'mime'     => ! empty( $attachment['mime'] ) ? sanitize_mime_type( $attachment['mime'] ) : 'application/octet-stream',
+					);
+				}
+			}
+		}
+
 		return array(
 			'from'        => $from,
 			'to'          => $email_data['to'],
 			'subject'     => sanitize_text_field( $email_data['subject'] ),
 			'body'        => wp_kses_post( $email_data['message'] ),
-			'attachments' => array(), // TODO: Parse attachments from email
+			'attachments' => $attachments,
 		);
 	}
 

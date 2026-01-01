@@ -21,12 +21,15 @@ class LGP_HubSpot {
 	 * Initialize HubSpot integration
 	 */
 	public static function init() {
-		// Hook into ticket creation to sync with HubSpot
+		// Hook into ticket creation to sync with HubSpot (queued for batch processing)
 		add_action( 'lgp_ticket_created', array( __CLASS__, 'sync_ticket_to_hubspot' ), 10, 2 );
 		add_action( 'lgp_ticket_updated', array( __CLASS__, 'update_hubspot_ticket' ), 10, 2 );
 
 		// Hook into company creation
 		add_action( 'lgp_company_created', array( __CLASS__, 'sync_company_to_hubspot' ), 10, 1 );
+
+		// Batch sync processor (runs every 5 minutes)
+		add_action( 'lgp_hubspot_batch_sync', array( __CLASS__, 'process_sync_queue' ) );
 
 		// Add settings page
 		add_action( 'admin_menu', array( __CLASS__, 'add_settings_page' ) );
@@ -150,13 +153,84 @@ class LGP_HubSpot {
 	}
 
 	/**
-	 * Sync ticket to HubSpot
+	 * Queue ticket for HubSpot sync (batch processing)
+	 * Optimization: Prevents rate limits on shared hosting
+	 *
+	 * @param int   $ticket_id Ticket ID
+	 * @param array $ticket_data Ticket data
+	 * @return bool
+	 */
+	public static function sync_ticket_to_hubspot( $ticket_id, $ticket_data = array() ) {
+		self::queue_sync( 'ticket', $ticket_id );
+		return true;
+	}
+
+	/**
+	 * Queue object for batch HubSpot sync
+	 *
+	 * @param string $type Object type (ticket, company)
+	 * @param int    $object_id Object ID
+	 */
+	private static function queue_sync( $type, $object_id ) {
+		$queue   = get_option( 'lgp_hubspot_sync_queue', array() );
+		$queue[] = array(
+			'type'      => $type,
+			'id'        => $object_id,
+			'queued_at' => time(),
+		);
+		update_option( 'lgp_hubspot_sync_queue', $queue );
+
+		// Schedule batch processing if not already scheduled
+		if ( ! wp_next_scheduled( 'lgp_hubspot_batch_sync' ) ) {
+			wp_schedule_single_event( time() + 300, 'lgp_hubspot_batch_sync' ); // 5 minutes
+		}
+	}
+
+	/**
+	 * Process HubSpot sync queue in batches
+	 * Prevents API rate limits (max 10 per batch)
+	 */
+	public static function process_sync_queue() {
+		$queue = get_option( 'lgp_hubspot_sync_queue', array() );
+
+		if ( empty( $queue ) ) {
+			return;
+		}
+
+		$batch_size = 10; // HubSpot allows ~10 req/sec
+		$batch      = array_splice( $queue, 0, $batch_size );
+
+		foreach ( $batch as $item ) {
+			try {
+				if ( 'ticket' === $item['type'] ) {
+					self::sync_ticket_immediate( $item['id'] );
+				} elseif ( 'company' === $item['type'] ) {
+					self::sync_company_to_hubspot( $item['id'] );
+				}
+			} catch ( Exception $e ) {
+				error_log( 'HubSpot batch sync failed: ' . $e->getMessage() );
+				// Re-queue for retry
+				$queue[] = $item;
+			}
+		}
+
+		// Update queue
+		update_option( 'lgp_hubspot_sync_queue', $queue );
+
+		// Schedule next batch if queue not empty
+		if ( ! empty( $queue ) && ! wp_next_scheduled( 'lgp_hubspot_batch_sync' ) ) {
+			wp_schedule_single_event( time() + 10, 'lgp_hubspot_batch_sync' ); // 10 seconds
+		}
+	}
+
+	/**
+	 * Immediate ticket sync (called by batch processor)
 	 *
 	 * @param int   $ticket_id Ticket ID
 	 * @param array $ticket_data Ticket data
 	 * @return bool|WP_Error
 	 */
-	public static function sync_ticket_to_hubspot( $ticket_id, $ticket_data = array() ) {
+	private static function sync_ticket_immediate( $ticket_id, $ticket_data = array() ) {
 		global $wpdb;
 
 		if ( empty( $ticket_data ) ) {

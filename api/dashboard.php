@@ -70,6 +70,16 @@ class LGP_Dashboard_API {
 			);
 		}
 
+		// Optimization: Use transient cache (15 min TTL) for fast dashboard loads
+		$cache_key = 'lgp_dashboard_' . ( $is_support ? 'support' : $company_id );
+		$cached    = get_transient( $cache_key );
+
+		if ( false !== $cached ) {
+			$cached['from_cache'] = true;
+			$cached['cache_age']  = round( ( time() - $cached['generated_at'] ) / 60 ) . ' min';
+			return rest_ensure_response( $cached );
+		}
+
 		// Database tables
 		$units_table    = $wpdb->prefix . 'lgp_units';
 		$tickets_table  = $wpdb->prefix . 'lgp_tickets';
@@ -171,17 +181,59 @@ class LGP_Dashboard_API {
 			)
 		);
 
-		return rest_ensure_response(
-			array(
-				'total_units'        => $total_units,
-				'active_tickets'     => $active_tickets,
-				'resolved_today'     => $resolved_today,
-				'average_resolution' => $avg_resolution,
-				'role'               => $is_support ? 'support' : 'partner',
-				'company_id'         => $is_support ? null : $company_id,
-			)
+		$result = array(
+			'total_units'        => $total_units,
+			'active_tickets'     => $active_tickets,
+			'resolved_today'     => $resolved_today,
+			'average_resolution' => $avg_resolution,
+			'role'               => $is_support ? 'support' : 'partner',
+			'company_id'         => $is_support ? null : $company_id,
+			'generated_at'       => time(),
+			'from_cache'         => false,
 		);
+
+		// Cache for 15 minutes
+		set_transient( $cache_key, $result, 15 * MINUTE_IN_SECONDS );
+
+		return rest_ensure_response( $result );
+	}
+
+	/**
+	 * Invalidate dashboard cache (called when tickets/units change)
+	 *
+	 * @param int $company_id Company ID (null for support view)
+	 */
+	public static function invalidate_cache( $company_id = null ) {
+		if ( $company_id ) {
+			delete_transient( 'lgp_dashboard_' . $company_id );
+		} else {
+			delete_transient( 'lgp_dashboard_support' );
+		}
 	}
 }
 
 LGP_Dashboard_API::init();
+
+// Invalidate cache when tickets or units change
+add_action( 'lgp_ticket_created', function( $ticket_id ) {
+	global $wpdb;
+	$ticket = $wpdb->get_row( $wpdb->prepare( "SELECT service_request_id FROM {$wpdb->prefix}lgp_tickets WHERE id = %d", $ticket_id ) );
+	if ( $ticket ) {
+		$request = $wpdb->get_row( $wpdb->prepare( "SELECT company_id FROM {$wpdb->prefix}lgp_service_requests WHERE id = %d", $ticket->service_request_id ) );
+		if ( $request ) {
+			LGP_Dashboard_API::invalidate_cache( $request->company_id );
+			LGP_Dashboard_API::invalidate_cache( null ); // Support view
+		}
+	}
+});
+add_action( 'lgp_ticket_updated', function( $ticket_id ) {
+	global $wpdb;
+	$ticket = $wpdb->get_row( $wpdb->prepare( "SELECT service_request_id FROM {$wpdb->prefix}lgp_tickets WHERE id = %d", $ticket_id ) );
+	if ( $ticket ) {
+		$request = $wpdb->get_row( $wpdb->prepare( "SELECT company_id FROM {$wpdb->prefix}lgp_service_requests WHERE id = %d", $ticket->service_request_id ) );
+		if ( $request ) {
+			LGP_Dashboard_API::invalidate_cache( $request->company_id );
+			LGP_Dashboard_API::invalidate_cache( null ); // Support view
+		}
+	}
+});
