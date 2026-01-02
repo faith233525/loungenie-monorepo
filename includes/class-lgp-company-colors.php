@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Company Colors Aggregation Utility
  * Handles calculation and caching of company-level color distribution
@@ -14,35 +13,41 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * LGP_Company_Colors class.
+ *
+ * Handles calculation and caching of company-level color distribution.
+ * Units are aggregated at company level by color. NO individual unit IDs are exposed or tracked.
+ */
 class LGP_Company_Colors {
 
 
-	const CACHE_TTL = 3600; // 1 hour cache
+	const CACHE_TTL = 3600; // 1 hour cache.
 
 	/**
-	 * Initialize hooks
+	 * Initialize hooks.
 	 */
 	public static function init() {
-		// Invalidate cache when units change
+		// Invalidate cache when units change.
 		add_action( 'lgp_unit_created', array( __CLASS__, 'invalidate_cache' ), 10, 2 );
 		add_action( 'lgp_unit_updated', array( __CLASS__, 'invalidate_cache' ), 10, 2 );
 		add_action( 'lgp_unit_deleted', array( __CLASS__, 'invalidate_cache' ), 10, 2 );
 	}
 
 	/**
-	 * Get color distribution for a company
+	 * Get color distribution for a company.
 	 *
 	 * Returns aggregated color counts, NOT individual unit IDs.
 	 *
-	 * @param int $company_id Company ID
-	 * @return array Color counts ['yellow' => 10, 'orange' => 5, ...]
+	 * @param int $company_id Company ID.
+	 * @return array Color counts ['yellow' => 10, 'orange' => 5, ...].
 	 */
 	public static function get_company_colors( $company_id ) {
 		if ( empty( $company_id ) ) {
 			return array();
 		}
 
-		// Try cache first
+		// Try cache first.
 		$cache_key = "company_colors_{$company_id}";
 		$colors    = wp_cache_get( $cache_key, 'loungenie_portal' );
 
@@ -50,22 +55,22 @@ class LGP_Company_Colors {
 			return $colors;
 		}
 
-		// Calculate from database
+		// Calculate from database.
 		$colors = self::calculate_colors( $company_id );
 
-		// Cache result
+		// Cache result.
 		wp_cache_set( $cache_key, $colors, 'loungenie_portal', self::CACHE_TTL );
 
 		return $colors;
 	}
 
 	/**
-	 * Get total unit count for company
+	 * Get total unit count for company.
 	 *
 	 * Returns aggregate count, NOT individual unit details.
 	 *
-	 * @param int $company_id Company ID
-	 * @return int Total units
+	 * @param int $company_id Company ID.
+	 * @return int Total units.
 	 */
 	public static function get_company_unit_count( $company_id ) {
 		global $wpdb;
@@ -91,12 +96,12 @@ class LGP_Company_Colors {
 	}
 
 	/**
-	 * Calculate color distribution from units table
+	 * Calculate color distribution from units table.
 	 *
 	 * Aggregates by color_tag, returns counts only.
 	 *
-	 * @param int $company_id Company ID
-	 * @return array Color counts
+	 * @param int $company_id Company ID.
+	 * @return array Color counts.
 	 */
 	private static function calculate_colors( $company_id ) {
 		global $wpdb;
@@ -124,25 +129,25 @@ class LGP_Company_Colors {
 	}
 
 	/**
-	 * Invalidate cache when units change
+	 * Invalidate cache when units change.
 	 *
-	 * @param int $unit_id Unit ID (not used, for hook compatibility)
-	 * @param int $company_id Company ID
+	 * @param int $unit_id Unit ID (not used, for hook compatibility).
+	 * @param int $company_id Company ID.
 	 */
 	public static function invalidate_cache( $unit_id, $company_id ) {
 		wp_cache_delete( "company_colors_{$company_id}", 'loungenie_portal' );
 		wp_cache_delete( "company_unit_count_{$company_id}", 'loungenie_portal' );
 
-		// Optionally: Update company.top_colors field in database
+		// Optionally: Update company.top_colors field in database.
 		self::refresh_company_colors( $company_id );
 	}
 
 	/**
-	 * Refresh company colors in database (top_colors JSON field)
+	 * Refresh company colors in database (top_colors JSON field).
 	 *
 	 * Updates the denormalized top_colors column for faster dashboard queries.
 	 *
-	 * @param int $company_id Company ID
+	 * @param int $company_id Company ID.
 	 */
 	public static function refresh_company_colors( $company_id ) {
 		global $wpdb;
@@ -172,12 +177,12 @@ class LGP_Company_Colors {
 	}
 
 	/**
-	 * Get color hex code for display
+	 * Get color hex code for display.
 	 *
 	 * Maps color names to hex codes for UI rendering.
 	 *
-	 * @param string $color Color name
-	 * @return string Hex color code
+	 * @param string $color Color name.
+	 * @return string Hex color code.
 	 */
 	public static function get_color_hex( $color ) {
 		$color_map = array(
@@ -195,22 +200,22 @@ class LGP_Company_Colors {
 
 		$color = strtolower( trim( $color ) );
 
-		return isset( $color_map[ $color ] ) ? $color_map[ $color ] : '#757575'; // Default gray
+		return isset( $color_map[ $color ] ) ? $color_map[ $color ] : '#757575'; // Default gray.
 	}
 
 	/**
-	 * Batch refresh colors for multiple companies
+	 * Batch refresh colors for multiple companies.
 	 *
 	 * Useful for maintenance tasks or after bulk unit imports.
 	 *
-	 * @param array $company_ids Array of company IDs
-	 * @return int Number of companies updated
+	 * @param array $company_ids Array of company IDs.
+	 * @return int Number of companies updated.
 	 */
 	public static function batch_refresh( $company_ids = array() ) {
 		global $wpdb;
 
 		if ( empty( $company_ids ) ) {
-			// Get all company IDs if none specified
+			// Get all company IDs if none specified.
 			$company_ids = $wpdb->get_col( "SELECT id FROM {$wpdb->prefix}lgp_companies" );
 		}
 
@@ -224,13 +229,13 @@ class LGP_Company_Colors {
 	}
 }
 
-// Helper function for templates
+// Helper function for templates.
 if ( ! function_exists( 'lgp_get_color_hex' ) ) {
 	/**
-	 * Get color hex code for display
+	 * Get color hex code for display.
 	 *
-	 * @param string $color Color name
-	 * @return string Hex color code
+	 * @param string $color Color name.
+	 * @return string Hex color code.
 	 */
 	function lgp_get_color_hex( $color ) {
 		return LGP_Company_Colors::get_color_hex( $color );
