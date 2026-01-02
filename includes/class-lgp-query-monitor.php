@@ -14,15 +14,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Query performance monitor class.
+ * LGP_Query_Monitor class.
+ *
+ * Monitors query performance and provides optimization insights for debugging.
  */
 class LGP_Query_Monitor {
 
 	const SLOW_QUERY_THRESHOLD = 0.1; // 100ms.
 	const CACHE_TABLE_NAME     = 'lgp_query_performance';
 
-	private static $query_log    = array();
-	private static $cache_hits   = 0;
+	/**
+	 * Query log array.
+	 *
+	 * @var array
+	 */
+	private static $query_log = array();
+
+	/**
+	 * Cache hits count.
+	 *
+	 * @var int
+	 */
+	private static $cache_hits = 0;
+
+	/**
+	 * Cache misses count.
+	 *
+	 * @var int
+	 */
 	private static $cache_misses = 0;
 
 	/**
@@ -162,7 +181,9 @@ class LGP_Query_Monitor {
 	}
 
 	/**
-	 * Analyze queries from SAVEQUERIES
+	 * Analyze queries from SAVEQUERIES.
+	 *
+	 * @return void
 	 */
 	public static function analyze_queries() {
 		global $wpdb;
@@ -179,13 +200,13 @@ class LGP_Query_Monitor {
 			$time    = $query_data[1];
 			$is_slow = $time > self::SLOW_QUERY_THRESHOLD;
 
-			// Hash the query (remove values for pattern matching)
+			// Hash the query (remove values for pattern matching).
 			$query_hash = md5( self::normalize_query( $query ) );
 
-			// Get caller information
+			// Get caller information.
 			$caller = self::get_caller_info( $query_data );
 
-			// Store query log
+			// Store query log.
 			$wpdb->insert(
 				$table_name,
 				array(
@@ -202,15 +223,16 @@ class LGP_Query_Monitor {
 				array( '%s', '%s', '%f', '%d', '%s', '%d', '%s', '%s', '%s' )
 			);
 
-			// Update summary
+		// Update summary.
 			self::update_query_summary( $query_hash, $query, $time, $is_slow );
 		}
 	}
 
 	/**
-	 * Normalize query for pattern matching (remove VALUES)
-	 */
-	private static function normalize_query( $query ) {
+	 * Normalize query for pattern matching (remove VALUES).
+	 *
+	 * @param string $query The SQL query to normalize.
+	 * @return string Normalized query pattern.
 		// Remove actual values, keep structure
 		$normalized = preg_replace( "/('.*?'|\".*?\"|[0-9]+)/", '?', $query );
 		// Remove multiple spaces
@@ -219,9 +241,10 @@ class LGP_Query_Monitor {
 	}
 
 	/**
-	 * Get caller information from query stack
-	 */
-	private static function get_caller_info( $query_data ) {
+	 * Get caller information from query stack.
+	 *
+	 * @param array $query_data Query data from SAVEQUERIES.
+	 * @return array Caller information with file, line, function.
 		return array(
 			'file'     => isset( $query_data[2] ) ? $query_data[2] : '',
 			'line'     => isset( $query_data[3] ) ? $query_data[3] : 0,
@@ -230,14 +253,18 @@ class LGP_Query_Monitor {
 	}
 
 	/**
-	 * Update query summary table
-	 */
-	private static function update_query_summary( $query_hash, $query, $time, $is_slow ) {
+	 * Update query summary table.
+	 *
+	 * @param string $query_hash Query hash.
+	 * @param string $query SQL query text.
+	 * @param float  $time Execution time in seconds.
+	 * @param bool   $is_slow Whether query exceeds slow threshold.
+	 * @return void
 		global $wpdb;
 
 		$summary_table = $wpdb->prefix . 'lgp_query_summary';
 
-		// Check if hash exists
+		// Check if hash exists.
 		$exists = $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT id FROM {$summary_table} WHERE query_hash = %s",
@@ -246,7 +273,7 @@ class LGP_Query_Monitor {
 		);
 
 		if ( $exists ) {
-			// Update existing
+			// Update existing.
 			$wpdb->query(
 				$wpdb->prepare(
 					"UPDATE {$summary_table}
@@ -265,7 +292,7 @@ class LGP_Query_Monitor {
 				)
 			);
 		} else {
-			// Insert new
+			// Insert new.
 			$wpdb->insert(
 				$summary_table,
 				array(
@@ -284,7 +311,9 @@ class LGP_Query_Monitor {
 	}
 
 	/**
-	 * Get overall performance data
+	 * Get overall performance data.
+	 *
+	 * @return array Performance metrics and statistics.
 	 */
 	public static function get_performance_data() {
 		global $wpdb;
