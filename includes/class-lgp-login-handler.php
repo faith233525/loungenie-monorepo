@@ -64,15 +64,17 @@ class Login_Handler {
 		// Add login page body class.
 		add_filter( 'body_class', array( __CLASS__, 'add_login_body_class' ) );
 
-		// Add login redirect based on role
+		// Add login redirect based on role.
 		add_filter( 'login_redirect', array( __CLASS__, 'redirect_on_role' ), 10, 3 );
 	}
 
 	/**
-	 * Register custom login page template
+	 * Register custom login page template.
+	 *
+	 * @return void
 	 */
 	public static function register_login_page() {
-		// Custom login page via custom URL parameter
+		// Custom login page via custom URL parameter.
 		if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] === 'login' ) {
 			self::load_custom_login_template();
 			exit;
@@ -80,7 +82,9 @@ class Login_Handler {
 	}
 
 	/**
-	 * Load custom login template
+	 * Load custom login template.
+	 *
+	 * @return void
 	 */
 	public static function load_custom_login_template() {
 		$template = LGP_PLUGIN_DIR . 'templates/custom-login.php';
@@ -113,35 +117,35 @@ class Login_Handler {
 		$remember      = isset( $_POST['rememberme'] ) ? true : false;
 		$redirect_to   = isset( $_POST['redirect_to'] ) ? esc_url_raw( $_POST['redirect_to'] ) : admin_url( '' );
 
-		// Validate inputs
+		// Validate inputs.
 		if ( empty( $user_login ) || empty( $user_password ) ) {
 			self::redirect_with_error( 'invalid_credentials', 'partner', $redirect_to );
 			return;
 		}
 
-		// Attempt to authenticate
+		// Attempt to authenticate.
 		$user = wp_authenticate( $user_login, $user_password );
 
-		// Check for authentication errors
+		// Check for authentication errors.
 		if ( is_wp_error( $user ) ) {
 			$error_code = $user->get_error_code();
 
-			// Security: Don't reveal specific error (no user enumeration)
+			// Security: Don't reveal specific error (no user enumeration).
 			self::redirect_with_error( 'invalid_credentials', 'partner', $redirect_to );
 
-			// Log the actual error for debugging
+			// Log the actual error for debugging.
 			do_action( 'lgp_login_failed', $error_code, $user_login );
 			return;
 		}
 
-		// Verify user has partner role
+		// Verify user has partner role.
 		if ( ! self::user_has_role( $user->ID, 'partner' ) ) {
 			self::redirect_with_error( 'invalid_role', 'partner', $redirect_to );
 			do_action( 'lgp_unauthorized_login', $user->ID, 'partner' );
 			return;
 		}
 
-		// Check if user account is active (custom meta flag)
+		// Check if user account is active (custom meta flag).
 		$is_active = get_user_meta( $user->ID, 'lgp_account_active', true );
 		if ( $is_active === '0' || ( empty( $is_active ) && ! current_user_can( 'manage_options' ) ) ) {
 			self::redirect_with_error( 'account_disabled', 'partner', $redirect_to );
@@ -149,17 +153,17 @@ class Login_Handler {
 			return;
 		}
 
-		// Set session cookie
+		// Set session cookie.
 		wp_set_current_user( $user->ID );
 		wp_set_auth_cookie( $user->ID, $remember );
 
-		// Update last login time
+		// Update last login time.
 		update_user_meta( $user->ID, 'lgp_last_login', current_time( 'mysql' ) );
 
-		// Log successful login
+		// Log successful login.
 		do_action( 'lgp_login_success', $user->ID, 'partner' );
 
-		// Redirect based on user role and settings
+		// Redirect based on user role and settings.
 		$redirect = self::get_role_redirect( $user->ID, $redirect_to );
 		wp_safe_remote_post(
 			wp_login_url(),
@@ -174,22 +178,24 @@ class Login_Handler {
 	}
 
 	/**
-	 * Handle SSO (Microsoft) login
+	 * Handle SSO (Microsoft) login.
+	 *
+	 * @return void
 	 */
 	public static function handle_sso_login() {
-		// Check if this is an SSO login attempt
+		// Check if this is an SSO login attempt.
 		if ( ! isset( $_POST['action'] ) || $_POST['action'] !== 'lgp_microsoft_sso' ) {
 			return;
 		}
 
-		// Verify nonce
+		// Verify nonce.
 		if ( ! isset( $_POST['lgp_sso_nonce'] ) ||
 			! wp_verify_nonce( $_POST['lgp_sso_nonce'], self::NONCE_SSO ) ) {
 			self::redirect_with_error( 'invalid_nonce', 'support' );
 			return;
 		}
 
-		// Get Microsoft SSO instance
+		// Get Microsoft SSO instance.
 		$microsoft_sso = Microsoft_SSO::get_instance();
 
 		if ( ! $microsoft_sso ) {
@@ -197,11 +203,11 @@ class Login_Handler {
 			return;
 		}
 
-		// Store redirect URL for use after authentication
+		// Store redirect URL for use after authentication.
 		$redirect_to = isset( $_POST['redirect_to'] ) ? esc_url_raw( $_POST['redirect_to'] ) : admin_url( '' );
 		set_transient( 'lgp_sso_redirect_' . wp_get_current_user()->ID, $redirect_to, HOUR_IN_SECONDS );
 
-		// Initiate Microsoft SSO flow
+		// Initiate Microsoft SSO flow.
 		$microsoft_sso->authenticate();
 	}
 

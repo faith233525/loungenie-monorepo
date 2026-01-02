@@ -1,8 +1,9 @@
 <?php
 
 /**
- * LounGenie Portal - Email Handler
- * Converts incoming support emails to tickets
+ * LounGenie Portal email handler.
+ *
+ * Converts incoming support emails to tickets.
  * v1.8.0 - Adds Microsoft Graph (app-only) support for inbound/outbound
  */
 
@@ -10,6 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Email handler class.
+ */
 class LGP_Email_Handler {
 
 
@@ -18,10 +22,12 @@ class LGP_Email_Handler {
 	private static $graph_option_key = 'lgp_graph_settings';
 
 	/**
-	 * Initialize email handler
+	 * Initialize email handler.
+	 *
+	 * @return void
 	 */
 	public static function init() {
-		// Schedule/clear email processing based on configuration
+		// Schedule/clear email processing based on configuration.
 		self::ensure_cron_scheduled();
 
 		add_action( 'lgp_process_emails', array( __CLASS__, 'process_emails' ) );
@@ -29,6 +35,8 @@ class LGP_Email_Handler {
 
 	/**
 	 * Ensure the email processing cron is scheduled (or cleared) based on settings.
+	 *
+	 * @return void
 	 */
 	public static function ensure_cron_scheduled() {
 		$has_graph = self::is_graph_enabled();
@@ -36,20 +44,22 @@ class LGP_Email_Handler {
 
 		if ( $has_graph || $has_pop3 ) {
 			if ( ! wp_next_scheduled( 'lgp_process_emails' ) ) {
-				// Shared hosting constraint: use WP-Cron hourly schedule only
+				// Shared hosting constraint: use WP-Cron hourly schedule only.
 				wp_schedule_event( time(), 'hourly', 'lgp_process_emails' );
 			}
 		} else {
-			// No configuration present; avoid noisy cron runs
+			// No configuration present; avoid noisy cron runs.
 			wp_clear_scheduled_hook( 'lgp_process_emails' );
 		}
 	}
 
 	/**
-	 * Process all pending emails
+	 * Process all pending emails.
+	 *
+	 * @return void
 	 */
 	public static function process_emails() {
-		// Prefer Graph if configured, otherwise fallback to POP3
+		// Prefer Graph if configured, otherwise fallback to POP3.
 		if ( self::is_graph_enabled() ) {
 			self::process_graph_emails();
 			return;
@@ -63,10 +73,10 @@ class LGP_Email_Handler {
 		}
 
 		try {
-			// Connect to POP3
+			// Connect to POP3.
 			$mailbox = '{' . $settings['pop3_server'] . ':110/pop3}INBOX';
 
-			// Suppress warnings
+			// Suppress warnings.
 			$connection = @imap_open( $mailbox, $settings['pop3_username'], $settings['pop3_password'] );
 
 			if ( ! $connection ) {
@@ -74,7 +84,7 @@ class LGP_Email_Handler {
 				return;
 			}
 
-			// Get all emails
+			// Get all emails.
 			$emails = imap_search( $connection, 'ALL' );
 
 			if ( $emails ) {

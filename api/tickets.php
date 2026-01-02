@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tickets REST API Endpoints
+ * Tickets REST API endpoints.
  *
  * @package LounGenie Portal
  */
@@ -10,23 +10,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Tickets API class.
+ */
 class LGP_Tickets_API {
 
 
 
 
 	/**
-	 * Initialize API endpoints
+	 * Initialize API endpoints.
+	 *
+	 * @return void
 	 */
 	public static function init() {
 		add_action( 'rest_api_init', array( __CLASS__, 'register_routes' ) );
 	}
 
 	/**
-	 * Register REST API routes
+	 * Register REST API routes.
+	 *
+	 * @return void
 	 */
 	public static function register_routes() {
-		// Get tickets
+		// Get tickets.
 		register_rest_route(
 			'lgp/v1',
 			'/tickets',
@@ -37,7 +44,7 @@ class LGP_Tickets_API {
 			)
 		);
 
-		// Get single ticket
+		// Get single ticket.
 		register_rest_route(
 			'lgp/v1',
 			'/tickets/(?P<id>\d+)',
@@ -48,7 +55,7 @@ class LGP_Tickets_API {
 			)
 		);
 
-		// Create ticket/service request (Partners)
+		// Create ticket/service request (Partners).
 		register_rest_route(
 			'lgp/v1',
 			'/tickets',
@@ -59,7 +66,7 @@ class LGP_Tickets_API {
 			)
 		);
 
-		// Update ticket status (Support only)
+		// Update ticket status (Support only).
 		register_rest_route(
 			'lgp/v1',
 			'/tickets/(?P<id>\d+)',
@@ -70,7 +77,7 @@ class LGP_Tickets_API {
 			)
 		);
 
-		// Add reply to ticket thread
+		// Add reply to ticket thread.
 		register_rest_route(
 			'lgp/v1',
 			'/tickets/(?P<id>\d+)/reply',
