@@ -110,9 +110,9 @@ class LGP_HubSpot {
 	}
 
 	/**
-	 * Sync company to HubSpot
+	 * Sync company to HubSpot.
 	 *
-	 * @param int $company_id Company ID
+	 * @param int $company_id Company ID.
 	 * @return bool|WP_Error
 	 */
 	public static function sync_company_to_hubspot( $company_id ) {
@@ -134,15 +134,15 @@ class LGP_HubSpot {
 				'address' => $company->address,
 				'state'   => $company->state,
 				'phone'   => $company->contact_phone,
-				'domain'  => '', // Could extract from email if needed
+				'domain'  => '', // Could extract from email if needed.
 			),
 		);
 
 		if ( $hubspot_id ) {
-			// Update existing company
+			// Update existing company.
 			$response = self::api_request( '/crm/v3/objects/companies/' . $hubspot_id, 'PATCH', $data );
 		} else {
-			// Create new company
+			// Create new company.
 			$response = self::api_request( '/crm/v3/objects/companies', 'POST', $data );
 
 			if ( ! is_wp_error( $response ) && isset( $response['id'] ) ) {
@@ -159,11 +159,11 @@ class LGP_HubSpot {
 	}
 
 	/**
-	 * Queue ticket for HubSpot sync (batch processing)
-	 * Optimization: Prevents rate limits on shared hosting
+	 * Queue ticket for HubSpot sync (batch processing).
+	 * Optimization: Prevents rate limits on shared hosting.
 	 *
-	 * @param int   $ticket_id Ticket ID
-	 * @param array $ticket_data Ticket data
+	 * @param int   $ticket_id  Ticket ID.
+	 * @param array $ticket_data Ticket data.
 	 * @return bool
 	 */
 	public static function sync_ticket_to_hubspot( $ticket_id, $ticket_data = array() ) {
@@ -172,11 +172,12 @@ class LGP_HubSpot {
 	}
 
 	/**
-	 * Queue object for batch HubSpot sync
-	 * Optimized: Prevents unbounded growth, implements backoff
+	 * Queue object for batch HubSpot sync.
+	 * Optimized: Prevents unbounded growth, implements backoff.
 	 *
-	 * @param string $type Object type (ticket, company)
-	 * @param int    $object_id Object ID
+	 * @param string $type      Object type (ticket, company).
+	 * @param int    $object_id Object ID.
+	 * @return void
 	 */
 	private static function queue_sync( $type, $object_id ) {
 		$queue        = get_option( 'lgp_hubspot_sync_queue', array() );
@@ -188,9 +189,9 @@ class LGP_HubSpot {
 		);
 		$queue[]      = $queue_entry;
 
-		// Cap queue to prevent unbounded growth (max 500 items)
+		// Cap queue to prevent unbounded growth (max 500 items).
 		if ( count( $queue ) > 500 ) {
-			// Remove oldest entries
+			// Remove oldest entries.
 			$queue = array_slice( $queue, -500 );
 			if ( class_exists( 'LGP_Logger' ) ) {
 				LGP_Logger::log_event( 0, 'hubspot_queue_capped', 0, array( 'count' => count( $queue ) ) );
@@ -199,15 +200,17 @@ class LGP_HubSpot {
 
 		update_option( 'lgp_hubspot_sync_queue', $queue );
 
-		// Schedule batch processing if not already scheduled
+		// Schedule batch processing if not already scheduled.
 		if ( ! wp_next_scheduled( 'lgp_hubspot_batch_sync' ) ) {
 			wp_schedule_single_event( time() + 300, 'lgp_hubspot_batch_sync' ); // 5 minutes
 		}
 	}
 
 	/**
-	 * Process HubSpot sync queue in batches
-	 * Prevents API rate limits (max 10 per batch)
+	 * Process HubSpot sync queue in batches.
+	 * Prevents API rate limits (max 10 per batch).
+	 *
+	 * @return void
 	 */
 	public static function process_sync_queue() {
 		$queue = get_option( 'lgp_hubspot_sync_queue', array() );
@@ -216,7 +219,7 @@ class LGP_HubSpot {
 			return;
 		}
 
-		$batch_size = 10; // HubSpot allows ~10 req/sec
+		$batch_size = 10; // HubSpot allows ~10 req/sec.
 		$batch      = array_splice( $queue, 0, $batch_size );
 
 		foreach ( $batch as $item ) {
@@ -228,25 +231,25 @@ class LGP_HubSpot {
 				}
 			} catch ( Exception $e ) {
 				error_log( 'HubSpot batch sync failed: ' . $e->getMessage() );
-				// Re-queue for retry
+				// Re-queue for retry.
 				$queue[] = $item;
 			}
 		}
 
-		// Update queue
+		// Update queue.
 		update_option( 'lgp_hubspot_sync_queue', $queue );
 
-		// Schedule next batch if queue not empty
+		// Schedule next batch if queue not empty.
 		if ( ! empty( $queue ) && ! wp_next_scheduled( 'lgp_hubspot_batch_sync' ) ) {
-			wp_schedule_single_event( time() + 10, 'lgp_hubspot_batch_sync' ); // 10 seconds
+			wp_schedule_single_event( time() + 10, 'lgp_hubspot_batch_sync' ); // 10 seconds.
 		}
 	}
 
 	/**
-	 * Immediate ticket sync (called by batch processor)
+	 * Immediate ticket sync (called by batch processor).
 	 *
-	 * @param int   $ticket_id Ticket ID
-	 * @param array $ticket_data Ticket data
+	 * @param int   $ticket_id  Ticket ID.
+	 * @param array $ticket_data Ticket data.
 	 * @return bool|WP_Error
 	 */
 	private static function sync_ticket_immediate( $ticket_id, $ticket_data = array() ) {
