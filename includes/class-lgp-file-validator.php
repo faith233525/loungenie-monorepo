@@ -1,7 +1,7 @@
 <?php
 /**
- * File Upload Validator.
- * Hard limits and MIME validation for shared hosting safety.
+ * File Upload Validator
+ * Hard limits and MIME validation for shared hosting safety
  *
  * @package LounGenie Portal
  */
@@ -10,19 +10,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/**
- * File validator with hard limits for shared hosting.
- */
 class LGP_File_Validator {
 
-
 	/**
-	 * Initialize file validator and schedule cleanup cron.
-	 *
-	 * @return void
+	 * Initialize file validator and schedule cleanup cron
 	 */
 	public static function init() {
-		// Schedule daily cleanup of expired attachments.
+		// Schedule daily cleanup of expired attachments
 		if ( ! wp_next_scheduled( 'lgp_cleanup_expired_attachments' ) ) {
 			wp_schedule_event( time(), 'daily', 'lgp_cleanup_expired_attachments' );
 		}
@@ -43,15 +37,15 @@ class LGP_File_Validator {
 	const RETENTION_DAYS       = 90;
 
 	/**
-	 * Validate a file before upload.
+	 * Validate a file before upload
 	 *
-	 * @param array $file $_FILES entry.
+	 * @param array $file $_FILES entry
 	 * @return array ['valid' => bool, 'errors' => []]
 	 */
 	public static function validate( $file ) {
 		$errors = array();
 
-		// Check file exists.
+		// Check file exists
 		if ( ! isset( $file['tmp_name'] ) || ! is_uploaded_file( $file['tmp_name'] ) ) {
 			$errors[] = __( 'No file uploaded', 'loungenie-portal' );
 			return array(
@@ -60,27 +54,25 @@ class LGP_File_Validator {
 			);
 		}
 
-		// Check size.
+		// Check size
 		$size = filesize( $file['tmp_name'] );
 		if ( $size > self::MAX_FILE_SIZE ) {
-			// phpcs:ignore WordPress.WP.I18n.MissingArgDomain
 			$errors[] = sprintf(
 				__( 'File exceeds maximum size of %s MB', 'loungenie-portal' ),
 				self::MAX_FILE_SIZE / 1048576
 			);
 		}
 
-		// Check MIME type.
+		// Check MIME type
 		$mime = mime_content_type( $file['tmp_name'] );
 		if ( ! isset( self::ALLOWED_MIMES[ $mime ] ) ) {
-			// phpcs:ignore WordPress.WP.I18n.MissingArgDomain
 			$errors[] = sprintf(
 				__( 'File type "%s" not allowed', 'loungenie-portal' ),
 				esc_html( $mime )
 			);
 		}
 
-		// Check filename (prevent directory traversal).
+		// Check filename (prevent directory traversal)
 		$filename = basename( $file['name'] );
 		if ( strpos( $filename, '..' ) !== false || strpos( $filename, '/' ) !== false ) {
 			$errors[] = __( 'Invalid filename', 'loungenie-portal' );
@@ -95,14 +87,14 @@ class LGP_File_Validator {
 	}
 
 	/**
-	 * Generate safe filename with randomization.
+	 * Generate safe filename with randomization
 	 *
-	 * @param string $original_name Original filename.
-	 * @param string $mime_type     MIME type.
+	 * @param string $original_name Original filename
+	 * @param string $mime_type     MIME type
 	 * @return string
 	 */
 	public static function generate_safe_filename( $original_name, $mime_type ) {
-		// Get extension from MIME type.
+		// Get extension from MIME type
 		$extension = 'bin';
 		foreach ( self::ALLOWED_MIMES as $mime => $exts ) {
 			if ( $mime === $mime_type ) {
@@ -111,12 +103,12 @@ class LGP_File_Validator {
 			}
 		}
 
-		// Generate random filename.
+		// Generate random filename
 		$random    = bin2hex( random_bytes( 16 ) );
 		$sanitized = sanitize_file_name( $original_name );
 		$sanitized = preg_replace( '/[^a-zA-Z0-9_-]/', '', $sanitized );
 
-		// Combine: random + sanitized + ext.
+		// Combine: random + sanitized + ext
 		return "{$random}_{$sanitized}.{$extension}";
 	}
 

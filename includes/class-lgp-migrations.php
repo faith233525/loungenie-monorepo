@@ -1,8 +1,7 @@
 <?php
-
 /**
- * Versioned Database Migrations
- * Tracks schema changes and runs migrations on plugin updates
+ * Versioned Database Migrations.
+ * Tracks schema changes and runs migrations on plugin updates.
  *
  * @package LounGenie Portal
  */
@@ -11,6 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Database migration handler for schema versioning.
+ */
 class LGP_Migrations {
 
 
@@ -18,14 +20,18 @@ class LGP_Migrations {
 	const SCHEMA_VERSION_OPTION = 'lgp_schema_version';
 
 	/**
-	 * Initialize migrations system
+	 * Initialize migrations system.
+	 *
+	 * @return void
 	 */
 	public static function init() {
 		add_action( 'plugins_loaded', array( __CLASS__, 'run_pending_migrations' ), 10 );
 	}
 
 	/**
-	 * Check and run any pending migrations
+	 * Check and run any pending migrations.
+	 *
+	 * @return void
 	 */
 	public static function run_pending_migrations() {
 		if ( ! LGP_Loader::needs_migration() ) {
@@ -36,16 +42,17 @@ class LGP_Migrations {
 	}
 
 	/**
-	 * Run migrations to reach target version
+	 * Run migrations to reach target version.
 	 *
-	 * @param string $target_version Target version
+	 * @param string $target_version Target version.
+	 * @return void
 	 */
 	public static function migrate_to_version( $target_version ) {
 		global $wpdb;
 
 		$current_version = get_option( self::SCHEMA_VERSION_OPTION, '1.0.0' );
 
-		// Define all migrations in order
+		// Define all migrations in order.
 		$migrations = array(
 			'1.0.0' => array( __CLASS__, 'migrate_v1_0_0' ),
 			'1.1.0' => array( __CLASS__, 'migrate_v1_1_0' ),
@@ -64,28 +71,32 @@ class LGP_Migrations {
 				call_user_func( $callback );
 				update_option( self::SCHEMA_VERSION_OPTION, $version );
 
-				// Log successful migration
+				// Log successful migration.
 				error_log( "LGP Migration: {$current_version} → {$version} ✓" );
 			}
 		}
 	}
 
 	/**
-	 * Migration v1.0.0 → v1.1.0
-	 * Example: Add ticket priority field if missing
+	 * Migration v1.0.0 → v1.1.0.
+	 * Example: Add ticket priority field if missing.
+	 *
+	 * @return void
 	 */
 	public static function migrate_v1_1_0() {
 		global $wpdb;
 
 		$tickets_table = $wpdb->prefix . 'lgp_tickets';
 
-		// Check if column exists
+		// Check if column exists.
+		// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.InterpolatedNotPrepared
 		$column_exists = $wpdb->get_results(
 			"SHOW COLUMNS FROM {$tickets_table} LIKE 'priority'"
 		);
 
 		if ( empty( $column_exists ) ) {
-			// Add column with safe defaults
+			// Add column with safe defaults.
+			// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.InterpolatedNotPrepared
 			$wpdb->query(
 				"ALTER TABLE {$tickets_table} 
                 ADD COLUMN priority VARCHAR(20) DEFAULT 'normal' 

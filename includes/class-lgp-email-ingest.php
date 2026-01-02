@@ -1,13 +1,16 @@
 <?php
 
 /**
- * Email Ingest Handler for Shared Mailbox
+ * Email ingest handler for shared mailbox.
  *
  * Handles fetching emails from shared mailbox and creating tickets.
  *
  * @package loungenie-portal
  */
 
+/**
+ * Email ingest handler class.
+ */
 class LGP_Email_Ingest {
 
 
@@ -33,7 +36,9 @@ class LGP_Email_Ingest {
 	private $mailbox;
 
 	/**
-	 * Initialize email ingest handler
+	 * Initialize email ingest handler.
+	 *
+	 * @return void
 	 */
 	public function __construct() {
 		$this->graph   = new LGP_Graph_Client();
@@ -42,11 +47,11 @@ class LGP_Email_Ingest {
 	}
 
 	/**
-	 * Sync emails from shared mailbox
+	 * Sync emails from shared mailbox.
 	 *
 	 * Uses delta sync pattern for efficiency.
 	 *
-	 * @return array Sync stats
+	 * @return array Sync stats.
 	 */
 	public function sync_messages() {
 		$stats = array(
@@ -59,10 +64,10 @@ class LGP_Email_Ingest {
 		);
 
 		try {
-			// Get delta token
+			// Get delta token.
 			$delta_token = get_transient( 'lgp_email_delta_token' );
 
-			// Fetch messages (normalized shape from LGP_Graph_Client)
+			// Fetch messages (normalized shape from LGP_Graph_Client).
 			$response = $this->graph->get_messages( $delta_token );
 
 			if ( ! $response || empty( $response['messages'] ) ) {
@@ -70,7 +75,7 @@ class LGP_Email_Ingest {
 				return $stats;
 			}
 
-			// Process each message
+			// Process each message.
 			foreach ( $response['messages'] as $message ) {
 				++$stats['total'];
 

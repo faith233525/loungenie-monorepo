@@ -15,7 +15,6 @@ class LGP_Tickets_API {
 
 
 
-
 	/**
 	 * Initialize API endpoints
 	 */
@@ -191,9 +190,9 @@ class LGP_Tickets_API {
 		}
 
 		// Rate limiting: max 5 tickets per hour per user.
-		$user_id   = get_current_user_id();
+		$user_id  = get_current_user_id();
 		$cache_key = 'lgp_ticket_count_' . (int) $user_id;
-		$count     = (int) get_transient( $cache_key );
+		$count    = (int) get_transient( $cache_key );
 
 		if ( $count >= 5 ) {
 			return new WP_Error( 'rate_limit_exceeded', 'Too many tickets. Maximum 5 per hour.', array( 'status' => 429 ) );

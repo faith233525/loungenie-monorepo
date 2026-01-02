@@ -14,7 +14,6 @@ class LGP_Email_Handler {
 
 
 
-
 	private static $option_key       = 'lgp_email_settings';
 	private static $graph_option_key = 'lgp_graph_settings';
 
@@ -179,7 +178,7 @@ class LGP_Email_Handler {
 					try {
 						$attachments = $client->get_attachments( $message['id'] );
 						LGP_Email_To_Ticket::ingest_graph_message( $message, $attachments );
-						++$processed_count;
+						$processed_count++;
 					} catch ( Exception $inner ) {
 						if ( class_exists( 'LGP_Logger' ) ) {
 							LGP_Logger::log_event(

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * LounGenie Portal - Email to Ticket Converter
  * Automatically converts incoming emails to support tickets
@@ -13,7 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class LGP_Email_To_Ticket {
-
 
 	/**
 	 * Initialize email handler
@@ -162,12 +160,12 @@ class LGP_Email_To_Ticket {
 				$cache   = is_array( $cache ) ? $cache : array();
 				$cache[] = $internet_id;
 				if ( count( $cache ) > 500 ) {
-					$cache = array_slice( $cache, -500 );
-				}
+					$cache = array_slice( $cache, -500 ); }
 				update_option( 'lgp_graph_processed_ids', $cache, false );
 			}
 
 			return $ticket_id;
+
 		} catch ( Exception $e ) {
 			$wpdb->query( 'ROLLBACK' );
 			if ( class_exists( 'LGP_Logger' ) ) {
@@ -288,12 +286,10 @@ class LGP_Email_To_Ticket {
 			$upload_base = wp_upload_dir();
 			$dir         = trailingslashit( $upload_base['basedir'] ) . 'lgp-attachments/' . $ticket_id;
 			if ( ! file_exists( $dir ) ) {
-				wp_mkdir_p( $dir );
-			}
+				wp_mkdir_p( $dir ); }
 			$ht = $dir . '/.htaccess';
 			if ( ! file_exists( $ht ) ) {
-				file_put_contents( $ht, "deny from all\n" );
-			}
+				file_put_contents( $ht, "deny from all\n" ); }
 
 			$original  = sanitize_file_name( $att['name'] );
 			$ext       = pathinfo( $original, PATHINFO_EXTENSION );

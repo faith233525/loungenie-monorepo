@@ -1,5 +1,4 @@
 <?php
-
 /**
  * HubSpot Integration Class
  * Syncs companies, units, service requests, and tickets with HubSpot CRM
@@ -12,7 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class LGP_HubSpot {
-
 
 	/**
 	 * HubSpot API base URL
@@ -175,14 +173,14 @@ class LGP_HubSpot {
 	 * @param int    $object_id Object ID
 	 */
 	private static function queue_sync( $type, $object_id ) {
-		$queue       = get_option( 'lgp_hubspot_sync_queue', array() );
-		$queue_entry = array(
+		$queue        = get_option( 'lgp_hubspot_sync_queue', array() );
+		$queue_entry  = array(
 			'type'      => $type,
 			'id'        => $object_id,
 			'queued_at' => time(),
 			'attempts'  => 0,
 		);
-		$queue[]     = $queue_entry;
+		$queue[]      = $queue_entry;
 
 		// Cap queue to prevent unbounded growth (max 500 items)
 		if ( count( $queue ) > 500 ) {
@@ -479,36 +477,36 @@ class LGP_HubSpot {
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'HubSpot Integration Settings', 'loungenie-portal' ); ?></h1>
-
+			
 			<form method="post" action="options.php">
 				<?php
 				settings_fields( 'lgp_hubspot_settings' );
 				do_settings_sections( 'lgp_hubspot_settings' );
 				?>
-
+				
 				<table class="form-table">
 					<tr>
 						<th scope="row">
 							<label for="lgp_hubspot_api_key"><?php esc_html_e( 'HubSpot API Key', 'loungenie-portal' ); ?></label>
 						</th>
 						<td>
-							<input type="text"
-								id="lgp_hubspot_api_key"
-								name="lgp_hubspot_api_key"
-								value="<?php echo esc_attr( get_option( 'lgp_hubspot_api_key' ) ); ?>"
-								class="regular-text" />
+							<input type="text" 
+									id="lgp_hubspot_api_key" 
+									name="lgp_hubspot_api_key" 
+									value="<?php echo esc_attr( get_option( 'lgp_hubspot_api_key' ) ); ?>" 
+									class="regular-text" />
 							<p class="description">
 								<?php esc_html_e( 'Enter your HubSpot Private App Access Token. Get it from HubSpot Settings → Integrations → Private Apps.', 'loungenie-portal' ); ?>
 							</p>
 						</td>
 					</tr>
 				</table>
-
+				
 				<?php submit_button(); ?>
 			</form>
-
+			
 			<hr>
-
+			
 			<h2><?php esc_html_e( 'Integration Status', 'loungenie-portal' ); ?></h2>
 			<p>
 				<strong><?php esc_html_e( 'Status:', 'loungenie-portal' ); ?></strong>
@@ -518,7 +516,7 @@ class LGP_HubSpot {
 					<span style="color: red;">✗ <?php esc_html_e( 'Disabled (API key required)', 'loungenie-portal' ); ?></span>
 				<?php endif; ?>
 			</p>
-
+			
 			<?php
 			$errors = get_option( 'lgp_hubspot_errors', array() );
 			if ( ! empty( $errors ) ) :

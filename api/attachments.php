@@ -1,9 +1,8 @@
 <?php
 
-// phpcs:ignoreFile WordPress.Files.FileName.InvalidClassFileName
 /**
  * Ticket Attachments REST API Endpoints
- * Handles secure file uploads and downloads for tickets.
+ * Handles secure file uploads and downloads for tickets
  *
  * @package LounGenie Portal
  */
@@ -12,30 +11,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/**
- * REST endpoints for ticket attachments.
- */
 class LGP_Attachments_API {
-	const MAX_FILE_SIZE = 10485760; // 10MB.
+
+
+
+	const MAX_FILE_SIZE = 10485760; // 10MB
 	const ALLOWED_TYPES = array( 'image/jpeg', 'image/png', 'application/pdf', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' );
 	const UPLOAD_DIR    = 'lgp-attachments';
 
 	/**
-	 * Initialize API endpoints.
-	 *
-	 * @return void
+	 * Initialize API endpoints
 	 */
 	public static function init() {
 		add_action( 'rest_api_init', array( __CLASS__, 'register_routes' ) );
 	}
 
 	/**
-	 * Register REST API routes.
-	 *
-	 * @return void
+	 * Register REST API routes
 	 */
 	public static function register_routes() {
-		// Upload attachment to ticket.
+		// Upload attachment to ticket
 		register_rest_route(
 			'lgp/v1',
 			'/tickets/(?P<ticket_id>\d+)/attachments',
@@ -46,7 +41,7 @@ class LGP_Attachments_API {
 			)
 		);
 
-		// Get ticket attachments.
+		// Get ticket attachments
 		register_rest_route(
 			'lgp/v1',
 			'/tickets/(?P<ticket_id>\d+)/attachments',
@@ -57,7 +52,7 @@ class LGP_Attachments_API {
 			)
 		);
 
-		// Delete attachment.
+		// Delete attachment
 		register_rest_route(
 			'lgp/v1',
 			'/attachments/(?P<id>\d+)',
@@ -68,7 +63,7 @@ class LGP_Attachments_API {
 			)
 		);
 
-		// Download attachment.
+		// Download attachment
 		register_rest_route(
 			'lgp/v1',
 			'/attachments/(?P<id>\d+)/download',
@@ -81,10 +76,7 @@ class LGP_Attachments_API {
 	}
 
 	/**
-	 * Check upload rate limit (max 10 per hour per user).
-	 *
-	 * @param int $user_id User ID.
-	 * @return bool
+	 * Check upload rate limit (max 10 per hour per user)
 	 */
 	private static function check_upload_rate_limit( $user_id ) {
 		$cache_key = 'lgp_upload_count_' . (int) $user_id;
@@ -94,16 +86,13 @@ class LGP_Attachments_API {
 			return false;
 		}
 
-		// Increment count (transient auto-expires after 1 hour).
+		// Increment count (transient auto-expires after 1 hour)
 		set_transient( $cache_key, $count + 1, HOUR_IN_SECONDS );
 		return true;
 	}
 
 	/**
-	 * Check if user has access to ticket.
-	 *
-	 * @param WP_REST_Request $request Request instance.
-	 * @return bool
+	 * Check if user has access to ticket
 	 */
 	public static function check_ticket_access( $request ) {
 		$ticket_id = $request->get_param( 'ticket_id' );
@@ -118,35 +107,31 @@ class LGP_Attachments_API {
 			return false;
 		}
 
-		// Support can access all tickets.
+		// Support can access all tickets
 		if ( LGP_Auth::is_support() ) {
 			return true;
 		}
 
-		// Partners can only access their company's tickets.
+		// Partners can only access their company's tickets
 		$tickets_table  = $wpdb->prefix . 'lgp_tickets';
 		$requests_table = $wpdb->prefix . 'lgp_service_requests';
 		$company_id     = LGP_Auth::get_user_company_id();
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$ticket_company = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT sr.company_id FROM {$tickets_table} t
-				LEFT JOIN {$requests_table} sr ON t.service_request_id = sr.id
-				WHERE t.id = %d",
+				"SELECT sr.company_id FROM $tickets_table t 
+            LEFT JOIN $requests_table sr ON t.service_request_id = sr.id 
+            WHERE t.id = %d",
 				$ticket_id
 			)
 		);
 
-		// Compare company IDs as integers to avoid type mismatch.
+		// Compare company IDs as integers to avoid type mismatch
 		return (int) $ticket_company === (int) $company_id;
 	}
 
 	/**
-	 * Check if user can access attachment.
-	 *
-	 * @param WP_REST_Request $request Request instance.
-	 * @return bool
+	 * Check if user can access attachment
 	 */
 	public static function check_attachment_permission( $request ) {
 		$id = (int) $request->get_param( 'id' );
@@ -157,10 +142,9 @@ class LGP_Attachments_API {
 		}
 
 		$attachments_table = $wpdb->prefix . 'lgp_ticket_attachments';
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$ticket_id         = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT ticket_id FROM {$attachments_table} WHERE id = %d",
+				"SELECT ticket_id FROM $attachments_table WHERE id = %d",
 				$id
 			)
 		);
@@ -169,20 +153,17 @@ class LGP_Attachments_API {
 			return false;
 		}
 
-		// Check if user can access the ticket.
+		// Check if user can access the ticket
 		$dummy_request = new WP_REST_Request( 'GET' );
 		$dummy_request->set_param( 'ticket_id', $ticket_id );
 		return self::check_ticket_access( $dummy_request );
 	}
 
 	/**
-	 * Upload attachment to ticket.
-	 *
-	 * @param WP_REST_Request $request Request instance.
-	 * @return WP_REST_Response|WP_Error
+	 * Upload attachment to ticket
 	 */
 	public static function upload_attachment( $request ) {
-		// Verify nonce.
+		// Verify nonce
 		$nonce = $request->get_header( 'X-WP-Nonce' );
 		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
 			return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
@@ -196,13 +177,12 @@ class LGP_Attachments_API {
 			return new WP_Error( 'rate_limit_exceeded', 'Too many uploads. Maximum 10 per hour.', array( 'status' => 429 ) );
 		}
 
-		// Validate ticket exists.
+		// Validate ticket exists
 		global $wpdb;
 		$tickets_table = $wpdb->prefix . 'lgp_tickets';
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$ticket        = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM {$tickets_table} WHERE id = %d",
+				"SELECT * FROM $tickets_table WHERE id = %d",
 				$ticket_id
 			)
 		);
@@ -211,7 +191,7 @@ class LGP_Attachments_API {
 			return new WP_Error( 'ticket_not_found', 'Ticket not found', array( 'status' => 404 ) );
 		}
 
-		// Get uploaded files.
+		// Get uploaded files
 		$files = $request->get_file_params();
 		if ( empty( $files ) ) {
 			return new WP_Error( 'no_files', 'No files uploaded', array( 'status' => 400 ) );
@@ -239,7 +219,7 @@ class LGP_Attachments_API {
 				continue;
 			}
 
-			// Handle file upload.
+			// Handle file upload
 			$result = self::handle_file_upload( $file, $ticket_id, $current_user_id );
 			if ( is_wp_error( $result ) ) {
 				$uploaded[] = array(
@@ -253,7 +233,7 @@ class LGP_Attachments_API {
 					'message'       => 'File uploaded successfully',
 				);
 
-				// Log attachment upload.
+				// Log attachment upload
 				if ( class_exists( 'LGP_Logger' ) ) {
 					LGP_Logger::log_event(
 						$current_user_id,
@@ -274,15 +254,10 @@ class LGP_Attachments_API {
 	}
 
 	/**
-	 * Handle file upload to protected directory.
-	 *
-	 * @param array $file Uploaded file array.
-	 * @param int   $ticket_id Ticket identifier.
-	 * @param int   $user_id User uploading the file.
-	 * @return array|WP_Error
+	 * Handle file upload to protected directory
 	 */
 	private static function handle_file_upload( $file, $ticket_id, $user_id ) {
-		// Create secure upload directory.
+		// Create secure upload directory
 		$upload_base = wp_upload_dir();
 		$upload_path = $upload_base['basedir'] . '/' . self::UPLOAD_DIR . '/' . $ticket_id;
 
@@ -290,26 +265,25 @@ class LGP_Attachments_API {
 			wp_mkdir_p( $upload_path );
 		}
 
-		// Create .htaccess to prevent direct access.
+		// Create .htaccess to prevent direct access
 		$htaccess_file = $upload_path . '/.htaccess';
 		if ( ! file_exists( $htaccess_file ) ) {
 			$htaccess_content = "deny from all\n";
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_put_contents_file_system
 			file_put_contents( $htaccess_file, $htaccess_content );
 		}
 
-		// Generate unique filename.
+		// Generate unique filename
 		$original_name = sanitize_file_name( $file['name'] );
 		$ext           = pathinfo( $original_name, PATHINFO_EXTENSION );
 		$unique_name   = md5( uniqid( $original_name, true ) ) . '.' . $ext;
 		$file_path     = $upload_path . '/' . $unique_name;
 
-		// Move uploaded file.
+		// Move uploaded file
 		if ( ! move_uploaded_file( $file['tmp_name'], $file_path ) ) {
 			return new WP_Error( 'upload_failed', 'Failed to upload file' );
 		}
 
-		// Store attachment record in database.
+		// Store attachment record in database
 		global $wpdb;
 		$attachments_table = $wpdb->prefix . 'lgp_ticket_attachments';
 		$relative_path     = self::UPLOAD_DIR . '/' . $ticket_id . '/' . $unique_name;
@@ -338,20 +312,16 @@ class LGP_Attachments_API {
 	}
 
 	/**
-	 * Get ticket attachments.
-	 *
-	 * @param WP_REST_Request $request Request instance.
-	 * @return WP_REST_Response
+	 * Get ticket attachments
 	 */
 	public static function get_attachments( $request ) {
 		$ticket_id = (int) $request->get_param( 'ticket_id' );
 		global $wpdb;
 
 		$attachments_table = $wpdb->prefix . 'lgp_ticket_attachments';
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$attachments       = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM {$attachments_table} WHERE ticket_id = %d ORDER BY created_at DESC",
+				"SELECT * FROM $attachments_table WHERE ticket_id = %d ORDER BY created_at DESC",
 				$ticket_id
 			)
 		);
@@ -373,13 +343,10 @@ class LGP_Attachments_API {
 	}
 
 	/**
-	 * Delete attachment.
-	 *
-	 * @param WP_REST_Request $request Request instance.
-	 * @return WP_REST_Response|WP_Error
+	 * Delete attachment
 	 */
 	public static function delete_attachment( $request ) {
-		// Verify nonce.
+		// Verify nonce
 		$nonce = $request->get_header( 'X-WP-Nonce' );
 		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
 			return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
@@ -390,10 +357,9 @@ class LGP_Attachments_API {
 		global $wpdb;
 
 		$attachments_table = $wpdb->prefix . 'lgp_ticket_attachments';
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$attachment        = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM {$attachments_table} WHERE id = %d",
+				"SELECT * FROM $attachments_table WHERE id = %d",
 				$id
 			)
 		);
@@ -402,30 +368,29 @@ class LGP_Attachments_API {
 			return new WP_Error( 'attachment_not_found', 'Attachment not found', array( 'status' => 404 ) );
 		}
 
-		// Only support and uploader can delete.
+		// Only support and uploader can delete
 		$is_support  = LGP_Auth::is_support();
-		$is_uploader = (int) $attachment->uploaded_by === (int) $current_user_id;
+		$is_uploader = $attachment->uploaded_by == $current_user_id;
 
 		if ( ! $is_support && ! $is_uploader ) {
 			return new WP_Error( 'forbidden', 'You cannot delete this attachment', array( 'status' => 403 ) );
 		}
 
-		// Delete physical file.
+		// Delete physical file
 		$upload_base = wp_upload_dir();
 		$file_path   = $upload_base['basedir'] . '/' . $attachment->file_path;
 		if ( file_exists( $file_path ) ) {
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink
 			unlink( $file_path );
 		}
 
-		// Delete database record.
+		// Delete database record
 		$wpdb->delete(
 			$attachments_table,
 			array( 'id' => $id ),
 			array( '%d' )
 		);
 
-		// Log deletion.
+		// Log deletion
 		if ( class_exists( 'LGP_Logger' ) ) {
 			LGP_Logger::log_event(
 				$current_user_id,
@@ -448,20 +413,16 @@ class LGP_Attachments_API {
 	}
 
 	/**
-	 * Download attachment.
-	 *
-	 * @param WP_REST_Request $request Request instance.
-	 * @return WP_Error|void
+	 * Download attachment
 	 */
 	public static function download_attachment( $request ) {
 		$id = (int) $request->get_param( 'id' );
 		global $wpdb;
 
 		$attachments_table = $wpdb->prefix . 'lgp_ticket_attachments';
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$attachment        = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM {$attachments_table} WHERE id = %d",
+				"SELECT * FROM $attachments_table WHERE id = %d",
 				$id
 			)
 		);
@@ -477,7 +438,7 @@ class LGP_Attachments_API {
 			return new WP_Error( 'file_not_found', 'File not found on server', array( 'status' => 404 ) );
 		}
 
-		// Log download.
+		// Log download
 		$current_user_id = get_current_user_id();
 		if ( class_exists( 'LGP_Logger' ) ) {
 			LGP_Logger::log_event(
@@ -492,18 +453,17 @@ class LGP_Attachments_API {
 			);
 		}
 
-		// Return file for download with safe headers.
+		// Return file for download with safe headers
 		$mime      = in_array( $attachment->file_type, self::ALLOWED_TYPES, true ) ? $attachment->file_type : 'application/octet-stream';
 		$safe_name = sanitize_file_name( $attachment->file_name );
 		header( 'Content-Type: ' . $mime );
 		header( 'Content-Disposition: attachment; filename="' . $safe_name . '"' );
 		header( 'X-Content-Type-Options: nosniff' );
 		header( 'Content-Length: ' . (int) $attachment->file_size );
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.readfile_file_get_contents
 		readfile( $file_path );
 		exit;
 	}
 }
 
-// Initialize.
+// Initialize
 LGP_Attachments_API::init();

@@ -1,8 +1,9 @@
 <?php
 
 /**
- * Query Performance Monitor
- * Tracks slow queries, cache efficiency, and optimization suggestions
+ * Query performance monitor.
+ *
+ * Tracks slow queries, cache efficiency, and optimization suggestions.
  *
  * @package LounGenie Portal
  * @since 1.9.0
@@ -12,9 +13,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Query performance monitor class.
+ */
 class LGP_Query_Monitor {
 
-	const SLOW_QUERY_THRESHOLD = 0.1; // 100ms
+	const SLOW_QUERY_THRESHOLD = 0.1; // 100ms.
 	const CACHE_TABLE_NAME     = 'lgp_query_performance';
 
 	private static $query_log    = array();
@@ -22,29 +26,31 @@ class LGP_Query_Monitor {
 	private static $cache_misses = 0;
 
 	/**
-	 * Initialize query monitor
+	 * Initialize query monitor.
+	 *
+	 * @return void
 	 */
 	public static function init() {
-		// Only enable in development/staging or if explicitly enabled
+		// Only enable in development/staging or if explicitly enabled.
 		if ( ! self::is_enabled() ) {
 			return;
 		}
 
-		// Create table on activation
+		// Create table on activation.
 		add_action( 'lgp_plugin_activated', array( __CLASS__, 'create_table' ) );
 
-		// Hook into WordPress to monitor queries
+		// Hook into WordPress to monitor queries.
 		if ( defined( 'SAVEQUERIES' ) && SAVEQUERIES ) {
 			add_action( 'admin_footer', array( __CLASS__, 'analyze_queries' ) );
 		}
 
-		// Register REST endpoint for performance data
+		// Register REST endpoint for performance data.
 		add_action( 'rest_api_init', array( __CLASS__, 'register_endpoints' ) );
 
-		// Register admin page
+		// Register admin page.
 		add_action( 'admin_menu', array( __CLASS__, 'register_admin_page' ) );
 
-		// Schedule cleanup
+		// Schedule cleanup.
 		if ( ! wp_next_scheduled( 'lgp_cleanup_query_log' ) ) {
 			wp_schedule_event( time(), 'daily', 'lgp_cleanup_query_log' );
 		}
@@ -52,22 +58,26 @@ class LGP_Query_Monitor {
 	}
 
 	/**
-	 * Check if query monitoring is enabled
+	 * Check if query monitoring is enabled.
+	 *
+	 * @return bool
 	 */
 	private static function is_enabled() {
 		$env = class_exists( 'LGP_Environment' ) ? LGP_Environment::get_environment() : 'production';
 
-		// Enable in development and staging
+		// Enable in development and staging.
 		if ( in_array( $env, array( 'development', 'staging' ), true ) ) {
 			return true;
 		}
 
-		// Check for explicit enable flag
+		// Check for explicit enable flag.
 		return defined( 'LGP_ENABLE_QUERY_MONITOR' ) && LGP_ENABLE_QUERY_MONITOR;
 	}
 
 	/**
-	 * Create performance logging table
+	 * Create performance logging table.
+	 *
+	 * @return void
 	 */
 	public static function create_table() {
 		global $wpdb;

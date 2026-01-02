@@ -1,8 +1,9 @@
 <?php
 
 /**
- * Internationalization & Localization System
- * Handles multi-language support with translation strings
+ * Internationalization & localization system.
+ *
+ * Handles multi-language support with translation strings.
  *
  * @package LounGenie Portal
  * @since 1.9.0
@@ -12,23 +13,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Internationalization & localization class.
+ */
 class LGP_i18n {
 
 	const TEXT_DOMAIN = 'loungenie-portal';
 
 	/**
-	 * Initialize i18n system
+	 * Initialize i18n system.
+	 *
+	 * @return void
 	 */
 	public static function init() {
-		// Load plugin translations
+		// Load plugin translations.
 		add_action( 'plugins_loaded', array( __CLASS__, 'load_plugin_textdomain' ) );
 
-		// Register translation strings for .pot file generation
+		// Register translation strings for .pot file generation.
 		add_action( 'plugins_loaded', array( __CLASS__, 'register_strings' ) );
 	}
 
 	/**
-	 * Load plugin translations from languages directory
+	 * Load plugin translations from languages directory.
+	 *
+	 * @return void
 	 */
 	public static function load_plugin_textdomain() {
 		$loaded = load_plugin_textdomain(
@@ -43,11 +51,14 @@ class LGP_i18n {
 	}
 
 	/**
-	 * Register all translatable strings
-	 * Used for .pot file generation and string scanning
+	 * Register all translatable strings.
+	 *
+	 * Used for .pot file generation and string scanning.
+	 *
+	 * @return void
 	 */
 	public static function register_strings() {
-		// Core plugin strings
+		// Core plugin strings.
 		esc_html_e( 'LounGenie Portal', 'loungenie-portal' );
 		esc_html_e( 'Manage partner companies, units, and service requests', 'loungenie-portal' );
 		__( 'Dashboard', 'loungenie-portal' );
@@ -57,11 +68,11 @@ class LGP_i18n {
 		__( 'Tickets', 'loungenie-portal' );
 		__( 'Settings', 'loungenie-portal' );
 
-		// User roles
+		// User roles.
 		__( 'LounGenie Support Team', 'loungenie-portal' );
 		__( 'LounGenie Partner Company', 'loungenie-portal' );
 
-		// Actions
+		// Actions.
 		__( 'Add New', 'loungenie-portal' );
 		__( 'Edit', 'loungenie-portal' );
 		__( 'Delete', 'loungenie-portal' );
@@ -74,7 +85,7 @@ class LGP_i18n {
 		__( 'Export', 'loungenie-portal' );
 		__( 'Import', 'loungenie-portal' );
 
-		// Status strings
+		// Status strings.
 		__( 'Active', 'loungenie-portal' );
 		__( 'Inactive', 'loungenie-portal' );
 		__( 'Pending', 'loungenie-portal' );

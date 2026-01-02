@@ -10,6 +10,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * LounGenie Portal email notifications class.
+ *
+ * Template-based notifications with event routing.
+ */
 class LGP_Email_Notifications {
 
 	/**
@@ -25,10 +30,12 @@ class LGP_Email_Notifications {
 	);
 
 	/**
-	 * Initialize notifications
+	 * Initialize notifications.
+	 *
+	 * @return void
 	 */
 	public static function init() {
-		// Hook for ticket events
+		// Hook for ticket events.
 		add_action( 'lgp_ticket_created', array( __CLASS__, 'on_ticket_created' ), 10, 3 );
 		add_action( 'lgp_ticket_updated', array( __CLASS__, 'on_ticket_updated' ), 10, 3 );
 		add_action( 'lgp_ticket_replied', array( __CLASS__, 'on_ticket_replied' ), 10, 3 );
@@ -36,17 +43,18 @@ class LGP_Email_Notifications {
 	}
 
 	/**
-	 * Notify when ticket is created
+	 * Notify when ticket is created.
 	 *
-	 * @param int   $ticket_id Ticket ID
-	 * @param int   $company_id Company ID
-	 * @param int   $user_id User ID who created
-	 * @param array $email_data Email data
+	 * @param int   $ticket_id Ticket ID.
+	 * @param int   $company_id Company ID.
+	 * @param int   $user_id User ID who created.
+	 * @param array $email_data Email data.
+	 * @return void
 	 */
 	public static function notify_ticket_created( $ticket_id, $company_id, $user_id, $email_data = array() ) {
 		global $wpdb;
 
-		// Get ticket and request data
+		// Get ticket and request data.
 		$ticket = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT * FROM {$wpdb->prefix}lgp_tickets WHERE id = %d",
@@ -65,7 +73,7 @@ class LGP_Email_Notifications {
 			)
 		);
 
-		// Get company data
+		// Get company data.
 		$company = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT * FROM {$wpdb->prefix}lgp_companies WHERE id = %d",
@@ -73,7 +81,7 @@ class LGP_Email_Notifications {
 			)
 		);
 
-		// Build notification payload
+		// Build notification payload.
 		$notification = array(
 			'ticket_id'     => $ticket_id,
 			'ticket_number' => sprintf( '#%d', $ticket_id ),

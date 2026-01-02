@@ -10,6 +10,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Outlook / Microsoft Graph integration class.
+ *
+ * Handles email integration for ticket replies and notifications
+ * via Microsoft Graph API.
+ */
 class LGP_Outlook {
 
 	/**
@@ -29,30 +35,32 @@ class LGP_Outlook {
 	const FRONT_CALLBACK_PATH = 'psp-azure-callback';
 
 	/**
-	 * Initialize Outlook integration
+	 * Initialize Outlook integration.
+	 *
+	 * @return void
 	 */
 	public static function init() {
-		// Hook into ticket replies
+		// Hook into ticket replies.
 		add_action( 'lgp_ticket_reply_added', array( __CLASS__, 'send_notification_email' ), 10, 3 );
 
-		// Add settings page
+		// Add settings page.
 		add_action( 'admin_menu', array( __CLASS__, 'add_settings_page' ) );
 		add_action( 'admin_init', array( __CLASS__, 'register_settings' ) );
 
-		// Handle OAuth callback
+		// Handle OAuth callback.
 		add_action( 'admin_init', array( __CLASS__, 'handle_oauth_callback' ) );
 
-		// OAuth callback via admin-ajax (supports logged-in and non-logged-in)
+		// OAuth callback via admin-ajax (supports logged-in and non-logged-in).
 		add_action( 'wp_ajax_lgp_outlook_oauth_callback', array( __CLASS__, 'handle_oauth_ajax_callback' ) );
 		add_action( 'wp_ajax_nopriv_lgp_outlook_oauth_callback', array( __CLASS__, 'handle_oauth_ajax_callback' ) );
 
-		// Pretty front-end callback handler
+		// Pretty front-end callback handler.
 		add_action( 'parse_request', array( __CLASS__, 'maybe_handle_front_callback' ) );
 
-		// Add reply button to portal
+		// Add reply button to portal.
 		add_action( 'wp_ajax_lgp_send_outlook_reply', array( __CLASS__, 'ajax_send_reply' ) );
 
-		// Clear error log handler
+		// Clear error log handler.
 		add_action( 'admin_post_lgp_clear_outlook_errors', array( __CLASS__, 'clear_error_log' ) );
 	}
 
