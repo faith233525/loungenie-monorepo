@@ -498,7 +498,7 @@ class LGP_Migrations {
 	/**
 	 * Check if a migration has been applied
 	 *
-	 * @param string $version Version to check
+	 * @param string $version Version to check.
 	 * @return bool
 	 */
 	public static function migration_applied( $version ) {
@@ -510,7 +510,7 @@ class LGP_Migrations {
 	 * Rollback to a previous version (caution: destructive)
 	 * Only used in development/testing
 	 *
-	 * @param string $version Version to rollback to
+	 * @param string $version Version to rollback to.
 	 */
 	public static function rollback( $version ) {
 		if ( defined( 'WP_ENV' ) && 'development' !== WP_ENV ) {
