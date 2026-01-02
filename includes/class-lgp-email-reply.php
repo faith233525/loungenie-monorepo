@@ -84,7 +84,7 @@ class LGP_Email_Reply {
 			$attachments
 		);
 
-		// Send via Graph API
+		// Send via Graph API.
 		$graph_response = $this->graph->send_mail_message( $this->mailbox, $message_payload );
 
 		if ( ! $graph_response || ! empty( $graph_response['error'] ) ) {
@@ -92,7 +92,7 @@ class LGP_Email_Reply {
 			throw new Exception( 'Failed to send email: ' . $error );
 		}
 
-		// Create WordPress comment record
+		// Create WordPress comment record.
 		$comment_id = wp_insert_comment(
 			array(
 				'comment_post_ID'      => $ticket_id,
@@ -109,13 +109,13 @@ class LGP_Email_Reply {
 			throw new Exception( 'Failed to create comment' );
 		}
 
-		// Store email metadata in comment
+		// Store email metadata in comment.
 		update_comment_meta( $comment_id, '_email_sent', true );
 		update_comment_meta( $comment_id, '_reply_to_email', $sender_email );
 		update_comment_meta( $comment_id, '_sent_via_portal', true );
 		update_comment_meta( $comment_id, '_sent_timestamp', current_time( 'mysql' ) );
 
-		// Handle local attachments
+		// Handle local attachments.
 		if ( ! empty( $attachments ) ) {
 			$this->attach_local_files( $comment_id, $attachments );
 		}
@@ -135,33 +135,33 @@ class LGP_Email_Reply {
 	}
 
 	/**
-	 * Build reply message with proper threading
+	 * Build reply message with proper threading.
 	 *
-	 * @param string $to_email Recipient email
-	 * @param string $subject Original subject
-	 * @param string $html_body Reply body (HTML)
-	 * @param string $conversation_id Conversation ID
-	 * @param string $in_reply_to Internet Message ID to reply to
-	 * @param array  $attachments File attachments
-	 * @return array Message payload for Graph API
+	 * @param string $to_email       Recipient email.
+	 * @param string $subject        Original subject.
+	 * @param string $html_body      Reply body (HTML).
+	 * @param string $conversation_id Conversation ID.
+	 * @param string $in_reply_to    Internet Message ID to reply to.
+	 * @param array  $attachments    File attachments.
+	 * @return array Message payload for Graph API.
 	 */
 	private function build_reply_message( $to_email, $subject, $html_body, $conversation_id = '', $in_reply_to = '', $attachments = array() ) {
 		$graph_attachments = array();
 
-		// Process attachments
+		// Process attachments.
 		foreach ( $attachments as $att ) {
 			if ( empty( $att['path'] ) ) {
 				continue;
 			}
 
-			// Read file
+			// Read file.
 			$file_content = file_get_contents( $att['path'] );
 			if ( ! $file_content ) {
 				$this->logger->warning( 'Failed to read attachment file', array( 'path' => $att['path'] ) );
 				continue;
 			}
 
-			$graph_attachments[] = array(
+				$graph_attachments[] = array(
 				'@odata.type'  => '#microsoft.graph.fileAttachment',
 				'name'         => $att['name'] ?? basename( $att['path'] ),
 				'contentBytes' => base64_encode( $file_content ),
@@ -217,10 +217,11 @@ class LGP_Email_Reply {
 	}
 
 	/**
-	 * Attach local files to comment
+	 * Attach local files to comment.
 	 *
-	 * @param int   $comment_id Comment ID
-	 * @param array $attachments Attachments with 'path' and 'name'
+	 * @param int   $comment_id  Comment ID.
+	 * @param array $attachments Attachments with 'path' and 'name'.
+	 * @return void
 	 */
 	private function attach_local_files( $comment_id, $attachments ) {
 		foreach ( $attachments as $att ) {
@@ -241,17 +242,17 @@ class LGP_Email_Reply {
 	}
 
 	/**
-	 * Detect and record Outlook replies
+	 * Detect and record Outlook replies.
 	 *
 	 * This is called periodically to check for replies sent via Outlook
 	 * to the shared mailbox directly.
 	 *
-	 * @return int Number of replies detected
+	 * @return int Number of replies detected.
 	 */
 	public function detect_outlook_replies() {
 		$count = 0;
 
-		// Get all open tickets with email source
+		// Get all open tickets with email source.
 		$tickets = get_posts(
 			array(
 				'post_type'      => 'ticket',
@@ -289,30 +290,30 @@ class LGP_Email_Reply {
 	}
 
 	/**
-	 * Check conversation for new replies via Outlook
+	 * Check conversation for new replies via Outlook.
 	 *
-	 * @param int    $ticket_id Ticket ID
-	 * @param string $conversation_id Conversation ID from email
-	 * @return int Number of new replies found
+	 * @param int    $ticket_id       Ticket ID.
+	 * @param string $conversation_id Conversation ID from email.
+	 * @return int Number of new replies found.
 	 * @throws Exception
 	 */
 	private function check_conversation_for_replies( $ticket_id, $conversation_id ) {
 		$count = 0;
 
-		// Get conversation messages from Graph API
+		// Get conversation messages from Graph API.
 		$path = '/users/' . rawurlencode( $this->mailbox ) . '/conversations/' . rawurlencode( $conversation_id ) . '/threads';
 
 		try {
-			// Note: This requires Conversations.Read permission
+			// Note: This requires Conversations.Read permission.
 			$response = $this->graph->request( 'GET', $path );
 
 			if ( empty( $response['value'] ) ) {
 				return 0;
 			}
 
-			// Process each thread
+			// Process each thread.
 			foreach ( $response['value'] as $thread ) {
-				// Get messages in thread
+				// Get messages in thread.
 				$thread_path     = $path . '/' . rawurlencode( $thread['id'] ) . '/posts';
 				$thread_response = $this->graph->request( 'GET', $thread_path );
 
