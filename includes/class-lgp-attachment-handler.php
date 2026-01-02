@@ -14,6 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Attachment handler class.
+ *
+ * Manages file attachments with company-specific directories, chunked reading for memory efficiency,
+ * and comprehensive security validation including MIME type checking and access control tokens.
  */
 class LGP_Attachment_Handler {
 
@@ -102,10 +105,10 @@ HTACCESS;
 	}
 
 	/**
-	 * Get company-specific attachment directory
+	 * Get company-specific attachment directory.
 	 *
-	 * @param int|string $company_id Company ID or domain
-	 * @return string Company attachment directory path
+	 * @param int|string $company_id Company ID or domain for directory lookup.
+	 * @return string Company attachment directory path on server.
 	 */
 	public static function get_company_directory( $company_id ) {
 		global $wpdb;
@@ -133,7 +136,7 @@ HTACCESS;
 		$upload_dir  = wp_upload_dir();
 		$company_dir = $upload_dir['basedir'] . '/lgp-attachments/' . $dir_name;
 
-		// Create directory if it doesn't exist
+		// Create directory if it doesn't exist.
 		if ( ! is_dir( $company_dir ) ) {
 			wp_mkdir_p( $company_dir );
 			// Add index.php to prevent listing
@@ -147,46 +150,46 @@ HTACCESS;
 	}
 
 	/**
-	 * Save attachment with chunked reading (memory-safe)
+	 * Save attachment with chunked reading (memory-safe).
 	 *
-	 * @param string $file_path Temporary file path
-	 * @param string $filename Original filename
-	 * @param int    $ticket_id Ticket ID
-	 * @param int    $company_id Company ID
-	 * @param int    $uploaded_by User ID who uploaded
-	 * @return array|false Attachment metadata or false on failure
+	 * @param string $file_path Temporary file path to read from.
+	 * @param string $filename Original filename provided by user.
+	 * @param int    $ticket_id Ticket ID to associate with attachment.
+	 * @param int    $company_id Company ID for directory organization.
+	 * @param int    $uploaded_by User ID who uploaded the file.
+	 * @return array|false Attachment metadata array on success, false on failure.
 	 */
 	public static function save_attachment( $file_path, $filename, $ticket_id, $company_id, $uploaded_by = 0 ) {
-		// Validate file
+		// Validate file.
 		$validation = self::validate_file( $file_path, $filename );
 		if ( ! $validation['valid'] ) {
 			error_log( "LGP Attachment: Validation failed - {$validation['error']}" );
 			return false;
 		}
 
-		// Check attachment count for ticket
+		// Check attachment count for ticket.
 		if ( ! self::can_add_attachment( $ticket_id ) ) {
 			error_log( "LGP Attachment: Max attachments exceeded for ticket $ticket_id" );
 			return false;
 		}
 
-		// Get company directory
+		// Get company directory.
 		$company_dir = self::get_company_directory( $company_id );
 
-		// Generate secure filename
+		// Generate secure filename.
 		$new_filename = self::generate_secure_filename( $filename, $ticket_id );
 		$destination  = $company_dir . '/' . $new_filename;
 
-		// Copy file with chunked reading (memory-safe)
+		// Copy file with chunked reading (memory-safe).
 		if ( ! self::copy_file_chunked( $file_path, $destination ) ) {
 			error_log( "LGP Attachment: Failed to copy file: $filename" );
 			return false;
 		}
 
-		// Get MIME type
+		// Get MIME type.
 		$mime_type = self::get_mime_type( $destination );
 
-		// Store in database
+		// Store in database.
 		global $wpdb;
 
 		$file_size = filesize( $destination );
@@ -221,14 +224,14 @@ HTACCESS;
 	}
 
 	/**
-	 * Validate file before saving
+	 * Validate file before saving.
 	 *
-	 * @param string $file_path Temporary file path
-	 * @param string $filename Original filename
-	 * @return array Validation result with 'valid' boolean and 'error' string
+	 * @param string $file_path Temporary file path to validate.
+	 * @param string $filename Original filename provided by user.
+	 * @return array Validation result array with 'valid' boolean and 'error' string if invalid.
 	 */
 	private static function validate_file( $file_path, $filename ) {
-		// Check file exists
+		// Check file exists. and is readable.
 		if ( ! file_exists( $file_path ) || ! is_readable( $file_path ) ) {
 			return array(
 				'valid' => false,
@@ -236,7 +239,7 @@ HTACCESS;
 			);
 		}
 
-		// Check file size
+		// Check file size.
 		$file_size = filesize( $file_path );
 		if ( $file_size > self::MAX_FILE_SIZE ) {
 			return array(
@@ -245,7 +248,7 @@ HTACCESS;
 			);
 		}
 
-		// Check MIME type
+		// Check MIME type.
 		$mime_type = self::get_mime_type( $file_path );
 		if ( ! in_array( $mime_type, self::ALLOWED_MIME_TYPES, true ) ) {
 			return array(
@@ -254,7 +257,7 @@ HTACCESS;
 			);
 		}
 
-		// Sanitize filename
+		// Sanitize filename.
 		$sanitized = sanitize_file_name( $filename );
 		if ( empty( $sanitized ) ) {
 			return array(
@@ -267,10 +270,10 @@ HTACCESS;
 	}
 
 	/**
-	 * Check if we can add more attachments to ticket
+	 * Check if we can add more attachments to ticket.
 	 *
-	 * @param int $ticket_id Ticket ID
-	 * @return bool True if can add
+	 * @param int $ticket_id Ticket ID to check attachment count for.
+	 * @return bool True if attachment count is below maximum.
 	 */
 	private static function can_add_attachment( $ticket_id ) {
 		global $wpdb;
@@ -286,11 +289,11 @@ HTACCESS;
 	}
 
 	/**
-	 * Generate secure filename with unique suffix
+	 * Generate secure filename with unique suffix.
 	 *
-	 * @param string $original_name Original filename
-	 * @param int    $ticket_id Ticket ID
-	 * @return string Secure filename
+	 * @param string $original_name Original filename from user upload.
+	 * @param int    $ticket_id Ticket ID for filename prefix.
+	 * @return string Secure filename with ticket ID and random suffix.
 	 */
 	private static function generate_secure_filename( $original_name, $ticket_id ) {
 		$sanitized = sanitize_file_name( $original_name );
@@ -298,17 +301,17 @@ HTACCESS;
 		$name      = $parts['filename'];
 		$ext       = isset( $parts['extension'] ) ? '.' . $parts['extension'] : '';
 
-		// Generate random suffix to prevent collisions
+		// Generate random suffix to prevent collisions.
 		$suffix = substr( md5( time() . wp_rand() ), 0, 8 );
 
 		return $ticket_id . '-' . $suffix . '-' . $name . $ext;
 	}
 
 	/**
-	 * Get MIME type of file
+	 * Get MIME type of file.
 	 *
-	 * @param string $file_path File path
-	 * @return string MIME type or application/octet-stream
+	 * @param string $file_path File path to inspect for MIME type.
+	 * @return string MIME type detected or application/octet-stream as fallback.
 	 */
 	private static function get_mime_type( $file_path ) {
 		if ( function_exists( 'mime_content_type' ) ) {
@@ -327,11 +330,11 @@ HTACCESS;
 	}
 
 	/**
-	 * Copy file in chunks to avoid memory exhaustion
+	 * Copy file in chunks to avoid memory exhaustion.
 	 *
-	 * @param string $source Source file path
-	 * @param string $destination Destination file path
-	 * @return bool Success
+	 * @param string $source Source file path to read from.
+	 * @param string $destination Destination file path to write to.
+	 * @return bool True on successful copy, false on failure.
 	 */
 	private static function copy_file_chunked( $source, $destination ) {
 		$source_handle = fopen( $source, 'rb' );
@@ -345,7 +348,7 @@ HTACCESS;
 			return false;
 		}
 
-		// Copy in chunks
+		// Copy in chunks.
 		while ( ! feof( $source_handle ) ) {
 			$chunk = fread( $source_handle, self::CHUNK_SIZE );
 			if ( $chunk === false ) {
@@ -366,17 +369,17 @@ HTACCESS;
 		fclose( $source_handle );
 		fclose( $dest_handle );
 
-		// Set appropriate permissions
+		// Set appropriate permissions.
 		chmod( $destination, 0644 );
 
 		return true;
 	}
 
 	/**
-	 * Get safe attachment download URL (with access control)
+	 * Get safe attachment download URL (with access control).
 	 *
-	 * @param int $attachment_id Attachment ID
-	 * @return string|false Download URL or false
+	 * @param int $attachment_id Attachment ID to generate download URL for.
+	 * @return string|false Download URL with access token or false if attachment not found.
 	 */
 	public static function get_download_url( $attachment_id ) {
 		global $wpdb;
@@ -392,14 +395,14 @@ HTACCESS;
 			return false;
 		}
 
-		// Generate temporary token for access control
+		// Generate temporary token for access control.
 		$token = hash_hmac(
 			'sha256',
 			$attachment_id . '|' . $attachment->ticket_id,
 			wp_salt()
 		);
 
-		// Return portal download URL (with access control check)
+		// Return portal download URL (with access control check).
 		return add_query_arg(
 			array(
 				'lgp_action' => 'download_attachment',
@@ -411,10 +414,10 @@ HTACCESS;
 	}
 
 	/**
-	 * Delete attachment securely
+	 * Delete attachment securely.
 	 *
-	 * @param int $attachment_id Attachment ID
-	 * @return bool Success
+	 * @param int $attachment_id Attachment ID to delete from storage and database.
+	 * @return bool True on successful deletion, false on failure.
 	 */
 	public static function delete_attachment( $attachment_id ) {
 		global $wpdb;
@@ -430,12 +433,12 @@ HTACCESS;
 			return false;
 		}
 
-		// Delete file
+		// Delete file.
 		if ( file_exists( $attachment->file_path ) ) {
 			wp_delete_file( $attachment->file_path );
 		}
 
-		// Delete database record
+		// Delete database record.
 		return (bool) $wpdb->delete(
 			$wpdb->prefix . 'lgp_ticket_attachments',
 			array( 'id' => $attachment_id ),
@@ -444,10 +447,10 @@ HTACCESS;
 	}
 
 	/**
-	 * Get attachment for display (with access control)
+	 * Get attachment for display (with access control).
 	 *
-	 * @param int $attachment_id Attachment ID
-	 * @return array|false Attachment data or false
+	 * @param int $attachment_id Attachment ID to retrieve.
+	 * @return array|false Attachment data array on success, false if not found or access denied.
 	 */
 	public static function get_attachment( $attachment_id ) {
 		global $wpdb;
