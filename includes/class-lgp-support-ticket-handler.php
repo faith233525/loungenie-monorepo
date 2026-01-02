@@ -214,6 +214,7 @@ class LGP_Support_Ticket_Handler {
 	 * @param array $ticket_data Sanitized ticket data.
 	 * @return int|false Ticket ID on success, false on failure.
 	 * @throws Exception If table doesn't exist.
+	 */
 	private static function create_ticket( $ticket_data ) {
 		global $wpdb;
 
@@ -264,6 +265,7 @@ class LGP_Support_Ticket_Handler {
 	 * @param array $ticket_data Sanitized ticket data.
 	 * @return int|WP_Error Post ID on success, WP_Error on failure.
 	 * @throws Exception If post insertion fails.
+	 */
 	private static function create_ticket_as_post( $ticket_data ) {
 		$post_id = wp_insert_post(
 			array(
@@ -302,6 +304,7 @@ class LGP_Support_Ticket_Handler {
 	 * @param int $ticket_id Ticket ID.
 	 * @param int $company_id Company ID for organization.
 	 * @return void
+	 */
 	private static function process_attachments( $ticket_id, $company_id ) {
 		// Require WordPress file handling
 		require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -395,6 +398,7 @@ class LGP_Support_Ticket_Handler {
 	 * @param array $ticket_data Ticket information.
 	 * @param int   $ticket_id Ticket ID.
 	 * @return void
+	 */
 	private static function send_confirmation_email( $ticket_data, $ticket_id ) {
 		$to      = $ticket_data['email'];
 		$subject = sprintf(
@@ -438,6 +442,7 @@ LounGenie Support Team',
 	 * @param array $ticket_data Ticket information.
 	 * @param int   $ticket_id Ticket ID.
 	 * @return void
+	 */
 	private static function notify_support_team( $ticket_data, $ticket_id ) {
 		$admin_email = get_option( 'admin_email' );
 		$to          = $admin_email;

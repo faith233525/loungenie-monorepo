@@ -34,11 +34,11 @@ add_action(
 	'wp_loaded',
 	function () {
 		if ( ! wp_next_scheduled( 'lgp_sync_emails' ) ) {
-			wp_schedule_event( time(), '5-minute', 'lgp_sync_emails' );
+			wp_schedule_event( time(), 'hourly', 'lgp_sync_emails' );
 		}
 
 		if ( ! wp_next_scheduled( 'lgp_detect_outlook_replies' ) ) {
-			wp_schedule_event( time() + 120, '10-minute', 'lgp_detect_outlook_replies' );
+			wp_schedule_event( time() + 120, 'hourly', 'lgp_detect_outlook_replies' );
 		}
 
 		// Deconflict: ensure legacy schedulers are disabled while new pipeline is active
