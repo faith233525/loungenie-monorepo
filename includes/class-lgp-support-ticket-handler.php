@@ -55,18 +55,18 @@ class LGP_Support_Ticket_Handler {
 				wp_send_json_error( array( 'message' => __( 'Failed to create ticket. Please try again.', 'loungenie-portal' ) ) );
 			}
 
-			// Handle file uploads
+			// Handle file uploads.
 			if ( ! empty( $_FILES['attachments'] ) ) {
 				self::process_attachments( $ticket_id, $ticket_data['company_id'] );
 			}
 
-			// Send confirmation email
+			// Send confirmation email.
 			self::send_confirmation_email( $ticket_data, $ticket_id );
 
-			// Send notification to support team
+			// Send notification to support team.
 			self::notify_support_team( $ticket_data, $ticket_id );
 
-			// Return success
+			// Return success.
 			wp_send_json_success(
 				array(
 					'ticket_id' => $ticket_data['ticket_reference'],
@@ -79,8 +79,9 @@ class LGP_Support_Ticket_Handler {
 	}
 
 	/**
-	 * Validate form submission
-	 */
+	 * Validate form submission.
+	 *
+	 * @return array Validation result with 'valid' and 'message' keys.
 	private static function validate_submission() {
 		$required_fields = array(
 			'first_name',
@@ -102,8 +103,10 @@ class LGP_Support_Ticket_Handler {
 			}
 		}
 
-		// Validate email
-		$email = sanitize_email( $_POST['email'] );
+	/**
+	 * Validate email
+	 *
+	 * Checks if email is in valid format using WordPress is_email().
 		if ( ! is_email( $email ) ) {
 			return array(
 				'valid'   => false,
@@ -111,7 +114,7 @@ class LGP_Support_Ticket_Handler {
 			);
 		}
 
-		// Validate phone if provided
+		// Validate phone if provided.
 		if ( ! empty( $_POST['phone'] ) ) {
 			$phone = sanitize_text_field( $_POST['phone'] );
 			if ( ! preg_match( '/^[\d\s()+-]{10,}$/', str_replace( ' ', '', $phone ) ) ) {
@@ -122,7 +125,7 @@ class LGP_Support_Ticket_Handler {
 			}
 		}
 
-		// Validate consent checkboxes
+		// Validate consent checkboxes.
 		if ( empty( $_POST['consent_contact'] ) || empty( $_POST['consent_privacy'] ) ) {
 			return array(
 				'valid'   => false,
@@ -134,13 +137,14 @@ class LGP_Support_Ticket_Handler {
 	}
 
 	/**
-	 * Process and sanitize form data
-	 */
+	 * Process and sanitize form data.
+	 *
+	 * @return array Sanitized ticket data with company_id, first_name, last_name, email, phone, category, urgency, subject, description, units_affected, ticket_reference, user_id.
 	private static function process_form_data() {
 		$current_user = wp_get_current_user();
 		$company_id   = isset( $_POST['company_id'] ) ? absint( $_POST['company_id'] ) : 0;
 
-		// If user is logged in and not admin, use their company
+		// If user is logged in and not admin, use their company.
 		if ( is_user_logged_in() && ! current_user_can( 'manage_options' ) ) {
 			$company_id = LGP_Auth::get_user_company_id();
 		}
@@ -181,7 +185,7 @@ class LGP_Support_Ticket_Handler {
 			$company_id = LGP_Auth::get_user_company_id();
 		}
 
-		// Parse units affected; preserve raw input for tests that assert ranges/strings
+		// Parse units affected; preserve raw input for tests that assert ranges/strings.
 		$units_affected_raw = isset( $data['units_affected'] ) ? $data['units_affected'] : '';
 		$units_affected     = sanitize_text_field( $units_affected_raw );
 
@@ -203,20 +207,25 @@ class LGP_Support_Ticket_Handler {
 	}
 
 	/**
-	 * Create ticket in database
-	 */
+	 * Create ticket in database.
+	 *
+	 * Inserts new ticket record with provided data.
+	 *
+	 * @param array $ticket_data Sanitized ticket data.
+	 * @return int|false Ticket ID on success, false on failure.
+	 * @throws Exception If table doesn't exist.
 	private static function create_ticket( $ticket_data ) {
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . 'lgp_tickets';
 
-		// Check if table exists
+		// Check if table exists.
 		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) !== $table_name ) {
-			// Fallback: create ticket using custom post type if available
+			// Fallback: create ticket using custom post type if available.
 			return self::create_ticket_as_post( $ticket_data );
 		}
 
-		// Insert ticket
+		// Insert ticket.
 		$insert_result = $wpdb->insert(
 			$table_name,
 			array(
@@ -242,7 +251,7 @@ class LGP_Support_Ticket_Handler {
 			throw new Exception( __( 'Failed to create ticket in database.', 'loungenie-portal' ) );
 		}
 
-		// Store unit IDs as metadata if available
+		// Store unit IDs as metadata if available.
 		$ticket_id = $wpdb->insert_id;
 		// Phase 2B: unit_ids removed - using aggregation only
 
@@ -250,8 +259,11 @@ class LGP_Support_Ticket_Handler {
 	}
 
 	/**
-	 * Fallback: Create ticket as custom post type
-	 */
+	 * Fallback: Create ticket as custom post type.
+	 *
+	 * @param array $ticket_data Sanitized ticket data.
+	 * @return int|WP_Error Post ID on success, WP_Error on failure.
+	 * @throws Exception If post insertion fails.
 	private static function create_ticket_as_post( $ticket_data ) {
 		$post_id = wp_insert_post(
 			array(
@@ -267,7 +279,7 @@ class LGP_Support_Ticket_Handler {
 			throw new Exception( __( 'Failed to create ticket.', 'loungenie-portal' ) );
 		}
 
-		// Store ticket metadata
+		// Store ticket metadata.
 		update_post_meta( $post_id, '_company_id', $ticket_data['company_id'] );
 		update_post_meta( $post_id, '_requester_name', $ticket_data['first_name'] . ' ' . $ticket_data['last_name'] );
 		update_post_meta( $post_id, '_requester_email', $ticket_data['email'] );
@@ -283,8 +295,13 @@ class LGP_Support_Ticket_Handler {
 	}
 
 	/**
-	 * Process file attachments
-	 */
+	 * Process file attachments.
+	 *
+	 * Handles file uploads for tickets with validation and storage.
+	 *
+	 * @param int $ticket_id Ticket ID.
+	 * @param int $company_id Company ID for organization.
+	 * @return void
 	private static function process_attachments( $ticket_id, $company_id ) {
 		// Require WordPress file handling
 		require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -292,11 +309,11 @@ class LGP_Support_Ticket_Handler {
 		$upload_dir        = wp_upload_dir();
 		$ticket_upload_dir = $upload_dir['basedir'] . '/lgp-tickets/' . $ticket_id;
 
-		// Create directory if it doesn't exist
+		// Create directory if it doesn't exist.
 		if ( ! is_dir( $ticket_upload_dir ) ) {
 			wp_mkdir_p( $ticket_upload_dir );
 
-			// Add .htaccess for security
+			// Add .htaccess for security.
 			$htaccess_path = $ticket_upload_dir . '/.htaccess';
 			if ( ! file_exists( $htaccess_path ) ) {
 				file_put_contents( $htaccess_path, 'deny from all' );
@@ -305,7 +322,7 @@ class LGP_Support_Ticket_Handler {
 
 		$uploaded_files = array();
 
-		// Process each file
+		// Process each file.
 		for ( $i = 0; $i < count( $_FILES['attachments']['name'] ); $i++ ) {
 			if ( empty( $_FILES['attachments']['name'][ $i ] ) ) {
 				continue;
@@ -319,17 +336,17 @@ class LGP_Support_Ticket_Handler {
 				'size'     => $_FILES['attachments']['size'][ $i ],
 			);
 
-			// Validate file
+			// Validate file.
 			if ( $file['error'] !== UPLOAD_ERR_OK ) {
 				continue;
 			}
 
-			// Validate file size (10MB max)
+			// Validate file size (10MB max).
 			if ( $file['size'] > 10 * 1024 * 1024 ) {
 				continue;
 			}
 
-			// Validate MIME type
+			// Validate MIME type.
 			$allowed_mimes = array(
 				'image/jpeg',
 				'image/png',
@@ -347,11 +364,11 @@ class LGP_Support_Ticket_Handler {
 				continue;
 			}
 
-			// Generate unique filename
+			// Generate unique filename.
 			$filename = sanitize_file_name( $file['name'] );
 			$filename = wp_unique_filename( $ticket_upload_dir, $filename );
 
-			// Move file
+			// Move file.
 			$destination = $ticket_upload_dir . '/' . $filename;
 			if ( move_uploaded_file( $file['tmp_name'], $destination ) ) {
 				$uploaded_files[] = array(
@@ -364,7 +381,7 @@ class LGP_Support_Ticket_Handler {
 			}
 		}
 
-		// Save uploaded files metadata
+		// Save uploaded files metadata.
 		if ( ! empty( $uploaded_files ) ) {
 			update_post_meta( $ticket_id, '_attached_files', $uploaded_files );
 		}
@@ -373,8 +390,11 @@ class LGP_Support_Ticket_Handler {
 	}
 
 	/**
-	 * Send confirmation email to requester
-	 */
+	 * Send confirmation email to requester.
+	 *
+	 * @param array $ticket_data Ticket information.
+	 * @param int   $ticket_id Ticket ID.
+	 * @return void
 	private static function send_confirmation_email( $ticket_data, $ticket_id ) {
 		$to      = $ticket_data['email'];
 		$subject = sprintf(
@@ -413,8 +433,11 @@ LounGenie Support Team',
 	}
 
 	/**
-	 * Notify support team of new ticket
-	 */
+	 * Notify support team of new ticket.
+	 *
+	 * @param array $ticket_data Ticket information.
+	 * @param int   $ticket_id Ticket ID.
+	 * @return void
 	private static function notify_support_team( $ticket_data, $ticket_id ) {
 		$admin_email = get_option( 'admin_email' );
 		$to          = $admin_email;
