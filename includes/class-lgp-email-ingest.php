@@ -101,7 +101,7 @@ class LGP_Email_Ingest {
 				}
 			}
 
-			// Update delta token if present
+			// Update delta token if present.
 			if ( ! empty( $response['delta_token'] ) ) {
 				set_transient( 'lgp_email_delta_token', $response['delta_token'], 24 * HOUR_IN_SECONDS );
 			}
@@ -117,23 +117,23 @@ class LGP_Email_Ingest {
 	}
 
 	/**
-	 * Process individual message
+	 * Process individual message.
 	 *
-	 * @param array $message Message from Graph API
-	 * @return string 'created', 'updated', or 'skipped'
+	 * @param array $message Message from Graph API.
+	 * @return string 'created', 'updated', or 'skipped'.
 	 * @throws Exception
 	 */
 	private function process_message( $message ) {
-		// Check if already processed
+		// Check if already processed.
 		$ticket_id = $this->get_ticket_for_message( $message['id'] );
 
 		if ( $ticket_id ) {
-			// Message already has a ticket - possibly a reply
+			// Message already has a ticket - possibly a reply.
 			$this->handle_reply( $ticket_id, $message );
 			return 'updated';
 		}
 
-		// Check if this is a reply to an existing conversation
+		// Check if this is a reply to an existing conversation.
 		if ( ! empty( $message['parentMessageId'] ) || ! empty( $message['conversationId'] ) ) {
 			$existing_ticket = $this->find_ticket_by_conversation(
 				$message['conversationId'] ?? null,
@@ -146,15 +146,15 @@ class LGP_Email_Ingest {
 			}
 		}
 
-		// New ticket from email
+		// New ticket from email.
 		$ticket_id = $this->create_ticket_from_email( $message );
 
-		// Mark message as processed
+		// Mark message as processed.
 		update_post_meta( $ticket_id, '_email_message_id', $message['id'] );
 		update_post_meta( $ticket_id, '_email_conversation_id', $message['conversationId'] ?? '' );
 		update_post_meta( $ticket_id, '_email_internet_message_id', $message['internetMessageId'] ?? '' );
 
-		// Mark as read in mailbox
+		// Mark as read in mailbox.
 		try {
 			$this->graph->mark_as_read( $message['id'] );
 		} catch ( Exception $e ) {
@@ -165,14 +165,14 @@ class LGP_Email_Ingest {
 	}
 
 	/**
-	 * Create ticket from email message
+	 * Create ticket from email message.
 	 *
-	 * @param array $message Message from Graph API
-	 * @return int Ticket post ID
+	 * @param array $message Message from Graph API.
+	 * @return int Ticket post ID.
 	 * @throws Exception
 	 */
 	private function create_ticket_from_email( $message ) {
-		// Extract sender info (support normalized or raw Graph shape)
+		// Extract sender info (support normalized or raw Graph shape).
 		$sender_email = '';
 		$sender_name  = '';
 		if ( isset( $message['from'] ) && is_string( $message['from'] ) ) {
@@ -188,13 +188,13 @@ class LGP_Email_Ingest {
 			throw new Exception( 'No sender address in message' );
 		}
 
-		// Find or create contact
+		// Find or create contact.
 		$contact_id = $this->get_or_create_contact( $sender_email, $sender_name );
 
-		// Find associated company from contact
+		// Find associated company from contact.
 		$company_id = $this->get_contact_company( $contact_id );
 
-		// Prepare ticket data
+		// Prepare ticket data.
 		$body_content = '';
 		if ( ! empty( $message['body'] ) && is_string( $message['body'] ) ) {
 			$body_content = $message['body'];
@@ -212,14 +212,14 @@ class LGP_Email_Ingest {
 			'post_author'  => 1,
 		);
 
-		// Create ticket
+		// Create ticket.
 		$ticket_id = wp_insert_post( $ticket_data );
 
 		if ( ! $ticket_id ) {
 			throw new Exception( 'Failed to create ticket post' );
 		}
 
-		// Set ticket metadata
+		// Set ticket metadata.
 		update_post_meta( $ticket_id, '_contact_id', $contact_id );
 		update_post_meta( $ticket_id, '_company_id', $company_id );
 		update_post_meta( $ticket_id, '_email_source', true );
@@ -245,14 +245,14 @@ class LGP_Email_Ingest {
 	}
 
 	/**
-	 * Handle email reply to existing ticket
+	 * Handle email reply to existing ticket.
 	 *
-	 * @param int   $ticket_id Ticket ID
-	 * @param array $message Message from Graph API
-	 * @return int Reply post ID
+	 * @param int   $ticket_id Ticket ID.
+	 * @param array $message   Message from Graph API.
+	 * @return int Reply post ID.
 	 */
 	private function handle_reply( $ticket_id, $message ) {
-		// Check if reply already exists
+		// Check if reply already exists.
 		$existing_reply = get_comments(
 			array(
 				'post_id'    => $ticket_id,
@@ -263,14 +263,14 @@ class LGP_Email_Ingest {
 		);
 
 		if ( $existing_reply > 0 ) {
-			return null; // Already processed
+			return null; // Already processed.
 		}
 
-		// Extract sender info
+		// Extract sender info.
 		$from         = $message['from']['emailAddress'] ?? array();
 		$sender_email = ! empty( $from['address'] ) ? $from['address'] : 'noreply@local';
 
-		// Create reply comment
+		// Create reply comment.
 		$reply_id = wp_insert_comment(
 			array(
 				'comment_post_ID'      => $ticket_id,
@@ -324,10 +324,11 @@ class LGP_Email_Ingest {
 	}
 
 	/**
-	 * Process attachments from email message
+	 * Process attachments from email message.
 	 *
-	 * @param int    $ticket_id Ticket ID
-	 * @param string $message_id Graph message ID
+	 * @param int    $ticket_id  Ticket ID.
+	 * @param string $message_id Graph message ID.
+	 * @return void
 	 * @throws Exception
 	 */
 	private function process_attachments( $ticket_id, $message_id ) {
@@ -335,12 +336,12 @@ class LGP_Email_Ingest {
 			$attachments = $this->graph->get_attachments_with_content( $message_id );
 
 			foreach ( $attachments as $attachment ) {
-				// Skip if not a file attachment
+				// Skip if not a file attachment.
 				if ( '#microsoft.graph.fileAttachment' !== $attachment['@odata.type'] ) {
 					continue;
 				}
 
-				// Download and attach to ticket
+				// Download and attach to ticket.
 				$this->attach_file_to_ticket( $ticket_id, $attachment );
 			}
 		} catch ( Exception $e ) {
@@ -355,13 +356,15 @@ class LGP_Email_Ingest {
 	}
 
 	/**
-	 * Attach file to ticket
+	 * Attach file to ticket.
 	 *
-	 * @param int   $ticket_id Ticket ID
-	 * @param array $attachment Attachment from Graph API
+	 * @param int   $ticket_id  Ticket ID.
+	 * @param array $attachment Attachment from Graph API.
+	 * @return void
+	 * @throws Exception
 	 */
 	private function attach_file_to_ticket( $ticket_id, $attachment ) {
-		// Decode content
+		// Decode content.
 		$content = base64_decode( $attachment['contentBytes'], true );
 
 		if ( ! $content ) {
