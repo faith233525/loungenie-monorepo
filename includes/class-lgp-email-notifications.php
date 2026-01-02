@@ -18,7 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 class LGP_Email_Notifications {
 
 	/**
-	 * Notification template mapping
+	 * Notification template mapping.
+	 *
+	 * @var array
 	 */
 	private static $templates = array(
 		'ticket_created'    => 'Ticket Created: %s',
@@ -95,22 +97,22 @@ class LGP_Email_Notifications {
 			'email'         => isset( $email_data['from'] ) ? $email_data['from'] : '',
 		);
 
-		// Send to Support Team (always)
+		// Send to Support Team (always).
 		self::send_to_support_team( $notification, 'ticket_created' );
 
-		// Send to Partner Company (if their ticket)
+		// Send to Partner Company (if their ticket).
 		self::send_to_partner_company( $notification, 'ticket_created' );
 
-		// Log notification
+		// Log notification.
 		self::log_notification( 'created', $ticket_id, $company_id, $user_id );
 	}
 
 	/**
-	 * Notify when ticket is updated
+	 * Notify when ticket is updated.
 	 *
-	 * @param int $ticket_id Ticket ID
-	 * @param int $company_id Company ID
-	 * @param int $updated_by User ID who updated
+	 * @param int $ticket_id Ticket ID.
+	 * @param int $company_id Company ID.
+	 * @param int $updated_by User ID who updated.
 	 */
 	public static function on_ticket_updated( $ticket_id, $company_id, $updated_by ) {
 		global $wpdb;
@@ -149,11 +151,11 @@ class LGP_Email_Notifications {
 	}
 
 	/**
-	 * Notify when ticket has new reply
+	 * Notify when ticket has new reply.
 	 *
-	 * @param int $ticket_id Ticket ID
-	 * @param int $company_id Company ID
-	 * @param int $replied_by User ID who replied
+	 * @param int $ticket_id Ticket ID.
+	 * @param int $company_id Company ID.
+	 * @param int $replied_by User ID who replied.
 	 */
 	public static function on_ticket_replied( $ticket_id, $company_id, $replied_by ) {
 		$user = get_user_by( 'id', $replied_by );
@@ -170,12 +172,12 @@ class LGP_Email_Notifications {
 	}
 
 	/**
-	 * Notify when ticket status changes
+	 * Notify when ticket status changes.
 	 *
-	 * @param int    $ticket_id Ticket ID
-	 * @param string $old_status Old status
-	 * @param string $new_status New status
-	 * @param int    $changed_by User ID who changed status
+	 * @param int    $ticket_id Ticket ID.
+	 * @param string $old_status Old status.
+	 * @param string $new_status New status.
+	 * @param int    $changed_by User ID who changed status.
 	 */
 	public static function on_ticket_status_changed( $ticket_id, $old_status, $new_status, $changed_by ) {
 		$event = 'ticket_' . $new_status; // e.g., 'ticket_resolved', 'ticket_closed'
@@ -193,13 +195,13 @@ class LGP_Email_Notifications {
 	}
 
 	/**
-	 * Send notification to Support Team
+	 * Send notification to Support Team.
 	 *
-	 * @param array  $notification Notification data
-	 * @param string $event Event type
+	 * @param array  $notification Notification data.
+	 * @param string $event Event type.
 	 */
 	private static function send_to_support_team( $notification, $event ) {
-		// Get all support team members
+		// Get all support team members.
 		$support_users = get_users(
 			array(
 				'role'   => 'lgp_support',
@@ -208,7 +210,7 @@ class LGP_Email_Notifications {
 		);
 
 		if ( empty( $support_users ) ) {
-			// Fallback to admin email
+			// Fallback to admin email.
 			$support_users = array(
 				(object) array(
 					'user_email'   => get_option( 'admin_email' ),
@@ -229,17 +231,17 @@ class LGP_Email_Notifications {
 	}
 
 	/**
-	 * Send notification to Partner Company
+	 * Send notification to Partner Company.
 	 *
-	 * @param array  $notification Notification data
-	 * @param string $event Event type
+	 * @param array  $notification Notification data.
+	 * @param string $event Event type.
 	 */
 	private static function send_to_partner_company( $notification, $event ) {
 		global $wpdb;
 
 		$company_id = $notification['company_id'];
 
-		// Get all partner users for this company
+		// Get all partner users for this company.
 		$partner_users = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT u.ID, u.user_email, u.display_name 
@@ -250,7 +252,7 @@ class LGP_Email_Notifications {
 			)
 		);
 
-		// Also check for users with lgp_partner role
+		// Also check for users with lgp_partner role.
 		$partner_role_users = get_users(
 			array(
 				'role'   => 'lgp_partner',
@@ -258,7 +260,7 @@ class LGP_Email_Notifications {
 			)
 		);
 
-		// Merge and deduplicate
+		// Merge and deduplicate.
 		$users_by_id = array();
 		foreach ( $partner_users as $user ) {
 			$users_by_id[ $user->ID ] = $user;
