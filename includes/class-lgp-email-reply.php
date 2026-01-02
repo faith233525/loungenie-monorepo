@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Email Reply Handler
+ * Email reply handler.
  *
  * Handles sending replies via Graph API to the shared mailbox
  * and detecting replies that came via Outlook.
@@ -9,6 +9,9 @@
  * @package loungenie-portal
  */
 
+/**
+ * Email reply handler class.
+ */
 class LGP_Email_Reply {
 
 
@@ -34,7 +37,9 @@ class LGP_Email_Reply {
 	private $mailbox;
 
 	/**
-	 * Initialize reply handler
+	 * Initialize reply handler.
+	 *
+	 * @return void
 	 */
 	public function __construct() {
 		$this->graph   = new LGP_Graph_Client();
@@ -43,33 +48,33 @@ class LGP_Email_Reply {
 	}
 
 	/**
-	 * Send reply to ticket via email
+	 * Send reply to ticket via email.
 	 *
-	 * @param int    $ticket_id Ticket ID
-	 * @param string $reply_content Reply content (HTML)
-	 * @param int    $author_id WordPress user ID
-	 * @param array  $attachments Optional attachments
-	 * @return int Comment ID
+	 * @param int    $ticket_id Ticket ID.
+	 * @param string $reply_content Reply content (HTML).
+	 * @param int    $author_id WordPress user ID.
+	 * @param array  $attachments Optional attachments.
+	 * @return int Comment ID.
 	 * @throws Exception
 	 */
 	public function send_reply( $ticket_id, $reply_content, $author_id = 1, $attachments = array() ) {
-		// Get ticket details
+		// Get ticket details.
 		$ticket = get_post( $ticket_id );
 		if ( ! $ticket ) {
 			throw new Exception( 'Ticket not found' );
 		}
 
-		// Get sender email and details
+		// Get sender email and details.
 		$sender_email = get_post_meta( $ticket_id, '_sender_email', true );
 		if ( ! $sender_email ) {
 			throw new Exception( 'No sender email found for ticket' );
 		}
 
-		// Get email metadata for reply threading
+		// Get email metadata for reply threading.
 		$conversation_id     = get_post_meta( $ticket_id, '_email_conversation_id', true );
 		$internet_message_id = get_post_meta( $ticket_id, '_email_internet_message_id', true );
 
-		// Build message payload with proper threading
+		// Build message payload with proper threading.
 		$message_payload = $this->build_reply_message(
 			$sender_email,
 			$ticket->post_title,

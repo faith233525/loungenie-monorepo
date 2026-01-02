@@ -1,7 +1,8 @@
 <?php
 /**
- * LounGenie Portal - Email to Ticket Converter
- * Automatically converts incoming emails to support tickets
+ * LounGenie Portal email to ticket converter.
+ *
+ * Automatically converts incoming emails to support tickets.
  *
  * @package LounGenie Portal
  * @version 1.7.0
@@ -11,10 +12,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Email to ticket converter class.
+ */
 class LGP_Email_To_Ticket {
 
 	/**
-	 * Initialize email handler
+	 * Initialize email handler.
+	 *
+	 * @return void
 	 */
 	public static function init() {
 		add_action( 'wp_mail_failed', array( __CLASS__, 'log_email_failure' ) );
@@ -25,8 +31,9 @@ class LGP_Email_To_Ticket {
 	/**
 	 * Ingest a Graph message + attachments and create a ticket.
 	 *
-	 * @param array $message Parsed Graph message
-	 * @param array $attachments Graph attachments array
+	 * @param array $message Parsed Graph message.
+	 * @param array $attachments Graph attachments array.
+	 * @return int|false
 	 */
 	public static function ingest_graph_message( $message, $attachments = array() ) {
 		$parsed = array(
@@ -46,7 +53,7 @@ class LGP_Email_To_Ticket {
 
 		global $wpdb;
 
-		// Idempotency: skip if this email already created a ticket
+		// Idempotency: skip if this email already created a ticket.
 		$internet_id = $message['internetMessageId'] ?? '';
 		if ( ! empty( $internet_id ) ) {
 			$existing_id = $wpdb->get_var(

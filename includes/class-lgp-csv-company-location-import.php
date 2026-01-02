@@ -1,9 +1,10 @@
 <?php
 
 /**
- * CSV Company + Location + Lock Import Handler
- * Enables bulk company, user, location, and lock code upload
- * Creates companies with site/location data and lock information
+ * CSV company + location + lock import handler.
+ *
+ * Enables bulk company, user, location, and lock code upload.
+ * Creates companies with site/location data and lock information.
  *
  * @package LounGenie Portal
  */
@@ -12,13 +13,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * CSV company, location, and lock import class.
+ */
 class LGP_CSV_Company_Location_Import {
 
 
-	const MAX_FILE_SIZE     = 5242880; // 5MB
-	const BATCH_SIZE        = 25; // Process 25 rows per batch
+	const MAX_FILE_SIZE     = 5242880; // 5MB.
+	const BATCH_SIZE        = 25; // Process 25 rows per batch.
 	const ALLOWED_MIME_TYPE = 'text/csv';
-	const MEMORY_LIMIT_MB   = 64; // Memory threshold before chunking
+	const MEMORY_LIMIT_MB   = 64; // Memory threshold before chunking.
 
 	/**
 	 * Required CSV columns
@@ -50,7 +54,9 @@ class LGP_CSV_Company_Location_Import {
 	);
 
 	/**
-	 * Initialize CSV import system
+	 * Initialize CSV import system.
+	 *
+	 * @return void
 	 */
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'add_admin_menu' ) );
@@ -59,7 +65,9 @@ class LGP_CSV_Company_Location_Import {
 	}
 
 	/**
-	 * Add admin menu item
+	 * Add admin menu item.
+	 *
+	 * @return void
 	 */
 	public static function add_admin_menu() {
 		if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'lgp_support' ) ) {

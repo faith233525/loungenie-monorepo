@@ -1,7 +1,8 @@
 <?php
 /**
- * LounGenie Portal - Attachment Handler
- * Manages file attachments with company-specific folders, chunked parsing, and security
+ * LounGenie Portal attachment handler.
+ *
+ * Manages file attachments with company-specific folders, chunked parsing, and security.
  *
  * @package LounGenie Portal
  * @version 1.8.0
@@ -11,11 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Attachment handler class.
+ */
 class LGP_Attachment_Handler {
 
-	const MAX_FILE_SIZE              = 10 * 1024 * 1024; // 10MB per file
+	const MAX_FILE_SIZE              = 10 * 1024 * 1024; // 10MB per file.
 	const MAX_ATTACHMENTS_PER_TICKET = 5;
-	const CHUNK_SIZE                 = 1024 * 1024; // 1MB chunks for parsing
+	const CHUNK_SIZE                 = 1024 * 1024; // 1MB chunks for parsing.
 	const ALLOWED_MIME_TYPES         = array(
 		'image/jpeg',
 		'image/png',
@@ -30,29 +34,33 @@ class LGP_Attachment_Handler {
 	);
 
 	/**
-	 * Initialize attachment handler
+	 * Initialize attachment handler.
+	 *
+	 * @return void
 	 */
 	public static function init() {
-		// Create base attachment directory with security
+		// Create base attachment directory with security.
 		self::ensure_attachment_base_exists();
 
-		// Add .htaccess to prevent direct access to certain files
+		// Add .htaccess to prevent direct access to certain files.
 		self::add_security_files();
 	}
 
 	/**
-	 * Ensure base attachment directory exists with proper protection
+	 * Ensure base attachment directory exists with proper protection.
+	 *
+	 * @return void
 	 */
 	public static function ensure_attachment_base_exists() {
 		$upload_dir = wp_upload_dir();
 		$base_dir   = $upload_dir['basedir'] . '/lgp-attachments';
 
-		// Create directory
+		// Create directory.
 		if ( ! is_dir( $base_dir ) ) {
 			wp_mkdir_p( $base_dir );
 		}
 
-		// Ensure index.php exists to prevent directory listing
+		// Ensure index.php exists to prevent directory listing.
 		if ( ! file_exists( $base_dir . '/index.php' ) ) {
 			file_put_contents(
 				$base_dir . '/index.php',
@@ -62,13 +70,15 @@ class LGP_Attachment_Handler {
 	}
 
 	/**
-	 * Add security files (.htaccess, index.php)
+	 * Add security files (.htaccess, index.php).
+	 *
+	 * @return void
 	 */
 	private static function add_security_files() {
 		$upload_dir = wp_upload_dir();
 		$base_dir   = $upload_dir['basedir'] . '/lgp-attachments';
 
-		// Add .htaccess to prevent script execution
+		// Add .htaccess to prevent script execution.
 		$htaccess_content = <<<'HTACCESS'
 <FilesMatch "\.php$">
     Deny from all
