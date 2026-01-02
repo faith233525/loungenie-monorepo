@@ -14,9 +14,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Internationalization & localization class.
+ * LGP_I18n class.
+ *
+ * Handles multi-language support and translation string registration.
  */
-class LGP_i18n {
+class LGP_I18n {
 
 	const TEXT_DOMAIN = 'loungenie-portal';
 
@@ -29,7 +31,7 @@ class LGP_i18n {
 		// Load plugin translations.
 		add_action( 'plugins_loaded', array( __CLASS__, 'load_plugin_textdomain' ) );
 
-		// Register translation strings for .pot file generation.
+		// Register translation strings for .pot file generation..
 		add_action( 'plugins_loaded', array( __CLASS__, 'register_strings' ) );
 	}
 
@@ -108,7 +110,7 @@ class LGP_i18n {
 		__( 'Notes', 'loungenie-portal' );
 		__( 'Attachment', 'loungenie-portal' );
 
-		// Unit-related
+		// Unit-related.
 		__( 'Unit Color', 'loungenie-portal' );
 		__( 'Lock Brand', 'loungenie-portal' );
 		__( 'Installation Date', 'loungenie-portal' );
@@ -122,20 +124,20 @@ class LGP_i18n {
 		__( 'MAKE', 'loungenie-portal' );
 		__( 'L&F', 'loungenie-portal' );
 
-		// Service request types
+		// Service request types.
 		__( 'Installation', 'loungenie-portal' );
 		__( 'Service', 'loungenie-portal' );
 		__( 'Maintenance', 'loungenie-portal' );
 		__( 'Repair', 'loungenie-portal' );
 		__( 'Update', 'loungenie-portal' );
 
-		// Priority levels
+		// Priority levels.
 		__( 'Low', 'loungenie-portal' );
 		__( 'Medium', 'loungenie-portal' );
 		__( 'High', 'loungenie-portal' );
 		__( 'Urgent', 'loungenie-portal' );
 
-		// Error & success messages
+		// Error & success messages.
 		__( 'Error', 'loungenie-portal' );
 		__( 'Success', 'loungenie-portal' );
 		__( 'Warning', 'loungenie-portal' );
@@ -146,7 +148,7 @@ class LGP_i18n {
 		__( 'You do not have permission to access this resource.', 'loungenie-portal' );
 		__( 'Not found.', 'loungenie-portal' );
 
-		// Authentication
+		// Authentication.
 		__( 'Login', 'loungenie-portal' );
 		__( 'Logout', 'loungenie-portal' );
 		__( 'Sign in with Microsoft', 'loungenie-portal' );
@@ -157,7 +159,7 @@ class LGP_i18n {
 		__( 'Invalid credentials.', 'loungenie-portal' );
 		__( 'Session expired. Please log in again.', 'loungenie-portal' );
 
-		// Dashboard
+		// Dashboard.
 		__( 'Welcome', 'loungenie-portal' );
 		__( 'Dashboard', 'loungenie-portal' );
 		__( 'Overview', 'loungenie-portal' );
@@ -168,7 +170,7 @@ class LGP_i18n {
 		__( 'Open Tickets', 'loungenie-portal' );
 		__( 'Pending Requests', 'loungenie-portal' );
 
-		// Tickets
+		// Tickets.
 		__( 'Ticket', 'loungenie-portal' );
 		__( 'New Ticket', 'loungenie-portal' );
 		__( 'Ticket Details', 'loungenie-portal' );
@@ -178,7 +180,7 @@ class LGP_i18n {
 		__( 'Close Ticket', 'loungenie-portal' );
 		__( 'Reopen Ticket', 'loungenie-portal' );
 
-		// Admin tools
+		// Admin tools.
 		__( 'System Health', 'loungenie-portal' );
 		__( 'Security Log', 'loungenie-portal' );
 		__( 'Query Performance', 'loungenie-portal' );
@@ -186,7 +188,7 @@ class LGP_i18n {
 		__( 'Database Migrations', 'loungenie-portal' );
 		__( 'Environment Config', 'loungenie-portal' );
 
-		// Integration labels
+		// Integration labels.
 		__( 'HubSpot Integration', 'loungenie-portal' );
 		__( 'Microsoft 365 SSO', 'loungenie-portal' );
 		__( 'Microsoft Outlook Integration', 'loungenie-portal' );
@@ -204,11 +206,11 @@ class LGP_i18n {
 	}
 
 	/**
-	 * Get translated string with fallback
+	 * Get translated string with fallback.
 	 *
-	 * @param string $string String to translate
-	 * @param string $context Optional context
-	 * @return string Translated string
+	 * @param string $string String to translate.
+	 * @param string $context Optional context.
+	 * @return string Translated string.
 	 */
 	public static function get_string( $string, $context = '' ) {
 		if ( ! empty( $context ) ) {
@@ -218,11 +220,11 @@ class LGP_i18n {
 	}
 
 	/**
-	 * Echo translated string
+	 * Echo translated string.
 	 *
-	 * @param string $string String to translate
-	 * @param string $context Optional context
-	 */
+	 * @param string $string String to translate.
+	 * @param string $context Optional context.
+	 * @return void
 	public static function echo_string( $string, $context = '' ) {
 		if ( ! empty( $context ) ) {
 			_ex( $string, $context, self::TEXT_DOMAIN );
@@ -232,13 +234,13 @@ class LGP_i18n {
 	}
 
 	/**
-	 * Get translated plural string
+	 * Get translated plural string.
 	 *
-	 * @param string $singular Singular form
-	 * @param string $plural Plural form
-	 * @param int    $count Count
-	 * @param string $context Optional context
-	 * @return string Translated string
+	 * @param string $singular Singular form.
+	 * @param string $plural Plural form.
+	 * @param int    $count Count.
+	 * @param string $context Optional context.
+	 * @return string Translated string.
 	 */
 	public static function get_plural( $singular, $plural, $count, $context = '' ) {
 		if ( ! empty( $context ) ) {
