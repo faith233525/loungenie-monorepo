@@ -59,7 +59,7 @@ $where_sql = implode( ' AND ', $where_clauses );
 
 // Fetch units only if table exists; otherwise show empty list.
 if ( strtolower( (string) $units_table_exists ) === strtolower( $units_table ) ) {
-	$query = "SELECT u.*, c.name as company_name FROM " . esc_sql( $units_table ) . " u LEFT JOIN " . esc_sql( $companies_table ) . " c ON u.company_id = c.id WHERE " . esc_sql( $where_sql ) . " ORDER BY u.created_at DESC LIMIT %d";
+	$query = 'SELECT u.*, c.name as company_name FROM ' . esc_sql( $units_table ) . ' u LEFT JOIN ' . esc_sql( $companies_table ) . ' c ON u.company_id = c.id WHERE ' . esc_sql( $where_sql ) . ' ORDER BY u.created_at DESC LIMIT %d';
 	$units = $wpdb->get_results( $wpdb->prepare( $query, 100 ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 } else {
 	$units = array();

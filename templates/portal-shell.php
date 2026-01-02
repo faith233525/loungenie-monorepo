@@ -11,10 +11,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$is_support         = LGP_Auth::is_support();
-$is_partner         = LGP_Auth::is_partner();
-$section            = get_query_var( 'lgp_section', 'dashboard' );
-$current_user_obj   = wp_get_current_user();
+$is_support       = LGP_Auth::is_support();
+$is_partner       = LGP_Auth::is_partner();
+$section          = get_query_var( 'lgp_section', 'dashboard' );
+$current_user_obj = wp_get_current_user();
 
 // Determine which dashboard to load.
 $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner.php';
@@ -42,7 +42,7 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 		<!-- Logo with Hover Effects -->
 		<div class="lgp-logo" role="img" aria-label="<?php esc_attr_e( 'LounGenie Portal Logo', 'loungenie-portal' ); ?>">
 				<?php
-		// Check for WordPress custom logo.
+				// Check for WordPress custom logo.
 				$logo_url = get_option( 'lgp_custom_logo_url' );
 				if ( ! $logo_url && has_custom_logo() ) {
 					$custom_logo_id = get_theme_mod( 'custom_logo' );

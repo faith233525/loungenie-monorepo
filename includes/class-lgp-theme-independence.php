@@ -10,55 +10,53 @@
  * @since 2.0.0
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class LGP_Theme_Independence
-{
+class LGP_Theme_Independence {
+
 
 	/**
 	 * Initialize theme independence
 	 */
-	public static function init()
-	{
+	public static function init() {
 		// Remove theme dependencies
-		add_action('template_redirect', array(__CLASS__, 'intercept_portal_requests'), 1);
+		add_action( 'template_redirect', array( __CLASS__, 'intercept_portal_requests' ), 1 );
 
 		// Login redirects for portal roles
-		add_filter('login_redirect', array(__CLASS__, 'portal_login_redirect'), 10, 3);
+		add_filter( 'login_redirect', array( __CLASS__, 'portal_login_redirect' ), 10, 3 );
 
 		// Hide admin bar for portal roles
-		add_filter('show_admin_bar', array(__CLASS__, 'hide_admin_bar_for_portal_roles'), 20);
+		add_filter( 'show_admin_bar', array( __CLASS__, 'hide_admin_bar_for_portal_roles' ), 20 );
 
 		// Remove admin bar completely for portal roles
-		add_action('init', array(__CLASS__, 'disable_admin_bar_for_portal_roles'));
+		add_action( 'init', array( __CLASS__, 'disable_admin_bar_for_portal_roles' ) );
 
 		// Block wp-admin access for portal roles
-		add_action('admin_init', array(__CLASS__, 'block_wp_admin_access'));
+		add_action( 'admin_init', array( __CLASS__, 'block_wp_admin_access' ) );
 
 		// Enqueue plugin-controlled assets only
-		add_action('wp_enqueue_scripts', array(__CLASS__, 'enqueue_portal_assets'), 999);
+		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_portal_assets' ), 999 );
 
 		// Inject dynamic theme colors (Rule 7 compliance: WordPress theme inheritance)
-		add_action('wp_head', array(__CLASS__, 'inject_theme_colors'), 5);
+		add_action( 'wp_head', array( __CLASS__, 'inject_theme_colors' ), 5 );
 
 		// Invalidate color cache when theme switches
-		add_action('switch_theme', array(__CLASS__, 'invalidate_color_cache'));
+		add_action( 'switch_theme', array( __CLASS__, 'invalidate_color_cache' ) );
 	}
 
 	/**
 	 * Intercept portal page requests and render with plugin template
 	 */
-	public static function intercept_portal_requests()
-	{
+	public static function intercept_portal_requests() {
 		global $wp;
 
 		// Check if this is a portal request
-		$portal_slugs = array('portal', 'partner-portal', 'support-portal');
+		$portal_slugs = array( 'portal', 'partner-portal', 'support-portal' );
 
-		foreach ($portal_slugs as $slug) {
-			if (isset($wp->query_vars['pagename']) && $wp->query_vars['pagename'] === $slug) {
+		foreach ( $portal_slugs as $slug ) {
+			if ( isset( $wp->query_vars['pagename'] ) && $wp->query_vars['pagename'] === $slug ) {
 				self::render_portal_shell();
 				exit;
 			}
@@ -68,38 +66,37 @@ class LGP_Theme_Independence
 	/**
 	 * Render portal with plugin's own shell (no theme)
 	 */
-	public static function render_portal_shell()
-	{
+	public static function render_portal_shell() {
 		// Verify user access
-		if (! is_user_logged_in()) {
-			wp_safe_redirect(wp_login_url(home_url('/portal')));
+		if ( ! is_user_logged_in() ) {
+			wp_safe_redirect( wp_login_url( home_url( '/portal' ) ) );
 			exit;
 		}
 
 		$user = wp_get_current_user();
 
 		// Check if user has portal access
-		$portal_roles = array('lg_partner', 'lg_support', 'administrator');
+		$portal_roles = array( 'lg_partner', 'lg_support', 'administrator' );
 		$has_access   = false;
 
-		foreach ($portal_roles as $role) {
-			if (in_array($role, $user->roles, true)) {
+		foreach ( $portal_roles as $role ) {
+			if ( in_array( $role, $user->roles, true ) ) {
 				$has_access = true;
 				break;
 			}
 		}
 
-		if (! $has_access) {
-			wp_die(esc_html__('You do not have permission to access the portal.', 'loungenie-portal'));
+		if ( ! $has_access ) {
+			wp_die( esc_html__( 'You do not have permission to access the portal.', 'loungenie-portal' ) );
 		}
 
 		// Load portal shell template (theme-independent)
 		$template_path = LGP_PLUGIN_DIR . 'templates/portal-shell.php';
 
-		if (file_exists($template_path)) {
+		if ( file_exists( $template_path ) ) {
 			include $template_path;
 		} else {
-			wp_die(esc_html__('Portal template not found.', 'loungenie-portal'));
+			wp_die( esc_html__( 'Portal template not found.', 'loungenie-portal' ) );
 		}
 	}
 
@@ -111,20 +108,19 @@ class LGP_Theme_Independence
 	 * @param WP_User|WP_Error $user User object or error.
 	 * @return string Redirect URL.
 	 */
-	public static function portal_login_redirect($redirect_to, $request, $user)
-	{
+	public static function portal_login_redirect( $redirect_to, $request, $user ) {
 		// Check if user object is valid
-		if (! isset($user->ID) || ! isset($user->roles)) {
+		if ( ! isset( $user->ID ) || ! isset( $user->roles ) ) {
 			return $redirect_to;
 		}
 
 		// Portal roles that should bypass wp-admin
-		$portal_roles = array('lg_partner', 'lg_support');
+		$portal_roles = array( 'lg_partner', 'lg_support' );
 
 		// Check if user has a portal role
-		foreach ($portal_roles as $role) {
-			if (in_array($role, $user->roles, true)) {
-				return home_url('/portal');
+		foreach ( $portal_roles as $role ) {
+			if ( in_array( $role, $user->roles, true ) ) {
+				return home_url( '/portal' );
 			}
 		}
 
@@ -137,17 +133,16 @@ class LGP_Theme_Independence
 	 * @param bool $show_admin_bar Whether to show admin bar.
 	 * @return bool
 	 */
-	public static function hide_admin_bar_for_portal_roles($show_admin_bar)
-	{
-		if (! is_user_logged_in()) {
+	public static function hide_admin_bar_for_portal_roles( $show_admin_bar ) {
+		if ( ! is_user_logged_in() ) {
 			return $show_admin_bar;
 		}
 
 		$user         = wp_get_current_user();
-		$portal_roles = array('lg_partner', 'lg_support');
+		$portal_roles = array( 'lg_partner', 'lg_support' );
 
-		foreach ($portal_roles as $role) {
-			if (in_array($role, $user->roles, true)) {
+		foreach ( $portal_roles as $role ) {
+			if ( in_array( $role, $user->roles, true ) ) {
 				return false;
 			}
 		}
@@ -158,19 +153,18 @@ class LGP_Theme_Independence
 	/**
 	 * Disable admin bar completely for portal roles
 	 */
-	public static function disable_admin_bar_for_portal_roles()
-	{
-		if (! is_user_logged_in()) {
+	public static function disable_admin_bar_for_portal_roles() {
+		if ( ! is_user_logged_in() ) {
 			return;
 		}
 
 		$user         = wp_get_current_user();
-		$portal_roles = array('lg_partner', 'lg_support');
+		$portal_roles = array( 'lg_partner', 'lg_support' );
 
-		foreach ($portal_roles as $role) {
-			if (in_array($role, $user->roles, true)) {
-				add_filter('show_admin_bar', '__return_false');
-				remove_action('wp_head', '_admin_bar_bump_cb');
+		foreach ( $portal_roles as $role ) {
+			if ( in_array( $role, $user->roles, true ) ) {
+				add_filter( 'show_admin_bar', '__return_false' );
+				remove_action( 'wp_head', '_admin_bar_bump_cb' );
 				break;
 			}
 		}
@@ -179,23 +173,22 @@ class LGP_Theme_Independence
 	/**
 	 * Block wp-admin access for portal roles
 	 */
-	public static function block_wp_admin_access()
-	{
-		if (! is_user_logged_in()) {
+	public static function block_wp_admin_access() {
+		if ( ! is_user_logged_in() ) {
 			return;
 		}
 
 		// Allow AJAX requests
-		if (defined('DOING_AJAX') && DOING_AJAX) {
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			return;
 		}
 
 		$user         = wp_get_current_user();
-		$portal_roles = array('lg_partner', 'lg_support');
+		$portal_roles = array( 'lg_partner', 'lg_support' );
 
-		foreach ($portal_roles as $role) {
-			if (in_array($role, $user->roles, true)) {
-				wp_safe_redirect(home_url('/portal'));
+		foreach ( $portal_roles as $role ) {
+			if ( in_array( $role, $user->roles, true ) ) {
+				wp_safe_redirect( home_url( '/portal' ) );
 				exit;
 			}
 		}
@@ -204,20 +197,19 @@ class LGP_Theme_Independence
 	/**
 	 * Enqueue plugin-controlled assets (override theme)
 	 */
-	public static function enqueue_portal_assets()
-	{
+	public static function enqueue_portal_assets() {
 		// Only on portal pages
-		if (! self::is_portal_page()) {
+		if ( ! self::is_portal_page() ) {
 			return;
 		}
 
 		// Remove theme styles on portal pages
 		global $wp_styles;
-		if (isset($wp_styles->queue)) {
-			foreach ($wp_styles->queue as $handle) {
+		if ( isset( $wp_styles->queue ) ) {
+			foreach ( $wp_styles->queue as $handle ) {
 				// Remove theme stylesheets but keep essential WordPress styles
-				if (strpos($handle, 'theme') !== false || strpos($handle, get_template()) !== false) {
-					wp_dequeue_style($handle);
+				if ( strpos( $handle, 'theme' ) !== false || strpos( $handle, get_template() ) !== false ) {
+					wp_dequeue_style( $handle );
 				}
 			}
 		}
@@ -234,7 +226,7 @@ class LGP_Theme_Independence
 		wp_enqueue_style(
 			'lgp-portal-shell',
 			LGP_ASSETS_URL . 'css/portal-shell.css',
-			array('lgp-core-tokens'),
+			array( 'lgp-core-tokens' ),
 			LGP_VERSION
 		);
 	}
@@ -244,14 +236,13 @@ class LGP_Theme_Independence
 	 *
 	 * @return bool
 	 */
-	private static function is_portal_page()
-	{
+	private static function is_portal_page() {
 		global $wp;
 
-		$portal_slugs = array('portal', 'partner-portal', 'support-portal');
+		$portal_slugs = array( 'portal', 'partner-portal', 'support-portal' );
 
-		if (isset($wp->query_vars['pagename'])) {
-			return in_array($wp->query_vars['pagename'], $portal_slugs, true);
+		if ( isset( $wp->query_vars['pagename'] ) ) {
+			return in_array( $wp->query_vars['pagename'], $portal_slugs, true );
 		}
 
 		return false;
@@ -261,18 +252,17 @@ class LGP_Theme_Independence
 	 * Inject dynamic theme colors into wp_head (Rule 7 Compliance)
 	 * Detects active WordPress theme colors and applies them to portal
 	 */
-	public static function inject_theme_colors()
-	{
+	public static function inject_theme_colors() {
 		// Only on portal pages
-		if (! self::is_portal_page()) {
+		if ( ! self::is_portal_page() ) {
 			return;
 		}
 
 		$theme_colors = self::get_active_theme_colors();
-		$css          = self::generate_portal_color_css($theme_colors);
+		$css          = self::generate_portal_color_css( $theme_colors );
 
-		if (! empty($css)) {
-			echo '<style id="lgp-theme-colors">' . wp_kses_post($css) . '</style>';
+		if ( ! empty( $css ) ) {
+			echo '<style id="lgp-theme-colors">' . wp_kses_post( $css ) . '</style>';
 		}
 	}
 
@@ -282,11 +272,10 @@ class LGP_Theme_Independence
 	 *
 	 * @return array Theme colors with fallbacks
 	 */
-	private static function get_active_theme_colors()
-	{
+	private static function get_active_theme_colors() {
 		// Try to get cached colors (24 hour TTL)
-		$cached = get_transient('lgp_theme_colors');
-		if (! empty($cached) && is_array($cached)) {
+		$cached = get_transient( 'lgp_theme_colors' );
+		if ( ! empty( $cached ) && is_array( $cached ) ) {
 			return $cached;
 		}
 
@@ -294,41 +283,41 @@ class LGP_Theme_Independence
 
 		// Step 1: Try theme.json (block themes - WordPress 5.9+)
 		$theme_json_file = get_template_directory() . '/theme.json';
-		if (file_exists($theme_json_file)) {
-			$json = json_decode(file_get_contents($theme_json_file), true);
-			if (! empty($json['settings']['color']['palette'])) {
-				foreach ($json['settings']['color']['palette'] as $color) {
-					if (! empty($color['slug']) && ! empty($color['color'])) {
-						$colors[$color['slug']] = $color['color'];
+		if ( file_exists( $theme_json_file ) ) {
+			$json = json_decode( file_get_contents( $theme_json_file ), true );
+			if ( ! empty( $json['settings']['color']['palette'] ) ) {
+				foreach ( $json['settings']['color']['palette'] as $color ) {
+					if ( ! empty( $color['slug'] ) && ! empty( $color['color'] ) ) {
+						$colors[ $color['slug'] ] = $color['color'];
 					}
 				}
 			}
 		}
 
 		// Step 2: Try Customizer colors (classic themes)
-		if (empty($colors)) {
+		if ( empty( $colors ) ) {
 			$colors = array(
-				'primary'   => get_theme_mod('primary_color', '#2271b1'),
-				'secondary' => get_theme_mod('secondary_color', '#135e96'),
+				'primary'   => get_theme_mod( 'primary_color', '#2271b1' ),
+				'secondary' => get_theme_mod( 'secondary_color', '#135e96' ),
 			);
 		}
 
 		// Step 3: Fallback to Twenty Twenty-Three defaults
-		if (empty($colors['primary'])) {
+		if ( empty( $colors['primary'] ) ) {
 			$colors['primary'] = '#2271b1';
 		}
-		if (empty($colors['secondary'])) {
+		if ( empty( $colors['secondary'] ) ) {
 			$colors['secondary'] = '#135e96';
 		}
-		if (empty($colors['background'])) {
+		if ( empty( $colors['background'] ) ) {
 			$colors['background'] = '#ffffff';
 		}
-		if (empty($colors['text'])) {
+		if ( empty( $colors['text'] ) ) {
 			$colors['text'] = '#1e1e1e';
 		}
 
 		// Cache for 24 hours
-		set_transient('lgp_theme_colors', $colors, 24 * HOUR_IN_SECONDS);
+		set_transient( 'lgp_theme_colors', $colors, 24 * HOUR_IN_SECONDS );
 
 		return $colors;
 	}
@@ -339,49 +328,48 @@ class LGP_Theme_Independence
 	 * @param array $colors Theme colors.
 	 * @return string CSS rules
 	 */
-	private static function generate_portal_color_css($colors)
-	{
-		$primary   = sanitize_hex_color($colors['primary'] ?? '#2271b1');
-		$secondary = sanitize_hex_color($colors['secondary'] ?? '#135e96');
-		$bg        = sanitize_hex_color($colors['background'] ?? '#ffffff');
-		$text      = sanitize_hex_color($colors['text'] ?? '#1e1e1e');
+	private static function generate_portal_color_css( $colors ) {
+		$primary   = sanitize_hex_color( $colors['primary'] ?? '#2271b1' );
+		$secondary = sanitize_hex_color( $colors['secondary'] ?? '#135e96' );
+		$bg        = sanitize_hex_color( $colors['background'] ?? '#ffffff' );
+		$text      = sanitize_hex_color( $colors['text'] ?? '#1e1e1e' );
 
 		$css = ':root {
-			--lgp-primary: ' . esc_attr($primary) . ';
-			--lgp-secondary: ' . esc_attr($secondary) . ';
-			--lgp-background: ' . esc_attr($bg) . ';
-			--lgp-text: ' . esc_attr($text) . ';
-			--wp-primary-theme-color: ' . esc_attr($primary) . ';
-			--wp-secondary-theme-color: ' . esc_attr($secondary) . ';
+			--lgp-primary: ' . esc_attr( $primary ) . ';
+			--lgp-secondary: ' . esc_attr( $secondary ) . ';
+			--lgp-background: ' . esc_attr( $bg ) . ';
+			--lgp-text: ' . esc_attr( $text ) . ';
+			--wp-primary-theme-color: ' . esc_attr( $primary ) . ';
+			--wp-secondary-theme-color: ' . esc_attr( $secondary ) . ';
 		}
 		
 		.button, .button-primary {
-			background-color: ' . esc_attr($primary) . ' !important;
+			background-color: ' . esc_attr( $primary ) . ' !important;
 			color: white;
-			border-color: ' . esc_attr($primary) . ' !important;
+			border-color: ' . esc_attr( $primary ) . ' !important;
 		}
 		
 		.button:hover, .button-primary:hover {
-			background-color: ' . esc_attr($secondary) . ' !important;
-			border-color: ' . esc_attr($secondary) . ' !important;
+			background-color: ' . esc_attr( $secondary ) . ' !important;
+			border-color: ' . esc_attr( $secondary ) . ' !important;
 		}
 		
 		.button-secondary {
-			background-color: ' . esc_attr($secondary) . ' !important;
+			background-color: ' . esc_attr( $secondary ) . ' !important;
 			color: white;
-			border-color: ' . esc_attr($secondary) . ' !important;
+			border-color: ' . esc_attr( $secondary ) . ' !important;
 		}
 		
 		a, .lgp-nav-link:not(.active) {
-			color: ' . esc_attr($primary) . ';
+			color: ' . esc_attr( $primary ) . ';
 		}
 		
 		a:hover, .lgp-nav-link:not(.active):hover {
-			color: ' . esc_attr($secondary) . ';
+			color: ' . esc_attr( $secondary ) . ';
 		}
 		
 		.lgp-nav-link.active, .lgp-button-active {
-			background-color: ' . esc_attr($primary) . ' !important;
+			background-color: ' . esc_attr( $primary ) . ' !important;
 			color: white;
 		}';
 
@@ -391,9 +379,8 @@ class LGP_Theme_Independence
 	/**
 	 * Invalidate theme color cache when theme switches
 	 */
-	public static function invalidate_color_cache()
-	{
-		delete_transient('lgp_theme_colors');
+	public static function invalidate_color_cache() {
+		delete_transient( 'lgp_theme_colors' );
 	}
 }
 

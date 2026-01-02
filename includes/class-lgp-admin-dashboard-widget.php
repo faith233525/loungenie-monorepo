@@ -7,39 +7,37 @@
  * @package LounGenie_Portal
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
  * Admin Dashboard Widget Class
  */
-class LGP_Admin_Dashboard_Widget
-{
+class LGP_Admin_Dashboard_Widget {
+
 
 	/**
 	 * Initialize dashboard widget
 	 */
-	public static function init()
-	{
-		add_action('wp_dashboard_setup', array(__CLASS__, 'register_widget'));
-		add_action('admin_enqueue_scripts', array(__CLASS__, 'enqueue_widget_styles'));
+	public static function init() {
+		add_action( 'wp_dashboard_setup', array( __CLASS__, 'register_widget' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_widget_styles' ) );
 	}
 
 	/**
 	 * Register dashboard widget
 	 */
-	public static function register_widget()
-	{
+	public static function register_widget() {
 		// Only show to users who can manage portal
-		if (! current_user_can('manage_options')) {
+		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
 
 		wp_add_dashboard_widget(
 			'lgp_portal_health_widget',
-			__('LounGenie Portal Health', 'loungenie-portal'),
-			array(__CLASS__, 'render_widget')
+			__( 'LounGenie Portal Health', 'loungenie-portal' ),
+			array( __CLASS__, 'render_widget' )
 		);
 	}
 
@@ -48,9 +46,8 @@ class LGP_Admin_Dashboard_Widget
 	 *
 	 * @param string $hook Current admin page hook.
 	 */
-	public static function enqueue_widget_styles($hook)
-	{
-		if ('index.php' !== $hook) {
+	public static function enqueue_widget_styles( $hook ) {
+		if ( 'index.php' !== $hook ) {
 			return;
 		}
 
@@ -81,8 +78,7 @@ class LGP_Admin_Dashboard_Widget
 	/**
 	 * Render dashboard widget
 	 */
-	public static function render_widget()
-	{
+	public static function render_widget() {
 		global $wpdb;
 
 		// Get portal statistics
@@ -91,34 +87,34 @@ class LGP_Admin_Dashboard_Widget
 		// Get health indicators
 		$health = self::get_health_indicators();
 
-?>
+		?>
 		<div class="lgp-widget-container">
 			<!-- Quick Stats -->
 			<div class="lgp-stats-grid">
 				<div class="lgp-stat-card">
-					<span class="lgp-stat-value"><?php echo esc_html(number_format($stats['total_tickets'])); ?></span>
-					<span class="lgp-stat-label"><?php esc_html_e('Total Tickets', 'loungenie-portal'); ?></span>
+					<span class="lgp-stat-value"><?php echo esc_html( number_format( $stats['total_tickets'] ) ); ?></span>
+					<span class="lgp-stat-label"><?php esc_html_e( 'Total Tickets', 'loungenie-portal' ); ?></span>
 				</div>
 				<div class="lgp-stat-card">
-					<span class="lgp-stat-value"><?php echo esc_html(number_format($stats['open_tickets'])); ?></span>
-					<span class="lgp-stat-label"><?php esc_html_e('Open Tickets', 'loungenie-portal'); ?></span>
+					<span class="lgp-stat-value"><?php echo esc_html( number_format( $stats['open_tickets'] ) ); ?></span>
+					<span class="lgp-stat-label"><?php esc_html_e( 'Open Tickets', 'loungenie-portal' ); ?></span>
 				</div>
 				<div class="lgp-stat-card">
-					<span class="lgp-stat-value"><?php echo esc_html(number_format($stats['total_units'])); ?></span>
-					<span class="lgp-stat-label"><?php esc_html_e('Total Units', 'loungenie-portal'); ?></span>
+					<span class="lgp-stat-value"><?php echo esc_html( number_format( $stats['total_units'] ) ); ?></span>
+					<span class="lgp-stat-label"><?php esc_html_e( 'Total Units', 'loungenie-portal' ); ?></span>
 				</div>
 				<div class="lgp-stat-card">
-					<span class="lgp-stat-value"><?php echo esc_html(number_format($stats['total_companies'])); ?></span>
-					<span class="lgp-stat-label"><?php esc_html_e('Companies', 'loungenie-portal'); ?></span>
+					<span class="lgp-stat-value"><?php echo esc_html( number_format( $stats['total_companies'] ) ); ?></span>
+					<span class="lgp-stat-label"><?php esc_html_e( 'Companies', 'loungenie-portal' ); ?></span>
 				</div>
 			</div>
 
 			<!-- Health Indicators -->
 			<div class="lgp-health-indicators">
-				<?php foreach ($health as $indicator) : ?>
+				<?php foreach ( $health as $indicator ) : ?>
 					<div class="lgp-indicator">
-						<span class="lgp-indicator-dot <?php echo esc_attr($indicator['status']); ?>"></span>
-						<span><?php echo esc_html($indicator['label']); ?></span>
+						<span class="lgp-indicator-dot <?php echo esc_attr( $indicator['status'] ); ?>"></span>
+						<span><?php echo esc_html( $indicator['label'] ); ?></span>
 					</div>
 				<?php endforeach; ?>
 			</div>
@@ -127,27 +123,27 @@ class LGP_Admin_Dashboard_Widget
 			<div>
 				<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
 					<span style="font-size: 13px; color: #646970;">
-						<?php esc_html_e('System Performance', 'loungenie-portal'); ?>
+						<?php esc_html_e( 'System Performance', 'loungenie-portal' ); ?>
 					</span>
 					<span style="font-size: 12px; color: #646970;">
-						<?php echo esc_html($stats['performance_score']); ?>%
+						<?php echo esc_html( $stats['performance_score'] ); ?>%
 					</span>
 				</div>
 				<div class="lgp-performance-bar">
-					<div class="lgp-performance-fill" style="width: <?php echo esc_attr($stats['performance_score']); ?>%;"></div>
+					<div class="lgp-performance-fill" style="width: <?php echo esc_attr( $stats['performance_score'] ); ?>%;"></div>
 				</div>
 			</div>
 
 			<!-- Quick Actions -->
 			<div class="lgp-widget-actions">
-				<a href="<?php echo esc_url(admin_url('admin.php?page=lgp-dashboard')); ?>" class="button button-primary">
-					<?php esc_html_e('View Portal', 'loungenie-portal'); ?>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=lgp-dashboard' ) ); ?>" class="button button-primary">
+					<?php esc_html_e( 'View Portal', 'loungenie-portal' ); ?>
 				</a>
-				<a href="<?php echo esc_url(admin_url('tools.php?page=lgp-system-health')); ?>" class="button">
-					<?php esc_html_e('System Health', 'loungenie-portal'); ?>
+				<a href="<?php echo esc_url( admin_url( 'tools.php?page=lgp-system-health' ) ); ?>" class="button">
+					<?php esc_html_e( 'System Health', 'loungenie-portal' ); ?>
 				</a>
-				<a href="<?php echo esc_url(admin_url('options-general.php?page=lgp-settings')); ?>" class="button">
-					<?php esc_html_e('Settings', 'loungenie-portal'); ?>
+				<a href="<?php echo esc_url( admin_url( 'options-general.php?page=lgp-settings' ) ); ?>" class="button">
+					<?php esc_html_e( 'Settings', 'loungenie-portal' ); ?>
 				</a>
 			</div>
 		</div>
@@ -155,14 +151,14 @@ class LGP_Admin_Dashboard_Widget
 		<div class="lgp-widget-footer">
 			<?php
 			/* translators: %s: Version number */
-			printf(esc_html__('LounGenie Portal v%s', 'loungenie-portal'), esc_html(LGP_VERSION));
+			printf( esc_html__( 'LounGenie Portal v%s', 'loungenie-portal' ), esc_html( LGP_VERSION ) );
 			?>
 			|
-			<a href="<?php echo esc_url(home_url('/portal/')); ?>" target="_blank">
-				<?php esc_html_e('Visit Portal', 'loungenie-portal'); ?>
+			<a href="<?php echo esc_url( home_url( '/portal/' ) ); ?>" target="_blank">
+				<?php esc_html_e( 'Visit Portal', 'loungenie-portal' ); ?>
 			</a>
 		</div>
-<?php
+		<?php
 	}
 
 	/**
@@ -170,15 +166,14 @@ class LGP_Admin_Dashboard_Widget
 	 *
 	 * @return array Statistics array.
 	 */
-	private static function get_portal_stats()
-	{
+	private static function get_portal_stats() {
 		global $wpdb;
 
 		// Get cached stats (5 minute cache)
 		$cache_key = 'lgp_dashboard_widget_stats';
-		$stats     = get_transient($cache_key);
+		$stats     = get_transient( $cache_key );
 
-		if (false !== $stats) {
+		if ( false !== $stats ) {
 			return $stats;
 		}
 
@@ -195,8 +190,8 @@ class LGP_Admin_Dashboard_Widget
 		);
 
 		// Get ticket counts
-		if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $tickets_table)) === $tickets_table) {
-			$stats['total_tickets'] = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$tickets_table}");
+		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $tickets_table ) ) === $tickets_table ) {
+			$stats['total_tickets'] = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$tickets_table}" );
 			$stats['open_tickets']  = (int) $wpdb->get_var(
 				$wpdb->prepare(
 					"SELECT COUNT(*) FROM {$tickets_table} WHERE status IN (%s, %s)",
@@ -207,25 +202,25 @@ class LGP_Admin_Dashboard_Widget
 		}
 
 		// Get unit count
-		if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $units_table)) === $units_table) {
-			$stats['total_units'] = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$units_table}");
+		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $units_table ) ) === $units_table ) {
+			$stats['total_units'] = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$units_table}" );
 		}
 
 		// Get company count
-		if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $companies_table)) === $companies_table) {
-			$stats['total_companies'] = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$companies_table}");
+		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $companies_table ) ) === $companies_table ) {
+			$stats['total_companies'] = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$companies_table}" );
 		}
 
 		// Calculate performance score (simple heuristic)
-		$memory_limit       = ini_get('memory_limit');
-		$memory_limit_bytes = wp_convert_hr_to_bytes($memory_limit);
-		$memory_usage       = memory_get_usage(true);
-		$memory_percentage  = ($memory_usage / $memory_limit_bytes) * 100;
+		$memory_limit       = ini_get( 'memory_limit' );
+		$memory_limit_bytes = wp_convert_hr_to_bytes( $memory_limit );
+		$memory_usage       = memory_get_usage( true );
+		$memory_percentage  = ( $memory_usage / $memory_limit_bytes ) * 100;
 
-		$stats['performance_score'] = max(0, min(100, 100 - ($memory_percentage / 2)));
+		$stats['performance_score'] = max( 0, min( 100, 100 - ( $memory_percentage / 2 ) ) );
 
 		// Cache for 5 minutes
-		set_transient($cache_key, $stats, 5 * MINUTE_IN_SECONDS);
+		set_transient( $cache_key, $stats, 5 * MINUTE_IN_SECONDS );
 
 		return $stats;
 	}
@@ -235,39 +230,38 @@ class LGP_Admin_Dashboard_Widget
 	 *
 	 * @return array Health indicators array.
 	 */
-	private static function get_health_indicators()
-	{
+	private static function get_health_indicators() {
 		$indicators = array();
 
 		// Database connection
 		global $wpdb;
-		$db_status              = $wpdb->check_connection(false) ? 'green' : 'red';
+		$db_status              = $wpdb->check_connection( false ) ? 'green' : 'red';
 		$indicators['database'] = array(
-			'label'  => __('Database', 'loungenie-portal'),
+			'label'  => __( 'Database', 'loungenie-portal' ),
 			'status' => $db_status,
 		);
 
 		// Memory status
-		$memory_limit         = ini_get('memory_limit');
+		$memory_limit         = ini_get( 'memory_limit' );
 		$memory_limit_mb      = (int) $memory_limit;
-		$memory_status        = $memory_limit_mb >= 128 ? 'green' : ($memory_limit_mb >= 64 ? 'yellow' : 'red');
+		$memory_status        = $memory_limit_mb >= 128 ? 'green' : ( $memory_limit_mb >= 64 ? 'yellow' : 'red' );
 		$indicators['memory'] = array(
-			'label'  => sprintf(__('Memory: %s', 'loungenie-portal'), $memory_limit),
+			'label'  => sprintf( __( 'Memory: %s', 'loungenie-portal' ), $memory_limit ),
 			'status' => $memory_status,
 		);
 
 		// Cache status
-		$cache_working       = wp_cache_get('test') !== false || wp_cache_set('test', 'test', '', 60);
+		$cache_working       = wp_cache_get( 'test' ) !== false || wp_cache_set( 'test', 'test', '', 60 );
 		$indicators['cache'] = array(
-			'label'  => __('Cache', 'loungenie-portal'),
+			'label'  => __( 'Cache', 'loungenie-portal' ),
 			'status' => $cache_working ? 'green' : 'yellow',
 		);
 
 		// PHP version
 		$php_version       = PHP_VERSION;
-		$php_status        = version_compare($php_version, '8.0', '>=') ? 'green' : (version_compare($php_version, '7.4', '>=') ? 'yellow' : 'red');
+		$php_status        = version_compare( $php_version, '8.0', '>=' ) ? 'green' : ( version_compare( $php_version, '7.4', '>=' ) ? 'yellow' : 'red' );
 		$indicators['php'] = array(
-			'label'  => sprintf(__('PHP %s', 'loungenie-portal'), PHP_VERSION),
+			'label'  => sprintf( __( 'PHP %s', 'loungenie-portal' ), PHP_VERSION ),
 			'status' => $php_status,
 		);
 
