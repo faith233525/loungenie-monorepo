@@ -41,7 +41,10 @@ class LGP_Shared_Mailbox {
 	}
 
 	/**
-	 * Get Graph client configured for shared mailbox
+	 * Get Graph client configured for shared mailbox.
+	 *
+	 * @return LGP_Graph_Client
+	 * @throws Exception If settings not configured.
 	 */
 	public static function get_graph_client() {
 		$settings = self::get_settings();
@@ -57,17 +60,19 @@ class LGP_Shared_Mailbox {
 	}
 
 	/**
-	 * Sync shared mailbox inbox: fetch new messages, create tickets
-	 * Uses delta sync if supported
+	 * Sync shared mailbox inbox: fetch new messages, create tickets.
+	 * Uses delta sync if supported.
+	 *
+	 * @return void
 	 */
 	public static function sync_inbox() {
 		try {
 			$client = self::get_graph_client();
 
-			// Get delta token from last sync
+			// Get delta token from last sync.
 			$delta_token = get_option( 'lgp_graph_delta_token' );
 
-			// Fetch messages (delta-aware)
+			// Fetch messages (delta-aware).
 			$response = $client->get_messages( $delta_token );
 
 			if ( empty( $response['value'] ) ) {
@@ -75,7 +80,7 @@ class LGP_Shared_Mailbox {
 			}
 
 			foreach ( $response['value'] as $message ) {
-				// Idempotency check
+				// Idempotency check.
 				$internet_id = $message['internetMessageId'] ?? '';
 				if ( ! self::is_message_processed( $internet_id ) ) {
 					self::ingest_message( $message, $client );
@@ -83,7 +88,7 @@ class LGP_Shared_Mailbox {
 				}
 			}
 
-			// Store new delta token for next sync
+			// Store new delta token for next sync.
 			if ( ! empty( $response['@odata.deltaLink'] ) ) {
 				update_option( 'lgp_graph_delta_token', $response['@odata.deltaLink'] );
 			}
@@ -104,19 +109,21 @@ class LGP_Shared_Mailbox {
 	}
 
 	/**
-	 * Ingest a single Graph message and create a ticket
+	 * Ingest a single Graph message and create a ticket.
 	 *
-	 * @param array  $message Graph message object
-	 * @param object $client LGP_Graph_Client instance
+	 * @param array  $message Graph message object.
+	 * @param object $client  LGP_Graph_Client instance.
+	 * @return void
+	 * @throws Exception If message ingestion fails.
 	 */
 	public static function ingest_message( $message, $client ) {
-		// Extract sender email
+		// Extract sender email.
 		$from_email = $message['from']['emailAddress']['address'] ?? '';
 		if ( empty( $from_email ) ) {
 			return;
 		}
 
-		// Find company by email domain
+		// Find company by email domain.
 		$company_id = self::find_company_by_domain( $from_email );
 		if ( ! $company_id ) {
 			if ( class_exists( 'LGP_Logger' ) ) {
@@ -132,26 +139,26 @@ class LGP_Shared_Mailbox {
 
 		global $wpdb;
 
-		// Extract threading metadata
+		// Extract threading metadata.
 		$internet_id     = $message['internetMessageId'] ?? '';
 		$conversation_id = $message['conversationId'] ?? '';
 		$parent_ref      = $message['parentMessageId'] ?? '';
 
-		// Check if this is a reply to an existing ticket
+		// Check if this is a reply to an existing ticket.
 		$ticket_id = self::find_ticket_by_conversation( $conversation_id, $company_id );
 
 		$wpdb->query( 'START TRANSACTION' );
 
 		try {
 			if ( $ticket_id ) {
-				// Add reply to existing ticket
+				// Add reply to existing ticket.
 				self::add_reply_to_ticket( $ticket_id, $message, $from_email );
 			} else {
-				// Create new ticket from incoming email
+				// Create new ticket from incoming email.
 				$ticket_id = self::create_ticket_from_message( $company_id, $message, $internet_id, $conversation_id );
 			}
 
-			// Download attachments from message
+			// Download attachments from message.
 			if ( ! empty( $message['hasAttachments'] ) && $ticket_id ) {
 				self::download_attachments( $ticket_id, $message['id'], $client );
 			}
@@ -166,18 +173,19 @@ class LGP_Shared_Mailbox {
 	}
 
 	/**
-	 * Create new ticket from incoming email message
+	 * Create new ticket from incoming email message.
 	 *
-	 * @param int    $company_id Company ID
-	 * @param array  $message Graph message
-	 * @param string $internet_id Unique message ID
-	 * @param string $conversation_id Thread conversation ID
-	 * @return int Ticket ID
+	 * @param int    $company_id      Company ID.
+	 * @param array  $message         Graph message.
+	 * @param string $internet_id     Unique message ID.
+	 * @param string $conversation_id Thread conversation ID.
+	 * @return int Ticket ID.
+	 * @throws Exception If ticket creation fails.
 	 */
 	private static function create_ticket_from_message( $company_id, $message, $internet_id, $conversation_id ) {
 		global $wpdb;
 
-		// Create service request
+		// Create service request.
 		$requests_table = $wpdb->prefix . 'lgp_service_requests';
 		$priority       = self::detect_priority( $message['subject'] ?? '', $message['bodyPreview'] ?? '' );
 
@@ -246,11 +254,13 @@ class LGP_Shared_Mailbox {
 	}
 
 	/**
-	 * Add reply to existing ticket from Outlook
+	 * Add reply to existing ticket from Outlook.
 	 *
-	 * @param int    $ticket_id Ticket ID
-	 * @param array  $message Graph message
-	 * @param string $from_email Sender email
+	 * @param int    $ticket_id  Ticket ID.
+	 * @param array  $message    Graph message.
+	 * @param string $from_email Sender email.
+	 * @return void
+	 * @throws Exception If ticket not found.
 	 */
 	private static function add_reply_to_ticket( $ticket_id, $message, $from_email ) {
 		global $wpdb;
@@ -271,10 +281,10 @@ class LGP_Shared_Mailbox {
 			$thread_history['messages'] = array();
 		}
 
-		// Map sender email to portal support user (optional)
+		// Map sender email to portal support user (optional).
 		$portal_user = self::find_portal_user_by_email( $from_email );
 
-		// Add message to thread
+		// Add message to thread.
 		$thread_history['messages'][] = array(
 			'internet_id'     => $message['internetMessageId'] ?? '',
 			'from'            => $from_email,
@@ -287,7 +297,7 @@ class LGP_Shared_Mailbox {
 			'subject'         => $message['subject'] ?? '',
 		);
 
-		// Update ticket
+		// Update ticket.
 		$wpdb->update(
 			$tickets_table,
 			array( 'thread_history' => wp_json_encode( $thread_history ) ),
@@ -308,18 +318,19 @@ class LGP_Shared_Mailbox {
 	}
 
 	/**
-	 * Send reply via shared mailbox
+	 * Send reply via shared mailbox.
 	 * Hook: lgp_ticket_reply_added
 	 *
-	 * @param int    $ticket_id Ticket ID
-	 * @param int    $user_id Support user ID
-	 * @param string $reply_text Reply message text
+	 * @param int    $ticket_id  Ticket ID.
+	 * @param int    $user_id    Support user ID.
+	 * @param string $reply_text Reply message text.
+	 * @return void
 	 */
 	public static function send_reply_via_graph( $ticket_id, $user_id, $reply_text ) {
 		try {
 			global $wpdb;
 
-			// Get ticket and company
+			// Get ticket and company.
 			$tickets_table  = $wpdb->prefix . 'lgp_tickets';
 			$requests_table = $wpdb->prefix . 'lgp_service_requests';
 
@@ -336,7 +347,7 @@ class LGP_Shared_Mailbox {
 				return;
 			}
 
-			// Get original sender email from thread history
+			// Get original sender email from thread history.
 			$thread        = json_decode( $ticket->thread_history ?? '{}', true );
 			$first_message = $thread['messages'][0] ?? null;
 			if ( ! $first_message || empty( $first_message['from'] ) ) {
@@ -347,15 +358,15 @@ class LGP_Shared_Mailbox {
 			$user            = get_user_by( 'id', $user_id );
 			$user_display    = $user ? ( $user->first_name ? $user->first_name . ' ' . $user->last_name : $user->user_login ) : 'Support Team';
 
-			// Compose email
+			// Compose email.
 			$subject = 'Re: ' . ( $first_message['subject'] ?? 'Support Ticket' );
 			$body    = self::format_reply_body( $reply_text, $user_display );
 
-			// Send via shared mailbox
+			// Send via shared mailbox.
 			$client   = self::get_graph_client();
 			$settings = self::get_settings();
 
-			// Construct message with thread ID preservation
+			// Construct message with thread ID preservation.
 			$message_data = array(
 				'message'         => array(
 					'subject'      => $subject,
@@ -374,12 +385,12 @@ class LGP_Shared_Mailbox {
 				'saveToSentItems' => 'true',
 			);
 
-			// Add conversation context if available
+			// Add conversation context if available.
 			if ( ! empty( $thread['conversation_id'] ) ) {
 				$message_data['message']['conversationId'] = $thread['conversation_id'];
 			}
 
-			// Optional: Add "on behalf of" header if support user has mailbox
+			// Optional: Add "on behalf of" header if support user has mailbox.
 			if ( ! empty( $settings['allow_send_on_behalf'] ) && $user ) {
 				$message_data['message']['from'] = array(
 					'emailAddress' => array(
@@ -391,7 +402,7 @@ class LGP_Shared_Mailbox {
 
 			$client->send_mail_message( $settings['mailbox'] ?? '', $message_data );
 
-			// Record in ticket thread
+			// Record in ticket thread.
 			self::record_portal_reply( $ticket_id, $user_id, $reply_text );
 
 			if ( class_exists( 'LGP_Logger' ) ) {
@@ -410,7 +421,12 @@ class LGP_Shared_Mailbox {
 	}
 
 	/**
-	 * Record portal reply in ticket thread
+	 * Record portal reply in ticket thread.
+	 *
+	 * @param int    $ticket_id  Ticket ID.
+	 * @param int    $user_id    User ID.
+	 * @param string $reply_text Reply text.
+	 * @return void
 	 */
 	private static function record_portal_reply( $ticket_id, $user_id, $reply_text ) {
 		global $wpdb;
@@ -449,11 +465,12 @@ class LGP_Shared_Mailbox {
 	}
 
 	/**
-	 * Download attachments from Graph message
+	 * Download attachments from Graph message.
 	 *
-	 * @param int    $ticket_id Ticket ID
-	 * @param string $message_id Graph message ID
-	 * @param object $client LGP_Graph_Client
+	 * @param int    $ticket_id  Ticket ID.
+	 * @param string $message_id Graph message ID.
+	 * @param object $client     LGP_Graph_Client.
+	 * @return void
 	 */
 	private static function download_attachments( $ticket_id, $message_id, $client ) {
 		try {
@@ -489,12 +506,15 @@ class LGP_Shared_Mailbox {
 	}
 
 	/**
-	 * Find company by email domain
+	 * Find company by email domain.
+	 *
+	 * @param string $email Email address.
+	 * @return int|null Company ID or null.
 	 */
 	private static function find_company_by_domain( $email ) {
 		global $wpdb;
 
-		// Extract domain
+		// Extract domain.
 		$domain = substr( strrchr( $email, '@' ), 1 );
 		if ( empty( $domain ) ) {
 			return null;
@@ -515,7 +535,11 @@ class LGP_Shared_Mailbox {
 	}
 
 	/**
-	 * Find ticket by conversation ID
+	 * Find ticket by conversation ID.
+	 *
+	 * @param string $conversation_id Conversation ID.
+	 * @param int    $company_id      Company ID.
+	 * @return int|null Ticket ID or null.
 	 */
 	private static function find_ticket_by_conversation( $conversation_id, $company_id ) {
 		global $wpdb;
@@ -543,7 +567,10 @@ class LGP_Shared_Mailbox {
 	}
 
 	/**
-	 * Find portal user by email
+	 * Find portal user by email.
+	 *
+	 * @param string $email Email address.
+	 * @return array|null User data or null.
 	 */
 	private static function find_portal_user_by_email( $email ) {
 		$user = get_user_by( 'email', $email );
@@ -565,7 +592,10 @@ class LGP_Shared_Mailbox {
 	}
 
 	/**
-	 * Mark message as processed (idempotency)
+	 * Check if message is already processed (idempotency).
+	 *
+	 * @param string $internet_id Message ID.
+	 * @return bool True if processed.
 	 */
 	private static function is_message_processed( $internet_id ) {
 		if ( empty( $internet_id ) ) {
@@ -587,7 +617,10 @@ class LGP_Shared_Mailbox {
 	}
 
 	/**
-	 * Mark message as processed
+	 * Mark message as processed.
+	 *
+	 * @param string $internet_id Message ID.
+	 * @return void
 	 */
 	private static function mark_message_processed( $internet_id ) {
 		if ( empty( $internet_id ) ) {
@@ -597,14 +630,17 @@ class LGP_Shared_Mailbox {
 		$processed = get_option( 'lgp_processed_messages', array() );
 		if ( ! in_array( $internet_id, (array) $processed, true ) ) {
 			$processed[] = $internet_id;
-			// Keep only last 1000
+			// Keep only last 1000.
 			$processed = array_slice( $processed, -1000 );
 			update_option( 'lgp_processed_messages', $processed );
 		}
 	}
 
 	/**
-	 * Extract notes from message
+	 * Extract notes from message.
+	 *
+	 * @param array $message Message data.
+	 * @return string Notes text.
 	 */
 	private static function extract_notes( $message ) {
 		$from    = $message['from']['emailAddress']['address'] ?? 'Unknown';
@@ -620,7 +656,11 @@ class LGP_Shared_Mailbox {
 	}
 
 	/**
-	 * Detect priority from email
+	 * Detect priority from email.
+	 *
+	 * @param string $subject Subject line.
+	 * @param string $body    Message body.
+	 * @return string Priority level (high|medium|low).
 	 */
 	private static function detect_priority( $subject, $body ) {
 		$content = strtolower( $subject . ' ' . $body );
@@ -641,7 +681,11 @@ class LGP_Shared_Mailbox {
 	}
 
 	/**
-	 * Format reply body with footer
+	 * Format reply body with footer.
+	 *
+	 * @param string $reply_text    Reply message.
+	 * @param string $user_display  User display name.
+	 * @return string Formatted HTML reply.
 	 */
 	private static function format_reply_body( $reply_text, $user_display ) {
 		return sprintf(
@@ -653,7 +697,9 @@ class LGP_Shared_Mailbox {
 	}
 
 	/**
-	 * Get settings
+	 * Get settings.
+	 *
+	 * @return array Settings array.
 	 */
 	public static function get_settings() {
 		return get_option(
@@ -669,7 +715,9 @@ class LGP_Shared_Mailbox {
 	}
 
 	/**
-	 * Add settings page
+	 * Add settings page.
+	 *
+	 * @return void
 	 */
 	public static function add_settings_page() {
 		add_options_page(
@@ -682,14 +730,18 @@ class LGP_Shared_Mailbox {
 	}
 
 	/**
-	 * Register settings
+	 * Register settings.
+	 *
+	 * @return void
 	 */
 	public static function register_settings() {
 		register_setting( 'lgp_shared_mailbox', 'lgp_shared_mailbox_settings' );
 	}
 
 	/**
-	 * Render settings page
+	 * Render settings page.
+	 *
+	 * @return void
 	 */
 	public static function render_settings_page() {
 		$settings = self::get_settings();
