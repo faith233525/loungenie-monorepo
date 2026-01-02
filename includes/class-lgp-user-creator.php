@@ -1,7 +1,8 @@
 <?php
 /**
- * LounGenie Portal - User Auto-Creation
- * Automatically creates WP users from incoming emails with proper role assignment
+ * LounGenie Portal user auto-creation.
+ *
+ * Automatically creates WP users from incoming emails with proper role assignment.
  *
  * @package LounGenie Portal
  * @version 1.8.0
@@ -11,58 +12,61 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * User creator class.
+ */
 class LGP_User_Creator {
 
 	/**
-	 * Get or create WP user from email with company mapping
+	 * Get or create WP user from email with company mapping.
 	 *
-	 * @param string $email Email address
-	 * @param int    $company_id Company ID
-	 * @param string $display_name Optional display name
-	 * @return int|WP_Error User ID or WP_Error
+	 * @param string $email Email address.
+	 * @param int    $company_id Company ID.
+	 * @param string $display_name Optional display name.
+	 * @return int|WP_Error User ID or WP_Error.
 	 */
 	public static function get_or_create_user( $email, $company_id, $display_name = '' ) {
-		// Check if user exists
+		// Check if user exists.
 		$user = get_user_by( 'email', $email );
 
 		if ( $user ) {
 			return $user->ID;
 		}
 
-		// Create new user
+		// Create new user.
 		return self::create_user_from_email( $email, $company_id, $display_name );
 	}
 
 	/**
-	 * Create new WP user from email
+	 * Create new WP user from email.
 	 *
-	 * @param string $email Email address
-	 * @param int    $company_id Company ID
-	 * @param string $display_name Optional display name
-	 * @return int|WP_Error User ID or WP_Error
+	 * @param string $email Email address.
+	 * @param int    $company_id Company ID.
+	 * @param string $display_name Optional display name.
+	 * @return int|WP_Error User ID or WP_Error.
 	 */
 	private static function create_user_from_email( $email, $company_id, $display_name = '' ) {
-		// Validate email
+		// Validate email.
 		$email = sanitize_email( $email );
 		if ( ! is_email( $email ) ) {
 			return new WP_Error( 'invalid_email', 'Invalid email address' );
 		}
 
-		// Generate username from email
+		// Generate username from email.
 		$username = self::generate_username( $email );
 		if ( is_wp_error( $username ) ) {
 			return $username;
 		}
 
-		// Generate secure random password
+		// Generate secure random password.
 		$password = wp_generate_password( 16, true, true );
 
-		// Use provided display name or extract from email
+		// Use provided display name or extract from email.
 		if ( empty( $display_name ) ) {
 			$display_name = self::extract_display_name( $email );
 		}
 
-		// Create user
+		// Create user.
 		$user_id = wp_create_user( $username, $password, $email );
 
 		if ( is_wp_error( $user_id ) ) {
@@ -70,12 +74,12 @@ class LGP_User_Creator {
 			return $user_id;
 		}
 
-		// Update user metadata
+		// Update user metadata.
 		wp_update_user(
 			array(
 				'ID'         => $user_id,
 				'first_name' => $display_name,
-				'user_url'   => '', // Clear default
+				'user_url'   => '', // Clear default.
 			)
 		);
 

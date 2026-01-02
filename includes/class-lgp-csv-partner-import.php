@@ -1,9 +1,10 @@
 <?php
 
 /**
- * CSV Partner Import Handler
- * Enables bulk partner company upload for Admin and Support roles
- * WordPress.org compliant: No shell exec, shared hosting safe
+ * CSV partner import handler.
+ *
+ * Enables bulk partner company upload for Admin and Support roles.
+ * WordPress.org compliant: No shell exec, shared hosting safe.
  *
  * @package LounGenie Portal
  */
@@ -12,11 +13,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * CSV partner import class.
+ */
 class LGP_CSV_Partner_Import {
 
 
-	const MAX_FILE_SIZE     = 2097152; // 2MB in bytes
-	const BATCH_SIZE        = 50; // Process 50 rows per batch for shared hosting
+	const MAX_FILE_SIZE     = 2097152; // 2MB in bytes.
+	const BATCH_SIZE        = 50; // Process 50 rows per batch for shared hosting.
 	const ALLOWED_MIME_TYPE = 'text/csv';
 
 	/**
@@ -43,24 +47,28 @@ class LGP_CSV_Partner_Import {
 	);
 
 	/**
-	 * Initialize CSV import system
+	 * Initialize CSV import system.
+	 *
+	 * @return void
 	 */
 	public static function init() {
-		// Admin menu
+		// Admin menu.
 		add_action( 'admin_menu', array( __CLASS__, 'add_admin_menu' ) );
 
-		// Register REST API endpoints
+		// Register REST API endpoints.
 		add_action( 'rest_api_init', array( __CLASS__, 'register_routes' ) );
 
-		// Enqueue assets
+		// Enqueue assets.
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
 	}
 
 	/**
-	 * Add admin menu item
+	 * Add admin menu item.
+	 *
+	 * @return void
 	 */
 	public static function add_admin_menu() {
-		// Check permission: Admin OR Support role
+		// Check permission: Admin OR Support role.
 		if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'lgp_support' ) ) {
 			return;
 		}
@@ -69,14 +77,16 @@ class LGP_CSV_Partner_Import {
 			'loungenie-portal',
 			__( 'CSV Partner Import', 'loungenie-portal' ),
 			__( 'CSV Import', 'loungenie-portal' ),
-			'lgp_manage_companies', // Use existing capability
+			'lgp_manage_companies', // Use existing capability.
 			'lgp-csv-import',
 			array( __CLASS__, 'render_admin_page' )
 		);
 	}
 
 	/**
-	 * Register REST API routes
+	 * Register REST API routes.
+	 *
+	 * @return void
 	 */
 	public static function register_routes() {
 		// CSV upload endpoint

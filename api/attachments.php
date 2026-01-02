@@ -1,8 +1,9 @@
 <?php
 
 /**
- * Ticket Attachments REST API Endpoints
- * Handles secure file uploads and downloads for tickets
+ * Ticket attachments REST API endpoints.
+ *
+ * Handles secure file uploads and downloads for tickets.
  *
  * @package LounGenie Portal
  */
@@ -11,26 +12,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Attachments API class.
+ */
 class LGP_Attachments_API {
 
 
 
-	const MAX_FILE_SIZE = 10485760; // 10MB
+	const MAX_FILE_SIZE = 10485760; // 10MB.
 	const ALLOWED_TYPES = array( 'image/jpeg', 'image/png', 'application/pdf', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' );
 	const UPLOAD_DIR    = 'lgp-attachments';
 
 	/**
-	 * Initialize API endpoints
+	 * Initialize API endpoints.
+	 *
+	 * @return void
 	 */
 	public static function init() {
 		add_action( 'rest_api_init', array( __CLASS__, 'register_routes' ) );
 	}
 
 	/**
-	 * Register REST API routes
+	 * Register REST API routes.
+	 *
+	 * @return void
 	 */
 	public static function register_routes() {
-		// Upload attachment to ticket
+		// Upload attachment to ticket.
 		register_rest_route(
 			'lgp/v1',
 			'/tickets/(?P<ticket_id>\d+)/attachments',
@@ -41,7 +49,7 @@ class LGP_Attachments_API {
 			)
 		);
 
-		// Get ticket attachments
+		// Get ticket attachments.
 		register_rest_route(
 			'lgp/v1',
 			'/tickets/(?P<ticket_id>\d+)/attachments',
@@ -52,7 +60,7 @@ class LGP_Attachments_API {
 			)
 		);
 
-		// Delete attachment
+		// Delete attachment.
 		register_rest_route(
 			'lgp/v1',
 			'/attachments/(?P<id>\d+)',

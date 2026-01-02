@@ -1,20 +1,34 @@
 <?php
 
 /**
- * Dashboard Metrics API
- * Returns aggregated metrics for Support/Partner users
+ * Dashboard metrics API.
+ *
+ * Returns aggregated metrics for Support/Partner users.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Dashboard API class.
+ */
 class LGP_Dashboard_API {
 
+	/**
+	 * Initialize dashboard API.
+	 *
+	 * @return void
+	 */
 	public static function init() {
 		add_action( 'rest_api_init', array( __CLASS__, 'register_routes' ) );
 	}
 
+	/**
+	 * Register API routes.
+	 *
+	 * @return void
+	 */
 	public static function register_routes() {
 		$api = new self();
 		register_rest_route(
@@ -28,6 +42,11 @@ class LGP_Dashboard_API {
 		);
 	}
 
+	/**
+	 * Check portal access.
+	 *
+	 * @return bool
+	 */
 	public function check_portal_access() {
 		if ( ! is_user_logged_in() ) {
 			return false;
@@ -35,10 +54,16 @@ class LGP_Dashboard_API {
 		return LGP_Auth::is_support() || LGP_Auth::is_partner();
 	}
 
+	/**
+	 * Get metrics.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 * @return WP_REST_Response|WP_Error
+	 */
 	public function get_metrics( $request ) {
 		global $wpdb;
 
-		// Enhanced authentication check
+		// Enhanced authentication check.
 		if ( ! is_user_logged_in() ) {
 			return new WP_Error(
 				'unauthorized',
@@ -47,7 +72,7 @@ class LGP_Dashboard_API {
 			);
 		}
 
-		// Role-based access control
+		// Role-based access control.
 		$is_support = LGP_Auth::is_support();
 		$is_partner = LGP_Auth::is_partner();
 
