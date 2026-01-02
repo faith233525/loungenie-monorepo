@@ -61,15 +61,15 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 			</div>
 
 			<div class="lgp-header-actions" role="region" aria-label="<?php esc_attr_e( 'User Actions', 'loungenie-portal' ); ?>">
-				<!-- Notification Icon with Hover -->
+				<!-- Notification Icon with Hover. -->
 				<div class="lgp-notification-icon" role="button" tabindex="0" aria-label="<?php esc_attr_e( 'Notifications', 'loungenie-portal' ); ?>" aria-pressed="false">
 					<span class="lgp-notification-bell">Notifications</span>
 					<span class="lgp-notification-badge">3</span>
 				</div>
 
-				<!-- User Menu -->
+				<!-- User Menu. -->
 				<div class="lgp-user-menu">
-					<span class="lgp-user-name"><?php echo esc_html( $current_user->display_name ); ?></span>
+					<span class="lgp-user-name"><?php echo esc_html( $current_user_obj->display_name ); ?></span>
 					<span class="lgp-user-role">(<?php echo $is_support ? esc_html__( 'Support', 'loungenie-portal' ) : esc_html__( 'Partner', 'loungenie-portal' ); ?>)</span>
 					<a href="<?php echo esc_url( wp_logout_url( home_url() ) ); ?>" class="button button-secondary lgp-logout-btn">
 						<?php esc_html_e( 'Logout', 'loungenie-portal' ); ?>
@@ -199,9 +199,9 @@ $dashboard_template = $is_support ? 'dashboard-support.php' : 'dashboard-partner
 	<?php wp_footer(); ?>
 
 	<?php
-	// Admin-only role switcher widget (Partner/Support toggle)
+	// Admin-only role switcher widget (Partner/Support toggle).
 	if ( function_exists( 'lgp_role_switcher_widget' ) ) {
-		echo lgp_role_switcher_widget();
+		echo wp_kses_post( lgp_role_switcher_widget() );
 	}
 	?>
 

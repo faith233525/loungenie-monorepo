@@ -7,19 +7,20 @@
  * @package LounGenie Portal
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 }
 
 /**
  * Register service notes REST endpoint.
  */
-function lgp_register_service_notes_rest_route() {
+function lgp_register_service_notes_rest_route()
+{
 	register_rest_route(
 		'lgp/v1',
 		'/service-notes',
 		array(
-			'methods'             => array( 'GET', 'POST' ),
+			'methods'             => array('GET', 'POST'),
 			'callback'            => 'lgp_handle_service_notes',
 			'permission_callback' => function () {
 				return LGP_Auth::is_support();
@@ -28,40 +29,42 @@ function lgp_register_service_notes_rest_route() {
 	);
 }
 
-add_action( 'rest_api_init', 'lgp_register_service_notes_rest_route' );
+add_action('rest_api_init', 'lgp_register_service_notes_rest_route');
 
 /**
  * Handle service notes requests.
  */
-function lgp_handle_service_notes( WP_REST_Request $request ) {
+function lgp_handle_service_notes(WP_REST_Request $request)
+{
 	global $wpdb;
 
-	if ( 'GET' === $request->get_method() ) {
-		return lgp_get_service_notes( $request );
+	if ('GET' === $request->get_method()) {
+		return lgp_get_service_notes($request);
 	}
 
-	if ( 'POST' === $request->get_method() ) {
-		return lgp_create_service_note( $request );
+	if ('POST' === $request->get_method()) {
+		return lgp_create_service_note($request);
 	}
 
-	return new WP_Error( 'invalid_method', 'Method not allowed', array( 'status' => 405 ) );
+	return new WP_Error('invalid_method', 'Method not allowed', array('status' => 405));
 }
 
 /**
  * Get service notes for a company.
  */
-function lgp_get_service_notes( WP_REST_Request $request ) {
+function lgp_get_service_notes(WP_REST_Request $request)
+{
 	global $wpdb;
 
-	$company_id = $request->get_param( 'company_id' );
+	$company_id = $request->get_param('company_id');
 
-	if ( ! $company_id ) {
-		return new WP_Error( 'missing_company', 'Company ID required', array( 'status' => 400 ) );
+	if (! $company_id) {
+		return new WP_Error('missing_company', 'Company ID required', array('status' => 400));
 	}
 
 	// Verify access
-	if ( ! LGP_Auth::is_support() ) {
-		return new WP_Error( 'unauthorized', 'Access denied', array( 'status' => 403 ) );
+	if (! LGP_Auth::is_support()) {
+		return new WP_Error('unauthorized', 'Access denied', array('status' => 403));
 	}
 
 	$table = $wpdb->prefix . 'lgp_service_notes';
@@ -72,19 +75,20 @@ function lgp_get_service_notes( WP_REST_Request $request ) {
 		)
 	);
 
-	return rest_ensure_response( $notes );
+	return rest_ensure_response($notes);
 }
 
 /**
  * Create a new service note
  */
-function lgp_create_service_note( WP_REST_Request $request ) {
+function lgp_create_service_note(WP_REST_Request $request)
+{
 	global $wpdb;
 
 	// Verify nonce.
-	$nonce = $request->get_header( 'X-WP-Nonce' );
-	if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-		return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
+	$nonce = $request->get_header('X-WP-Nonce');
+	if (! wp_verify_nonce($nonce, 'wp_rest')) {
+		return new WP_Error('invalid_nonce', __('Nonce verification failed', 'loungenie-portal'), array('status' => 403));
 	}
 
 	$company_id      = $request->get_json_params()['company_id'] ?? null;
@@ -92,21 +96,21 @@ function lgp_create_service_note( WP_REST_Request $request ) {
 	$service_type    = $request->get_json_params()['service_type'] ?? null;
 	$technician_name = $request->get_json_params()['technician_name'] ?? null;
 	$notes           = $request->get_json_params()['notes'] ?? null;
-	$travel_time     = (int) ( $request->get_json_params()['travel_time'] ?? 0 );
+	$travel_time     = (int) ($request->get_json_params()['travel_time'] ?? 0);
 	$service_date    = $request->get_json_params()['service_date'] ?? null;
 
 	// Validate required fields.
-	if ( ! $company_id || ! $service_type || ! $technician_name || ! $notes || ! $service_date ) {
+	if (! $company_id || ! $service_type || ! $technician_name || ! $notes || ! $service_date) {
 		return new WP_Error(
 			'missing_fields',
 			'Missing required fields: company_id, service_type, technician_name, notes, service_date',
-			array( 'status' => 400 )
+			array('status' => 400)
 		);
 	}
 
 	// Verify access
-	if ( ! LGP_Auth::is_support() ) {
-		return new WP_Error( 'unauthorized', 'Access denied', array( 'status' => 403 ) );
+	if (! LGP_Auth::is_support()) {
+		return new WP_Error('unauthorized', 'Access denied', array('status' => 403));
 	}
 
 	$user  = wp_get_current_user();
@@ -116,18 +120,18 @@ function lgp_create_service_note( WP_REST_Request $request ) {
 		'company_id'      => (int) $company_id,
 		'unit_id'         => $unit_id ? (int) $unit_id : null,
 		'user_id'         => $user->ID,
-		'service_type'    => sanitize_text_field( $service_type ),
-		'technician_name' => sanitize_text_field( $technician_name ),
-		'notes'           => wp_kses_post( $notes ),
+		'service_type'    => sanitize_text_field($service_type),
+		'technician_name' => sanitize_text_field($technician_name),
+		'notes'           => wp_kses_post($notes),
 		'travel_time'     => $travel_time,
-		'service_date'    => sanitize_text_field( $service_date ),
-		'created_at'      => current_time( 'mysql', true ),
+		'service_date'    => sanitize_text_field($service_date),
+		'created_at'      => current_time('mysql', true),
 	);
 
-	$result = $wpdb->insert( $table, $data );
+	$result = $wpdb->insert($table, $data);
 
-	if ( ! $result ) {
-		return new WP_Error( 'db_error', 'Failed to save service note', array( 'status' => 500 ) );
+	if (! $result) {
+		return new WP_Error('db_error', 'Failed to save service note', array('status' => 500));
 	}
 
 	// Log the action.

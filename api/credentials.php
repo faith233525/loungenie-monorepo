@@ -11,7 +11,7 @@
  * @since 2.0.0 Initial release with security hardening.
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 }
 
@@ -24,7 +24,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package LounGenie\Portal
  * @since 2.0.0
  */
-class LGP_Credentials_API {
+class LGP_Credentials_API
+{
 
 	/**
 	 * Initialize API endpoints.
@@ -35,8 +36,9 @@ class LGP_Credentials_API {
 	 * @since 2.0.0
 	 * @return void
 	 */
-	public static function init() {
-		add_action( 'rest_api_init', array( __CLASS__, 'register_routes' ) );
+	public static function init()
+	{
+		add_action('rest_api_init', array(__CLASS__, 'register_routes'));
 	}
 
 	/**
@@ -55,15 +57,16 @@ class LGP_Credentials_API {
 	 * @return void
 	 * @see register_rest_route()
 	 */
-	public static function register_routes() {
+	public static function register_routes()
+	{
 		// Update company credentials
 		register_rest_route(
 			'lgp/v1',
 			'/company/(?P<id>\d+)/credentials',
 			array(
 				'methods'             => 'POST',
-				'callback'            => array( __CLASS__, 'update_company_credentials' ),
-				'permission_callback' => array( __CLASS__, 'check_support_permission_with_nonce' ),
+				'callback'            => array(__CLASS__, 'update_company_credentials'),
+				'permission_callback' => array(__CLASS__, 'check_support_permission_with_nonce'),
 				// Security: State-changing operation requires CSRF protection
 			)
 		);
@@ -74,8 +77,8 @@ class LGP_Credentials_API {
 			'/company/(?P<id>\d+)/credentials',
 			array(
 				'methods'             => 'GET',
-				'callback'            => array( __CLASS__, 'get_company_credentials' ),
-				'permission_callback' => array( __CLASS__, 'check_support_permission' ),
+				'callback'            => array(__CLASS__, 'get_company_credentials'),
+				'permission_callback' => array(__CLASS__, 'check_support_permission'),
 				// Security: Read-only operation, no nonce required
 			)
 		);
@@ -86,8 +89,8 @@ class LGP_Credentials_API {
 			'/companies/credentials',
 			array(
 				'methods'             => 'GET',
-				'callback'            => array( __CLASS__, 'list_companies_credentials' ),
-				'permission_callback' => array( __CLASS__, 'check_support_permission' ),
+				'callback'            => array(__CLASS__, 'list_companies_credentials'),
+				'permission_callback' => array(__CLASS__, 'check_support_permission'),
 			)
 		);
 
@@ -97,8 +100,8 @@ class LGP_Credentials_API {
 			'/generate-password',
 			array(
 				'methods'             => 'GET',
-				'callback'            => array( __CLASS__, 'generate_password' ),
-				'permission_callback' => array( __CLASS__, 'check_support_permission' ),
+				'callback'            => array(__CLASS__, 'generate_password'),
+				'permission_callback' => array(__CLASS__, 'check_support_permission'),
 			)
 		);
 	}
@@ -112,13 +115,14 @@ class LGP_Credentials_API {
 	 * @since 2.0.0
 	 * @return bool True if user is Support or admin, false otherwise.
 	 */
-	public static function check_support_permission() {
-		if ( ! is_user_logged_in() ) {
+	public static function check_support_permission()
+	{
+		if (! is_user_logged_in()) {
 			return false;
 		}
 
 		$user = wp_get_current_user();
-		return in_array( 'lgp_support', (array) $user->roles, true ) || current_user_can( 'manage_options' );
+		return in_array('lgp_support', (array) $user->roles, true) || current_user_can('manage_options');
 	}
 
 	/**
@@ -132,9 +136,10 @@ class LGP_Credentials_API {
 	 * @return bool True if user is Support and nonce is valid, false otherwise.
 	 * @see check_support_permission()
 	 */
-	public static function check_support_permission_with_nonce() {
+	public static function check_support_permission_with_nonce()
+	{
 		// First check if user is support
-		if ( ! self::check_support_permission() ) {
+		if (! self::check_support_permission()) {
 			return false;
 		}
 
@@ -174,39 +179,40 @@ class LGP_Credentials_API {
 	 * @return WP_REST_Response|WP_Error Response with success message and username,
 	 *                                   WP_Error if validation fails or company not found.
 	 */
-	public static function update_company_credentials( $request ) {
+	public static function update_company_credentials($request)
+	{
 		global $wpdb;
 
 		// Verify nonce
-		$nonce = $request->get_header( 'X-WP-Nonce' );
-		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-			return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
+		$nonce = $request->get_header('X-WP-Nonce');
+		if (! wp_verify_nonce($nonce, 'wp_rest')) {
+			return new WP_Error('invalid_nonce', __('Nonce verification failed', 'loungenie-portal'), array('status' => 403));
 		}
 
-		$company_id = (int) $request->get_param( 'id' );
-		$username   = sanitize_user( $request->get_param( 'partner_username' ) );
+		$company_id = (int) $request->get_param('id');
+		$username   = sanitize_user($request->get_param('partner_username'));
 		// Security: Passwords should be sanitized but not overly stripped
 		// sanitize_text_field removes line breaks and some chars, which is appropriate for passwords
-		$password = sanitize_text_field( $request->get_param( 'partner_password' ) );
+		$password = sanitize_text_field($request->get_param('partner_password'));
 
 		// Validate required fields
-		if ( empty( $username ) || empty( $password ) ) {
+		if (empty($username) || empty($password)) {
 			return new WP_Error(
 				'missing_fields',
-				__( 'Username and password are required', 'loungenie-portal' ),
-				array( 'status' => 400 )
+				__('Username and password are required', 'loungenie-portal'),
+				array('status' => 400)
 			);
 		}
 
 		// Validate contact information
-		$primary_name  = sanitize_text_field( $request->get_param( 'primary_contact_name' ) );
-		$primary_email = sanitize_email( $request->get_param( 'primary_contact_email' ) );
+		$primary_name  = sanitize_text_field($request->get_param('primary_contact_name'));
+		$primary_email = sanitize_email($request->get_param('primary_contact_email'));
 
-		if ( empty( $primary_name ) || empty( $primary_email ) ) {
+		if (empty($primary_name) || empty($primary_email)) {
 			return new WP_Error(
 				'missing_contact',
-				__( 'Primary contact name and email are required', 'loungenie-portal' ),
-				array( 'status' => 400 )
+				__('Primary contact name and email are required', 'loungenie-portal'),
+				array('status' => 400)
 			);
 		}
 
@@ -214,14 +220,14 @@ class LGP_Credentials_API {
 
 		// Verify company exists
 		$company = $wpdb->get_row(
-			$wpdb->prepare( "SELECT id FROM $table WHERE id = %d", $company_id )
+			$wpdb->prepare("SELECT id FROM $table WHERE id = %d", $company_id)
 		);
 
-		if ( ! $company ) {
+		if (! $company) {
 			return new WP_Error(
 				'company_not_found',
-				__( 'Company not found', 'loungenie-portal' ),
-				array( 'status' => 404 )
+				__('Company not found', 'loungenie-portal'),
+				array('status' => 404)
 			);
 		}
 
@@ -234,16 +240,16 @@ class LGP_Credentials_API {
 			)
 		);
 
-		if ( $existing ) {
+		if ($existing) {
 			return new WP_Error(
 				'username_exists',
-				__( 'This username is already in use by another company', 'loungenie-portal' ),
-				array( 'status' => 400 )
+				__('This username is already in use by another company', 'loungenie-portal'),
+				array('status' => 400)
 			);
 		}
 
 		// Security: Hash password using WordPress secure password hashing (bcrypt-based)
-		$hashed_password = wp_hash_password( $password );
+		$hashed_password = wp_hash_password($password);
 
 		// Prepare data
 		$data = array(
@@ -251,36 +257,36 @@ class LGP_Credentials_API {
 			'partner_password'        => $hashed_password,
 			'primary_contact_name'    => $primary_name,
 			'primary_contact_email'   => $primary_email,
-			'primary_contact_phone'   => sanitize_text_field( $request->get_param( 'primary_contact_phone' ) ),
-			'secondary_contact_name'  => sanitize_text_field( $request->get_param( 'secondary_contact_name' ) ),
-			'secondary_contact_email' => sanitize_email( $request->get_param( 'secondary_contact_email' ) ),
-			'secondary_contact_phone' => sanitize_text_field( $request->get_param( 'secondary_contact_phone' ) ),
-			'updated_at'              => current_time( 'mysql' ),
+			'primary_contact_phone'   => sanitize_text_field($request->get_param('primary_contact_phone')),
+			'secondary_contact_name'  => sanitize_text_field($request->get_param('secondary_contact_name')),
+			'secondary_contact_email' => sanitize_email($request->get_param('secondary_contact_email')),
+			'secondary_contact_phone' => sanitize_text_field($request->get_param('secondary_contact_phone')),
+			'updated_at'              => current_time('mysql'),
 		);
 
 		// Update company
 		$updated = $wpdb->update(
 			$table,
 			$data,
-			array( 'id' => $company_id ),
-			array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' )
+			array('id' => $company_id),
+			array('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')
 		);
 
-		if ( $updated === false ) {
+		if ($updated === false) {
 			return new WP_Error(
 				'update_failed',
-				__( 'Failed to update credentials', 'loungenie-portal' ),
-				array( 'status' => 500 )
+				__('Failed to update credentials', 'loungenie-portal'),
+				array('status' => 500)
 			);
 		}
 
 		// Log the action
-		do_action( 'lgp_credentials_updated', $company_id, $username );
+		do_action('lgp_credentials_updated', $company_id, $username);
 
 		return rest_ensure_response(
 			array(
 				'success'    => true,
-				'message'    => __( 'Credentials updated successfully', 'loungenie-portal' ),
+				'message'    => __('Credentials updated successfully', 'loungenie-portal'),
 				'company_id' => $company_id,
 				'username'   => $username,
 			)
@@ -300,10 +306,11 @@ class LGP_Credentials_API {
 	 * @return WP_REST_Response|WP_Error Company credential object (password excluded),
 	 *                                   WP_Error if company not found.
 	 */
-	public static function get_company_credentials( $request ) {
+	public static function get_company_credentials($request)
+	{
 		global $wpdb;
 
-		$company_id = (int) $request->get_param( 'id' );
+		$company_id = (int) $request->get_param('id');
 		$table      = $wpdb->prefix . 'lgp_companies';
 
 		$company = $wpdb->get_row(
@@ -323,15 +330,15 @@ class LGP_Credentials_API {
 			)
 		);
 
-		if ( ! $company ) {
+		if (! $company) {
 			return new WP_Error(
 				'not_found',
-				__( 'Company not found', 'loungenie-portal' ),
-				array( 'status' => 404 )
+				__('Company not found', 'loungenie-portal'),
+				array('status' => 404)
 			);
 		}
 
-		return rest_ensure_response( $company );
+		return rest_ensure_response($company);
 	}
 
 	/**
@@ -357,13 +364,14 @@ class LGP_Credentials_API {
 	 *                          - configured (int) Count of companies with credentials.
 	 *                          - pending (int) Count of companies without credentials.
 	 */
-	public static function list_companies_credentials( $request ) {
+	public static function list_companies_credentials($request)
+	{
 		global $wpdb;
 
 		$table    = $wpdb->prefix . 'lgp_companies';
-		$page     = intval( $request->get_param( 'page' ) ) ?: 1;
-		$per_page = intval( $request->get_param( 'per_page' ) ) ?: 20;
-		$offset   = ( $page - 1 ) * $per_page;
+		$page     = intval($request->get_param('page')) ?: 1;
+		$per_page = intval($request->get_param('per_page')) ?: 20;
+		$offset   = ($page - 1) * $per_page;
 
 		$companies = $wpdb->get_results(
 			$wpdb->prepare(
@@ -385,7 +393,7 @@ class LGP_Credentials_API {
 			)
 		);
 
-		$total = (int) $wpdb->get_var( "SELECT COUNT(*) FROM $table" );
+		$total = (int) $wpdb->get_var("SELECT COUNT(*) FROM $table");
 
 		return rest_ensure_response(
 			array(
@@ -393,8 +401,8 @@ class LGP_Credentials_API {
 				'total'      => $total,
 				'page'       => $page,
 				'per_page'   => $per_page,
-				'configured' => (int) $wpdb->get_var( "SELECT COUNT(*) FROM $table WHERE partner_username IS NOT NULL AND partner_username != ''" ),
-				'pending'    => (int) $wpdb->get_var( "SELECT COUNT(*) FROM $table WHERE partner_username IS NULL OR partner_username = ''" ),
+				'configured' => (int) $wpdb->get_var("SELECT COUNT(*) FROM $table WHERE partner_username IS NOT NULL AND partner_username != ''"),
+				'pending'    => (int) $wpdb->get_var("SELECT COUNT(*) FROM $table WHERE partner_username IS NULL OR partner_username = ''"),
 			)
 		);
 	}
@@ -411,14 +419,15 @@ class LGP_Credentials_API {
 	 *                          with special characters.
 	 * @see wp_generate_password()
 	 */
-	public static function generate_password() {
+	public static function generate_password()
+	{
 		return rest_ensure_response(
 			array(
-				'password' => wp_generate_password( 16, true, true ),
+				'password' => wp_generate_password(16, true, true),
 			)
 		);
 	}
 }
 
 // Initialize
-add_action( 'plugins_loaded', array( 'LGP_Credentials_API', 'init' ) );
+add_action('plugins_loaded', array('LGP_Credentials_API', 'init'));
