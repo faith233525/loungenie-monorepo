@@ -65,7 +65,7 @@ class LGP_Outlook {
 	}
 
 	/**
-	 * Check if Outlook integration is enabled
+	 * Check if Outlook integration is enabled.
 	 *
 	 * @return bool
 	 */
@@ -77,7 +77,7 @@ class LGP_Outlook {
 	}
 
 	/**
-	 * Get access token (refresh if needed)
+	 * Get access token (refresh if needed).
 	 *
 	 * @return string|false
 	 */
@@ -85,7 +85,7 @@ class LGP_Outlook {
 		$access_token = get_option( 'lgp_outlook_access_token' );
 		$expires_at   = get_option( 'lgp_outlook_token_expires' );
 
-		// Check if token is expired
+		// Check if token is expired.
 		if ( $access_token && $expires_at && time() < $expires_at ) {
 			return $access_token;
 		}
@@ -144,17 +144,17 @@ class LGP_Outlook {
 	}
 
 	/**
-	 * Send email via Microsoft Graph API
+	 * Send email via Microsoft Graph API.
 	 *
-	 * @param string $to Recipient email
-	 * @param string $subject Email subject
-	 * @param string $body Email body (HTML)
-	 * @param array  $cc CC recipients (optional)
-	 * @param array  $options Optional sender info for "send on behalf"
-	 *                       - 'sender_user_id': WordPress user ID replying
-	 *                       - 'sender_name': Display name of replying user
-	 *                       - 'sender_email': Email of replying user
-	 *                       - 'send_on_behalf': true/false to enable header
+	 * @param string $to      Recipient email.
+	 * @param string $subject Email subject.
+	 * @param string $body    Email body (HTML).
+	 * @param array  $cc      CC recipients (optional).
+	 * @param array  $options Optional sender info for "send on behalf".
+	 *                        - 'sender_user_id': WordPress user ID replying.
+	 *                        - 'sender_name': Display name of replying user.
+	 *                        - 'sender_email': Email of replying user.
+	 *                        - 'send_on_behalf': true/false to enable header.
 	 * @return bool|WP_Error
 	 */
 	public static function send_email( $to, $subject, $body, $cc = array(), $options = array() ) {
@@ -186,8 +186,8 @@ class LGP_Outlook {
 			'saveToSentItems' => 'true',
 		);
 
-		// Method 2: Optional "send on behalf" header for shared mailbox
-		// Shows "From: support@company.com on behalf of Jane Doe" in Outlook
+		// Method 2: Optional "send on behalf" header for shared mailbox.
+			// Shows "From: support@company.com on behalf of Jane Doe" in Outlook.
 		if ( ! empty( $options['send_on_behalf'] ) && ! empty( $options['sender_email'] ) ) {
 			$message['message']['from'] = array(
 				'emailAddress' => array(
@@ -195,7 +195,7 @@ class LGP_Outlook {
 					'address' => $options['sender_email'],
 				),
 			);
-			// The shared mailbox is implicit (logged-in account)
+			// The shared mailbox is implicit (logged-in account).
 		}
 
 		// Add CC recipients if provided
@@ -242,11 +242,12 @@ class LGP_Outlook {
 	}
 
 	/**
-	 * Send notification email when ticket is updated
+	 * Send notification email when ticket is updated.
 	 *
-	 * @param int    $ticket_id Ticket ID
-	 * @param string $message Reply message
-	 * @param array  $ticket_data Ticket data
+	 * @param int    $ticket_id  Ticket ID.
+	 * @param string $message    Reply message.
+	 * @param array  $ticket_data Ticket data.
+	 * @return void
 	 */
 	public static function send_notification_email( $ticket_id, $message, $ticket_data = array() ) {
 		global $wpdb;
@@ -300,9 +301,11 @@ class LGP_Outlook {
 	}
 
 	/**
-	 * Handle AJAX request to send Outlook reply
-	 * Method 1: Portal tracks which user replied (user_id, name, email)
-	 * Method 2: Optional "send on behalf" header in email
+	 * Handle AJAX request to send Outlook reply.
+	 * Method 1: Portal tracks which user replied (user_id, name, email).
+	 * Method 2: Optional "send on behalf" header in email.
+	 *
+	 * @return void
 	 */
 	public static function ajax_send_reply() {
 		check_ajax_referer( 'lgp_portal_nonce', 'nonce' );
@@ -312,14 +315,15 @@ class LGP_Outlook {
 		}
 
 		$ticket_id = absint( $_POST['ticket_id'] ?? 0 );
-		$message   = sanitize_textarea_field( $_POST['message'] ?? '' );
-		$send_as   = ! empty( $_POST['send_as'] ) ? 'yes' : 'no'; // Optional: user wants "send on behalf" header
+		$message   = wp_unslash( $_POST['message'] ?? '' );
+		$message   = sanitize_textarea_field( $message );
+		$send_as   = ! empty( $_POST['send_as'] ) ? 'yes' : 'no'; // Optional: user wants "send on behalf" header.
 
 		if ( ! $ticket_id || ! $message ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid data', 'loungenie-portal' ) ) );
 		}
 
-		// Get ticket data
+		// Get ticket data.
 		global $wpdb;
 		$tickets_table   = $wpdb->prefix . 'lgp_tickets';
 		$requests_table  = $wpdb->prefix . 'lgp_service_requests';
