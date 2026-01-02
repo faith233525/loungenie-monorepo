@@ -88,9 +88,26 @@ class LGP_Email_Handler {
 			$emails = imap_search( $connection, 'ALL' );
 
 			if ( $emails ) {
+				// SHARED HOSTING: Limit batch size to prevent timeout
+				$max_batch_size    = 10; // Process max 10 emails per run
+				$emails_to_process = array_slice( array_reverse( $emails ), 0, $max_batch_size );
+				$processed_count   = 0;
+				$start_time        = time();
+
 				// Process in reverse order (oldest first)
-				foreach ( array_reverse( $emails ) as $email_id ) {
+				foreach ( $emails_to_process as $email_id ) {
+					// SHARED HOSTING: Check execution time limit
+					if ( ( time() - $start_time ) > 20 ) {
+						error_log( 'LGP: Email processing stopped - time limit reached. Processed: ' . $processed_count );
+						break;
+					}
+
 					self::process_email( $connection, $email_id );
+					++$processed_count;
+				}
+
+				if ( count( $emails ) > $max_batch_size ) {
+					error_log( sprintf( 'LGP: %d emails remaining, will process in next run', count( $emails ) - $processed_count ) );
 				}
 			}
 
@@ -138,9 +155,16 @@ class LGP_Email_Handler {
 
 		// Shared hosting timeout protection
 		$start_time       = time();
-		$max_execution    = 25; // Leave 5-second buffer for 30s timeout
-		$max_emails_batch = 50; // Process max 50 emails per run
+		$max_execution    = 20; // Leave 10-second buffer for 30s timeout
+		$max_emails_batch = 10; // REDUCED: Process max 10 emails per run for shared hosting
 		$processed_count  = 0;
+
+		// Check if we have enough time to execute
+		$max_exec_time = (int) ini_get( 'max_execution_time' );
+		if ( $max_exec_time > 0 && $max_exec_time < 30 ) {
+			$max_execution = max( 10, $max_exec_time - 10 ); // Adjust to available time
+			error_log( 'LGP: Adjusted email processing time limit to ' . $max_execution . 's based on server settings' );
+		}
 
 		// Concurrency guard: prevent overlapping cron runs (5 min lock)
 		$lock_key = 'lgp_graph_sync_lock';
@@ -188,7 +212,7 @@ class LGP_Email_Handler {
 					try {
 						$attachments = $client->get_attachments( $message['id'] );
 						LGP_Email_To_Ticket::ingest_graph_message( $message, $attachments );
-						$processed_count++;
+						++$processed_count;
 					} catch ( Exception $inner ) {
 						if ( class_exists( 'LGP_Logger' ) ) {
 							LGP_Logger::log_event(

@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $wpdb;
 
-// Get partner's company ID
+// Get partner's company ID.
 $company_id = LGP_Auth::get_user_company_id();
 
 if ( ! $company_id ) {
@@ -22,7 +22,7 @@ if ( ! $company_id ) {
 	return;
 }
 
-// Fetch company information
+// Fetch company information.
 $companies_table        = $wpdb->prefix . 'lgp_companies';
 $units_table            = $wpdb->prefix . 'lgp_units';
 $service_requests_table = $wpdb->prefix . 'lgp_service_requests';
@@ -37,7 +37,7 @@ $open_requests = $wpdb->get_var(
 	)
 );
 
-// Get management company if exists
+// Get management company if exists.
 $management_company = null;
 if ( $company->management_company_id ) {
 	$management_company = $wpdb->get_row(
@@ -48,7 +48,7 @@ if ( $company->management_company_id ) {
 	);
 }
 
-// Recent activity
+// Recent activity.
 $recent_requests = $wpdb->get_results(
 	$wpdb->prepare(
 		"SELECT * FROM $service_requests_table WHERE company_id = %d ORDER BY created_at DESC LIMIT 5",
@@ -125,11 +125,11 @@ $recent_requests = $wpdb->get_results(
 		<h2 class="lgp-card-title"><?php esc_html_e( 'Quick Actions', 'loungenie-portal' ); ?></h2>
 	</div>
 	<div class="lgp-card-footer lgp-border-none lgp-pt-0">
-		<a href="<?php echo esc_url( home_url( '/portal/requests' ) ); ?>" class="lgp-btn lgp-btn-primary">
+		<a href="<?php echo esc_url( home_url( '/portal/requests' ) ); ?>" class="button button-primary">
 			<i class="fa-solid fa-plus" aria-hidden="true"></i>
 			<?php esc_html_e( 'Create Ticket', 'loungenie-portal' ); ?>
 		</a>
-		<a href="<?php echo esc_url( home_url( '/portal/gateways' ) ); ?>" class="lgp-btn lgp-btn-secondary">
+		<a href="<?php echo esc_url( home_url( '/portal/gateways' ) ); ?>" class="button button-secondary">
 			<i class="fa-solid fa-router" aria-hidden="true"></i>
 			<?php esc_html_e( 'Add New Gateway', 'loungenie-portal' ); ?>
 		</a>
@@ -193,7 +193,7 @@ $recent_requests = $wpdb->get_results(
 			
 			<?php wp_nonce_field( 'lgp_submit_service_request', 'lgp_service_request_nonce' ); ?>
 			
-			<button type="submit" class="lgp-btn lgp-btn-primary">
+			<button type="submit" class="button button-primary">
 				<?php esc_html_e( 'Submit Request', 'loungenie-portal' ); ?>
 			</button>
 		</form>

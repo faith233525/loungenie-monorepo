@@ -99,11 +99,11 @@ class LGP_Tickets_API {
 		$requests_table  = $wpdb->prefix . 'lgp_service_requests';
 		$companies_table = $wpdb->prefix . 'lgp_companies';
 		$page            = $request->get_param( 'page' ) ?: 1;
-		$per_page        = $request->get_param( 'per_page' ) ?: 20;
+		$per_page        = min( (int) ( $request->get_param( 'per_page' ) ?: 20 ), 100 ); // SHARED HOSTING: Max 100 items
 		$offset          = ( $page - 1 ) * $per_page;
 
 		if ( LGP_Auth::is_support() ) {
-			// Support can see all tickets
+			// Support can see all tickets.
 			$tickets = $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT t.*, sr.request_type, sr.priority, sr.company_id, c.name AS company_name 
@@ -118,7 +118,7 @@ class LGP_Tickets_API {
 			);
 			$total   = $wpdb->get_var( "SELECT COUNT(*) FROM $tickets_table" );
 		} else {
-			// Partners see only their tickets
+			// Partners see only their tickets.
 			$company_id = LGP_Auth::get_user_company_id();
 			$tickets    = $wpdb->get_results(
 				$wpdb->prepare(
@@ -197,15 +197,15 @@ class LGP_Tickets_API {
 		}
 
 		// Rate limiting: max 5 tickets per hour per user.
-		$user_id  = get_current_user_id();
+		$user_id   = get_current_user_id();
 		$cache_key = 'lgp_ticket_count_' . (int) $user_id;
-		$count    = (int) get_transient( $cache_key );
+		$count     = (int) get_transient( $cache_key );
 
 		if ( $count >= 5 ) {
 			return new WP_Error( 'rate_limit_exceeded', 'Too many tickets. Maximum 5 per hour.', array( 'status' => 429 ) );
 		}
 
-		// Increment count
+		// Increment count.
 		set_transient( $cache_key, $count + 1, HOUR_IN_SECONDS );
 
 		$company_id   = LGP_Auth::get_user_company_id();
@@ -219,7 +219,7 @@ class LGP_Tickets_API {
 		$units_affected = absint( $request->get_param( 'units_affected' ) );
 		$notes_raw      = sanitize_textarea_field( $request->get_param( 'notes' ) );
 
-		// Build a safe note that captures minimal form data
+		// Build a safe note that captures minimal form data.
 		$notes_parts = array();
 		if ( $contact_name ) {
 			$notes_parts[] = 'Contact: ' . $contact_name;
@@ -242,11 +242,11 @@ class LGP_Tickets_API {
 			return new WP_Error( 'invalid_message', __( 'Please provide issue details.', 'loungenie-portal' ), array( 'status' => 400 ) );
 		}
 
-		// START TRANSACTION for atomic ticket creation
+		// START TRANSACTION for atomic ticket creation.
 		$wpdb->query( 'START TRANSACTION' );
 
 		try {
-			// Create service request first
+			// Create service request first.
 			$requests_table = $wpdb->prefix . 'lgp_service_requests';
 			$request_data   = array(
 				'company_id'   => $company_id,
@@ -265,7 +265,7 @@ class LGP_Tickets_API {
 
 			$service_request_id = $wpdb->insert_id;
 
-			// Create ticket
+			// Create ticket.
 			$tickets_table = $wpdb->prefix . 'lgp_tickets';
 			$ticket_data   = array(
 				'service_request_id' => $service_request_id,
@@ -289,7 +289,7 @@ class LGP_Tickets_API {
 
 			$ticket_id = $wpdb->insert_id;
 
-			// Audit logging
+			// Audit logging.
 			$user = wp_get_current_user();
 			LGP_Logger::log_event(
 				$user->ID,
@@ -307,7 +307,7 @@ class LGP_Tickets_API {
 			// COMMIT TRANSACTION
 			$wpdb->query( 'COMMIT' );
 
-			// Fire action for integrations (after successful commit)
+			// Fire action for integrations (after successful commit).
 			do_action( 'lgp_ticket_created', $ticket_id, (object) array_merge( (array) $ticket_data, (array) $request_data ) );
 
 			return rest_ensure_response(
@@ -321,10 +321,10 @@ class LGP_Tickets_API {
 			// ROLLBACK TRANSACTION on any error
 			$wpdb->query( 'ROLLBACK' );
 
-			// Helpful debug during tests
+			// Helpful debug during tests.
 			error_log( 'LGP ticket create error: ' . $e->getMessage() );
 
-			// Use existing logger methods (no log_error in LGP_Logger)
+			// Use existing logger methods (no log_error in LGP_Logger).
 			LGP_Logger::log(
 				'ticket',
 				'creation_failed',

@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Register service notes REST endpoint
+ * Register service notes REST endpoint.
  */
 function lgp_register_service_notes_rest_route() {
 	register_rest_route(
@@ -31,7 +31,7 @@ function lgp_register_service_notes_rest_route() {
 add_action( 'rest_api_init', 'lgp_register_service_notes_rest_route' );
 
 /**
- * Handle service notes requests
+ * Handle service notes requests.
  */
 function lgp_handle_service_notes( WP_REST_Request $request ) {
 	global $wpdb;
@@ -48,7 +48,7 @@ function lgp_handle_service_notes( WP_REST_Request $request ) {
 }
 
 /**
- * Get service notes for a company
+ * Get service notes for a company.
  */
 function lgp_get_service_notes( WP_REST_Request $request ) {
 	global $wpdb;
@@ -81,7 +81,7 @@ function lgp_get_service_notes( WP_REST_Request $request ) {
 function lgp_create_service_note( WP_REST_Request $request ) {
 	global $wpdb;
 
-	// Verify nonce
+	// Verify nonce.
 	$nonce = $request->get_header( 'X-WP-Nonce' );
 	if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
 		return new WP_Error( 'invalid_nonce', __( 'Nonce verification failed', 'loungenie-portal' ), array( 'status' => 403 ) );
@@ -95,7 +95,7 @@ function lgp_create_service_note( WP_REST_Request $request ) {
 	$travel_time     = (int) ( $request->get_json_params()['travel_time'] ?? 0 );
 	$service_date    = $request->get_json_params()['service_date'] ?? null;
 
-	// Validate required fields
+	// Validate required fields.
 	if ( ! $company_id || ! $service_type || ! $technician_name || ! $notes || ! $service_date ) {
 		return new WP_Error(
 			'missing_fields',
@@ -130,7 +130,7 @@ function lgp_create_service_note( WP_REST_Request $request ) {
 		return new WP_Error( 'db_error', 'Failed to save service note', array( 'status' => 500 ) );
 	}
 
-	// Log the action
+	// Log the action.
 	LGP_Logger::log_event(
 		$user->ID,
 		'service_note_created',

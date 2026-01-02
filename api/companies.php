@@ -83,6 +83,7 @@ class LGP_Companies_API {
 		$per_page = $request->get_param( 'per_page' ) ?: 20;
 		$offset   = ( $page - 1 ) * $per_page;
 
+		// Fetch companies with pagination.
 		$companies = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT * FROM $table ORDER BY name ASC LIMIT %d OFFSET %d",
@@ -91,6 +92,7 @@ class LGP_Companies_API {
 			)
 		);
 
+		// Get total count.
 		$total = $wpdb->get_var( "SELECT COUNT(*) FROM $table" );
 
 		return rest_ensure_response(

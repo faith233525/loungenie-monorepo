@@ -1,5 +1,4 @@
 <?php
-
 /**
  * LounGenie Portal - Enterprise SaaS Partner Management System
  *
@@ -193,6 +192,7 @@ function lgp_init() {
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-outlook.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-system-health.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-attachments.php';
+	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-admin-dashboard-widget.php';
 	// Legacy email handler will be conditionally initialized via loader based on feature flag.
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-email-handler.php';
 	require_once LGP_PLUGIN_DIR . 'includes/class-lgp-capabilities.php';

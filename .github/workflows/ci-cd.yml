@@ -1,0 +1,177 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  release:
+    types: [ published ]
+
+jobs:
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          tools: composer
+          coverage: none
+      
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+      
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress
+      
+      - name: Run PHPCS
+        run: composer run cs
+        continue-on-error: true
+      
+      - name: Auto-fix PHPCS violations
+        run: composer run cbf
+        continue-on-error: true
+  
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        php-version: ['7.4', '8.0', '8.1', '8.2']
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          tools: composer
+          extensions: mysqli
+          coverage: none
+      
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress
+      
+      - name: Run PHPUnit tests
+        run: composer run test
+        continue-on-error: true
+  
+  asset-build:
+    name: Build Assets
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Minify CSS files
+        run: |
+          for f in assets/css/*.css; do
+            [ "${f%.min.css}" = "$f" ] && npx csso "$f" -o "${f%.css}.min.css"
+          done
+      
+      - name: Minify JS files
+        run: |
+          for f in assets/js/*.js; do
+            [ "${f%.min.js}" = "$f" ] && npx terser "$f" -o "${f%.js}.min.js" --compress --mangle
+          done
+      
+      - name: Upload minified assets
+        uses: actions/upload-artifact@v3
+        with:
+          name: minified-assets
+          path: |
+            assets/css/*.min.css
+            assets/js/*.min.js
+  
+  create-release-package:
+    name: Create Release Package
+    runs-on: ubuntu-latest
+    needs: [code-quality, unit-tests, asset-build]
+    if: github.event_name == 'release'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download minified assets
+        uses: actions/download-artifact@v3
+        with:
+          name: minified-assets
+          path: assets/
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+      
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-dev --optimize-autoloader
+      
+      - name: Create deployment package
+        run: |
+          chmod +x deployment-artifacts/create-production-package.sh
+          ./deployment-artifacts/create-production-package.sh
+      
+      - name: Upload release package
+        uses: actions/upload-artifact@v3
+        with:
+          name: plugin-package
+          path: dist/*.zip
+      
+      - name: Attach package to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+  deploy-to-wordpress-org:
+    name: Deploy to WordPress.org
+    runs-on: ubuntu-latest
+    needs: create-release-package
+    if: github.event_name == 'release' && !github.event.release.prerelease
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download plugin package
+        uses: actions/download-artifact@v3
+        with:
+          name: plugin-package
+          path: dist/
+      
+      - name: WordPress Plugin Deploy
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: loungenie-portal

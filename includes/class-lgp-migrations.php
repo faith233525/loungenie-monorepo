@@ -156,22 +156,30 @@ class LGP_Migrations {
 		$table = $wpdb->prefix . 'lgp_help_guides';
 
 		// content_url.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$col = $wpdb->get_results( "SHOW COLUMNS FROM {$table} LIKE 'content_url'" );
 		if ( empty( $col ) ) {
+			// Note: ALTER TABLE on known table names (prefixed) is safe from injection.
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 			$wpdb->query( "ALTER TABLE {$table} ADD COLUMN content_url VARCHAR(500) NOT NULL AFTER description" );
-			// Backfill from legacy video_url.
+			// Backfill from legacy video_url - safe as it's copying between columns.
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$wpdb->query( "UPDATE {$table} SET content_url = video_url WHERE (content_url IS NULL OR content_url = '') AND video_url IS NOT NULL" );
 		}
 
 		// type.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$col = $wpdb->get_results( "SHOW COLUMNS FROM {$table} LIKE 'type'" );
 		if ( empty( $col ) ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 			$wpdb->query( "ALTER TABLE {$table} ADD COLUMN type VARCHAR(50) DEFAULT 'video' AFTER content_url" );
 		}
 
 		// tags.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$col = $wpdb->get_results( "SHOW COLUMNS FROM {$table} LIKE 'tags'" );
 		if ( empty( $col ) ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 			$wpdb->query( "ALTER TABLE {$table} ADD COLUMN tags LONGTEXT AFTER category" );
 		}
 

@@ -347,10 +347,10 @@ $ticket_reference = 'TKT-' . date( 'YmdHis' ) . rand( 100, 999 );
 
 		<!-- Form Actions -->
 		<div class="lgp-form-actions">
-			<button type="submit" class="lgp-btn lgp-btn-primary">
+			<button type="submit" class="button button-primary">
 				<?php _e( 'Submit Ticket', 'loungenie-portal' ); ?>
 			</button>
-			<button type="reset" class="lgp-btn lgp-btn-secondary">
+			<button type="reset" class="button button-secondary">
 				<?php _e( 'Clear Form', 'loungenie-portal' ); ?>
 			</button>
 		</div>

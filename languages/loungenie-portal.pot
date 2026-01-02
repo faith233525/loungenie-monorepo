@@ -1,0 +1,3670 @@
+# Copyright (C) 2026 LounGenie Team
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: LounGenie Portal 1.8.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/Pool-Safe-Portal\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-01-02T02:53:59+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: loungenie-portal\n"
+
+#. Plugin Name of the plugin
+#: loungenie-portal.php
+#: includes/class-lgp-i18n.php:64
+#: templates/portal-shell.php:54
+msgid "LounGenie Portal"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: loungenie-portal.php
+msgid "https://loungenie.com/portal"
+msgstr ""
+
+#. Description of the plugin
+#: loungenie-portal.php
+msgid "Commercial enterprise SaaS portal for LounGenie partner and support management"
+msgstr ""
+
+#. Author of the plugin
+#: loungenie-portal.php
+msgid "LounGenie Team"
+msgstr ""
+
+#. Author URI of the plugin
+#: loungenie-portal.php
+msgid "https://loungenie.com"
+msgstr ""
+
+#: api/attachments.php:177
+#: api/attachments.php:360
+#: api/companies.php:138
+#: api/companies.php:193
+#: api/credentials.php:184
+#: api/gateways.php:143
+#: api/gateways.php:178
+#: api/knowledge-center.php:196
+#: api/knowledge-center.php:238
+#: api/knowledge-center.php:312
+#: api/service-notes.php:87
+#: api/tickets.php:196
+#: api/tickets.php:357
+#: api/tickets.php:453
+#: api/units.php:164
+#: api/units.php:219
+msgid "Nonce verification failed"
+msgstr ""
+
+#: api/companies.php:123
+#: api/credentials.php:224
+#: api/credentials.php:330
+#: includes/class-lgp-admin-credentials-ui.php:167
+#: includes/class-lgp-company-credentials.php:140
+#: includes/class-lgp-company-credentials.php:214
+#: includes/class-lgp-hubspot.php:125
+msgid "Company not found"
+msgstr ""
+
+#: api/companies.php:156
+#: includes/class-lgp-csv-company-location-import.php:673
+msgid "Failed to create company"
+msgstr ""
+
+#: api/companies.php:179
+msgid "Company created successfully"
+msgstr ""
+
+#: api/companies.php:212
+#: includes/class-lgp-csv-company-location-import.php:648
+msgid "Failed to update company"
+msgstr ""
+
+#: api/companies.php:229
+msgid "Company updated successfully"
+msgstr ""
+
+#: api/credentials.php:197
+msgid "Username and password are required"
+msgstr ""
+
+#: api/credentials.php:209
+#: includes/class-lgp-company-credentials.php:127
+msgid "Primary contact name and email are required"
+msgstr ""
+
+#: api/credentials.php:241
+msgid "This username is already in use by another company"
+msgstr ""
+
+#: api/credentials.php:273
+#: includes/class-lgp-admin-credentials-ui.php:205
+#: includes/class-lgp-company-credentials.php:178
+msgid "Failed to update credentials"
+msgstr ""
+
+#: api/credentials.php:284
+#: includes/class-lgp-company-credentials.php:187
+msgid "Credentials updated successfully"
+msgstr ""
+
+#: api/tickets.php:181
+#: includes/class-lgp-hubspot.php:274
+#: includes/class-lgp-outlook.php:344
+msgid "Ticket not found"
+msgstr ""
+
+#: api/tickets.php:242
+msgid "Please provide issue details."
+msgstr ""
+
+#: api/tickets.php:317
+msgid "Service request submitted successfully"
+msgstr ""
+
+#: api/tickets.php:342
+msgid "Failed to create service request"
+msgstr ""
+
+#: api/tickets.php:416
+msgid "Ticket updated successfully"
+msgstr ""
+
+#: api/tickets.php:438
+msgid "Failed to update ticket"
+msgstr ""
+
+#: api/tickets.php:463
+msgid "Reply message cannot be empty"
+msgstr ""
+
+#: api/tickets.php:530
+msgid "Reply added successfully"
+msgstr ""
+
+#: api/tickets.php:551
+msgid "Failed to add reply"
+msgstr ""
+
+#: api/units.php:149
+msgid "Unit not found"
+msgstr ""
+
+#: api/units.php:183
+msgid "Failed to create unit"
+msgstr ""
+
+#: api/units.php:205
+msgid "Unit created successfully"
+msgstr ""
+
+#: api/units.php:239
+msgid "Failed to update unit"
+msgstr ""
+
+#: api/units.php:257
+msgid "Unit updated successfully"
+msgstr ""
+
+#: includes/class-lgp-admin-credentials-ui.php:36
+#: includes/class-lgp-admin-credentials-ui.php:37
+#: includes/class-lgp-company-credentials.php:36
+#: includes/class-lgp-company-credentials.php:37
+msgid "Partner Credentials"
+msgstr ""
+
+#: includes/class-lgp-admin-credentials-ui.php:84
+#: includes/class-lgp-admin-credentials-ui.php:107
+#: includes/class-lgp-admin-credentials-ui.php:139
+#: includes/class-lgp-cache-invalidation.php:131
+#: includes/class-lgp-company-credentials.php:293
+#: includes/class-lgp-microsoft-sso.php:92
+#: includes/class-lgp-outlook.php:314
+#: includes/class-lgp-outlook.php:806
+#: includes/class-lgp-system-health.php:447
+msgid "Unauthorized"
+msgstr ""
+
+#: includes/class-lgp-admin-credentials-ui.php:88
+msgid "Partner Company Credentials Management"
+msgstr ""
+
+#: includes/class-lgp-admin-credentials-ui.php:89
+msgid "Configure login credentials and contact information for each partner company. Each company gets one unique username and password."
+msgstr ""
+
+#: includes/class-lgp-admin-credentials-ui.php:93
+msgid "Loading companies..."
+msgstr ""
+
+#: includes/class-lgp-admin-credentials-ui.php:156
+msgid "All required fields must be filled"
+msgstr ""
+
+#: includes/class-lgp-admin-credentials-ui.php:180
+#: includes/class-lgp-company-credentials.php:153
+msgid "This username is already assigned to another company"
+msgstr ""
+
+#: includes/class-lgp-admin-credentials-ui.php:213
+#: includes/class-lgp-company-credentials.php:369
+msgid "Credentials updated successfully!"
+msgstr ""
+
+#: includes/class-lgp-attachments.php:56
+msgid "No file provided"
+msgstr ""
+
+#: includes/class-lgp-attachments.php:98
+#, php-format
+msgid "File size exceeds maximum of %s MB"
+msgstr ""
+
+#: includes/class-lgp-attachments.php:110
+#, php-format
+msgid "File type not allowed. Allowed types: %s"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:172
+msgid "Clear Performance Caches"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:173
+msgid "Clear Caches"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:188
+msgid "Performance Cache Management"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:192
+msgid "All portal caches have been cleared successfully."
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:197
+msgid "Current Cache Status"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:201
+msgid "Dashboard Statistics"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:202
+#: templates/company-profile.php:341
+#: templates/dashboard-support.php:507
+msgid "Recent Tickets"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:203
+msgid "Top Metrics"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:204
+msgid "API Metrics (Support)"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:205
+#: templates/units-view.php:168
+msgid "Units List"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:206
+msgid "Company Map Markers"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:228
+msgid "Geocoding Queue"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:233
+#, php-format
+msgid "Pending companies: %d"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:239
+msgid "Performance Metrics"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:244
+#, php-format
+msgid "Database queries this request: %d"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:249
+#, php-format
+msgid "Memory usage: %s MB"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:257
+msgid "Clear All Caches"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:258
+msgid "Use this when you need to force-refresh all cached data. Caches will rebuild automatically on next access."
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:264
+msgid "Clear All Portal Caches"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:270
+msgid "Cache Configuration"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:274
+msgid "Cache Type"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:275
+msgid "TTL (Time To Live)"
+msgstr ""
+
+#: includes/class-lgp-cache-invalidation.php:276
+msgid "Purpose"
+msgstr ""
+
+#: includes/class-lgp-company-credentials.php:119
+msgid "Partner username is required"
+msgstr ""
+
+#: includes/class-lgp-company-credentials.php:123
+msgid "Partner password is required"
+msgstr ""
+
+#: includes/class-lgp-company-credentials.php:297
+msgid "Partner Company Credentials"
+msgstr ""
+
+#: includes/class-lgp-company-credentials.php:298
+msgid "Configure partner login credentials and contact information for each company."
+msgstr ""
+
+#: includes/class-lgp-company-credentials.php:305
+#: templates/map-view.php:138
+#: templates/units-view.php:177
+msgid "Loading..."
+msgstr ""
+
+#: includes/class-lgp-company-credentials.php:311
+#: includes/class-lgp-csv-company-location-import.php:275
+#: includes/class-lgp-csv-partner-import.php:306
+#: includes/class-lgp-i18n.php:101
+msgid "Company Name"
+msgstr ""
+
+#: includes/class-lgp-company-credentials.php:312
+#: includes/class-lgp-i18n.php:155
+#: templates/custom-login-enhanced.php:105
+msgid "Username"
+msgstr ""
+
+#: includes/class-lgp-company-credentials.php:313
+#: includes/class-lgp-csv-partner-import.php:309
+#: templates/company-profile.php:169
+msgid "Primary Contact"
+msgstr ""
+
+#: includes/class-lgp-company-credentials.php:314
+#: includes/class-lgp-csv-partner-import.php:308
+#: templates/company-profile.php:273
+#: templates/company-profile.php:352
+#: templates/dashboard-partner.php:217
+#: templates/dashboard-support.php:518
+#: templates/map-view.php:95
+#: templates/tickets-view.php:122
+#: templates/tickets-view.php:180
+#: templates/units-view.php:141
+#: templates/units-view.php:191
+msgid "Status"
+msgstr ""
+
+#: includes/class-lgp-company-credentials.php:315
+#: includes/class-lgp-csv-company-location-import.php:278
+#: includes/class-lgp-security-audit.php:494
+#: templates/company-profile.php:424
+msgid "Action"
+msgstr ""
+
+#: includes/class-lgp-company-credentials.php:327
+#: includes/class-lgp-i18n.php:79
+msgid "Edit"
+msgstr ""
+
+#: includes/class-lgp-company-credentials.php:372
+msgid "Error updating credentials"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:80
+#: includes/class-lgp-csv-company-location-import.php:81
+msgid "CSV Company Import"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:155
+msgid "Company + Location + Lock CSV Import"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:156
+msgid "Upload a CSV file to bulk import companies with location data and lock codes."
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:160
+msgid "CSV Format Guide"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:162
+#: includes/class-lgp-csv-partner-import.php:200
+msgid "Required Columns"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:174
+#: includes/class-lgp-csv-partner-import.php:211
+msgid "Optional Columns"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:188
+#: includes/class-lgp-csv-partner-import.php:220
+msgid "Notes:"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:190
+msgid "All columns are case-insensitive"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:191
+msgid "Maximum file size: 5MB"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:192
+msgid "Users created as Partner role by default"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:193
+msgid "Location data stored per company (site-based, not individual units)"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:194
+msgid "Existing companies (matched by name) will be updated"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:195
+msgid "Primary contact can be added after company creation"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:201
+#: includes/class-lgp-csv-partner-import.php:232
+msgid "Download Sample CSV Template"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:208
+#: includes/class-lgp-csv-partner-import.php:239
+msgid "Upload CSV File"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:216
+#: includes/class-lgp-csv-partner-import.php:247
+msgid "Choose CSV File"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:218
+#: includes/class-lgp-csv-partner-import.php:249
+msgid "No file chosen"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:224
+#: includes/class-lgp-csv-partner-import.php:255
+msgid "Dry Run (Preview only, do not import)"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:230
+#: includes/class-lgp-csv-partner-import.php:261
+msgid "Upload and Process"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:239
+#: includes/class-lgp-csv-partner-import.php:270
+msgid "Import Results"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:243
+#: includes/class-lgp-csv-partner-import.php:274
+msgid "Total Rows:"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:247
+#: includes/class-lgp-csv-partner-import.php:278
+msgid "Success:"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:251
+#: includes/class-lgp-csv-partner-import.php:282
+msgid "Errors:"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:257
+#: includes/class-lgp-csv-partner-import.php:288
+msgid "Error Details"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:261
+#: includes/class-lgp-csv-partner-import.php:292
+msgid "Row"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:262
+#: includes/class-lgp-csv-partner-import.php:293
+#: templates/components/support-ticket-form.php:183
+#: templates/components/support-ticket-form.php:206
+#: templates/dashboard-support.php:516
+#: templates/tickets-view.php:153
+#: templates/tickets-view.php:182
+#: templates/tickets-view.php:236
+#: templates/units-view.php:186
+msgid "Company"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:263
+#: includes/class-lgp-csv-partner-import.php:163
+#: includes/class-lgp-csv-partner-import.php:294
+#: includes/class-lgp-i18n.php:141
+msgid "Error"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:271
+#: includes/class-lgp-csv-partner-import.php:302
+msgid "Successfully Imported"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:276
+msgid "User Login"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:277
+msgid "City/State"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:299
+#: includes/class-lgp-csv-company-location-import.php:332
+#: includes/class-lgp-csv-partner-import.php:340
+#: includes/class-lgp-file-validator.php:50
+msgid "No file uploaded"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:367
+msgid "File is empty"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:371
+msgid "File exceeds 5MB limit"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:378
+msgid "Invalid file type. Only CSV files accepted."
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:405
+#: includes/class-lgp-csv-partner-import.php:427
+msgid "Could not open CSV file"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:416
+#: includes/class-lgp-csv-partner-import.php:438
+msgid "CSV file is empty"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:468
+#, php-format
+msgid "CSV file too large. Memory usage: %dMB"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:484
+#: includes/class-lgp-csv-partner-import.php:478
+msgid "CSV file contains no data rows"
+msgstr ""
+
+#. translators: %s: comma-separated list of missing columns
+#: includes/class-lgp-csv-company-location-import.php:509
+#: includes/class-lgp-csv-partner-import.php:504
+#, php-format
+msgid "Missing required columns: %s"
+msgstr ""
+
+#: includes/class-lgp-csv-company-location-import.php:546
+msgid "Missing required fields: company_name, user_login, or user_pass"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:78
+#: includes/class-lgp-csv-partner-import.php:184
+msgid "CSV Partner Import"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:79
+msgid "CSV Import"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:159
+msgid "Uploading..."
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:160
+msgid "Processing..."
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:161
+msgid "Validating..."
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:162
+msgid "Complete!"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:164
+msgid "File size exceeds 2MB limit"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:165
+#: includes/class-lgp-csv-partner-import.php:401
+msgid "Only CSV files are allowed"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:176
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:187
+msgid "Upload a CSV file to bulk import or update partner companies."
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:191
+msgid "As a Support user, you can import partner companies but cannot modify system settings or roles."
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:198
+msgid "CSV Format Requirements"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:222
+msgid "Column names are case-insensitive"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:223
+msgid "Maximum file size: 2MB"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:224
+msgid "Secondary contact fields are optional"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:225
+msgid "Existing companies (matched by email) will be updated"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:307
+msgid "Email"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:331
+msgid "Invalid security token"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:383
+msgid "File upload failed"
+msgstr ""
+
+#. translators: %s: maximum file size
+#: includes/class-lgp-csv-partner-import.php:392
+#, php-format
+msgid "File size exceeds %s limit"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:411
+msgid "Invalid file type"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:600
+msgid "Database update failed"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:628
+msgid "Database insert failed"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:670
+msgid "Company name is required"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:674
+msgid "Company email is required"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:678
+msgid "Invalid company email format"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:682
+msgid "Status is required"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:687
+msgid "Status must be \"active\" or \"inactive\""
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:692
+msgid "Primary contact name is required"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:696
+msgid "Primary contact title is required"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:700
+msgid "Primary contact email is required"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:704
+msgid "Invalid primary contact email format"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:708
+msgid "Primary contact phone is required"
+msgstr ""
+
+#: includes/class-lgp-csv-partner-import.php:726
+msgid "If secondary contact is provided, all fields must be complete"
+msgstr ""
+
+#: includes/class-lgp-environment.php:485
+msgid "LounGenie Portal - Environment Configuration"
+msgstr ""
+
+#: includes/class-lgp-environment.php:489
+msgid "Current Environment:"
+msgstr ""
+
+#: includes/class-lgp-environment.php:495
+msgid "Configuration Status"
+msgstr ""
+
+#: includes/class-lgp-environment.php:498
+msgid ".env File:"
+msgstr ""
+
+#: includes/class-lgp-environment.php:501
+msgid "Found"
+msgstr ""
+
+#: includes/class-lgp-environment.php:503
+msgid "Not found (using defaults)"
+msgstr ""
+
+#: includes/class-lgp-environment.php:508
+msgid "Debug Mode:"
+msgstr ""
+
+#: includes/class-lgp-environment.php:512
+msgid "Log Level:"
+msgstr ""
+
+#: includes/class-lgp-environment.php:516
+msgid "Cache TTL:"
+msgstr ""
+
+#: includes/class-lgp-environment.php:517
+#: includes/class-lgp-environment.php:521
+msgid "seconds"
+msgstr ""
+
+#: includes/class-lgp-environment.php:520
+msgid "API Timeout:"
+msgstr ""
+
+#: includes/class-lgp-environment.php:524
+msgid "Rate Limit:"
+msgstr ""
+
+#: includes/class-lgp-environment.php:525
+msgid "requests/hour"
+msgstr ""
+
+#: includes/class-lgp-environment.php:531
+msgid "Feature Flags"
+msgstr ""
+
+#: includes/class-lgp-environment.php:547
+msgid ".env Template"
+msgstr ""
+
+#: includes/class-lgp-environment.php:548
+msgid "Copy the following template and save it as .env in the repository root:"
+msgstr ""
+
+#: includes/class-lgp-environment.php:555
+msgid "Environment Examples"
+msgstr ""
+
+#: includes/class-lgp-environment.php:556
+msgid "Development"
+msgstr ""
+
+#: includes/class-lgp-environment.php:561
+msgid "Staging"
+msgstr ""
+
+#: includes/class-lgp-environment.php:566
+msgid "Production"
+msgstr ""
+
+#: includes/class-lgp-file-validator.php:61
+#, php-format
+msgid "File exceeds maximum size of %s MB"
+msgstr ""
+
+#: includes/class-lgp-file-validator.php:70
+#, php-format
+msgid "File type \"%s\" not allowed"
+msgstr ""
+
+#: includes/class-lgp-file-validator.php:78
+msgid "Invalid filename"
+msgstr ""
+
+#: includes/class-lgp-health-check.php:589
+msgid "LounGenie Portal - System Health"
+msgstr ""
+
+#: includes/class-lgp-health-check.php:596
+#: includes/class-lgp-hubspot.php:521
+#: includes/class-lgp-outlook.php:689
+msgid "Status:"
+msgstr ""
+
+#: includes/class-lgp-health-check.php:603
+msgid "System Checks"
+msgstr ""
+
+#: includes/class-lgp-health-check.php:625
+msgid "Metrics"
+msgstr ""
+
+#: includes/class-lgp-health-check.php:629
+msgid "Memory Usage"
+msgstr ""
+
+#: includes/class-lgp-health-check.php:633
+msgid "Peak Memory"
+msgstr ""
+
+#: includes/class-lgp-health-check.php:637
+msgid "Active Users"
+msgstr ""
+
+#: includes/class-lgp-health-check.php:641
+msgid "Pending Tickets"
+msgstr ""
+
+#: includes/class-lgp-hubspot.php:73
+msgid "HubSpot integration is not enabled"
+msgstr ""
+
+#: includes/class-lgp-hubspot.php:458
+msgid "LounGenie HubSpot Settings"
+msgstr ""
+
+#: includes/class-lgp-hubspot.php:459
+#: includes/class-lgp-i18n.php:192
+msgid "HubSpot Integration"
+msgstr ""
+
+#: includes/class-lgp-hubspot.php:488
+msgid "HubSpot Integration Settings"
+msgstr ""
+
+#: includes/class-lgp-hubspot.php:499
+msgid "HubSpot API Key"
+msgstr ""
+
+#: includes/class-lgp-hubspot.php:508
+msgid "Enter your HubSpot Private App Access Token. Get it from HubSpot Settings → Integrations → Private Apps."
+msgstr ""
+
+#: includes/class-lgp-hubspot.php:519
+msgid "Integration Status"
+msgstr ""
+
+#: includes/class-lgp-hubspot.php:523
+#: includes/class-lgp-system-health.php:167
+#: includes/class-lgp-system-health.php:178
+#: templates/gateway-view.php:50
+msgid "Enabled"
+msgstr ""
+
+#: includes/class-lgp-hubspot.php:525
+msgid "Disabled (API key required)"
+msgstr ""
+
+#: includes/class-lgp-hubspot.php:533
+#: includes/class-lgp-system-health.php:214
+msgid "Recent Errors"
+msgstr ""
+
+#: includes/class-lgp-hubspot.php:537
+#: includes/class-lgp-security-audit.php:490
+#: includes/class-lgp-system-health.php:230
+#: templates/company-profile.php:422
+msgid "Timestamp"
+msgstr ""
+
+#: includes/class-lgp-hubspot.php:538
+#: includes/class-lgp-i18n.php:109
+#: includes/class-lgp-system-health.php:231
+msgid "Message"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:65
+msgid "Manage partner companies, units, and service requests"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:66
+#: includes/class-lgp-i18n.php:164
+#: templates/portal-shell.php:94
+#: templates/portal-shell.php:131
+msgid "Dashboard"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:67
+#: templates/portal-shell.php:100
+msgid "Companies"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:68
+msgid "Units"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:69
+#: templates/portal-shell.php:143
+msgid "Service Requests"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:70
+#: templates/portal-shell.php:112
+#: templates/tickets-view.php:106
+msgid "Tickets"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:71
+msgid "Settings"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:74
+#: roles/support.php:39
+msgid "LounGenie Support Team"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:75
+#: roles/partner.php:37
+msgid "LounGenie Partner Company"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:78
+msgid "Add New"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:80
+msgid "Delete"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:81
+msgid "Save"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:82
+#: templates/company-profile.php:490
+#: templates/company-profile.php:535
+#: templates/knowledge-center-view.php:143
+msgid "Cancel"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:83
+msgid "Submit"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:84
+msgid "Create"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:85
+#: includes/class-lgp-i18n.php:132
+#: templates/dashboard-partner.php:176
+msgid "Update"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:86
+msgid "Remove"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:87
+msgid "Export"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:88
+msgid "Import"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:91
+#: templates/units-view.php:144
+msgid "Active"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:92
+msgid "Inactive"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:93
+#: templates/tickets-view.php:90
+msgid "Pending"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:94
+msgid "Approved"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:95
+msgid "Rejected"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:96
+msgid "Completed"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:97
+#: templates/map-view.php:99
+msgid "In Progress"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:98
+msgid "On Hold"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:102
+#: templates/components/support-ticket-form.php:134
+#: templates/support-ticket-form.php:90
+msgid "Email Address"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:103
+#: templates/components/support-ticket-form.php:155
+#: templates/support-ticket-form.php:107
+msgid "Phone Number"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:104
+#: templates/company-profile.php:271
+#: templates/company-profile.php:313
+#: templates/gateway-view.php:76
+msgid "Address"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:105
+msgid "City"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:106
+msgid "State"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:107
+msgid "ZIP Code"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:108
+msgid "Contact Person"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:110
+#: templates/company-profile.php:481
+#: templates/company-profile.php:505
+#: templates/dashboard-partner.php:190
+msgid "Notes"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:111
+msgid "Attachment"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:114
+msgid "Unit Color"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:115
+#: templates/units-view.php:131
+#: templates/units-view.php:190
+msgid "Lock Brand"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:116
+msgid "Installation Date"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:117
+msgid "Service Date"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:118
+#: templates/units-view.php:118
+msgid "Venue Type"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:119
+#: templates/units-view.php:108
+#: templates/units-view.php:188
+msgid "Season"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:120
+#: templates/units-view.php:99
+msgid "Yellow"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:121
+#: templates/units-view.php:100
+msgid "Red"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:122
+#: templates/units-view.php:101
+msgid "Classic Blue"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:123
+#: templates/units-view.php:102
+msgid "Ice Blue"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:124
+#: templates/units-view.php:134
+msgid "MAKE"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:125
+#: templates/units-view.php:135
+msgid "L&F"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:128
+#: templates/company-profile.php:467
+#: templates/dashboard-partner.php:173
+#: templates/knowledge-center-view.php:115
+#: templates/units-view.php:145
+msgid "Installation"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:129
+#: templates/units-view.php:146
+msgid "Service"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:130
+#: templates/company-profile.php:464
+#: templates/dashboard-partner.php:174
+#: templates/knowledge-center-view.php:117
+#: templates/map-view.php:110
+msgid "Maintenance"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:131
+#: templates/company-profile.php:465
+#: templates/dashboard-partner.php:175
+#: templates/map-view.php:111
+msgid "Repair"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:135
+#: templates/dashboard-support.php:465
+#: templates/map-view.php:89
+#: templates/map-view.php:160
+#: templates/support-ticket-form.php:231
+msgid "Low"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:136
+#: templates/dashboard-support.php:466
+#: templates/map-view.php:88
+#: templates/map-view.php:156
+#: templates/support-ticket-form.php:232
+msgid "Medium"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:137
+#: templates/dashboard-partner.php:184
+#: templates/dashboard-support.php:467
+#: templates/map-view.php:87
+#: templates/map-view.php:152
+#: templates/support-ticket-form.php:233
+msgid "High"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:138
+#: templates/dashboard-partner.php:185
+msgid "Urgent"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:142
+msgid "Success"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:143
+msgid "Warning"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:144
+msgid "Info"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:145
+msgid "Something went wrong. Please try again."
+msgstr ""
+
+#: includes/class-lgp-i18n.php:146
+msgid "Operation completed successfully."
+msgstr ""
+
+#: includes/class-lgp-i18n.php:147
+msgid "Please fill in all required fields."
+msgstr ""
+
+#: includes/class-lgp-i18n.php:148
+msgid "You do not have permission to access this resource."
+msgstr ""
+
+#: includes/class-lgp-i18n.php:149
+msgid "Not found."
+msgstr ""
+
+#: includes/class-lgp-i18n.php:152
+msgid "Login"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:153
+#: templates/portal-shell.php:75
+msgid "Logout"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:154
+msgid "Sign in with Microsoft"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:156
+#: templates/custom-login-enhanced.php:125
+msgid "Password"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:157
+msgid "Forgot Password"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:158
+#: templates/custom-login-enhanced.php:151
+msgid "Remember me"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:159
+msgid "Invalid credentials."
+msgstr ""
+
+#: includes/class-lgp-i18n.php:160
+msgid "Session expired. Please log in again."
+msgstr ""
+
+#: includes/class-lgp-i18n.php:163
+msgid "Welcome"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:165
+msgid "Overview"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:166
+msgid "Statistics"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:167
+#: templates/dashboard-partner.php:206
+msgid "Recent Activity"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:168
+#: templates/dashboard-support.php:194
+#: templates/dashboard-support.php:303
+#: templates/dashboard-support.php:334
+msgid "Total Companies"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:169
+#: templates/dashboard-support.php:172
+#: templates/dashboard-support.php:310
+#: templates/dashboard-support.php:339
+msgid "Total Units"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:170
+#: templates/company-profile.php:135
+#: templates/dashboard-partner.php:107
+#: templates/dashboard-support.php:212
+#: templates/dashboard-support.php:317
+#: templates/dashboard-support.php:349
+msgid "Open Tickets"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:171
+msgid "Pending Requests"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:174
+#: templates/tickets-view.php:177
+msgid "Ticket"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:175
+msgid "New Ticket"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:176
+msgid "Ticket Details"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:177
+msgid "Ticket History"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:178
+#: templates/company-profile.php:393
+#: templates/tickets-view.php:250
+msgid "Reply"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:179
+msgid "Add Reply"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:180
+msgid "Close Ticket"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:181
+msgid "Reopen Ticket"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:184
+msgid "System Health"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:185
+msgid "Security Log"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:186
+msgid "Query Performance"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:187
+msgid "API Documentation"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:188
+msgid "Database Migrations"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:189
+msgid "Environment Config"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:193
+#: includes/class-lgp-microsoft-sso.php:59
+msgid "Microsoft 365 SSO"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:194
+msgid "Microsoft Outlook Integration"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:195
+msgid "Email Notifications"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:196
+msgid "API Key"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:197
+msgid "API Token"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:198
+#: includes/class-lgp-microsoft-sso.php:122
+#: includes/class-lgp-shared-mailbox.php:764
+msgid "Client ID"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:199
+#: includes/class-lgp-microsoft-sso.php:137
+#: includes/class-lgp-shared-mailbox.php:772
+msgid "Client Secret"
+msgstr ""
+
+#: includes/class-lgp-i18n.php:202
+#, php-format
+msgid "%s company"
+msgid_plural "%s companies"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-lgp-i18n.php:203
+#, php-format
+msgid "%s unit"
+msgid_plural "%s units"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-lgp-i18n.php:204
+#, php-format
+msgid "%s ticket"
+msgid_plural "%s tickets"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-lgp-i18n.php:205
+#, php-format
+msgid "%s attachment"
+msgid_plural "%s attachments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-lgp-login-handler.php:283
+msgid "User creation via SSO is disabled"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:96
+msgid "Microsoft SSO is not configured"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:132
+#: includes/class-lgp-microsoft-sso.php:261
+msgid "Invalid state parameter"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:149
+msgid "No authorization code received"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:199
+msgid "Failed to exchange authorization code for token"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:203
+msgid "No access token in response"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:234
+msgid "Failed to retrieve user data from Microsoft Graph"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:303
+msgid "Microsoft SSO Setup Instructions"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:306
+msgid "Register Application in Azure AD"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:308
+msgid "1. Go to Azure Portal: https://portal.azure.com"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:309
+msgid "2. Navigate to \"Azure Active Directory\" → \"App registrations\""
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:310
+msgid "3. Click \"New registration\""
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:311
+msgid "4. Enter application name: \"LounGenie Portal\""
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:312
+msgid "5. Select \"Accounts in this organizational directory only\""
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:313
+msgid "6. Click \"Register\""
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:317
+msgid "Configure Redirect URI"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:319
+msgid "1. In the registered app, go to \"Authentication\""
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:320
+msgid "2. Under \"Redirect URIs\", click \"Add URI\""
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:321
+#, php-format
+msgid "3. Enter the Redirect URI: %s"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:322
+msgid "4. Check the checkboxes for \"Access tokens\" and \"ID tokens\""
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:323
+msgid "5. Click \"Save\""
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:327
+msgid "Create Application Secret"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:329
+msgid "1. Go to \"Certificates & secrets\""
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:330
+msgid "2. Under \"Client secrets\", click \"New client secret\""
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:331
+msgid "3. Enter description: \"LounGenie Portal Secret\""
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:332
+msgid "4. Select expiration (24 months recommended)"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:333
+msgid "5. Click \"Add\""
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:334
+msgid "6. Copy the secret value immediately (cannot be retrieved later)"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:338
+msgid "Configure WordPress"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:340
+msgid "Add to wp-config.php:"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:341
+msgid "define(\"LGP_MICROSOFT_CLIENT_ID\", \"your-client-id\");"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:342
+msgid "define(\"LGP_MICROSOFT_CLIENT_SECRET\", \"your-client-secret\");"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:343
+msgid "define(\"LGP_MICROSOFT_TENANT_ID\", \"your-tenant-id\");"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:344
+msgid "Or configure in WordPress Admin → Settings → LounGenie Portal → SSO"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:348
+msgid "Set API Permissions"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:350
+msgid "1. In Azure app, go to \"API permissions\""
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:351
+msgid "2. Click \"Add a permission\""
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:352
+msgid "3. Select \"Microsoft Graph\" → \"Delegated permissions\""
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:353
+msgid "4. Search for and add: \"openid\", \"profile\", \"email\""
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso-handler.php:354
+msgid "5. Click \"Grant admin consent\""
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:60
+msgid "M365 SSO"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:103
+msgid "LounGenie Portal Settings"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:106
+msgid "Azure AD App Registration"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:108
+#: includes/class-lgp-outlook.php:738
+msgid "Go to Azure Portal → App Registrations"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:109
+msgid "Create new app: \"LounGenie Portal SSO\""
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:110
+msgid "Set redirect URI:"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:111
+msgid "Add API permissions: User.Read, email, profile, openid"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:112
+msgid "Create client secret and copy the value"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:131
+msgid "Application (client) ID from Azure AD"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:146
+msgid "Client secret value (not the ID)"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:152
+msgid "Tenant ID"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:161
+msgid "Directory (tenant) ID from Azure AD"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:166
+msgid "Portal Branding"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:171
+msgid "Logo URL"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:182
+msgid "Upload your logo to WordPress Media Library, then paste the URL here. Recommended size: 280x80px (PNG with transparent background)."
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:184
+msgid "Go to Media Library"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:188
+msgid "Preview:"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:200
+msgid "Test SSO"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:203
+msgid "Test Sign in with Microsoft"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:396
+msgid "No email address found in Microsoft account"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:472
+msgid "Sign in with Microsoft 365"
+msgstr ""
+
+#: includes/class-lgp-microsoft-sso.php:474
+msgid "— OR —"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:162
+msgid "Outlook integration is not enabled"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:168
+msgid "Not authenticated with Microsoft"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:277
+#, php-format
+msgid "LounGenie Ticket Update - #%d"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:323
+msgid "Invalid data"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:384
+msgid "Reply sent successfully"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:568
+msgid "LounGenie Outlook Settings"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:569
+#: includes/class-lgp-system-health.php:69
+msgid "Outlook Integration"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:601
+#: includes/class-lgp-system-health.php:256
+msgid "Outlook Integration Settings"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:605
+msgid "Successfully authenticated with Microsoft!"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:611
+msgid "Authentication failed. Please check your Azure AD configuration and try again."
+msgstr ""
+
+#: includes/class-lgp-outlook.php:624
+msgid "Azure AD Client ID"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:633
+msgid "Get this from Azure Portal → App Registrations"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:639
+msgid "Azure AD Client Secret"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:648
+msgid "Create a client secret in Azure Portal"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:654
+msgid "Redirect URI Mode"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:658
+msgid "Mode"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:662
+msgid "Pretty URL (/psp-azure-callback)"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:663
+msgid "Admin Ajax (admin-ajax.php)"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:664
+msgid "Admin Settings Page"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:667
+msgid "Use Pretty URL for Azure Web redirect URIs (no query string). Admin Ajax and Admin Settings modes may not be accepted by Azure."
+msgstr ""
+
+#: includes/class-lgp-outlook.php:672
+#: includes/class-lgp-system-health.php:128
+msgid "Current Redirect URI"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:676
+msgid "Register this URI in Azure → App Registration → Authentication → Web."
+msgstr ""
+
+#: includes/class-lgp-outlook.php:687
+msgid "Authentication"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:691
+msgid "Authenticated"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:693
+msgid "Not authenticated"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:705
+msgid "Token:"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:707
+#: includes/class-lgp-system-health.php:83
+msgid "Present"
+msgstr ""
+
+#. translators: 1: human readable time remaining
+#: includes/class-lgp-outlook.php:713
+#, php-format
+msgid "expires in %s"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:720
+msgid "Not found"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:725
+msgid "If you see \"Successfully authenticated\" after consent but status does not update, refresh this page once. Ensure you saved Client ID/Secret before authenticating."
+msgstr ""
+
+#: includes/class-lgp-outlook.php:731
+msgid "Authenticate with Microsoft"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:736
+msgid "Setup Instructions"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:739
+msgid "Create a new app registration"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:740
+msgid "Set redirect URI to the Current Redirect URI shown above."
+msgstr ""
+
+#: includes/class-lgp-outlook.php:741
+msgid "Add API permissions: Mail.Send, Mail.ReadWrite"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:742
+msgid "Create a client secret"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:743
+msgid "Enter Client ID and Client Secret above and save"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:744
+msgid "Click \"Authenticate with Microsoft\" to authorize"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:754
+msgid "Recent Errors (Debug)"
+msgstr ""
+
+#: includes/class-lgp-outlook.php:765
+#: includes/class-lgp-system-health.php:223
+msgid "Clear Error Log"
+msgstr ""
+
+#: includes/class-lgp-role-switcher.php:138
+msgid "Security check failed"
+msgstr ""
+
+#: includes/class-lgp-role-switcher.php:142
+msgid "Insufficient permissions"
+msgstr ""
+
+#: includes/class-lgp-router.php:144
+msgid "Access Denied: You do not have permission to access the portal."
+msgstr ""
+
+#: includes/class-lgp-router.php:145
+msgid "Access Denied"
+msgstr ""
+
+#: includes/class-lgp-security-audit.php:424
+msgid "LounGenie Portal - Security Audit Log"
+msgstr ""
+
+#: includes/class-lgp-security-audit.php:427
+#: templates/map-view.php:79
+#: templates/units-view.php:87
+msgid "Filters"
+msgstr ""
+
+#: includes/class-lgp-security-audit.php:433
+msgid "Event Type:"
+msgstr ""
+
+#: includes/class-lgp-security-audit.php:435
+#: includes/class-lgp-security-audit.php:447
+#: includes/class-lgp-security-audit.php:459
+#: templates/gateway-view.php:49
+#: templates/map-view.php:85
+#: templates/map-view.php:97
+#: templates/map-view.php:109
+msgid "All"
+msgstr ""
+
+#: includes/class-lgp-security-audit.php:445
+msgid "Severity:"
+msgstr ""
+
+#: includes/class-lgp-security-audit.php:457
+msgid "User:"
+msgstr ""
+
+#: includes/class-lgp-security-audit.php:469
+msgid "Search Action:"
+msgstr ""
+
+#: includes/class-lgp-security-audit.php:475
+msgid "Filter"
+msgstr ""
+
+#: includes/class-lgp-security-audit.php:476
+msgid "Clear Filters"
+msgstr ""
+
+#: includes/class-lgp-security-audit.php:477
+msgid "Export CSV"
+msgstr ""
+
+#: includes/class-lgp-security-audit.php:478
+msgid "Clear all audit logs?"
+msgstr ""
+
+#: includes/class-lgp-security-audit.php:479
+msgid "Clear All"
+msgstr ""
+
+#: includes/class-lgp-security-audit.php:486
+msgid "Audit Events"
+msgstr ""
+
+#: includes/class-lgp-security-audit.php:491
+msgid "Event Type"
+msgstr ""
+
+#: includes/class-lgp-security-audit.php:492
+msgid "Severity"
+msgstr ""
+
+#: includes/class-lgp-security-audit.php:493
+#: templates/company-profile.php:423
+msgid "User"
+msgstr ""
+
+#: includes/class-lgp-security-audit.php:495
+msgid "IP Address"
+msgstr ""
+
+#: includes/class-lgp-security-audit.php:536
+msgid "No audit events found."
+msgstr ""
+
+#: includes/class-lgp-shared-mailbox.php:724
+#: includes/class-lgp-shared-mailbox.php:750
+msgid "Shared Mailbox Settings"
+msgstr ""
+
+#: includes/class-lgp-shared-mailbox.php:725
+msgid "Shared Mailbox"
+msgstr ""
+
+#: includes/class-lgp-shared-mailbox.php:756
+msgid "Azure Tenant ID"
+msgstr ""
+
+#: includes/class-lgp-shared-mailbox.php:780
+msgid "Shared Mailbox Address"
+msgstr ""
+
+#: includes/class-lgp-shared-mailbox.php:784
+msgid "e.g., support@poolsafeinc.com"
+msgstr ""
+
+#: includes/class-lgp-shared-mailbox.php:789
+msgid "Allow \"Send On Behalf\""
+msgstr ""
+
+#: includes/class-lgp-shared-mailbox.php:793
+msgid "If enabled, replies will show sender name with shared mailbox. Requires additional Graph permissions."
+msgstr ""
+
+#: includes/class-lgp-support-ticket-handler.php:39
+msgid "Security verification failed."
+msgstr ""
+
+#: includes/class-lgp-support-ticket-handler.php:55
+msgid "Failed to create ticket. Please try again."
+msgstr ""
+
+#: includes/class-lgp-support-ticket-handler.php:73
+#: templates/components/support-ticket-form.php:481
+msgid "Your support ticket has been submitted successfully."
+msgstr ""
+
+#: includes/class-lgp-support-ticket-handler.php:252
+msgid "Failed to create ticket in database."
+msgstr ""
+
+#: includes/class-lgp-support-ticket-handler.php:281
+msgid "Failed to create ticket."
+msgstr ""
+
+#: includes/class-lgp-support-ticket-handler.php:405
+#, php-format
+msgid "Support Ticket Confirmation: %s"
+msgstr ""
+
+#: includes/class-lgp-support-ticket-handler.php:410
+#, php-format
+msgid ""
+"Dear %1$s,\n"
+"\n"
+"Thank you for submitting a support ticket. Your ticket has been received and assigned the following reference number:\n"
+"\n"
+"Ticket Reference: %2$s\n"
+"Category: %3$s\n"
+"Urgency: %4$s\n"
+"\n"
+"We will review your request and respond as soon as possible. You can track the status of your ticket using the reference number above.\n"
+"\n"
+"Best regards,\n"
+"LounGenie Support Team"
+msgstr ""
+
+#: includes/class-lgp-support-ticket-handler.php:451
+#, php-format
+msgid "[New Ticket] %1$s - %2$s"
+msgstr ""
+
+#: includes/class-lgp-support-ticket-handler.php:457
+#, php-format
+msgid ""
+"A new support ticket has been submitted:\n"
+"\n"
+"Ticket Reference: %1$s\n"
+"Requester: %2$s %3$s\n"
+"Email: %4$s\n"
+"Phone: %5$s\n"
+"Category: %6$s\n"
+"Urgency: %7$s\n"
+"Units Affected: %8$s\n"
+"\n"
+"Subject: %9$s\n"
+"\n"
+"Description:\n"
+"%10$s\n"
+"\n"
+"---\n"
+"Please log in to the portal to respond to this ticket."
+msgstr ""
+
+#: includes/class-lgp-system-health.php:28
+#: includes/class-lgp-system-health.php:47
+msgid "LounGenie System Health"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:29
+msgid "LounGenie Health"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:51
+msgid "Error log cleared successfully."
+msgstr ""
+
+#: includes/class-lgp-system-health.php:57
+msgid "Overall Status"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:65
+msgid "Microsoft OAuth Status"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:72
+msgid "Configured"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:74
+msgid "Not Configured"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:80
+msgid "Access Token"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:85
+msgid "Missing"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:90
+msgid "Token Expiration"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:101
+msgid "Expired"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:103
+#, php-format
+msgid "%d hours"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:105
+#, php-format
+msgid "%d days"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:117
+msgid "Redirect Mode"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:121
+msgid "Azure-compliant"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:123
+msgid "May not work with Azure"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:138
+msgid "System Requirements"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:142
+msgid "PHP Version"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:148
+msgid "Requires 7.4+"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:153
+msgid "WordPress Version"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:159
+msgid "Requires 5.8+"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:164
+msgid "HTTPS"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:169
+#: includes/class-lgp-system-health.php:180
+msgid "Not enabled"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:170
+msgid "HTTPS required for Azure OAuth and security headers"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:175
+msgid "cURL Extension"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:181
+msgid "Required for Microsoft Graph and HubSpot API calls"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:186
+msgid "Memory Limit"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:192
+msgid "Recommend 256M+"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:197
+msgid "Max Execution Time"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:203
+msgid "Recommend 60s+"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:222
+msgid "Clear all error logs?"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:244
+#, php-format
+msgid "Showing 50 of %d errors"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:247
+msgid "No errors logged."
+msgstr ""
+
+#: includes/class-lgp-system-health.php:253
+msgid "Quick Links"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:259
+msgid "Flush Permalinks"
+msgstr ""
+
+#: includes/class-lgp-system-health.php:262
+msgid "View Portal"
+msgstr ""
+
+#: includes/class-lgp-theme-independence.php:82
+msgid "You do not have permission to access the portal."
+msgstr ""
+
+#: includes/class-lgp-theme-independence.php:91
+msgid "Portal template not found."
+msgstr ""
+
+#: includes/email-integration.php:17
+msgid "Every 5 Minutes"
+msgstr ""
+
+#: includes/email-integration.php:24
+msgid "Every 10 Minutes"
+msgstr ""
+
+#: includes/email-integration.php:331
+msgid "Pool Safe Portal: Email integration is not configured. Please configure the shared mailbox in Settings."
+msgstr ""
+
+#: templates/company-profile.php:22
+msgid "No company found. Please contact support."
+msgstr ""
+
+#: templates/company-profile.php:34
+msgid "You do not have access to this company."
+msgstr ""
+
+#: templates/company-profile.php:52
+msgid "Company not found."
+msgstr ""
+
+#: templates/company-profile.php:111
+msgid "Company Profile & Management"
+msgstr ""
+
+#: templates/company-profile.php:115
+msgid "Edit Company"
+msgstr ""
+
+#: templates/company-profile.php:124
+#: templates/company-profile.php:220
+#: templates/units-view.php:80
+msgid "LounGenie Units"
+msgstr ""
+
+#: templates/company-profile.php:129
+#: templates/company-profile.php:303
+msgid "Gateways"
+msgstr ""
+
+#: templates/company-profile.php:141
+msgid "Contract Type"
+msgstr ""
+
+#: templates/company-profile.php:152
+#: templates/dashboard-partner.php:142
+msgid "Company Information"
+msgstr ""
+
+#: templates/company-profile.php:157
+msgid "Basic Information"
+msgstr ""
+
+#: templates/company-profile.php:158
+#: templates/company-profile.php:205
+#: templates/dashboard-partner.php:147
+msgid "Company Name:"
+msgstr ""
+
+#: templates/company-profile.php:160
+#: templates/dashboard-partner.php:148
+msgid "Address:"
+msgstr ""
+
+#: templates/company-profile.php:161
+#: templates/company-profile.php:163
+#: templates/company-profile.php:165
+#: templates/company-profile.php:171
+#: templates/company-profile.php:173
+#: templates/company-profile.php:175
+#: templates/company-profile.php:182
+#: templates/company-profile.php:184
+#: templates/company-profile.php:186
+#: templates/company-profile.php:194
+#: templates/company-profile.php:196
+#: templates/company-profile.php:198
+#: templates/company-profile.php:208
+#: templates/company-profile.php:210
+#: templates/components/support-ticket-form.php:216
+#: templates/dashboard-partner.php:148
+#: templates/dashboard-partner.php:149
+#: templates/dashboard-partner.php:154
+#: templates/dashboard-partner.php:155
+#: templates/dashboard-support.php:527
+msgid "N/A"
+msgstr ""
+
+#: templates/company-profile.php:162
+#: templates/dashboard-partner.php:149
+msgid "State:"
+msgstr ""
+
+#: templates/company-profile.php:164
+msgid "Venue Type:"
+msgstr ""
+
+#: templates/company-profile.php:170
+#: templates/company-profile.php:181
+msgid "Contact Name:"
+msgstr ""
+
+#: templates/company-profile.php:172
+#: templates/company-profile.php:183
+#: templates/company-profile.php:209
+#: templates/dashboard-partner.php:155
+msgid "Email:"
+msgstr ""
+
+#: templates/company-profile.php:174
+#: templates/company-profile.php:185
+msgid "Phone:"
+msgstr ""
+
+#: templates/company-profile.php:180
+msgid "Secondary Contact"
+msgstr ""
+
+#: templates/company-profile.php:192
+msgid "Contract Information"
+msgstr ""
+
+#: templates/company-profile.php:193
+msgid "Contract Type:"
+msgstr ""
+
+#: templates/company-profile.php:195
+msgid "Start Date:"
+msgstr ""
+
+#: templates/company-profile.php:197
+msgid "End Date:"
+msgstr ""
+
+#: templates/company-profile.php:204
+msgid "Management Company"
+msgstr ""
+
+#: templates/company-profile.php:207
+#: templates/dashboard-partner.php:154
+msgid "Contact:"
+msgstr ""
+
+#: templates/company-profile.php:228
+msgid "Unit distribution by status color:"
+msgstr ""
+
+#. translators: %1$d: unit count, %2$s: percentage
+#: templates/company-profile.php:248
+#, php-format
+msgid "%1$d units (%2$s%%)"
+msgstr ""
+
+#: templates/company-profile.php:264
+msgid "View Detailed Unit List"
+msgstr ""
+
+#: templates/company-profile.php:270
+#: templates/company-profile.php:311
+msgid "ID"
+msgstr ""
+
+#: templates/company-profile.php:272
+msgid "Lock Type"
+msgstr ""
+
+#: templates/company-profile.php:274
+#: templates/units-view.php:96
+#: templates/units-view.php:187
+msgid "Color"
+msgstr ""
+
+#: templates/company-profile.php:294
+msgid "No units found for this company."
+msgstr ""
+
+#: templates/company-profile.php:312
+#: templates/gateway-view.php:75
+msgid "Channel"
+msgstr ""
+
+#: templates/company-profile.php:314
+#: templates/gateway-view.php:77
+msgid "Unit Capacity"
+msgstr ""
+
+#: templates/company-profile.php:315
+#: templates/gateway-view.php:47
+#: templates/gateway-view.php:78
+msgid "Call Button"
+msgstr ""
+
+#: templates/company-profile.php:332
+msgid "No gateways found for this company."
+msgstr ""
+
+#: templates/company-profile.php:349
+#: templates/dashboard-support.php:515
+#: templates/tickets-view.php:220
+msgid "Ticket ID"
+msgstr ""
+
+#: templates/company-profile.php:350
+#: templates/company-profile.php:502
+#: templates/dashboard-partner.php:215
+#: templates/map-view.php:107
+#: templates/tickets-view.php:142
+#: templates/tickets-view.php:178
+msgid "Type"
+msgstr ""
+
+#: templates/company-profile.php:351
+#: templates/dashboard-partner.php:181
+#: templates/dashboard-partner.php:216
+#: templates/dashboard-support.php:463
+#: templates/tickets-view.php:132
+#: templates/tickets-view.php:179
+#: templates/tickets-view.php:228
+msgid "Priority"
+msgstr ""
+
+#: templates/company-profile.php:353
+#: templates/dashboard-support.php:519
+#: templates/tickets-view.php:185
+#: templates/tickets-view.php:240
+msgid "Created"
+msgstr ""
+
+#: templates/company-profile.php:354
+#: templates/dashboard-support.php:520
+#: templates/gateway-view.php:80
+#: templates/tickets-view.php:187
+#: templates/units-view.php:193
+msgid "Actions"
+msgstr ""
+
+#: templates/company-profile.php:402
+msgid "No tickets found for this company."
+msgstr ""
+
+#: templates/company-profile.php:411
+msgid "Audit Log"
+msgstr ""
+
+#: templates/company-profile.php:413
+msgid "Filter by action..."
+msgstr ""
+
+#: templates/company-profile.php:425
+msgid "Details"
+msgstr ""
+
+#: templates/company-profile.php:430
+msgid "Loading audit log..."
+msgstr ""
+
+#: templates/company-profile.php:443
+msgid "Service Notes"
+msgstr ""
+
+#: templates/company-profile.php:445
+msgid "+ Add Service Note"
+msgstr ""
+
+#: templates/company-profile.php:453
+#: templates/company-profile.php:500
+#: templates/dashboard-partner.php:218
+msgid "Date"
+msgstr ""
+
+#: templates/company-profile.php:457
+#: templates/company-profile.php:501
+msgid "Technician"
+msgstr ""
+
+#: templates/company-profile.php:461
+msgid "Service Type"
+msgstr ""
+
+#: templates/company-profile.php:463
+msgid "Select service type..."
+msgstr ""
+
+#: templates/company-profile.php:466
+#: templates/map-view.php:112
+msgid "Inspection"
+msgstr ""
+
+#: templates/company-profile.php:468
+#: templates/components/support-ticket-form.php:280
+#: templates/support-ticket-form.php:215
+msgid "Other"
+msgstr ""
+
+#: templates/company-profile.php:472
+msgid "Unit (optional)"
+msgstr ""
+
+#: templates/company-profile.php:474
+msgid "Select unit..."
+msgstr ""
+
+#: templates/company-profile.php:485
+msgid "Travel Time (minutes)"
+msgstr ""
+
+#: templates/company-profile.php:489
+msgid "Save Service Note"
+msgstr ""
+
+#: templates/company-profile.php:503
+#: templates/components/component-company-colors.php:71
+#: templates/tickets-view.php:184
+msgid "Unit"
+msgid_plural "Units"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/company-profile.php:504
+msgid "Travel Time"
+msgstr ""
+
+#: templates/company-profile.php:510
+msgid "Loading service notes..."
+msgstr ""
+
+#: templates/company-profile.php:523
+msgid "Reply to Ticket"
+msgstr ""
+
+#: templates/company-profile.php:530
+msgid "Your Reply"
+msgstr ""
+
+#: templates/company-profile.php:534
+#: templates/tickets-view.php:254
+msgid "Send Reply"
+msgstr ""
+
+#: templates/components/component-company-colors.php:54
+msgid "No units configured"
+msgstr ""
+
+#: templates/components/component-company-colors.php:158
+#, php-format
+msgid "+%d more"
+msgstr ""
+
+#: templates/components/component-company-colors.php:180
+msgid "No color data available"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:69
+#: templates/support-ticket-form.php:35
+msgid "Submit a Support Ticket"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:71
+msgid "Please provide detailed information about your issue. Required fields are marked with an asterisk (*)."
+msgstr ""
+
+#: templates/components/support-ticket-form.php:75
+msgid "Reference: "
+msgstr ""
+
+#: templates/components/support-ticket-form.php:82
+msgid "Personal Information"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:88
+#: templates/support-ticket-form.php:52
+msgid "First Name"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:89
+#: templates/components/support-ticket-form.php:111
+#: templates/components/support-ticket-form.php:135
+#: templates/components/support-ticket-form.php:184
+#: templates/components/support-ticket-form.php:227
+#: templates/components/support-ticket-form.php:263
+#: templates/components/support-ticket-form.php:289
+#: templates/components/support-ticket-form.php:312
+#: templates/components/support-ticket-form.php:336
+msgid "required"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:97
+msgid "John"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:110
+#: templates/support-ticket-form.php:70
+msgid "Last Name"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:119
+msgid "Doe"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:143
+msgid "john.doe@example.com"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:156
+#: templates/components/support-ticket-form.php:364
+msgid "(optional)"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:164
+msgid "(123) 456-7890"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:170
+msgid "Format: (123) 456-7890 or +1-123-456-7890"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:177
+msgid "Company & Unit Information"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:194
+msgid "-- Select your company --"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:226
+#: templates/support-ticket-form.php:161
+msgid "Number of Units Affected"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:232
+msgid "1 Unit"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:236
+msgid "2-5 Units"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:240
+msgid "6-10 Units"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:244
+msgid "10+ Units"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:257
+#: templates/support-ticket-form.php:195
+msgid "Issue Details"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:262
+msgid "Request Category"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:273
+msgid "-- Select category --"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:274
+msgid "Maintenance Request"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:275
+msgid "Software Issue"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:276
+msgid "Hardware Issue"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:277
+#: templates/support-ticket-form.php:214
+msgid "General Inquiry"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:278
+#: templates/support-ticket-form.php:213
+msgid "Feature Request"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:279
+msgid "Billing/Account"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:288
+#: templates/support-ticket-form.php:222
+msgid "Urgency Level"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:294
+msgid "Normal (Non-urgent)"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:298
+msgid "High (Soon needed)"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:302
+msgid "Critical (Down/Emergency)"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:311
+#: templates/dashboard-support.php:458
+#: templates/support-ticket-form.php:242
+msgid "Subject"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:319
+msgid "Brief description of your issue (max 100 characters)"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:335
+#: templates/support-ticket-form.php:262
+msgid "Detailed Description"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:342
+msgid "Please provide detailed information about your issue. Include steps to reproduce, error messages, etc."
+msgstr ""
+
+#: templates/components/support-ticket-form.php:359
+#: templates/dashboard-support.php:478
+#: templates/support-ticket-form.php:282
+msgid "Attachments"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:363
+msgid "Upload Files"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:383
+msgid "Click to upload or drag and drop"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:386
+msgid "PNG, JPG, PDF, DOCX up to 10MB each (max 5 files)"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:393
+msgid "Selected Files:"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:400
+msgid "Supported formats: JPG, PNG, PDF, DOC, DOCX, XLS, XLSX, TXT, ZIP. Max 10MB per file, 5 files total."
+msgstr ""
+
+#: templates/components/support-ticket-form.php:407
+msgid "Acknowledgments"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:421
+msgid "I agree to be contacted via email or phone regarding this support ticket."
+msgstr ""
+
+#: templates/components/support-ticket-form.php:440
+#, php-format
+msgid "I have read and agree to the %1$sprivacy policy%2$s and understand my data will be used to process this support request."
+msgstr ""
+
+#: templates/components/support-ticket-form.php:458
+msgid "Submit Support Ticket"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:468
+#: templates/support-ticket-form.php:354
+msgid "Clear Form"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:480
+msgid "Success!"
+msgstr ""
+
+#: templates/components/support-ticket-form.php:484
+msgid "You will receive a confirmation email shortly with your ticket details."
+msgstr ""
+
+#: templates/custom-login-enhanced.php:39
+#: templates/custom-login-enhanced.php:159
+msgid "Sign In"
+msgstr ""
+
+#: templates/custom-login-enhanced.php:66
+msgid "Partner Company Management System"
+msgstr ""
+
+#: templates/custom-login-enhanced.php:78
+msgid "Partner Company"
+msgstr ""
+
+#: templates/custom-login-enhanced.php:88
+msgid "Support Team"
+msgstr ""
+
+#: templates/custom-login-enhanced.php:112
+msgid "Enter your username"
+msgstr ""
+
+#: templates/custom-login-enhanced.php:132
+msgid "Enter your password"
+msgstr ""
+
+#: templates/custom-login-enhanced.php:135
+msgid "Toggle password visibility"
+msgstr ""
+
+#: templates/custom-login-enhanced.php:154
+msgid "Forgot password?"
+msgstr ""
+
+#: templates/custom-login-enhanced.php:173
+msgid "Secure Partner Company Access"
+msgstr ""
+
+#: templates/custom-login-enhanced.php:192
+msgid "Microsoft Sign-In"
+msgstr ""
+
+#: templates/custom-login-enhanced.php:203
+msgid "Use your Microsoft 365 credentials to access the Support Team portal."
+msgstr ""
+
+#: templates/custom-login-enhanced.php:210
+msgid "SSO Protected • Enterprise Security"
+msgstr ""
+
+#: templates/dashboard-partner.php:20
+msgid "No company associated with your account. Please contact support."
+msgstr ""
+
+#: templates/dashboard-partner.php:64
+msgid "Partner Dashboard"
+msgstr ""
+
+#: templates/dashboard-partner.php:68
+#: templates/dashboard-support.php:154
+msgid "Dashboard Orientation"
+msgstr ""
+
+#: templates/dashboard-partner.php:85
+#: templates/dashboard-support.php:203
+msgid "Active Units"
+msgstr ""
+
+#: templates/dashboard-partner.php:98
+msgid "Active Gateways"
+msgstr ""
+
+#: templates/dashboard-partner.php:116
+msgid "System Uptime"
+msgstr ""
+
+#: templates/dashboard-partner.php:125
+msgid "Quick Actions"
+msgstr ""
+
+#: templates/dashboard-partner.php:130
+#: templates/dashboard-support.php:494
+msgid "Create Ticket"
+msgstr ""
+
+#: templates/dashboard-partner.php:134
+msgid "Add New Gateway"
+msgstr ""
+
+#: templates/dashboard-partner.php:153
+msgid "Management Company:"
+msgstr ""
+
+#: templates/dashboard-partner.php:165
+msgid "Submit Service Request"
+msgstr ""
+
+#: templates/dashboard-partner.php:170
+#: templates/dashboard-support.php:517
+#: templates/tickets-view.php:224
+msgid "Request Type"
+msgstr ""
+
+#: templates/dashboard-partner.php:172
+msgid "Select type..."
+msgstr ""
+
+#: templates/dashboard-partner.php:183
+msgid "Normal"
+msgstr ""
+
+#: templates/dashboard-partner.php:191
+msgid "Describe your request..."
+msgstr ""
+
+#: templates/dashboard-partner.php:197
+msgid "Submit Request"
+msgstr ""
+
+#: templates/dashboard-partner.php:214
+msgid "Request ID"
+msgstr ""
+
+#: templates/dashboard-partner.php:247
+msgid "No recent activity."
+msgstr ""
+
+#: templates/dashboard-support.php:142
+msgid "Support Dashboard"
+msgstr ""
+
+#: templates/dashboard-support.php:143
+msgid "Overview of all companies, units, and support tickets"
+msgstr ""
+
+#: templates/dashboard-support.php:149
+msgid "Welcome to the LounGenie Support Team Portal!"
+msgstr ""
+
+#: templates/dashboard-support.php:150
+msgid "Track partner company updates, service requests, and units all in one place. Let's keep everything running smoothly!"
+msgstr ""
+
+#: templates/dashboard-support.php:157
+msgid "Support Team Operations"
+msgstr ""
+
+#: templates/dashboard-support.php:180
+msgid "Active Tickets"
+msgstr ""
+
+#: templates/dashboard-support.php:221
+#: templates/dashboard-support.php:344
+msgid "Active Installs"
+msgstr ""
+
+#: templates/dashboard-support.php:233
+msgid "Good morning!"
+msgstr ""
+
+#: templates/dashboard-support.php:235
+msgid "Good afternoon!"
+msgstr ""
+
+#: templates/dashboard-support.php:237
+msgid "Good evening!"
+msgstr ""
+
+#. Translators: %s is the user's display name.
+#: templates/dashboard-support.php:245
+#, php-format
+msgid "Welcome back, %s"
+msgstr ""
+
+#: templates/dashboard-support.php:254
+msgid "Support Operations"
+msgstr ""
+
+#. Translators: %d is the number of companies.
+#: templates/dashboard-support.php:258
+#, php-format
+msgid "Managing %d companies"
+msgstr ""
+
+#. Translators: %d is the number of open tickets.
+#: templates/dashboard-support.php:270
+#, php-format
+msgid "View Tickets (%d)"
+msgstr ""
+
+#: templates/dashboard-support.php:272
+msgid "View Tickets"
+msgstr ""
+
+#: templates/dashboard-support.php:278
+msgid "Manage Companies"
+msgstr ""
+
+#: templates/dashboard-support.php:283
+msgid "System Status:"
+msgstr ""
+
+#: templates/dashboard-support.php:286
+msgid " Moderate ticket volume. Review priority items."
+msgstr ""
+
+#: templates/dashboard-support.php:288
+msgid " Light ticket volume. All systems nominal."
+msgstr ""
+
+#: templates/dashboard-support.php:290
+msgid " No open tickets. Excellent!"
+msgstr ""
+
+#: templates/dashboard-support.php:323
+msgid "Company Map"
+msgstr ""
+
+#: templates/dashboard-support.php:324
+msgid "Support-only view powered by OpenStreetMap"
+msgstr ""
+
+#: templates/dashboard-support.php:357
+msgid "Top 5 Analytics"
+msgstr ""
+
+#: templates/dashboard-support.php:363
+msgid "Top Colors"
+msgstr ""
+
+#: templates/dashboard-support.php:375
+#: templates/dashboard-support.php:392
+#: templates/dashboard-support.php:409
+#: templates/dashboard-support.php:424
+#: templates/dashboard-support.php:428
+#: templates/units-view.php:257
+msgid "units"
+msgstr ""
+
+#: templates/dashboard-support.php:380
+#: templates/dashboard-support.php:397
+#: templates/dashboard-support.php:414
+msgid "No data available"
+msgstr ""
+
+#: templates/dashboard-support.php:386
+msgid "Top Lock Brands"
+msgstr ""
+
+#: templates/dashboard-support.php:403
+msgid "Top Venues"
+msgstr ""
+
+#: templates/dashboard-support.php:420
+msgid "Season Breakdown"
+msgstr ""
+
+#: templates/dashboard-support.php:423
+#: templates/units-view.php:111
+msgid "Seasonal"
+msgstr ""
+
+#: templates/dashboard-support.php:427
+#: templates/units-view.php:112
+msgid "Year-Round"
+msgstr ""
+
+#: templates/dashboard-support.php:440
+msgid "Create Support Ticket"
+msgstr ""
+
+#: templates/dashboard-support.php:441
+msgid "Or upload attachments to an existing ticket"
+msgstr ""
+
+#: templates/dashboard-support.php:459
+msgid "Brief description of the issue"
+msgstr ""
+
+#: templates/dashboard-support.php:468
+#: templates/map-view.php:86
+#: templates/map-view.php:148
+#: templates/support-ticket-form.php:234
+msgid "Critical"
+msgstr ""
+
+#: templates/dashboard-support.php:473
+#: templates/knowledge-center-view.php:94
+msgid "Description"
+msgstr ""
+
+#: templates/dashboard-support.php:474
+msgid "Detailed information about the issue"
+msgstr ""
+
+#: templates/dashboard-support.php:482
+msgid "Drag and drop files here or click to select"
+msgstr ""
+
+#: templates/dashboard-support.php:485
+msgid "Supported: PDF, DOC, XLS, PPT, TXT, CSV, JPG, PNG, GIF, ZIP (Max 10 MB)"
+msgstr ""
+
+#: templates/dashboard-support.php:497
+msgid "Clear"
+msgstr ""
+
+#: templates/dashboard-support.php:544
+#: templates/units-view.php:245
+msgid "View"
+msgstr ""
+
+#: templates/dashboard-support.php:552
+msgid "No tickets found."
+msgstr ""
+
+#: templates/dashboard-support.php:560
+msgid "System Alerts"
+msgstr ""
+
+#: templates/dashboard-support.php:564
+msgid "All systems operational"
+msgstr ""
+
+#: templates/gateway-view.php:32
+msgid "Gateway Management"
+msgstr ""
+
+#: templates/gateway-view.php:33
+msgid "Support-only view of all LounGenie gateways"
+msgstr ""
+
+#: templates/gateway-view.php:38
+msgid "Filters & Search"
+msgstr ""
+
+#: templates/gateway-view.php:43
+#: templates/tickets-view.php:117
+#: templates/units-view.php:152
+msgid "Search"
+msgstr ""
+
+#: templates/gateway-view.php:44
+msgid "Channel, address, or company"
+msgstr ""
+
+#: templates/gateway-view.php:51
+msgid "Disabled"
+msgstr ""
+
+#: templates/gateway-view.php:61
+msgid "No gateways found."
+msgstr ""
+
+#: templates/gateway-view.php:69
+msgid "gateways"
+msgstr ""
+
+#: templates/gateway-view.php:79
+msgid "Equipment"
+msgstr ""
+
+#: templates/gateway-view.php:94
+msgid "Yes"
+msgstr ""
+
+#: templates/gateway-view.php:96
+msgid "No"
+msgstr ""
+
+#: templates/gateway-view.php:102
+msgid "View Units"
+msgstr ""
+
+#: templates/gateway-view.php:105
+msgid "Audit Logs"
+msgstr ""
+
+#: templates/gateway-view.php:108
+msgid "Test Signal"
+msgstr ""
+
+#: templates/gateway-view.php:124
+msgid "Connected Units"
+msgstr ""
+
+#: templates/gateway-view.php:133
+msgid "Gateway Audit Logs"
+msgstr ""
+
+#: templates/knowledge-center-view.php:36
+#: templates/portal-shell.php:124
+#: templates/portal-shell.php:155
+msgid "Knowledge Center"
+msgstr ""
+
+#: templates/knowledge-center-view.php:39
+msgid "+ Add Guide"
+msgstr ""
+
+#: templates/knowledge-center-view.php:49
+msgid "Search videos..."
+msgstr ""
+
+#: templates/knowledge-center-view.php:53
+msgid "All Categories"
+msgstr ""
+
+#: templates/knowledge-center-view.php:64
+msgid "Loading videos..."
+msgstr ""
+
+#: templates/knowledge-center-view.php:69
+msgid "No knowledge guides available."
+msgstr ""
+
+#: templates/knowledge-center-view.php:71
+msgid "Click \"Add Guide\" to create your first knowledge guide."
+msgstr ""
+
+#: templates/knowledge-center-view.php:81
+msgid "Add Knowledge Guide"
+msgstr ""
+
+#: templates/knowledge-center-view.php:89
+msgid "Title"
+msgstr ""
+
+#: templates/knowledge-center-view.php:99
+msgid "Video URL or Upload"
+msgstr ""
+
+#: templates/knowledge-center-view.php:102
+msgid "YouTube/Vimeo/direct URL, or upload a video file below (mp4/mov/webm/ogg, max 10MB). One is required."
+msgstr ""
+
+#: templates/knowledge-center-view.php:106
+msgid "Upload Video (optional)"
+msgstr ""
+
+#: templates/knowledge-center-view.php:112
+#: templates/support-ticket-form.php:200
+msgid "Category"
+msgstr ""
+
+#: templates/knowledge-center-view.php:114
+msgid "General"
+msgstr ""
+
+#: templates/knowledge-center-view.php:116
+msgid "Troubleshooting"
+msgstr ""
+
+#: templates/knowledge-center-view.php:118
+msgid "Product Overview"
+msgstr ""
+
+#: templates/knowledge-center-view.php:123
+msgid "Duration (seconds)"
+msgstr ""
+
+#: templates/knowledge-center-view.php:128
+msgid "Target Companies (optional)"
+msgstr ""
+
+#: templates/knowledge-center-view.php:132
+msgid "All Companies"
+msgstr ""
+
+#: templates/knowledge-center-view.php:137
+msgid "Leave \"All Companies\" checked to make video available to everyone"
+msgstr ""
+
+#: templates/knowledge-center-view.php:146
+msgid "Save Video"
+msgstr ""
+
+#: templates/map-view.php:63
+msgid "Service Map"
+msgstr ""
+
+#: templates/map-view.php:65
+msgid "Manage units and service tickets by location"
+msgstr ""
+
+#: templates/map-view.php:83
+msgid "Urgency"
+msgstr ""
+
+#: templates/map-view.php:98
+#: templates/tickets-view.php:86
+msgid "Open"
+msgstr ""
+
+#: templates/map-view.php:100
+msgid "Resolved"
+msgstr ""
+
+#: templates/map-view.php:101
+#: templates/tickets-view.php:94
+msgid "Closed"
+msgstr ""
+
+#: templates/map-view.php:113
+msgid "Cleaning"
+msgstr ""
+
+#: templates/map-view.php:119
+msgid "Sort By"
+msgstr ""
+
+#: templates/map-view.php:121
+msgid "Urgency (High to Low)"
+msgstr ""
+
+#: templates/map-view.php:122
+msgid "Date (Newest)"
+msgstr ""
+
+#: templates/map-view.php:123
+msgid "Date (Oldest)"
+msgstr ""
+
+#: templates/map-view.php:124
+msgid "Location (A-Z)"
+msgstr ""
+
+#: templates/map-view.php:129
+msgid "Reset Filters"
+msgstr ""
+
+#: templates/map-view.php:135
+msgid "Units & Tickets"
+msgstr ""
+
+#: templates/map-view.php:145
+msgid "Legend"
+msgstr ""
+
+#: templates/portal-shell.php:29
+msgid "Portal"
+msgstr ""
+
+#: templates/portal-shell.php:36
+msgid "Skip to main content"
+msgstr ""
+
+#: templates/portal-shell.php:41
+msgid "Portal Header"
+msgstr ""
+
+#: templates/portal-shell.php:43
+msgid "LounGenie Portal Logo"
+msgstr ""
+
+#: templates/portal-shell.php:63
+msgid "User Actions"
+msgstr ""
+
+#: templates/portal-shell.php:65
+msgid "Notifications"
+msgstr ""
+
+#: templates/portal-shell.php:73
+msgid "Support"
+msgstr ""
+
+#: templates/portal-shell.php:73
+msgid "Partner"
+msgstr ""
+
+#: templates/portal-shell.php:80
+msgid "Toggle Navigation Menu"
+msgstr ""
+
+#: templates/portal-shell.php:87
+msgid "Main Navigation"
+msgstr ""
+
+#: templates/portal-shell.php:106
+msgid "Units & Gateways"
+msgstr ""
+
+#: templates/portal-shell.php:118
+msgid "Map View"
+msgstr ""
+
+#: templates/portal-shell.php:137
+msgid "My Units"
+msgstr ""
+
+#: templates/portal-shell.php:149
+msgid "Request History"
+msgstr ""
+
+#: templates/portal-shell.php:164
+msgid "Main Content"
+msgstr ""
+
+#: templates/portal-shell.php:190
+msgid "Welcome to LounGenie Portal"
+msgstr ""
+
+#: templates/portal-shell.php:191
+msgid "This section is under development."
+msgstr ""
+
+#: templates/support-ticket-form.php:37
+msgid "We're here to help! Please provide details about your issue and we'll get back to you as soon as possible."
+msgstr ""
+
+#: templates/support-ticket-form.php:47
+msgid "Your Information"
+msgstr ""
+
+#: templates/support-ticket-form.php:53
+#: templates/support-ticket-form.php:71
+msgid "required field"
+msgstr ""
+
+#: templates/support-ticket-form.php:108
+msgid "(Optional)"
+msgstr ""
+
+#: templates/support-ticket-form.php:119
+msgid "Format: (555) 123-4567"
+msgstr ""
+
+#: templates/support-ticket-form.php:126
+msgid "Property Information"
+msgstr ""
+
+#: templates/support-ticket-form.php:131
+msgid "Property/Company"
+msgstr ""
+
+#: templates/support-ticket-form.php:140
+msgid "-- Select Property --"
+msgstr ""
+
+#: templates/support-ticket-form.php:174
+msgid "How many units are affected by this issue?"
+msgstr ""
+
+#: templates/support-ticket-form.php:179
+msgid "Select Specific Units (Optional)"
+msgstr ""
+
+#: templates/support-ticket-form.php:187
+msgid "-- Select Units --"
+msgstr ""
+
+#: templates/support-ticket-form.php:189
+msgid "Hold Ctrl/Cmd to select multiple units"
+msgstr ""
+
+#: templates/support-ticket-form.php:209
+msgid "-- Select Category --"
+msgstr ""
+
+#: templates/support-ticket-form.php:210
+msgid "Maintenance Issue"
+msgstr ""
+
+#: templates/support-ticket-form.php:211
+msgid "Billing Question"
+msgstr ""
+
+#: templates/support-ticket-form.php:212
+msgid "Account/Access"
+msgstr ""
+
+#: templates/support-ticket-form.php:251
+msgid "Brief description of your issue"
+msgstr ""
+
+#: templates/support-ticket-form.php:256
+msgid "Characters: "
+msgstr ""
+
+#: templates/support-ticket-form.php:270
+msgid "Please provide detailed information about your issue..."
+msgstr ""
+
+#: templates/support-ticket-form.php:275
+msgid "Minimum 10 characters required"
+msgstr ""
+
+#: templates/support-ticket-form.php:285
+msgid "Upload Files (Optional)"
+msgstr ""
+
+#: templates/support-ticket-form.php:289
+msgid "Drag & drop files here or click to browse"
+msgstr ""
+
+#: templates/support-ticket-form.php:299
+msgid "Max 5 files, 10MB each. Allowed: Images, PDF, Office docs, ZIP"
+msgstr ""
+
+#: templates/support-ticket-form.php:308
+msgid "Consent & Preferences"
+msgstr ""
+
+#: templates/support-ticket-form.php:320
+msgid "I consent to be contacted about this ticket"
+msgstr ""
+
+#: templates/support-ticket-form.php:338
+#, php-format
+msgid "I agree to the <a href=\"%s\" target=\"_blank\">Privacy Policy</a>"
+msgstr ""
+
+#: templates/support-ticket-form.php:351
+msgid "Submit Ticket"
+msgstr ""
+
+#: templates/tickets-view.php:71
+msgid "Support Tickets"
+msgstr ""
+
+#: templates/tickets-view.php:71
+msgid "My Support Tickets"
+msgstr ""
+
+#: templates/tickets-view.php:75
+msgid "Track, triage, and reply to all partner tickets."
+msgstr ""
+
+#: templates/tickets-view.php:77
+msgid "View the status of your requests and reply to the support team."
+msgstr ""
+
+#: templates/tickets-view.php:98
+msgid "Total Tickets"
+msgstr ""
+
+#: templates/tickets-view.php:108
+msgid "New Request"
+msgstr ""
+
+#: templates/tickets-view.php:110
+msgid "Refresh"
+msgstr ""
+
+#: templates/tickets-view.php:118
+msgid "Search by ID, type, or text..."
+msgstr ""
+
+#: templates/tickets-view.php:124
+msgid "All statuses"
+msgstr ""
+
+#: templates/tickets-view.php:134
+msgid "All priorities"
+msgstr ""
+
+#: templates/tickets-view.php:144
+msgid "All types"
+msgstr ""
+
+#: templates/tickets-view.php:155
+msgid "All companies"
+msgstr ""
+
+#: templates/tickets-view.php:167
+msgid "Loading tickets..."
+msgstr ""
+
+#: templates/tickets-view.php:171
+msgid "No tickets found yet."
+msgstr ""
+
+#: templates/tickets-view.php:186
+msgid "Updated"
+msgstr ""
+
+#: templates/tickets-view.php:205
+msgid "Update Status"
+msgstr ""
+
+#: templates/tickets-view.php:212
+msgid "Apply"
+msgstr ""
+
+#: templates/tickets-view.php:232
+#: templates/units-view.php:185
+msgid "Unit ID"
+msgstr ""
+
+#: templates/tickets-view.php:245
+msgid "Thread"
+msgstr ""
+
+#: templates/tickets-view.php:251
+msgid "Type your reply to support..."
+msgstr ""
+
+#: templates/units-view.php:81
+msgid "View and filter all LounGenie units"
+msgstr ""
+
+#: templates/units-view.php:89
+msgid "Clear All Filters"
+msgstr ""
+
+#: templates/units-view.php:98
+msgid "All Colors"
+msgstr ""
+
+#: templates/units-view.php:110
+msgid "All Seasons"
+msgstr ""
+
+#: templates/units-view.php:120
+msgid "All Venues"
+msgstr ""
+
+#: templates/units-view.php:121
+msgid "Hotel"
+msgstr ""
+
+#: templates/units-view.php:122
+msgid "Resort"
+msgstr ""
+
+#: templates/units-view.php:123
+msgid "Waterpark"
+msgstr ""
+
+#: templates/units-view.php:124
+msgid "Surf Park"
+msgstr ""
+
+#: templates/units-view.php:125
+msgid "Others"
+msgstr ""
+
+#: templates/units-view.php:133
+msgid "All Brands"
+msgstr ""
+
+#: templates/units-view.php:143
+msgid "All Statuses"
+msgstr ""
+
+#: templates/units-view.php:153
+msgid "Search units..."
+msgstr ""
+
+#: templates/units-view.php:159
+msgid "Active Filters:"
+msgstr ""
+
+#: templates/units-view.php:170
+msgid "Export to CSV"
+msgstr ""
+
+#: templates/units-view.php:189
+msgid "Venue"
+msgstr ""
+
+#: templates/units-view.php:192
+msgid "Install Date"
+msgstr ""
+
+#: templates/units-view.php:256
+msgid "of"
+msgstr ""
+
+#: templates/units-view.php:262
+msgid "No Units Found"
+msgstr ""
+
+#: templates/units-view.php:263
+msgid "There are no LounGenie units to display at this time."
+msgstr ""

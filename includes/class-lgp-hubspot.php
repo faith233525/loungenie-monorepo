@@ -180,14 +180,14 @@ class LGP_HubSpot {
 	 * @return void
 	 */
 	private static function queue_sync( $type, $object_id ) {
-		$queue        = get_option( 'lgp_hubspot_sync_queue', array() );
-		$queue_entry  = array(
+		$queue       = get_option( 'lgp_hubspot_sync_queue', array() );
+		$queue_entry = array(
 			'type'      => $type,
 			'id'        => $object_id,
 			'queued_at' => time(),
 			'attempts'  => 0,
 		);
-		$queue[]      = $queue_entry;
+		$queue[]     = $queue_entry;
 
 		// Cap queue to prevent unbounded growth (max 500 items).
 		if ( count( $queue ) > 500 ) {

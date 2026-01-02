@@ -1,10 +1,10 @@
 <?php
-
 /**
  * Units View Template
- * Displays all units with comprehensive filtering options
+ * Displays all units with comprehensive filtering options.
  *
  * @package LounGenie Portal
+ * @since 1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -12,13 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Get color hex code for LounGenie color tags
+ * Get color hex code for LounGenie color tags.
  *
- * @param string $color_name Color name
- * @return string Hex color code
+ * @param string $color_name Color name.
+ * @return string Hex color code.
  */
-if ( ! function_exists( 'lgp_get_color_hex' ) ) {
-	function lgp_get_color_hex( $color_name ) {
+if ( ! function_exists( 'loungenie_portal_get_color_hex' ) ) {
+	function loungenie_portal_get_color_hex( $color_name ) {
 		$color_map   = array(
 			'yellow'       => '#D8EFF3',
 			'red'          => '#DCFCE7',
@@ -44,32 +44,23 @@ if ( strtolower( (string) $units_table_exists ) !== strtolower( $units_table ) )
 	}
 }
 
-// Check user role for data filtering
+// Check user role for data filtering.
 $is_support = LGP_Auth::is_support();
 $company_id = LGP_Auth::get_user_company_id();
 
-// Build base query
+// Build base query.
 $where_clauses = array( '1=1' );
 
-if ( ! $is_support && $company_id ) {
+if ( ! $is_support && 0 !== $company_id ) {
 	$where_clauses[] = $wpdb->prepare( 'u.company_id = %d', $company_id );
 }
 
 $where_sql = implode( ' AND ', $where_clauses );
 
-// Fetch units only if table exists; otherwise show empty list
+// Fetch units only if table exists; otherwise show empty list.
 if ( strtolower( (string) $units_table_exists ) === strtolower( $units_table ) ) {
-	$units = $wpdb->get_results(
-		$wpdb->prepare(
-			"SELECT u.*, c.name as company_name 
-			FROM {$units_table} u 
-			LEFT JOIN {$companies_table} c ON u.company_id = c.id 
-			WHERE {$where_sql}
-			ORDER BY u.created_at DESC 
-			LIMIT %d",
-			100
-		)
-	);
+	$query = "SELECT u.*, c.name as company_name FROM " . esc_sql( $units_table ) . " u LEFT JOIN " . esc_sql( $companies_table ) . " c ON u.company_id = c.id WHERE " . esc_sql( $where_sql ) . " ORDER BY u.created_at DESC LIMIT %d";
+	$units = $wpdb->get_results( $wpdb->prepare( $query, 100 ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 } else {
 	$units = array();
 }
@@ -85,7 +76,7 @@ if ( strtolower( (string) $units_table_exists ) === strtolower( $units_table ) )
 <div class="lgp-card">
 	<div class="lgp-card-header">
 		<h2 class="lgp-card-title"><?php esc_html_e( 'Filters', 'loungenie-portal' ); ?></h2>
-		<button type="button" class="lgp-btn lgp-btn-secondary" id="lgp-clear-filters">
+		<button type="button" class="button button-secondary" id="lgp-clear-filters">
 			<?php esc_html_e( 'Clear All Filters', 'loungenie-portal' ); ?>
 		</button>
 	</div>
@@ -166,7 +157,7 @@ if ( strtolower( (string) $units_table_exists ) === strtolower( $units_table ) )
 <div class="lgp-card">
 	<div class="lgp-card-header flex justify-between items-center">
 		<h2 class="lgp-card-title"><?php esc_html_e( 'Units List', 'loungenie-portal' ); ?></h2>
-		<button type="button" class="lgp-btn lgp-btn-primary" id="lgp-export-units">
+		<button type="button" class="button button-primary" id="lgp-export-units">
 			📥 <?php esc_html_e( 'Export to CSV', 'loungenie-portal' ); ?>
 		</button>
 	</div>
@@ -229,9 +220,9 @@ if ( strtolower( (string) $units_table_exists ) === strtolower( $units_table ) )
 								<td>
 									<?php
 									$status_class = 'info';
-									if ( $unit->status === 'active' ) {
+									if ( 'active' === $unit->status ) {
 										$status_class = 'success';
-									} elseif ( $unit->status === 'service' ) {
+									} elseif ( 'service' === $unit->status ) {
 										$status_class = 'warning';
 									}
 									?>
@@ -239,9 +230,9 @@ if ( strtolower( (string) $units_table_exists ) === strtolower( $units_table ) )
 										<?php echo esc_html( ucfirst( $unit->status ) ); ?>
 									</span>
 								</td>
-								<td><?php echo esc_html( $unit->install_date ? date_i18n( get_option( 'date_format' ), strtotime( $unit->install_date ) ) : '—' ); ?></td>
+								<td><?php echo esc_html( $unit->install_date ? gmdate( get_option( 'date_format' ), strtotime( $unit->install_date ) ) : '—' ); ?></td>
 								<td>
-									<button class="lgp-btn lgp-btn-primary lgp-btn-sm" data-unit-id="<?php echo esc_attr( $unit->id ); ?>">
+									<button class="button button-primary button-small" data-unit-id="<?php echo esc_attr( $unit->id ); ?>">
 										<?php esc_html_e( 'View', 'loungenie-portal' ); ?>
 									</button>
 								</td>

@@ -26,7 +26,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class LGP_Credentials_API {
 
-
 	/**
 	 * Initialize API endpoints.
 	 *

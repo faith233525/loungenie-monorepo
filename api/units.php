@@ -79,12 +79,12 @@ class LGP_Units_API {
 
 		$table    = $wpdb->prefix . 'lgp_units';
 		$page     = $request->get_param( 'page' ) ?: 1;
-		$per_page = $request->get_param( 'per_page' ) ?: 20;
+		$per_page = min( (int) ( $request->get_param( 'per_page' ) ?: 20 ), 100 ); // SHARED HOSTING: Max 100 items per page.
 		$offset   = ( $page - 1 ) * $per_page;
 
-		// Build query based on user role
+		// Build query based on user role.
 		if ( LGP_Auth::is_support() ) {
-			// Support can see all units
+			// Support can see all units.
 			$units = $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT id, company_id, unit_number, venue_type, address, city, state, latitude, longitude, lock_type, color_tag, status, install_date
@@ -97,7 +97,7 @@ class LGP_Units_API {
 			);
 			$total = $wpdb->get_var( "SELECT COUNT(*) FROM $table" );
 		} else {
-			// Partners see only their units
+			// Partners see only their units.
 			$company_id = LGP_Auth::get_user_company_id();
 			$units      = $wpdb->get_results(
 				$wpdb->prepare(

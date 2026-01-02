@@ -223,7 +223,7 @@ class LGP_Query_Monitor {
 				array( '%s', '%s', '%f', '%d', '%s', '%d', '%s', '%s', '%s' )
 			);
 
-		// Update summary.
+			// Update summary.
 			self::update_query_summary( $query_hash, $query, $time, $is_slow );
 		}
 	}
@@ -243,7 +243,7 @@ class LGP_Query_Monitor {
 	/**
 	 * Get caller information from query stack.
 	 *
-	 * @param array $query_data Query data from SAVEQUERIES.
+	 * @param array  $query_data Query data from SAVEQUERIES.
 	 * @return array Caller information with file, line, function.
 		return array(
 			'file'     => isset( $query_data[2] ) ? $query_data[2] : '',
@@ -277,13 +277,13 @@ class LGP_Query_Monitor {
 			$wpdb->query(
 				$wpdb->prepare(
 					"UPDATE {$summary_table}
-					 SET execution_count = execution_count + 1,
-						 avg_execution_time = (avg_execution_time * execution_count + %f) / (execution_count + 1),
-						 max_execution_time = GREATEST(max_execution_time, %f),
-						 min_execution_time = LEAST(min_execution_time, %f),
-						 slow_count = slow_count + %d,
-						 last_analyzed = NOW()
-					 WHERE query_hash = %s",
+					SET execution_count = execution_count + 1,
+						avg_execution_time = (avg_execution_time * execution_count + %f) / (execution_count + 1),
+						max_execution_time = GREATEST(max_execution_time, %f),
+						min_execution_time = LEAST(min_execution_time, %f),
+						slow_count = slow_count + %d,
+						last_analyzed = NOW()
+					WHERE query_hash = %s",
 					$time,
 					$time,
 					$time,

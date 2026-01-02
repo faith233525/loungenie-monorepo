@@ -262,7 +262,7 @@ if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table
 		</div>
 
 		<div class="lgp-welcome-actions">
-			<a href="<?php echo esc_url( home_url( '/portal/tickets' ) ); ?>" class="lgp-btn lgp-btn-primary">
+			<a href="<?php echo esc_url( home_url( '/portal/tickets' ) ); ?>" class="button button-primary">
 				<i class="fa-solid fa-ticket lgp-icon-action" aria-hidden="true"></i>
 				<?php
 				if ( 0 < $open_tickets ) {
@@ -273,7 +273,7 @@ if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table
 				}
 				?>
 			</a>
-			<a href="<?php echo esc_url( home_url( '/portal/companies' ) ); ?>" class="lgp-btn lgp-btn-secondary">
+			<a href="<?php echo esc_url( home_url( '/portal/companies' ) ); ?>" class="button button-secondary">
 				<i class="fa-solid fa-building lgp-icon-action" aria-hidden="true"></i>
 				<?php esc_html_e( 'Manage Companies', 'loungenie-portal' ); ?>
 			</a>
@@ -490,10 +490,10 @@ if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table
 				</div>
 
 				<div class="lgp-flex-center lgp-form-buttons">
-					<button type="submit" class="lgp-btn lgp-btn-primary">
+					<button type="submit" class="button button-primary">
 						<?php esc_html_e( 'Create Ticket', 'loungenie-portal' ); ?>
 					</button>
-					<button type="reset" class="lgp-btn lgp-btn-secondary">
+					<button type="reset" class="button button-secondary">
 						<?php esc_html_e( 'Clear', 'loungenie-portal' ); ?>
 					</button>
 				</div>
@@ -541,7 +541,7 @@ if ( strtolower( (string) $units_table_exists ) === strtolower( $lgp_units_table
 									</td>
 									<td><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $ticket->created_at ) ) ); ?></td>
 									<td>
-										<a href="#" class="lgp-btn lgp-btn-primary"><?php esc_html_e( 'View', 'loungenie-portal' ); ?></a>
+										<a href="#" class="button button-primary"><?php esc_html_e( 'View', 'loungenie-portal' ); ?></a>
 									</td>
 								</tr>
 							<?php endforeach; ?>

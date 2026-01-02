@@ -35,7 +35,7 @@ $categories = class_exists( 'LGP_Training_Video' ) ? LGP_Training_Video::get_cat
 	<div class="lgp-page-header">
 		<h1><?php esc_html_e( 'Knowledge Center', 'loungenie-portal' ); ?></h1>
 		<?php if ( $is_support ) : ?>
-			<button id="lgp-add-video-btn" class="lgp-btn lgp-btn-primary">
+			<button id="lgp-add-video-btn" class="button button-primary">
 				<?php esc_html_e( '+ Add Guide', 'loungenie-portal' ); ?>
 			</button>
 		<?php endif; ?>

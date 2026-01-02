@@ -204,7 +204,9 @@ class LGP_Database {
             updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
             KEY service_request_id (service_request_id),
-            KEY status (status)
+            KEY status (status),
+            KEY email_reference (email_reference),
+            KEY created_at (created_at)
         ) $charset_collate;";
 
 		// Gateways table (support-only management)
@@ -271,7 +273,9 @@ class LGP_Database {
             created_at datetime DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
             KEY ticket_id (ticket_id),
-            KEY uploaded_by (uploaded_by)
+            KEY uploaded_by (uploaded_by),
+            KEY created_at (created_at),
+            KEY file_type (file_type)
         ) $charset_collate;";
 
 		// Service Notes table (technician field notes for service work)

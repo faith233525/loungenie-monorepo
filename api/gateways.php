@@ -15,16 +15,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class LGP_Gateways_API {
 
-
 	/**
-	 * Initialize REST API routes
+	 * Initialize REST API routes.
 	 */
 	public static function init() {
 		add_action( 'rest_api_init', array( __CLASS__, 'register_routes' ) );
 	}
 
 	/**
-	 * Register gateway REST routes
+	 * Register gateway REST routes.
 	 */
 	public static function register_routes() {
 		register_rest_route(

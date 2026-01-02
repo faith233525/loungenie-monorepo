@@ -162,10 +162,10 @@ class LGP_Email_Reply {
 			}
 
 				$graph_attachments[] = array(
-				'@odata.type'  => '#microsoft.graph.fileAttachment',
-				'name'         => $att['name'] ?? basename( $att['path'] ),
-				'contentBytes' => base64_encode( $file_content ),
-			);
+					'@odata.type'  => '#microsoft.graph.fileAttachment',
+					'name'         => $att['name'] ?? basename( $att['path'] ),
+					'contentBytes' => base64_encode( $file_content ),
+				);
 		}
 
 		// Build message headers for threading

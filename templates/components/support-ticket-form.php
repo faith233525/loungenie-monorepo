@@ -452,7 +452,7 @@ $nonce = wp_create_nonce( 'lgp_submit_support_ticket' );
 		<div class="lgp-form-actions">
 			<button 
 				type="submit" 
-				class="lgp-btn lgp-btn-primary lgp-btn-large"
+				class="button button-primary button-large"
 				id="lgp-submit-btn"
 			>
 				<span class="lgp-btn-text"><?php esc_html_e( 'Submit Support Ticket', 'loungenie-portal' ); ?></span>
@@ -463,7 +463,7 @@ $nonce = wp_create_nonce( 'lgp_submit_support_ticket' );
 
 			<button 
 				type="reset" 
-				class="lgp-btn lgp-btn-secondary lgp-btn-large"
+				class="button button-secondary button-large"
 			>
 				<?php esc_html_e( 'Clear Form', 'loungenie-portal' ); ?>
 			</button>

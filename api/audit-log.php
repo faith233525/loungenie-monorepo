@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Register audit log REST endpoint
+ * Register audit log REST endpoint.
  */
 function lgp_register_audit_log_rest_route() {
 	register_rest_route(
@@ -30,7 +30,7 @@ function lgp_register_audit_log_rest_route() {
 add_action( 'rest_api_init', 'lgp_register_audit_log_rest_route' );
 
 /**
- * Get audit log for a company
+ * Get audit log for a company.
  */
 function lgp_get_audit_log( WP_REST_Request $request ) {
 	global $wpdb;
@@ -44,14 +44,14 @@ function lgp_get_audit_log( WP_REST_Request $request ) {
 		return new WP_Error( 'missing_company', 'Company ID required', array( 'status' => 400 ) );
 	}
 
-	// Verify access - support only
+	// Verify access - support only.
 	if ( ! LGP_Auth::is_support() ) {
 		return new WP_Error( 'unauthorized', 'Access denied', array( 'status' => 403 ) );
 	}
 
 	$table = $wpdb->prefix . 'lgp_audit_log';
 
-	// Build query
+	// Build query.
 	$where  = array( 'company_id = %d' );
 	$params = array( $company_id );
 

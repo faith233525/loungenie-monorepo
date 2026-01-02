@@ -36,6 +36,12 @@ class LGP_Theme_Independence {
 
 		// Enqueue plugin-controlled assets only
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_portal_assets' ), 999 );
+
+		// Inject dynamic theme colors (Rule 7 compliance: WordPress theme inheritance)
+		add_action( 'wp_head', array( __CLASS__, 'inject_theme_colors' ), 5 );
+
+		// Invalidate color cache when theme switches
+		add_action( 'switch_theme', array( __CLASS__, 'invalidate_color_cache' ) );
 	}
 
 	/**
@@ -238,6 +244,141 @@ class LGP_Theme_Independence {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Inject dynamic theme colors into wp_head (Rule 7 Compliance)
+	 * Detects active WordPress theme colors and applies them to portal
+	 */
+	public static function inject_theme_colors() {
+		// Only on portal pages
+		if ( ! self::is_portal_page() ) {
+			return;
+		}
+
+		$theme_colors = self::get_active_theme_colors();
+		$css          = self::generate_portal_color_css( $theme_colors );
+
+		if ( ! empty( $css ) ) {
+			echo '<style id="lgp-theme-colors">' . wp_kses_post( $css ) . '</style>';
+		}
+	}
+
+	/**
+	 * Get active WordPress theme colors
+	 * Supports theme.json (block themes), Customizer, and defaults
+	 *
+	 * @return array Theme colors with fallbacks
+	 */
+	private static function get_active_theme_colors() {
+		// Try to get cached colors (24 hour TTL)
+		$cached = get_transient( 'lgp_theme_colors' );
+		if ( ! empty( $cached ) && is_array( $cached ) ) {
+			return $cached;
+		}
+
+		$colors = array();
+
+		// Step 1: Try theme.json (block themes - WordPress 5.9+)
+		$theme_json_file = get_template_directory() . '/theme.json';
+		if ( file_exists( $theme_json_file ) ) {
+			$json = json_decode( file_get_contents( $theme_json_file ), true );
+			if ( ! empty( $json['settings']['color']['palette'] ) ) {
+				foreach ( $json['settings']['color']['palette'] as $color ) {
+					if ( ! empty( $color['slug'] ) && ! empty( $color['color'] ) ) {
+						$colors[ $color['slug'] ] = $color['color'];
+					}
+				}
+			}
+		}
+
+		// Step 2: Try Customizer colors (classic themes)
+		if ( empty( $colors ) ) {
+			$colors = array(
+				'primary'   => get_theme_mod( 'primary_color', '#2271b1' ),
+				'secondary' => get_theme_mod( 'secondary_color', '#135e96' ),
+			);
+		}
+
+		// Step 3: Fallback to Twenty Twenty-Three defaults
+		if ( empty( $colors['primary'] ) ) {
+			$colors['primary'] = '#2271b1';
+		}
+		if ( empty( $colors['secondary'] ) ) {
+			$colors['secondary'] = '#135e96';
+		}
+		if ( empty( $colors['background'] ) ) {
+			$colors['background'] = '#ffffff';
+		}
+		if ( empty( $colors['text'] ) ) {
+			$colors['text'] = '#1e1e1e';
+		}
+
+		// Cache for 24 hours
+		set_transient( 'lgp_theme_colors', $colors, 24 * HOUR_IN_SECONDS );
+
+		return $colors;
+	}
+
+	/**
+	 * Generate CSS with dynamic theme colors
+	 *
+	 * @param array $colors Theme colors.
+	 * @return string CSS rules
+	 */
+	private static function generate_portal_color_css( $colors ) {
+		$primary   = sanitize_hex_color( $colors['primary'] ?? '#2271b1' );
+		$secondary = sanitize_hex_color( $colors['secondary'] ?? '#135e96' );
+		$bg        = sanitize_hex_color( $colors['background'] ?? '#ffffff' );
+		$text      = sanitize_hex_color( $colors['text'] ?? '#1e1e1e' );
+
+		$css = ':root {
+			--lgp-primary: ' . esc_attr( $primary ) . ';
+			--lgp-secondary: ' . esc_attr( $secondary ) . ';
+			--lgp-background: ' . esc_attr( $bg ) . ';
+			--lgp-text: ' . esc_attr( $text ) . ';
+			--wp-primary-theme-color: ' . esc_attr( $primary ) . ';
+			--wp-secondary-theme-color: ' . esc_attr( $secondary ) . ';
+		}
+		
+		.button, .button-primary {
+			background-color: ' . esc_attr( $primary ) . ' !important;
+			color: white;
+			border-color: ' . esc_attr( $primary ) . ' !important;
+		}
+		
+		.button:hover, .button-primary:hover {
+			background-color: ' . esc_attr( $secondary ) . ' !important;
+			border-color: ' . esc_attr( $secondary ) . ' !important;
+		}
+		
+		.button-secondary {
+			background-color: ' . esc_attr( $secondary ) . ' !important;
+			color: white;
+			border-color: ' . esc_attr( $secondary ) . ' !important;
+		}
+		
+		a, .lgp-nav-link:not(.active) {
+			color: ' . esc_attr( $primary ) . ';
+		}
+		
+		a:hover, .lgp-nav-link:not(.active):hover {
+			color: ' . esc_attr( $secondary ) . ';
+		}
+		
+		.lgp-nav-link.active, .lgp-button-active {
+			background-color: ' . esc_attr( $primary ) . ' !important;
+			color: white;
+		}';
+
+		return $css;
+	}
+
+	/**
+	 * Invalidate theme color cache when theme switches
+	 */
+	public static function invalidate_color_cache() {
+		delete_transient( 'lgp_theme_colors' );
 	}
 }
 

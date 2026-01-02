@@ -111,7 +111,7 @@ if ( $company->management_company_id ) {
 			<p><?php esc_html_e( 'Company Profile & Management', 'loungenie-portal' ); ?></p>
 		</div>
 		<?php if ( $can_edit && $is_support ) : ?>
-			<a href="#" class="lgp-btn lgp-btn-primary" id="lgp-edit-company-btn">
+			<a href="#" class="button button-primary" id="lgp-edit-company-btn">
 				<?php esc_html_e( 'Edit Company', 'loungenie-portal' ); ?>
 			</a>
 		<?php endif; ?>
@@ -260,7 +260,7 @@ if ( $company->management_company_id ) {
 				<?php if ( $is_support ) : ?>
 					<!-- Support: Show detailed units table -->
 					<div class="lgp-mt-4">
-						<button type="button" class="lgp-btn lgp-btn-secondary" onclick="this.nextElementSibling.classList.toggle('lgp-hidden')">
+						<button type="button" class="button button-secondary" onclick="this.nextElementSibling.classList.toggle('lgp-hidden')">
 							<?php esc_html_e( 'View Detailed Unit List', 'loungenie-portal' ); ?>
 						</button>
 						<div class="lgp-table-container lgp-max-h-400 lgp-mt-2 lgp-hidden">
@@ -486,8 +486,8 @@ if ( $company->management_company_id ) {
 						<input type="number" id="service-note-travel-time" min="0" class="lgp-input">
 					</div>
 					<div class="lgp-flex-center">
-						<button type="submit" class="lgp-btn lgp-btn-primary"><?php esc_html_e( 'Save Service Note', 'loungenie-portal' ); ?></button>
-						<button type="button" id="cancel-service-note-btn" class="lgp-btn lgp-btn-secondary"><?php esc_html_e( 'Cancel', 'loungenie-portal' ); ?></button>
+						<button type="submit" class="button button-primary"><?php esc_html_e( 'Save Service Note', 'loungenie-portal' ); ?></button>
+						<button type="button" id="cancel-service-note-btn" class="button button-secondary"><?php esc_html_e( 'Cancel', 'loungenie-portal' ); ?></button>
 					</div>
 				</form>
 			</div>
@@ -531,8 +531,8 @@ if ( $company->management_company_id ) {
 					<textarea id="reply-content" required class="lgp-textarea"></textarea>
 				</div>
 				<div class="lgp-flex-center">
-					<button type="submit" class="lgp-btn lgp-btn-primary"><?php esc_html_e( 'Send Reply', 'loungenie-portal' ); ?></button>
-					<button type="button" class="lgp-btn lgp-btn-secondary" id="lgp-reply-modal-cancel"><?php esc_html_e( 'Cancel', 'loungenie-portal' ); ?></button>
+					<button type="submit" class="button button-primary"><?php esc_html_e( 'Send Reply', 'loungenie-portal' ); ?></button>
+					<button type="button" class="button button-secondary" id="lgp-reply-modal-cancel"><?php esc_html_e( 'Cancel', 'loungenie-portal' ); ?></button>
 				</div>
 			</form>
 		</div>

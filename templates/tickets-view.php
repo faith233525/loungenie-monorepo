@@ -105,8 +105,8 @@ $rest_nonce = wp_create_nonce( 'wp_rest' );
 	<div class="lgp-card-header">
 		<h2 class="lgp-card-title"><?php esc_html_e( 'Tickets', 'loungenie-portal' ); ?></h2>
 		<div class="lgp-flex-center lgp-tickets-actions">
-			<a class="lgp-btn lgp-btn-secondary" href="<?php echo esc_url( home_url( '/portal' ) ); ?>">➕ <?php esc_html_e( 'New Request', 'loungenie-portal' ); ?></a>
-			<button type="button" class="lgp-btn lgp-btn-secondary" id="lgp-refresh-tickets">
+			<a class="button button-secondary" href="<?php echo esc_url( home_url( '/portal' ) ); ?>">➕ <?php esc_html_e( 'New Request', 'loungenie-portal' ); ?></a>
+			<button type="button" class="button button-secondary" id="lgp-refresh-tickets">
 				<?php esc_html_e( 'Refresh', 'loungenie-portal' ); ?>
 			</button>
 		</div>
@@ -250,7 +250,7 @@ $rest_nonce = wp_create_nonce( 'wp_rest' );
 				<label for="lgp-ticket-reply-message" class="lgp-label"><?php esc_html_e( 'Reply', 'loungenie-portal' ); ?></label>
 				<textarea id="lgp-ticket-reply-message" class="lgp-textarea" rows="4" placeholder="<?php esc_attr_e( 'Type your reply to support...', 'loungenie-portal' ); ?>" required></textarea>
 			</div>
-			<button type="submit" class="lgp-btn lgp-btn-primary">
+			<button type="submit" class="button button-primary">
 				<?php esc_html_e( 'Send Reply', 'loungenie-portal' ); ?>
 			</button>
 		</form>
