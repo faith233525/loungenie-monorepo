@@ -1,7 +1,8 @@
 <?php
 /**
- * HubSpot Integration Class
- * Syncs companies, units, service requests, and tickets with HubSpot CRM
+ * HubSpot integration class.
+ *
+ * Syncs companies, units, service requests, and tickets with HubSpot CRM.
  *
  * @package LounGenie Portal
  */
@@ -10,6 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * HubSpot integration class.
+ */
 class LGP_HubSpot {
 
 	/**
@@ -18,26 +22,28 @@ class LGP_HubSpot {
 	const API_BASE_URL = 'https://api.hubapi.com';
 
 	/**
-	 * Initialize HubSpot integration
+	 * Initialize HubSpot integration.
+	 *
+	 * @return void
 	 */
 	public static function init() {
-		// Hook into ticket creation to sync with HubSpot (queued for batch processing)
+		// Hook into ticket creation to sync with HubSpot (queued for batch processing).
 		add_action( 'lgp_ticket_created', array( __CLASS__, 'sync_ticket_to_hubspot' ), 10, 2 );
 		add_action( 'lgp_ticket_updated', array( __CLASS__, 'update_hubspot_ticket' ), 10, 2 );
 
-		// Hook into company creation
+		// Hook into company creation.
 		add_action( 'lgp_company_created', array( __CLASS__, 'sync_company_to_hubspot' ), 10, 1 );
 
-		// Batch sync processor (runs every 5 minutes)
+		// Batch sync processor (runs every 5 minutes).
 		add_action( 'lgp_hubspot_batch_sync', array( __CLASS__, 'process_sync_queue' ) );
 
-		// Add settings page
+		// Add settings page.
 		add_action( 'admin_menu', array( __CLASS__, 'add_settings_page' ) );
 		add_action( 'admin_init', array( __CLASS__, 'register_settings' ) );
 	}
 
 	/**
-	 * Get HubSpot API key from settings
+	 * Get HubSpot API key from settings.
 	 *
 	 * @return string|false
 	 */
@@ -46,7 +52,7 @@ class LGP_HubSpot {
 	}
 
 	/**
-	 * Check if HubSpot integration is enabled
+	 * Check if HubSpot integration is enabled.
 	 *
 	 * @return bool
 	 */
@@ -55,11 +61,11 @@ class LGP_HubSpot {
 	}
 
 	/**
-	 * Make API request to HubSpot
+	 * Make API request to HubSpot.
 	 *
-	 * @param string $endpoint API endpoint
-	 * @param string $method HTTP method (GET, POST, PATCH)
-	 * @param array  $data Request data
+	 * @param string $endpoint API endpoint.
+	 * @param string $method HTTP method (GET, POST, PATCH).
+	 * @param array  $data Request data.
 	 * @return array|WP_Error
 	 */
 	private static function api_request( $endpoint, $method = 'GET', $data = array() ) {
