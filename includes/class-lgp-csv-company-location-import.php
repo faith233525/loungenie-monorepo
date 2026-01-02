@@ -14,7 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * CSV company, location, and lock import class.
+ * LGP_CSV_Company_Location_Import class.
+ *
+ * Handles CSV bulk import of companies, locations, and lock codes with batch processing.
  */
 class LGP_CSV_Company_Location_Import {
 
@@ -25,7 +27,7 @@ class LGP_CSV_Company_Location_Import {
 	const MEMORY_LIMIT_MB   = 64; // Memory threshold before chunking.
 
 	/**
-	 * Required CSV columns
+	 * Required CSV columns.
 	 */
 	const REQUIRED_COLUMNS = array(
 		'company_name',
@@ -39,7 +41,7 @@ class LGP_CSV_Company_Location_Import {
 	);
 
 	/**
-	 * Optional CSV columns
+	 * Optional CSV columns.
 	 */
 	const OPTIONAL_COLUMNS = array(
 		'management_company',
@@ -86,7 +88,9 @@ class LGP_CSV_Company_Location_Import {
 	}
 
 	/**
-	 * Register REST API routes
+	 * Register REST API routes.
+	 *
+	 * @return void
 	 */
 	public static function register_routes() {
 		register_rest_route(
@@ -111,7 +115,10 @@ class LGP_CSV_Company_Location_Import {
 	}
 
 	/**
-	 * Enqueue admin assets
+	 * Enqueue admin assets.
+	 *
+	 * @param string $hook Current admin page hook.
+	 * @return void
 	 */
 	public static function enqueue_assets( $hook ) {
 		if ( 'toplevel_page_lgp-csv-company-location' !== $hook ) {
@@ -280,10 +287,10 @@ class LGP_CSV_Company_Location_Import {
 	}
 
 	/**
-	 * Handle CSV upload via REST API
+	 * Handle CSV upload via REST API.
 	 *
-	 * @param WP_REST_Request $request
-	 * @return WP_REST_Response|WP_Error
+	 * @param WP_REST_Request $request The REST request object.
+	 * @return WP_REST_Response|WP_Error Response or error.
 	 */
 	public static function handle_csv_upload( WP_REST_Request $request ) {
 		$files = $request->get_file_params();
@@ -294,13 +301,13 @@ class LGP_CSV_Company_Location_Import {
 
 		$file = $files['csv_file'];
 
-		// Validate file
+		// Validate file.
 		$validation = self::validate_csv_file( $file );
 		if ( is_wp_error( $validation ) ) {
 			return $validation;
 		}
 
-		// Parse CSV
+		// Parse CSV.
 		$rows = self::parse_csv_file( $file['tmp_name'] );
 		if ( is_wp_error( $rows ) ) {
 			return $rows;
@@ -313,10 +320,10 @@ class LGP_CSV_Company_Location_Import {
 	}
 
 	/**
-	 * Preview CSV data via REST API
+	 * Preview CSV data via REST API.
 	 *
-	 * @param WP_REST_Request $request
-	 * @return WP_REST_Response|WP_Error
+	 * @param WP_REST_Request $request The REST request object.
+	 * @return WP_REST_Response|WP_Error Response or error.
 	 */
 	public static function preview_csv( WP_REST_Request $request ) {
 		$files = $request->get_file_params();
@@ -327,19 +334,19 @@ class LGP_CSV_Company_Location_Import {
 
 		$file = $files['csv_file'];
 
-		// Validate file
+		// Validate file.
 		$validation = self::validate_csv_file( $file );
 		if ( is_wp_error( $validation ) ) {
 			return $validation;
 		}
 
-		// Parse CSV
+		// Parse CSV.
 		$rows = self::parse_csv_file( $file['tmp_name'] );
 		if ( is_wp_error( $rows ) ) {
 			return $rows;
 		}
 
-		// Return first 5 rows for preview
+		// Return first 5 rows for preview.
 		$preview = array(
 			'total_rows'  => count( $rows ),
 			'sample_rows' => array_slice( $rows, 0, 5 ),
@@ -350,10 +357,10 @@ class LGP_CSV_Company_Location_Import {
 	}
 
 	/**
-	 * Validate CSV file
+	 * Validate CSV file.
 	 *
-	 * @param array $file File array from $_FILES
-	 * @return true|WP_Error
+	 * @param array $file File array from $_FILES.
+	 * @return true|WP_Error True on success, WP_Error on failure.
 	 */
 	private static function validate_csv_file( $file ) {
 		if ( empty( $file['size'] ) ) {
@@ -375,16 +382,16 @@ class LGP_CSV_Company_Location_Import {
 	}
 
 	/**
-	 * Parse CSV file with memory-efficient chunking
+	 * Parse CSV file with memory-efficient chunking.
 	 *
 	 * PERFORMANCE OPTIMIZATION: Uses generator pattern to process large files
 	 * without loading entire file into memory. Prevents 128MB memory limit breaches.
 	 *
-	 * @param string $file_path Path to CSV file
-	 * @return array|WP_Error Array of rows or WP_Error
+	 * @param string $file_path Path to CSV file.
+	 * @return array|WP_Error Array of rows or WP_Error.
 	 */
 	private static function parse_csv_file( $file_path ) {
-		// PERFORMANCE: Check available memory before parsing
+		// PERFORMANCE: Check available memory before parsing.
 		$memory_limit    = ini_get( 'memory_limit' );
 		$memory_limit_mb = intval( $memory_limit );
 		$current_memory  = memory_get_usage( true ) / 1024 / 1024;
@@ -402,14 +409,14 @@ class LGP_CSV_Company_Location_Import {
 		$headers = array();
 		$line    = 0;
 
-		// Read header row
+		// Read header row.
 		$header_row = fgetcsv( $handle );
 		if ( false === $header_row ) {
 			fclose( $handle );
 			return new WP_Error( 'empty_file', __( 'CSV file is empty', 'loungenie-portal' ), array( 'status' => 400 ) );
 		}
 
-		// Normalize header names
+		// Normalize header names.
 		$headers = array_map(
 			function ( $header ) {
 				return strtolower( trim( $header ) );
@@ -417,27 +424,27 @@ class LGP_CSV_Company_Location_Import {
 			$header_row
 		);
 
-		// Validate headers
+		// Validate headers.
 		$validation = self::validate_csv_headers( $headers );
 		if ( is_wp_error( $validation ) ) {
 			fclose( $handle );
 			return $validation;
 		}
 
-		// PERFORMANCE: Read data rows in chunks to avoid memory exhaustion
-		// For files larger than 1000 rows, process in batches
+		// PERFORMANCE: Read data rows in chunks to avoid memory exhaustion.
+		// For files larger than 1000 rows, process in batches.
 		$chunk_size = 100;
 		$chunk      = array();
 
 		while ( ( $row = fgetcsv( $handle ) ) !== false ) {
 			++$line;
 
-			// Skip empty rows
+			// Skip empty rows.
 			if ( empty( array_filter( $row ) ) ) {
 				continue;
 			}
 
-			// Combine headers with data
+			// Combine headers with data.
 			$row_data = array();
 			foreach ( $headers as $index => $header ) {
 				$row_data[ $header ] = isset( $row[ $index ] ) ? trim( $row[ $index ] ) : '';
@@ -481,10 +488,10 @@ class LGP_CSV_Company_Location_Import {
 	}
 
 	/**
-	 * Validate CSV headers
+	 * Validate CSV headers.
 	 *
-	 * @param array $headers Array of header names
-	 * @return true|WP_Error
+	 * @param array $headers Array of header names.
+	 * @return true|WP_Error True on success, WP_Error on failure.
 	 */
 	private static function validate_csv_headers( $headers ) {
 		$missing = array();
