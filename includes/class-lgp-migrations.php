@@ -103,7 +103,7 @@ class LGP_Migrations {
                 AFTER status"
 			);
 
-			// Log this change
+			// Log this change.
 			LGP_Logger::log_event(
 				0,
 				'migration_v1_1_0',
@@ -114,8 +114,10 @@ class LGP_Migrations {
 	}
 
 	/**
-	 * Migration v1.1.0 → v1.2.0
-	 * Example: Add attachment expiry tracking
+	 * Migration v1.1.0 → v1.2.0.
+	 * Example: Add attachment expiry tracking.
+	 *
+	 * @return void
 	 */
 	public static function migrate_v1_2_0() {
 		global $wpdb;
@@ -143,29 +145,31 @@ class LGP_Migrations {
 	}
 
 	/**
-	 * Migration v1.2.0 → v1.3.0
-	 * Add content_url/type/tags to help_guides and backfill from video_url
+	 * Migration v1.2.0 → v1.3.0.
+	 * Add content_url/type/tags to help_guides and backfill from video_url.
+	 *
+	 * @return void
 	 */
 	public static function migrate_v1_3_0() {
 		global $wpdb;
 
 		$table = $wpdb->prefix . 'lgp_help_guides';
 
-		// content_url
+		// content_url.
 		$col = $wpdb->get_results( "SHOW COLUMNS FROM {$table} LIKE 'content_url'" );
 		if ( empty( $col ) ) {
 			$wpdb->query( "ALTER TABLE {$table} ADD COLUMN content_url VARCHAR(500) NOT NULL AFTER description" );
-			// backfill from legacy video_url
+			// Backfill from legacy video_url.
 			$wpdb->query( "UPDATE {$table} SET content_url = video_url WHERE (content_url IS NULL OR content_url = '') AND video_url IS NOT NULL" );
 		}
 
-		// type
+		// type.
 		$col = $wpdb->get_results( "SHOW COLUMNS FROM {$table} LIKE 'type'" );
 		if ( empty( $col ) ) {
 			$wpdb->query( "ALTER TABLE {$table} ADD COLUMN type VARCHAR(50) DEFAULT 'video' AFTER content_url" );
 		}
 
-		// tags
+		// tags.
 		$col = $wpdb->get_results( "SHOW COLUMNS FROM {$table} LIKE 'tags'" );
 		if ( empty( $col ) ) {
 			$wpdb->query( "ALTER TABLE {$table} ADD COLUMN tags LONGTEXT AFTER category" );
@@ -175,8 +179,10 @@ class LGP_Migrations {
 	}
 
 	/**
-	 * Migration v1.3.0 → v1.4.0
-	 * Add company and unit fields required by spec
+	 * Migration v1.3.0 → v1.4.0.
+	 * Add company and unit fields required by spec.
+	 *
+	 * @return void
 	 */
 	public static function migrate_v1_4_0() {
 		global $wpdb;
@@ -184,7 +190,7 @@ class LGP_Migrations {
 		$companies = $wpdb->prefix . 'lgp_companies';
 		$units     = $wpdb->prefix . 'lgp_units';
 
-		// Companies table additions
+		// Companies table additions.
 		$addCols = array(
 			'company_name VARCHAR(255)',
 			'management_company VARCHAR(255)',
@@ -208,7 +214,7 @@ class LGP_Migrations {
 			}
 		}
 
-		// Units table additions
+		// Units table additions.
 		$unitCols = array(
 			'unit_number VARCHAR(100)',
 			'lock_part VARCHAR(100)',
@@ -227,7 +233,7 @@ class LGP_Migrations {
 			}
 		}
 
-		// Unique index for unit_number
+		// Unique index for unit_number.
 		$idx = $wpdb->get_results( "SHOW INDEX FROM {$units} WHERE Key_name = 'unit_number'" );
 		if ( empty( $idx ) ) {
 			$wpdb->query( "ALTER TABLE {$units} ADD UNIQUE KEY unit_number (unit_number)" );
@@ -237,8 +243,10 @@ class LGP_Migrations {
 	}
 
 	/**
-	 * Migration v1.4.0 → v1.5.0
-	 * Create user progress table for Knowledge Center
+	 * Migration v1.4.0 → v1.5.0.
+	 * Create user progress table for Knowledge Center.
+	 *
+	 * @return void
 	 */
 	public static function migrate_v1_5_0() {
 		global $wpdb;
@@ -261,28 +269,31 @@ class LGP_Migrations {
 		LGP_Logger::log_event( 0, 'migration_v1_5_0', 0, array( 'action' => 'Created user progress table' ) );
 	}
 
-	/**  * Migration v1.5.0 → v1.6.0
-	 * Add geolocation columns to units table for map view feature
+	/**
+	 * Migration v1.5.0 → v1.6.0.
+	 * Add geolocation columns to units table for map view feature.
+	 *
+	 * @return void
 	 */
 	public static function migrate_v1_6_0() {
 		global $wpdb;
 
 		$units_table = $wpdb->prefix . 'lgp_units';
 
-		// Check if latitude column exists
+		// Check if latitude column exists.
 		$latitude_exists = $wpdb->get_results(
 			"SHOW COLUMNS FROM {$units_table} LIKE 'latitude'"
 		);
 
 		if ( empty( $latitude_exists ) ) {
-			// Add geolocation columns (place after an existing column to avoid SQL errors)
+			// Add geolocation columns (place after an existing column to avoid SQL errors).
 			$wpdb->query(
 				"ALTER TABLE {$units_table}
 				ADD COLUMN latitude DECIMAL(10, 8) NULL AFTER status,
 				ADD COLUMN longitude DECIMAL(11, 8) NULL AFTER latitude"
 			);
 
-			// Add index for geo queries
+			// Add index for geo queries.
 			$wpdb->query(
 				"ALTER TABLE {$units_table}
 				ADD INDEX idx_geo (latitude, longitude)"
@@ -296,13 +307,15 @@ class LGP_Migrations {
 	}
 
 	/**
-	 * Migration v1.6.0 → v1.7.0
-	 * Add urgency column to tickets and contract_status to companies
+	 * Migration v1.6.0 → v1.7.0.
+	 * Add urgency column to tickets and contract_status to companies.
+	 *
+	 * @return void
 	 */
 	public static function migrate_v1_7_0() {
 		global $wpdb;
 
-		// Add urgency to tickets table
+		// Add urgency to tickets table.
 		$tickets_table  = $wpdb->prefix . 'lgp_tickets';
 		$urgency_exists = $wpdb->get_results(
 			"SHOW COLUMNS FROM {$tickets_table} LIKE 'urgency'"
@@ -314,14 +327,14 @@ class LGP_Migrations {
 				ADD COLUMN urgency VARCHAR(20) DEFAULT 'medium' AFTER status"
 			);
 
-			// Add index for urgency filtering
+			// Add index for urgency filtering.
 			$wpdb->query(
 				"ALTER TABLE {$tickets_table}
 				ADD INDEX idx_urgency (urgency)"
 			);
 		}
 
-		// Add contract_status to companies table
+		// Add contract_status to companies table.
 		$companies_table = $wpdb->prefix . 'lgp_companies';
 		$contract_exists = $wpdb->get_results(
 			"SHOW COLUMNS FROM {$companies_table} LIKE 'contract_status'"
@@ -343,28 +356,30 @@ class LGP_Migrations {
 	}
 
 	/**
-	 * Migration v1.7.0 → v1.8.0
-	 * Add top_colors JSON column to companies for unit color aggregation (Phase 2B)
+	 * Migration v1.7.0 → v1.8.0.
+	 * Add top_colors JSON column to companies for unit color aggregation (Phase 2B).
+	 *
+	 * @return void
 	 */
 	public static function migrate_v1_8_0() {
 		global $wpdb;
 
 		$companies_table = $wpdb->prefix . 'lgp_companies';
 
-		// Check if top_colors column exists
+		// Check if top_colors column exists.
 		$column_exists = $wpdb->get_results(
 			"SHOW COLUMNS FROM {$companies_table} LIKE 'top_colors'"
 		);
 
 		if ( empty( $column_exists ) ) {
-			// Add JSON column for color aggregates
+			// Add JSON column for color aggregates.
 			$wpdb->query(
 				"ALTER TABLE {$companies_table}
 				ADD COLUMN top_colors JSON DEFAULT NULL
 				AFTER contract_status"
 			);
 
-			// Populate initial color aggregates from existing units
+			// Populate initial color aggregates from existing units.
 			self::populate_initial_color_aggregates();
 
 			LGP_Logger::log_event(
@@ -380,8 +395,10 @@ class LGP_Migrations {
 	}
 
 	/**
-	 * Migration v1.8.0 → v1.8.1
-	 * Optional performance indexes for email threading lookups on meta tables
+	 * Migration v1.8.0 → v1.8.1.
+	 * Optional performance indexes for email threading lookups on meta tables.
+	 *
+	 * @return void
 	 */
 	public static function migrate_v1_8_1() {
 		global $wpdb;
@@ -389,15 +406,15 @@ class LGP_Migrations {
 		$postmeta    = $wpdb->postmeta;
 		$commentmeta = $wpdb->commentmeta;
 
-		// Helper to test if index exists
+		// Helper to test if index exists.
 		$has_index = function ( $table, $index_name ) use ( $wpdb ) {
 			$indexes = $wpdb->get_results( $wpdb->prepare( 'SHOW INDEX FROM ' . $table . ' WHERE Key_name = %s', $index_name ) );
 			return ! empty( $indexes );
 		};
 
-		// Add composite index on (meta_key, meta_value) with prefix length to support lookups by specific keys
+		// Add composite index on (meta_key, meta_value) with prefix length to support lookups by specific keys.
 		if ( ! $has_index( $postmeta, 'idx_email_message_id' ) ) {
-			// wp_postmeta.meta_value is LONGTEXT; use prefix to keep index size reasonable
+			// wp_postmeta.meta_value is LONGTEXT; use prefix to keep index size reasonable.
 			$wpdb->query( 'ALTER TABLE ' . $postmeta . ' ADD INDEX idx_email_message_id (meta_key(191), meta_value(191))' );
 		}
 		if ( ! $has_index( $postmeta, 'idx_email_conversation_id' ) ) {
@@ -412,8 +429,10 @@ class LGP_Migrations {
 	}
 
 	/**
-	 * Populate initial color aggregates for all existing companies
-	 * Called by migrate_v1_8_0
+	 * Populate initial color aggregates for all existing companies.
+	 * Called by migrate_v1_8_0.
+	 *
+	 * @return void
 	 */
 	private static function populate_initial_color_aggregates() {
 		global $wpdb;
@@ -425,7 +444,7 @@ class LGP_Migrations {
 		$companies = $wpdb->get_results( "SELECT id FROM {$companies_table}" );
 
 		foreach ( $companies as $company ) {
-			// Aggregate color counts for this company
+			// Aggregate color counts for this company.
 			// @phpstan-ignore-next-line OBJECT_K is WordPress core constant
 			$colors = $wpdb->get_results(
 				$wpdb->prepare(
