@@ -1,0 +1,9 @@
+.
+..
+elementor
+google-site-kit
+header-footer-elementor
+index.php
+leadin
+litespeed-cache
+seo-by-rank-math

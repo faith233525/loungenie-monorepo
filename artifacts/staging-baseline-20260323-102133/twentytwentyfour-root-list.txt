@@ -1,0 +1,12 @@
+.
+..
+assets
+functions.php
+parts
+patterns
+readme.txt
+screenshot.png
+style.css
+styles
+templates
+theme.json

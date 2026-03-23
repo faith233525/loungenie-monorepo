@@ -1,0 +1,16 @@
+{
+  "page_id": 4862,
+  "title": "About",
+  "blocks": [
+    {
+      "block": "core/heading",
+      "attrs": {"className":"about-hero"},
+      "innerHTML": "About LounGenie"
+    },
+    {
+      "block": "core/paragraph",
+      "attrs": {},
+      "innerHTML": "Short about text goes here. Replace with Kadence row layouts as needed."
+    }
+  ]
+}

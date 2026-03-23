@@ -1,0 +1,17 @@
+import getpass, requests, sys, json
+
+username = input("WP username: ").strip()
+password = getpass.getpass("App password: ")
+url = "https://loungenie.com/wp-json/wp/v2/users/me"
+
+try:
+    r = requests.get(url, auth=(username, password), timeout=15)
+    r.raise_for_status()
+    print(json.dumps(r.json(), indent=2))
+except requests.HTTPError as e:
+    print("HTTP error:", e, r.status_code if 'r' in locals() else "")
+    print(r.text if 'r' in locals() else "")
+    sys.exit(1)
+except Exception as e:
+    print("Error:", e)
+    sys.exit(1)

@@ -1,0 +1,25 @@
+{
+  "page_id": 4701,
+  "title": "Home",
+  "blocks": [
+    {
+      "block": "kadence/rowlayout",
+      "attrs": {"className":"lg9-section lg9-hero"},
+      "innerBlocks": [
+        {
+          "block": "core/group",
+          "attrs": {"className":"lg9-shell has-global-padding is-layout-constrained"},
+          "innerBlocks": [
+            {"block": "core/paragraph", "attrs": {"className": "lg9-kicker"}, "innerHTML": "Solar-Powered Cabana Platform"},
+            {"block": "core/heading", "attrs": {"className": "lg9-title-xl"}, "innerHTML": "Grow Premium Seating Revenue Across Resorts and Waterparks"},
+            {"block": "core/paragraph", "attrs": {"className": "lg9-copy"}, "innerHTML": "Built for operations managers and commercial decision makers, LounGenie improves guest flow, speeds poolside service, and helps premium seating deliver stronger daily revenue."}
+          ]
+        }
+      ]
+    },
+    {
+      "block": "core/gallery",
+      "attrs": {"ids": ["lg-gallery-hilton-kona-cabana-4-scaled.jpg", "lg-gallery-sea-world-san-diego.jpg", "IMG_2090.jpeg"], "columns": 3, "crop": true}
+    }
+  ]
+}

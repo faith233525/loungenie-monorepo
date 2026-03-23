@@ -1,0 +1,5 @@
+open ftp.poolsafeinc.com
+ftpadmin@loungenie.com
+LounGenie21!
+ls -la
+quit

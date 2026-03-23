@@ -1,0 +1,16 @@
+.
+..
+aiowps_backups
+backuply
+index.php
+litespeed
+maintenance
+maintenance.php
+mu-plugins
+plugins
+speedycache-config
+themes
+updraft
+upgrade
+upgrade-temp-backup
+uploads

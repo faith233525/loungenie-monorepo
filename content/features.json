@@ -1,0 +1,11 @@
+{
+  "page_id": 2989,
+  "title": "Features",
+  "blocks": [
+    {
+      "block": "core/heading",
+      "attrs": {},
+      "innerHTML": "Platform Features"
+    }
+  ]
+}
