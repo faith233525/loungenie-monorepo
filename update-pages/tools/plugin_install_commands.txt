@@ -1,0 +1,21 @@
+WP-CLI plugin install / activation commands (example)
+
+# Note: replace --path value with your WordPress installation path on the server.
+
+# Install Kadence theme and blocks
+wp plugin install kadence-blocks --activate --path=/path/to/wordpress
+wp theme install kadence --activate --path=/path/to/wordpress
+
+# Install WPide or a File Manager plugin (replace slug if different)
+wp plugin install wpide --activate --path=/path/to/wordpress
+
+# Install AI Engine (if available via WP repo)
+wp plugin install ai-engine --activate --path=/path/to/wordpress
+
+# LiteSpeed Cache (for HostPapa/LiteSpeed tuning)
+wp plugin install litespeed-cache --activate --path=/path/to/wordpress
+
+# Rank Math SEO (if used)
+wp plugin install rank-math --activate --path=/path/to/wordpress
+
+# Reminder: some premium add-ons or Kadence AI integrations may require manual install or vendor-provided slugs.

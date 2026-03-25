@@ -1,0 +1,33 @@
+# Updated LounGenie Website Image & Alt Text Recommendations
+
+## Press Page
+- **Image:** 1717093552335.jpg
+- **Alt Text:** LounGenie featured in press release with cabana installation at a luxury resort
+
+## Home Page
+- **Image:** 1717017917353.jpg
+- **Alt Text:** LounGenie smart amenity unit installed in a poolside cabana, providing guest convenience and security
+
+## Product/Features Page
+- **Image:** 1715898551198.jpg
+- **Alt Text:** Close-up of LounGenie unit showing waterproof safe, USB charging, and removable ice bucket
+
+## Gallery Page
+- **Image:** 1717017917353.jpg
+- **Alt Text:** Montage of LounGenie installations at hotels, resorts, and waterparks
+
+## Testimonials Page
+- **Image:** 1717093555111.jpg
+- **Alt Text:** Happy guests using LounGenie amenity unit in a premium cabana setting
+
+## Investors Page
+- **Image:** 1717093560550.jpg
+- **Alt Text:** LounGenie in use at The Grove Resort, demonstrating commercial adoption and guest satisfaction
+
+## Contact Page
+- **Image:** 1717093566487.jpg
+- **Alt Text:** Pool Safe Inc. logo for contact and support information
+
+---
+
+All alt text is written to be descriptive, on-brand, and SEO-friendly. Replace any incorrect or generic alt text on your site with these improved versions. If you need more detailed mapping for additional pages, let me know!

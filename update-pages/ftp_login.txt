@@ -1,0 +1,6 @@
+open sh-cp9.yyz2.servername.online
+ftpadmin
+LounGenie21!
+pwd
+ls
+quit

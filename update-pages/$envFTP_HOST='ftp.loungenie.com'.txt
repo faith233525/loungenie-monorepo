@@ -1,0 +1,6 @@
+$env:FTP_HOST='ftp.loungenie.com'
+$env:FTP_USER='copilot@loungenie.com'
+$env:FTP_PASS='LounGenie21!'
+$env:WP_USER='copilot'
+$env:WP_PASS='nbe2 1zsu upGv JS7h 8qVJ swch'
+pwsh -NoProfile -ExecutionPolicy Bypass -File .\tools\run_local_orchestrator.ps1

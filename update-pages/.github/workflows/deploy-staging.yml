@@ -1,0 +1,105 @@
+name: Automated Staging Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Run in dry run (true/false)"
+        required: false
+        default: "true"
+      run_ftp_backup:
+        description: "Run ftp backup (true/false)"
+        required: false
+        default: "false"
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: windows-latest
+    environment: staging
+    env:
+      # set defaults here if desired; real secrets must be set in repo settings
+      FTP_TYPE: ftp
+      DRY_RUN: ${{ github.event.inputs.dry_run || 'true' }}
+      RUN_FTP_BACKUP: ${{ github.event.inputs.run_ftp_backup || 'false' }}
+      WP_URL: ${{ secrets.WP_URL }}
+      WP_USER: ${{ secrets.WP_USER }}
+      WP_APP_PASS: ${{ secrets.WP_APP_PASS }}
+      FTP_HOST: ${{ secrets.FTP_HOST }}
+      FTP_USER: ${{ secrets.FTP_USER }}
+      FTP_PASS: ${{ secrets.FTP_PASS }}
+      STAGING_URL: ${{ secrets.STAGING_URL }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Python requirements (if present)
+        run: |
+          python -m pip install --upgrade pip
+          if (Test-Path requirements.txt) { pip install -r requirements.txt }
+        shell: pwsh
+
+      - name: Run repository duplicate detector
+        run: |
+          python scripts\find_artifact_duplicates.py > artifacts\duplicate_report.txt
+        shell: pwsh
+
+      - name: Validate required secrets
+        shell: pwsh
+        run: |
+          $missing = @()
+          $required = @('WP_URL','WP_USER','WP_APP_PASS','FTP_HOST','FTP_USER','FTP_PASS','STAGING_URL')
+          foreach ($r in $required) {
+            if (-not $env:$r) { $missing += $r }
+          }
+          if ($missing.Count -gt 0) {
+            Write-Error "Missing required secrets: $($missing -join ', ')"
+          } else {
+            Write-Output 'All required secrets present.'
+          }
+
+      - name: Upload duplicate report
+        uses: actions/upload-artifact@v4
+        with:
+          name: duplicate-report
+          path: artifacts/duplicate_report.txt
+
+      - name: Run orchestrator to sync FTP + REST deploy to staging (safe)
+        env:
+          WP_URL: ${{ secrets.WP_URL }}
+          WP_USER: ${{ secrets.WP_USER }}
+          WP_APP_PASS: ${{ secrets.WP_APP_PASS }}
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'true' }}
+          RUN_FTP_BACKUP: ${{ github.event.inputs.run_ftp_backup || 'false' }}
+        run: |
+          pwsh -NoProfile -ExecutionPolicy Bypass -File tools\run_wp_ftp_and_rest_safe.ps1
+        shell: pwsh
+
+      - name: Upload logs (if produced)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: staging-artifacts
+          path: |
+            run_wp_ftp_and_rest.log
+            apply_patches.log
+
+      - name: Smoke check front page
+        shell: pwsh
+        env:
+          STAGING_URL: ${{ secrets.STAGING_URL }}
+        run: |
+          try { Invoke-RestMethod -Uri "$env:STAGING_URL/" -Method Get -TimeoutSec 30; Write-Output 'Front page reachable' } catch { Write-Warning 'Front page check failed' }

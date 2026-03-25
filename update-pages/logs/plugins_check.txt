@@ -1,0 +1,9 @@
+200	https://loungenie.com/staging/wp-content/plugins/kadence-blocks/kadence-blocks.php
+404	https://loungenie.com/staging/wp-content/plugins/kadence-blocks/build/index.js
+404	https://loungenie.com/staging/wp-content/plugins/kadence-blocks/assets/js/frontend.min.js
+404	https://loungenie.com/staging/wp-content/plugins/kadence-blocks/includes/blocks/advanced-gallery.php
+404	https://loungenie.com/staging/wp-content/plugins/elementor/assets/js/frontend.min.js
+404	https://loungenie.com/staging/wp-content/plugins/smart-slider-3/public/assets/js/frontend.min.js
+404	https://loungenie.com/staging/wp-content/plugins/metaslider/assets/js/mu-plugins.min.js
+404	https://loungenie.com/staging/wp-content/plugins/revslider/public/assets/js/jquery.themepunch.revolution.min.js
+404	https://loungenie.com/staging/wp-content/plugins/woocommerce/woocommerce.php

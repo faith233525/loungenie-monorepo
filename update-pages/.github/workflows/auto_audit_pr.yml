@@ -1,0 +1,40 @@
+name: Automated Audit → PR
+
+on:
+  push:
+    branches:
+      - feature/staging-deploy
+
+jobs:
+  run-audits-and-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run local orchestrator (dry-run)
+        shell: bash
+        run: |
+          pwsh -NoProfile -ExecutionPolicy Bypass -File ./tools/run_everything_local.ps1
+
+      - name: Commit generated artifacts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b audit/artifacts-$(date +%s)
+          git add artifacts || true
+          git commit -m "chore(audit): add automated audit artifacts" || echo "No artifacts changes to commit"
+          git push --set-upstream origin HEAD
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(audit): add automated audit artifacts"
+          branch: "audit/artifacts-${{ github.run_id }}"
+          title: "Automated audit artifacts"
+          body: |
+            This PR was opened automatically by the audit workflow. It contains generated audit artifacts and suggested remediation payloads for review.
+          labels: "automated,audit"

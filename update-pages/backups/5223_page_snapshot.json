@@ -1,0 +1,213 @@
+{
+  "id": 5223,
+  "date": "2026-02-27T14:29:57",
+  "date_gmt": "2026-02-27T14:29:57",
+  "guid": {
+    "rendered": "https://loungenie.com/staging/?page_id=5223"
+  },
+  "modified": "2026-03-23T23:07:52",
+  "modified_gmt": "2026-03-23T23:07:52",
+  "slug": "cabana-installation-photos",
+  "status": "publish",
+  "type": "page",
+  "link": "https://loungenie.com/staging/cabana-installation-photos/",
+  "title": {
+    "rendered": "LounGenie Gallery | Cabana, Daybed &#038; Waterpark Installation Photos"
+  },
+  "content": {
+    "rendered": "<div class=\"wp-block-kadence-rowlayout lg9-hero kadence-row\">\n<h1 class=\"lg-adv-heading lg9-title-md\">Installation imagery organized by venue style, not by property name.</h1>\n<p class=\"lg9-copy\" style=\"text-align:center;color:#cfeafe;margin-top:8px;\">A curated showcase of cabana, daybed and waterpark deployments — editorial, property-agnostic, and optimized for operator review.</p>\n<div class=\"wp-block-kadence-buttons lg9-cta-row\"></div>\n</div>\n<div class=\"wp-block-kadence-rowlayout lg9-section\">\n<div class=\"wp-block-kadence-rowlayout lg9-shell\">\n<div class=\"wp-block-kadence-rowlayout-column\" style=\"width:66%\">\n<h2 class=\"lg9-kicker\">Resort Cabanas</h2>\n<h3 class=\"lg9-title-md\">Premium seating environments and daybed-style installations.</h3>\n<p class=\"lg9-gallery-note\">Editorial grouping to highlight product moments without property naming.</p>\n</div>\n<div class=\"wp-block-kadence-rowlayout-column\" style=\"width:34%\">\n</div>\n</div>\n</div>\n<div class=\"wp-block-kadence-rowlayout lg9-section-soft\">\n<div class=\"wp-block-kadence-rowlayout lg9-shell\">\n<h2 class=\"lg9-kicker\">Waterpark Deployment</h2>\n<h3 class=\"lg9-title-md\">High-volume outdoor installs organized as one visual family.</h3>\n<p class=\"lg9-gallery-note\">Images show deployment patterns without identifying operators.</p>\n</div>\n</div>\n<div class=\"wp-block-kadence-rowlayout lg9-section\">\n<div class=\"wp-block-kadence-rowlayout lg9-shell\">\n<h2 class=\"lg9-kicker\">Amenity Details</h2>\n<h3 class=\"lg9-title-md\">Closer views of storage, charging, and in-cabana presentation.</h3>\n<p class=\"lg9-gallery-note\">Hardware and guest-use moments for operator review.</p>\n<div class=\"wp-block-kadence-buttons lg9-cta-row\"></div>\n</div>\n</div>\n",
+    "protected": false
+  },
+  "excerpt": {
+    "rendered": "<p>Browse LounGenie installation photos across cabanas, daybeds, and waterpark environments with detailed views of real premium seating deployments.</p>\n",
+    "protected": false
+  },
+  "author": 1,
+  "featured_media": 8332,
+  "parent": 0,
+  "menu_order": 0,
+  "comment_status": "closed",
+  "ping_status": "closed",
+  "template": "page-wide",
+  "meta": {
+    "content-type": "",
+    "footnotes": ""
+  },
+  "class_list": [
+    "post-5223",
+    "page",
+    "type-page",
+    "status-publish",
+    "has-post-thumbnail",
+    "hentry"
+  ],
+  "_links": {
+    "self": [
+      {
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/pages/5223",
+        "targetHints": {
+          "allow": [
+            "GET"
+          ]
+        }
+      }
+    ],
+    "collection": [
+      {
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/pages"
+      }
+    ],
+    "about": [
+      {
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/types/page"
+      }
+    ],
+    "author": [
+      {
+        "embeddable": true,
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/users/1"
+      }
+    ],
+    "replies": [
+      {
+        "embeddable": true,
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/comments?post=5223"
+      }
+    ],
+    "version-history": [
+      {
+        "count": 304,
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/pages/5223/revisions"
+      }
+    ],
+    "predecessor-version": [
+      {
+        "id": 9225,
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/pages/5223/revisions/9225"
+      }
+    ],
+    "wp:featuredmedia": [
+      {
+        "embeddable": true,
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/media/8332"
+      }
+    ],
+    "wp:attachment": [
+      {
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/media?parent=5223"
+      }
+    ],
+    "curies": [
+      {
+        "name": "wp",
+        "href": "https://api.w.org/{rel}",
+        "templated": true
+      }
+    ]
+  },
+  "_embedded": {
+    "author": [
+      {
+        "id": 1,
+        "name": "admin",
+        "url": "https://loungenie.com/staging",
+        "description": "",
+        "link": "https://loungenie.com/staging/author/admin/",
+        "slug": "admin",
+        "_links": {
+          "self": [
+            {
+              "href": "https://loungenie.com/staging/wp-json/wp/v2/users/1",
+              "targetHints": {
+                "allow": [
+                  "GET"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://loungenie.com/staging/wp-json/wp/v2/users"
+            }
+          ]
+        }
+      }
+    ],
+    "wp:featuredmedia": [
+      {
+        "id": 8332,
+        "date": "2026-03-13T15:53:30",
+        "slug": "sea-world-san-diego-2",
+        "type": "attachment",
+        "link": "https://loungenie.com/staging/sea-world-san-diego-2/",
+        "title": {
+          "rendered": "Full-service hotel cabana interior with LounGenie smart unit"
+        },
+        "author": 1,
+        "featured_media": 0,
+        "caption": {
+          "rendered": ""
+        },
+        "alt_text": "Full-service hotel cabana interior with LounGenie smart unit",
+        "media_type": "image",
+        "mime_type": "image/jpeg",
+        "media_details": {
+          "width": 2382,
+          "height": 1906,
+          "file": "2026/03/Sea-World-San-Diego.jpg",
+          "filesize": 784902,
+          "sizes": {},
+          "image_meta": {
+            "aperture": "7.1",
+            "credit": "",
+            "camera": "NIKON D750",
+            "caption": "",
+            "created_timestamp": "1463929725",
+            "copyright": "",
+            "focal_length": "24",
+            "iso": "160",
+            "shutter_speed": "0.00625",
+            "title": "",
+            "orientation": "1",
+            "keywords": []
+          }
+        },
+        "source_url": "https://loungenie.com/staging/wp-content/uploads/2026/03/Sea-World-San-Diego.jpg",
+        "_links": {
+          "self": [
+            {
+              "href": "https://loungenie.com/staging/wp-json/wp/v2/media/8332",
+              "targetHints": {
+                "allow": [
+                  "GET"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://loungenie.com/staging/wp-json/wp/v2/media"
+            }
+          ],
+          "about": [
+            {
+              "href": "https://loungenie.com/staging/wp-json/wp/v2/types/attachment"
+            }
+          ],
+          "author": [
+            {
+              "embeddable": true,
+              "href": "https://loungenie.com/staging/wp-json/wp/v2/users/1"
+            }
+          ],
+          "replies": [
+            {
+              "embeddable": true,
+              "href": "https://loungenie.com/staging/wp-json/wp/v2/comments?post=8332"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

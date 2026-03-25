@@ -1,0 +1,6 @@
+open ftp.poolsafeinc.com
+ftpadmin@loungenie.com
+LounGenie21!
+cd /home/pools425/loungenie.com/Loungenie™/wp-content/uploads
+ls -la
+quit

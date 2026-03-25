@@ -1,0 +1,41 @@
+/* Responsive logo carousel styles for Kadence header/footer */
+.lg-logo-carousel {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  gap: 1rem;
+}
+.lg-logo-carousel .lg-item {
+  flex: 0 0 auto;
+  width: 120px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lg-logo-carousel img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* small screens: show fewer logos */
+@media (max-width: 767px) {
+  .lg-logo-carousel .lg-item { width: 90px; height: 48px; }
+}
+
+/* medium screens */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .lg-logo-carousel .lg-item { width: 110px; height: 56px; }
+}
+
+/* optional simple marquee animation */
+.lg-logo-carousel.marquee {
+  animation: lg-marquee 18s linear infinite;
+}
+@keyframes lg-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-25%); }
+}
+
+/* Kadence recommendation: use block spacing settings rather than inline margins */

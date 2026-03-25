@@ -1,0 +1,140 @@
+{
+  "id": 4701,
+  "date": "2026-02-26T16:59:48",
+  "date_gmt": "2026-02-26T16:59:48",
+  "guid": {
+    "rendered": "https://loungenie.com/staging/?page_id=4701",
+    "raw": "https://loungenie.com/staging/?page_id=4701"
+  },
+  "modified": "2026-03-25T16:33:02",
+  "modified_gmt": "2026-03-25T16:33:02",
+  "password": "",
+  "slug": "home",
+  "status": "publish",
+  "type": "page",
+  "link": "https://loungenie.com/staging/",
+  "title": {
+    "raw": "LounGenie Smart Cabana System for Hotels, Resorts and Waterparks",
+    "rendered": "LounGenie Smart Cabana System for Hotels, Resorts and Waterparks"
+  },
+  "content": {
+    "raw": "    <!-- Home Hero -->\r\n    <!-- wp:kadence/rowlayout {\"background\":\"#003366\",\"background2\":\"#0073e6\",\"backgroundType\":\"gradient\",\"backgroundGradientAngle\":135,\"paddingTop\":140,\"paddingBottom\":140} -->\r\n    <div class=\"kt-row-column-wrap\"><div class=\"kt-inside-inner-col\"><!-- wp:heading {\"level\":1} --><h1 style=\"color:#ffffff\">Luxury Hospitality Reimagined</h1><!-- /wp:heading -->\r\n    <!-- wp:paragraph --><p style=\"color:#e0e0e0\">Premium cabana amenities: QR ordering, waterproof safe, and solar USB charging.</p><!-- /wp:paragraph -->\r\n    <!-- wp:kadence/advancedgallery {\"type\":\"carousel\",\"uniqueID\":\"home_carousel\",\"carouselAutoPlay\":true} -->\r\n    <div class=\"wp-block-kadence-advancedgallery\"><p class=\"has-text-align-center\"><strong>Feature Carousel: Smart Cabana, QR Ordering, Secure Storage</strong></p></div>\r\n    <!-- /wp:kadence/advancedgallery -->\r\n\r\n    <!-- wp:kadence/rowlayout {\"uniqueID\":\"home_bento\",\"paddingTop\":80,\"paddingBottom\":80,\"background\":\"#f8f9fa\"} -->\r\n    <div class=\"kt-row-column-wrap\"><div class=\"kt-inside-inner-col\">\r\n    <!-- wp:kadence/column {\"uniqueID\":\"_c1_\",\"backgroundColor\":\"#ffffff\",\"borderRadius\":15,\"padding\":30} --><div class=\"kt-inside-inner-col\"><h3>QR Guest Ordering</h3><p>Boost F&B revenue with digital poolside service — orders print to staff printer.</p></div><!-- /wp:kadence/column -->\r\n    <!-- wp:kadence/column {\"uniqueID\":\"_c2_\",\"backgroundColor\":\"#ffffff\",\"borderRadius\":15,\"padding\":30} --><div class=\"kt-inside-inner-col\"><h3>Secure Storage</h3><p>Waterproof safe with keypad keeps guest belongings secure.</p></div><!-- /wp:kadence/column -->\r\n    <!-- wp:kadence/column {\"uniqueID\":\"_c3_\",\"backgroundColor\":\"#ffffff\",\"borderRadius\":15,\"padding\":30} --><div class=\"kt-inside-inner-col\"><h3>Solar USB Charging</h3><p>Solar-powered USB ports for convenient guest charging.</p></div><!-- /wp:kadence/column -->\r\n    </div></div>\r\n    <!-- /wp:kadence/rowlayout -->\r\n    '@\r\n        }\r\n        'about' {\r\n            return @'\r\n<!-- About -->\r\n<!-- wp:kadence/rowlayout {\"background\":\"#003366\",\"background2\":\"#0073e6\",\"backgroundType\":\"gradient\",\"backgroundGradientAngle\":135,\"paddingTop\":100,\"paddingBottom\":100} -->\r\n<div class=\"kt-row-column-wrap\"><div class=\"kt-inside-inner-col\"><!-- wp:heading {\"level\":2} --><h2 style=\"color:#ffffff\">About LounGenie | Hospitality Technology for Premium Seating</h2><!-- /wp:heading -->\r\n<!-- wp:paragraph --><p style=\"color:#e0e0e0\">Built for premium venues. Service-first design and commercial-grade construction. We design, build, and service premium cabana amenities. PoolSafe handles installation, maintenance, and service.</p><!-- /wp:paragraph -->\r\n<!-- wp:group {\"className\":\"about-vision\",\"style\":{\"spacing\":{\"padding\":{\"top\":\"30px\",\"bottom\":\"30px\"}},\"color\":{\"background\":\"rgba(255,255,255,0.04)\"}}} --><div class=\"about-vision\" style=\"padding:30px;background:rgba(255,255,255,0.04)\"><!-- wp:heading {\"level\":3} --><h3 style=\"color:#ffffff\">Our Vision</h3><!-- /wp:heading --><!-- wp:paragraph --><p style=\"color:#e0e0e0\">Bring premium hospitality experiences to life with modular, serviceable, and durable amenities that blend into venue aesthetics.</p><!-- /wp:paragraph --></div><!-- /wp:group -->\r\n<!-- wp:image --><img src=\"/wp-content/uploads/2025/10/team-photo.jpg\" alt=\"Team\" style=\"margin-top:18px;border-radius:8px\" /><!-- /wp:image -->\r\n<!-- /wp:kadence/rowlayout --><!-- /wp:kadence/rowlayout -->",
+    "rendered": "    <!-- Home Hero -->\r\n    \r\n    <div class=\"kt-row-column-wrap\"><div class=\"kt-inside-inner-col\"><h1 class=\"wp-block-heading\" style=\"color:#ffffff\">Luxury Hospitality Reimagined</h1>\r\n    <p style=\"color:#e0e0e0\">Premium cabana amenities: QR ordering, waterproof safe, and solar USB charging.</p>\r\n    <style>.wp-block-kadence-advancedgallery.kb-gallery-wrap-id-home_carousel{overflow:hidden;}.kb-gallery-id-home_carousel .kadence-blocks-gallery-item .kb-gal-image-radius, .kb-gallery-id-home_carousel .kb-slide-item .kb-gal-image-radius img{border-radius:0px 0px 0px 0px;;}.kb-gallery-wrap-id-home_carousel.wp-block-kadence-advancedgallery{overflow:visible;}.kb-gallery-wrap-id-home_carousel.wp-block-kadence-advancedgallery .kt-blocks-carousel{overflow:visible;}</style>\r\n    <div class=\"wp-block-kadence-advancedgallery\"><p class=\"has-text-align-center\"><strong>Feature Carousel: Smart Cabana, QR Ordering, Secure Storage</strong></p></div>\r\n    \r\n\r\n    <style>#kt-layout-idhome_bento > .kt-row-column-wrap{align-content:start;}:where(#kt-layout-idhome_bento > .kt-row-column-wrap) > .wp-block-kadence-column{justify-content:start;}#kt-layout-idhome_bento > .kt-row-column-wrap{column-gap:var(--global-kb-gap-md, 2rem);row-gap:var(--global-kb-gap-md, 2rem);padding-top:var( --global-kb-row-default-top, 25px );padding-bottom:var( --global-kb-row-default-bottom, 25px );padding-top:var(--global-kb-spacing-sm, 1.5rem);padding-bottom:var(--global-kb-spacing-sm, 1.5rem);grid-template-columns:repeat(2, minmax(0, 1fr));}#kt-layout-idhome_bento > .kt-row-layout-overlay{opacity:0.30;}@media all and (max-width: 1024px){#kt-layout-idhome_bento > .kt-row-column-wrap{grid-template-columns:repeat(2, minmax(0, 1fr));}}@media all and (max-width: 767px){#kt-layout-idhome_bento > .kt-row-column-wrap{grid-template-columns:minmax(0, 1fr);}}</style>\r\n    <div class=\"kt-row-column-wrap\"><div class=\"kt-inside-inner-col\">\r\n    <style>.kadence-column_c1_ > .kt-inside-inner-col{border-top-width:0px;border-right-width:0px;border-bottom-width:0px;border-left-width:0px;}.kadence-column_c1_ > .kt-inside-inner-col{column-gap:var(--global-kb-gap-sm, 1rem);}.kadence-column_c1_ > .kt-inside-inner-col{flex-direction:column;}.kadence-column_c1_ > .kt-inside-inner-col > .aligncenter{width:100%;}.kadence-column_c1_ > .kt-inside-inner-col:before{opacity:0.3;}.kadence-column_c1_{position:relative;}@media all and (max-width: 1024px){.kadence-column_c1_ > .kt-inside-inner-col{flex-direction:column;justify-content:center;}}@media all and (max-width: 767px){.kadence-column_c1_ > .kt-inside-inner-col{flex-direction:column;justify-content:center;}}</style><div class=\"kt-inside-inner-col\"><h3>QR Guest Ordering</h3><p>Boost F&#038;B revenue with digital poolside service — orders print to staff printer.</p></div>\r\n    <style>.kadence-column_c2_ > .kt-inside-inner-col{border-top-width:0px;border-right-width:0px;border-bottom-width:0px;border-left-width:0px;}.kadence-column_c2_ > .kt-inside-inner-col{column-gap:var(--global-kb-gap-sm, 1rem);}.kadence-column_c2_ > .kt-inside-inner-col{flex-direction:column;}.kadence-column_c2_ > .kt-inside-inner-col > .aligncenter{width:100%;}.kadence-column_c2_ > .kt-inside-inner-col:before{opacity:0.3;}.kadence-column_c2_{position:relative;}@media all and (max-width: 1024px){.kadence-column_c2_ > .kt-inside-inner-col{flex-direction:column;justify-content:center;}}@media all and (max-width: 767px){.kadence-column_c2_ > .kt-inside-inner-col{flex-direction:column;justify-content:center;}}</style><div class=\"kt-inside-inner-col\"><h3>Secure Storage</h3><p>Waterproof safe with keypad keeps guest belongings secure.</p></div>\r\n    <style>.kadence-column_c3_ > .kt-inside-inner-col{border-top-width:0px;border-right-width:0px;border-bottom-width:0px;border-left-width:0px;}.kadence-column_c3_ > .kt-inside-inner-col{column-gap:var(--global-kb-gap-sm, 1rem);}.kadence-column_c3_ > .kt-inside-inner-col{flex-direction:column;}.kadence-column_c3_ > .kt-inside-inner-col > .aligncenter{width:100%;}.kadence-column_c3_ > .kt-inside-inner-col:before{opacity:0.3;}.kadence-column_c3_{position:relative;}@media all and (max-width: 1024px){.kadence-column_c3_ > .kt-inside-inner-col{flex-direction:column;justify-content:center;}}@media all and (max-width: 767px){.kadence-column_c3_ > .kt-inside-inner-col{flex-direction:column;justify-content:center;}}</style><div class=\"kt-inside-inner-col\"><h3>Solar USB Charging</h3><p>Solar-powered USB ports for convenient guest charging.</p></div>\r\n    </div></div>\r\n    \r\n    &#8216;@\r\n        }\r\n        &#8216;about&#8217; {\r\n            return @&#8217;\r\n<!-- About -->\r\n\r\n<div class=\"kt-row-column-wrap\"><div class=\"kt-inside-inner-col\"><h2 class=\"wp-block-heading\" style=\"color:#ffffff\">About LounGenie | Hospitality Technology for Premium Seating</h2>\r\n<p style=\"color:#e0e0e0\">Built for premium venues. Service-first design and commercial-grade construction. We design, build, and service premium cabana amenities. PoolSafe handles installation, maintenance, and service.</p>\r\n<div class=\"about-vision is-layout-flow wp-block-group-is-layout-flow\" style=\"padding:30px;background:rgba(255,255,255,0.04)\"><div class=\"wp-block-group__inner-container\"><h3 class=\"wp-block-heading\" style=\"color:#ffffff\">Our Vision</h3><p style=\"color:#e0e0e0\">Bring premium hospitality experiences to life with modular, serviceable, and durable amenities that blend into venue aesthetics.</p></div></div>\r\n<img decoding=\"async\" src=\"/wp-content/uploads/2025/10/team-photo.jpg\" alt=\"Team\" style=\"margin-top:18px;border-radius:8px\" />\r\n",
+    "protected": false,
+    "block_version": 1
+  },
+  "excerpt": {
+    "raw": "LounGenie helps hotels, resorts, and waterparks increase premium seating revenue with QR ordering, waterproof storage, USB charging, and guest-service features.",
+    "rendered": "<p>LounGenie helps hotels, resorts, and waterparks increase premium seating revenue with QR ordering, waterproof storage, USB charging, and guest-service features.</p>\n",
+    "protected": false
+  },
+  "author": 1,
+  "featured_media": 0,
+  "parent": 0,
+  "menu_order": 0,
+  "comment_status": "closed",
+  "ping_status": "closed",
+  "template": "page-wide",
+  "meta": {
+    "content-type": "",
+    "_kadence_starter_templates_imported_post": false,
+    "_kad_post_transparent": "",
+    "_kad_post_title": "",
+    "_kad_post_layout": "",
+    "_kad_post_sidebar_id": "",
+    "_kad_post_content_style": "",
+    "_kad_post_vertical_padding": "",
+    "_kad_post_feature": "",
+    "_kad_post_feature_position": "",
+    "_kad_post_header": false,
+    "_kad_post_footer": false,
+    "_kad_post_classname": "",
+    "footnotes": ""
+  },
+  "permalink_template": "https://loungenie.com/staging/",
+  "generated_slug": "loungenie-smart-cabana-system-for-hotels-resorts-and-waterparks",
+  "class_list": [
+    "post-4701",
+    "page",
+    "type-page",
+    "status-publish",
+    "hentry"
+  ],
+  "_links": {
+    "self": [
+      {
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/pages/4701",
+        "targetHints": {
+          "allow": [
+            "GET",
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE"
+          ]
+        }
+      }
+    ],
+    "collection": [
+      {
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/pages"
+      }
+    ],
+    "about": [
+      {
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/types/page"
+      }
+    ],
+    "author": [
+      {
+        "embeddable": true,
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/users/1"
+      }
+    ],
+    "replies": [
+      {
+        "embeddable": true,
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/comments?post=4701"
+      }
+    ],
+    "version-history": [
+      {
+        "count": 1245,
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/pages/4701/revisions"
+      }
+    ],
+    "predecessor-version": [
+      {
+        "id": 9368,
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/pages/4701/revisions/9368"
+      }
+    ],
+    "wp:attachment": [
+      {
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/media?parent=4701"
+      }
+    ],
+    "wp:action-publish": [
+      {
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/pages/4701"
+      }
+    ],
+    "wp:action-unfiltered-html": [
+      {
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/pages/4701"
+      }
+    ],
+    "wp:action-assign-author": [
+      {
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/pages/4701"
+      }
+    ],
+    "curies": [
+      {
+        "name": "wp",
+        "href": "https://api.w.org/{rel}",
+        "templated": true
+      }
+    ]
+  }
+}

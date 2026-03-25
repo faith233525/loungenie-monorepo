@@ -1,0 +1,29 @@
+Mass update run - 2026-03-25T00:00:00Z
+-------------------------------------------------
+Note: this log intentionally excludes passwords and other secrets.
+
+Environment (non-sensitive):
+- FTP_HOST=ftp.loungenie.com
+- FTP_USER=copilot@loungenie.com
+- WP_SITE_URL=https://loungenie.com/staging
+- WP_USER=Copilot
+
+Script: tools/mass_update_pages.ps1
+
+Result summary:
+- Updated pages (status: publish):
+  - 5223 (gallery)
+  - 2989 (product)
+  - 5285 (investors)
+  - 4701 (home)
+  - 5139 (contact)
+- Skipped: 4862 (no content template found)
+
+Notes:
+- Payload previews were printed to the terminal during the run but are not stored here.
+- If you want full run output saved (including payload previews), re-run the command and pipe output to a file in `tools/logs/`.
+
+Recommended next steps:
+1) Verify the updated pages on staging and clear LiteSpeed cache.
+2) Review page 4862 to add or fix the missing content template.
+3) Take a staging backup and, if satisfied, prepare a production deployment plan.

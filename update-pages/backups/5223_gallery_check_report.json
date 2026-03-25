@@ -1,0 +1,61 @@
+{
+  "page": 5223,
+  "galleries": [
+    {
+      "index": 1,
+      "ids": [
+        8767
+      ],
+      "img_srcs_sample": [],
+      "unknown_ids": [],
+      "missing_ids": [],
+      "raw_attrs": "{\"ids\":[8767],\"columns\":1,\"linkTo\":\"none\"}"
+    },
+    {
+      "index": 2,
+      "ids": [
+        8769
+      ],
+      "img_srcs_sample": [],
+      "unknown_ids": [],
+      "missing_ids": [],
+      "raw_attrs": "{\"ids\":[8769],\"columns\":1,\"linkTo\":\"none\"}"
+    },
+    {
+      "index": 3,
+      "ids": [
+        8771
+      ],
+      "img_srcs_sample": [],
+      "unknown_ids": [],
+      "missing_ids": [],
+      "raw_attrs": "{\"ids\":[8771],\"columns\":1,\"linkTo\":\"none\"}"
+    },
+    {
+      "index": 4,
+      "ids": [
+        8773
+      ],
+      "img_srcs_sample": [],
+      "unknown_ids": [],
+      "missing_ids": [],
+      "raw_attrs": "{\"ids\":[8773],\"columns\":1,\"linkTo\":\"none\"}"
+    },
+    {
+      "index": 5,
+      "ids": [
+        2071
+      ],
+      "img_srcs_sample": [],
+      "unknown_ids": [],
+      "missing_ids": [],
+      "raw_attrs": "{\"ids\":[2071],\"columns\":1,\"linkTo\":\"none\"}"
+    }
+  ],
+  "summary": {
+    "total_galleries": 5,
+    "galleries_with_ids": 5,
+    "galleries_missing_ids": 0,
+    "galleries_with_unknown_ids": 0
+  }
+}

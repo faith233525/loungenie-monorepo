@@ -1,0 +1,40 @@
+Page 5716 - News and Press Releases | Pool Safe Inc. and LounGenie
+  Gutenberg: True  Kadence: False
+  Upload refs: 54  Plugin refs: 0
+
+Page 5686 - Financials and Filings | Pool Safe Inc. (TSXV: POOL)
+  Gutenberg: True  Kadence: False
+  Upload refs: 80  Plugin refs: 0
+
+Page 5668 - Investor Relations | Pool Safe Inc. (TSXV: POOL)
+  Gutenberg: True  Kadence: False
+  Upload refs: 2  Plugin refs: 0
+
+Page 5651 - Board of Directors | Pool Safe Inc. and LounGenie Leadership
+  Gutenberg: True  Kadence: False
+  Upload refs: 6  Plugin refs: 0
+
+Page 5285 - LounGenie Videos | Product Demos, Resort &#038; Waterpark Installations
+  Gutenberg: True  Kadence: False
+  Upload refs: 3  Plugin refs: 0
+
+Page 5223 - LounGenie Gallery | Cabana, Daybed &#038; Waterpark Installation Photos
+  Gutenberg: False  Kadence: True
+  Upload refs: 0  Plugin refs: 0
+
+Page 5139 - Contact LounGenie | Request a Demo for Your Property
+  Gutenberg: True  Kadence: False
+  Upload refs: 2  Plugin refs: 0
+
+Page 4862 - About LounGenie | Hospitality Technology for Premium Seating
+  Gutenberg: True  Kadence: False
+  Upload refs: 1  Plugin refs: 0
+
+Page 4701 - LounGenie Smart Cabana System for Hotels, Resorts and Waterparks
+  Gutenberg: True  Kadence: False
+  Upload refs: 0  Plugin refs: 0
+
+Page 2989 - LounGenie Features | QR Ordering, Safe, Charging and Guest Amenities
+  Gutenberg: True  Kadence: False
+  Upload refs: 8  Plugin refs: 0
+

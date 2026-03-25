@@ -1,0 +1,21 @@
+name: WordPress Sync
+on:
+  push:
+    branches:
+      - feature/staging-remediations
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 📁 FTP Sync
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ftp.poolsafeinc.com
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ./public_html/
+          exclude: |
+            **/.git*
+            **/venv/**
+            artifacts/**

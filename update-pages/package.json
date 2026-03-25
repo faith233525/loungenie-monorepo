@@ -1,0 +1,13 @@
+{
+  "name": "wordpress-page-updater",
+  "version": "1.0.0",
+  "description": "Automates WordPress page updates using the REST API.",
+  "main": "ai_premium_optimizer.js",
+  "scripts": {
+    "start": "node ai_premium_optimizer.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "node-fetch": "^3.3.0"
+  }
+}

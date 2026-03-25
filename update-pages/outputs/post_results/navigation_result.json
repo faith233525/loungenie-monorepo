@@ -1,0 +1,81 @@
+{
+  "id": 9299,
+  "date": "2026-03-25T02:34:34",
+  "date_gmt": "2026-03-25T02:34:34",
+  "guid": {
+    "rendered": "https://loungenie.com/staging/navigation-6/",
+    "raw": "https://loungenie.com/staging/navigation-6/"
+  },
+  "modified": "2026-03-25T02:34:34",
+  "modified_gmt": "2026-03-25T02:34:34",
+  "password": "",
+  "slug": "navigation-6",
+  "status": "publish",
+  "type": "wp_navigation",
+  "link": "https://loungenie.com/staging/navigation-6/",
+  "title": {
+    "raw": "Navigation",
+    "rendered": "Navigation"
+  },
+  "content": {
+    "raw": "<!-- wp:navigation-link {\"label\":\"Home\",\"type\":\"page\",\"id\":4701,\"url\":\"https://loungenie.com/staging/\",\"kind\":\"post-type\",\"isTopLevelLink\":true} /-->\n<!-- wp:navigation-link {\"label\":\"Features\",\"type\":\"page\",\"id\":2989,\"url\":\"https://loungenie.com/staging/poolside-amenity-unit/\",\"kind\":\"post-type\",\"isTopLevelLink\":true} /-->\n<!-- wp:navigation-link {\"label\":\"Gallery\",\"type\":\"page\",\"id\":5223,\"url\":\"https://loungenie.com/staging/cabana-installation-photos/\",\"kind\":\"post-type\",\"isTopLevelLink\":true} /-->\n<!-- wp:navigation-link {\"label\":\"Videos\",\"type\":\"page\",\"id\":5285,\"url\":\"https://loungenie.com/staging/loungenie-videos/\",\"kind\":\"post-type\",\"isTopLevelLink\":true} /-->\n<!-- wp:navigation-link {\"label\":\"About\",\"type\":\"page\",\"id\":4862,\"url\":\"https://loungenie.com/staging/hospitality-innovation/\",\"kind\":\"post-type\",\"isTopLevelLink\":true} /-->\n<!-- wp:navigation-link {\"label\":\"Contact\",\"type\":\"page\",\"id\":5139,\"url\":\"https://loungenie.com/staging/contact-loungenie/\",\"kind\":\"post-type\",\"isTopLevelLink\":true} /-->\n<!-- wp:navigation-submenu {\"label\":\"Investors\",\"url\":\"https://loungenie.com/staging/investors/\",\"kind\":\"custom\",\"isTopLevelItem\":true} -->\n<ul class=\"wp-block-navigation-submenu\"><!-- wp:navigation-link {\"label\":\"Investor Relations\",\"type\":\"page\",\"id\":5668,\"url\":\"https://loungenie.com/staging/investors/\",\"kind\":\"post-type\",\"isTopLevelLink\":false} /-->\n<!-- wp:navigation-link {\"label\":\"Board\",\"type\":\"page\",\"id\":5651,\"url\":\"https://loungenie.com/staging/board/\",\"kind\":\"post-type\",\"isTopLevelLink\":false} /-->\n<!-- wp:navigation-link {\"label\":\"Financials\",\"type\":\"page\",\"id\":5686,\"url\":\"https://loungenie.com/staging/financials/\",\"kind\":\"post-type\",\"isTopLevelLink\":false} /-->\n<!-- wp:navigation-link {\"label\":\"Press\",\"type\":\"page\",\"id\":5716,\"url\":\"https://loungenie.com/staging/press/\",\"kind\":\"post-type\",\"isTopLevelLink\":false} /--></ul>\n<!-- /wp:navigation-submenu -->",
+    "rendered": "<li class=\" wp-block-navigation-item wp-block-navigation-link\"><a class=\"wp-block-navigation-item__content\"  href=\"https://loungenie.com/staging/\"><span class=\"wp-block-navigation-item__label\">Home</span></a></li>\n<li class=\" wp-block-navigation-item wp-block-navigation-link\"><a class=\"wp-block-navigation-item__content\"  href=\"https://loungenie.com/staging/poolside-amenity-unit/\"><span class=\"wp-block-navigation-item__label\">Features</span></a></li>\n<li class=\" wp-block-navigation-item wp-block-navigation-link\"><a class=\"wp-block-navigation-item__content\"  href=\"https://loungenie.com/staging/cabana-installation-photos/\"><span class=\"wp-block-navigation-item__label\">Gallery</span></a></li>\n<li class=\" wp-block-navigation-item wp-block-navigation-link\"><a class=\"wp-block-navigation-item__content\"  href=\"https://loungenie.com/staging/loungenie-videos/\"><span class=\"wp-block-navigation-item__label\">Videos</span></a></li>\n<li class=\" wp-block-navigation-item wp-block-navigation-link\"><a class=\"wp-block-navigation-item__content\"  href=\"https://loungenie.com/staging/hospitality-innovation/\"><span class=\"wp-block-navigation-item__label\">About</span></a></li>\n<li class=\" wp-block-navigation-item wp-block-navigation-link\"><a class=\"wp-block-navigation-item__content\"  href=\"https://loungenie.com/staging/contact-loungenie/\"><span class=\"wp-block-navigation-item__label\">Contact</span></a></li>\n<li class=\"wp-block-navigation-item has-child wp-block-navigation-submenu\"><a class=\"wp-block-navigation-item__content\" href=\"https://loungenie.com/staging/investors/\"><span class=\"wp-block-navigation-item__label\">Investors</span></a><ul class=\"wp-block-navigation__submenu-container wp-block-navigation-submenu\"><li class=\" wp-block-navigation-item wp-block-navigation-link\"><a class=\"wp-block-navigation-item__content\"  href=\"https://loungenie.com/staging/investors/\"><span class=\"wp-block-navigation-item__label\">Investor Relations</span></a></li><li class=\" wp-block-navigation-item wp-block-navigation-link\"><a class=\"wp-block-navigation-item__content\"  href=\"https://loungenie.com/staging/board/\"><span class=\"wp-block-navigation-item__label\">Board</span></a></li><li class=\" wp-block-navigation-item wp-block-navigation-link\"><a class=\"wp-block-navigation-item__content\"  href=\"https://loungenie.com/staging/financials/\"><span class=\"wp-block-navigation-item__label\">Financials</span></a></li><li class=\" wp-block-navigation-item wp-block-navigation-link\"><a class=\"wp-block-navigation-item__content\"  href=\"https://loungenie.com/staging/press/\"><span class=\"wp-block-navigation-item__label\">Press</span></a></li></ul></li>",
+    "protected": false,
+    "block_version": 1
+  },
+  "template": "",
+  "_links": {
+    "self": [
+      {
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/navigation/9299",
+        "targetHints": {
+          "allow": [
+            "GET",
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE"
+          ]
+        }
+      }
+    ],
+    "collection": [
+      {
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/navigation"
+      }
+    ],
+    "about": [
+      {
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/types/wp_navigation"
+      }
+    ],
+    "version-history": [
+      {
+        "count": 0,
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/navigation/9299/revisions"
+      }
+    ],
+    "wp:attachment": [
+      {
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/media?parent=9299"
+      }
+    ],
+    "wp:action-publish": [
+      {
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/navigation/9299"
+      }
+    ],
+    "wp:action-unfiltered-html": [
+      {
+        "href": "https://loungenie.com/staging/wp-json/wp/v2/navigation/9299"
+      }
+    ],
+    "curies": [
+      {
+        "name": "wp",
+        "href": "https://api.w.org/{rel}",
+        "templated": true
+      }
+    ]
+  }
+}

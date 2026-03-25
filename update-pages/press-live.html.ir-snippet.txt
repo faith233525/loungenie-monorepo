@@ -1,0 +1,94 @@
+x;
+    align-items: center;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: #eaf3fd;
+    color: #1e456d;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .2px;
+}
+
+.ir-shell .ir-toolbar-note {
+    color: #4a637d;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.ir-shell .ir-source-content h1,
+.ir-shell .ir-source-content h2,
+.ir-shell .ir-source-content h3,
+.ir-shell .ir-source-content h4 {
+    color: #0c2238;
+    letter-spacing: -.35px;
+    line-height: 1.15;
+}
+
+.ir-shell .ir-source-content p,
+.ir-shell .ir-source-content li {
+    color: #29445f;
+    line-height: 1.8;
+    font-size: 1rem;
+}
+
+.ir-shell .ir-source-content a {
+    color: #0a4e94;
+    font-weight: 700;
+}
+
+.ir-shell .ir-source-content table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #dce8f3;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.ir-shell .ir-source-content th,
+.ir-shell .ir-source-content td {
+    border-bottom: 1px solid #e6eef6;
+    padding: 11px 13px;
+    text-align: left;
+}
+
+.ir-shell .ir-source-content .elementor-section {
+    margin-bottom: 20px;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid #e1ebf4;
+    box-shadow: 0 14px 36px rgba(8, 28, 48, .08);
+}
+
+.ir-shell .ir-source-content .elementor-background-overlay {
+    opacity: .9 !important;
+}
+
+.ir-shell .ir-source-content .elementor-widget-icon-list {
+    background: #f5faff;
+    border: 1px solid #deebf8;
+    border-radius: 13px;
+    padding: 14px 15px;
+}
+
+.ir-shell .ir-source-content .elementor-widget-button .elementor-button {
+    border-radius: 11px !important;
+    padding: 11px 17px !important;
+    font-weight: 800 !important;
+    box-shadow: 0 10px 24px rgba(0, 75, 147, .2);
+}
+
+.ir-shell .ir-source-content .elementor-widget-image img,
+.ir-shell .ir-source-content img {
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(8, 28, 48, .12);
+}
+
+.ir-shell .ir-source-content .elementor-top-section:first-of-type {
+    margin-top: 0 !important;
+}
+@media (max-width: 1024px) {
+  .lg9-logo-strip { grid-template-columns: repeat(3, minmax(0,1fr)); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lg9 * { animation: none !important; 

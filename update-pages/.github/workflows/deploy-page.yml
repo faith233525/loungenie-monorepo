@@ -1,0 +1,35 @@
+name: Deploy Page Artifact
+
+on:
+  workflow_dispatch:
+    inputs:
+      artifact:
+        description: "Path to artifact JSON under artifacts/ (e.g. artifacts/page_4862_update.json)"
+        required: true
+        default: "artifacts/page_4862_update.json"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Deploy page artifact
+        env:
+          WP_URL: ${{ secrets.WP_URL }}
+          WP_AUTH: ${{ secrets.WP_AUTH }}
+          WP_USER: ${{ secrets.WP_USER }}
+          WP_PASS: ${{ secrets.WP_PASS }}
+        run: |
+          python scripts/deploy_page.py "${{ github.event.inputs.artifact }}"

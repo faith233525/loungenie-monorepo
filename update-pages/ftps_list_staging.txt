@@ -1,0 +1,75 @@
+Warning: --ftp-ssl is an insecure option, consider --ssl-reqd instead
+  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+                                 Dload  Upload  Total   Spent   Left   Speed
+
+  0      0   0      0   0      0      0      0                              0* Host ftp.poolsafeinc.com:21 was resolved.
+* IPv6: (none)
+* IPv4: 66.102.133.37
+*   Trying 66.102.133.37:21...
+* Established connection to ftp.poolsafeinc.com (66.102.133.37 port 21) from 192.168.2.37 port 61756 
+< 220---------- Welcome to Pure-FTPd [privsep] [TLS] ----------
+
+< 220-You are user number 1 of 50 allowed.
+
+< 220-Local time is now 11:26. Server port: 21.
+
+< 220-This is a private system - No anonymous login
+
+< 220-IPv6 connections are also welcome on this server.
+
+< 220 You will be disconnected after 15 minutes of inactivity.
+
+> AUTH SSL
+
+< 500 This security scheme is not implemented
+
+> AUTH TLS
+
+< 234 AUTH TLS OK.
+
+* schannel: disabled automatic use of client certificate
+* Established connection to ftp.poolsafeinc.com (66.102.133.37 port 21) from 192.168.2.37 port 61756 
+> USER copilot@loungenie.com
+
+* schannel: remote party requests renegotiation
+* schannel: renegotiating SSL/TLS connection
+* schannel: SSL/TLS connection renegotiated
+* schannel: remote party requests renegotiation
+* schannel: renegotiating SSL/TLS connection
+* schannel: SSL/TLS connection renegotiated
+< 331 User copilot@loungenie.com OK. Password required
+
+> PASS LounGenie21!
+
+< 230 OK. Current restricted directory is /
+
+> PBSZ 0
+
+< 200 PBSZ=0
+
+> PROT P
+
+< 200 Data protection level set to "private"
+
+> PWD
+
+< 257 "/" is your current location
+
+* Entry path is '/'
+> CWD public_html
+
+
+  0      0   0      0   0      0      0      0                              0< 250 OK. Current directory is /public_html
+
+> CWD loungenie
+
+< 250 OK. Current directory is /public_html/loungenie
+
+> CWD staging
+
+< 550 Can't change directory to staging: No such file or directory
+
+* Server denied you to change to the given directory
+
+* Connection #0 to host ftp.poolsafeinc.com:21 left intact
+curl: (9) Server denied you to change to the given directory

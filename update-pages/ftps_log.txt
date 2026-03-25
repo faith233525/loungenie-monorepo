@@ -1,0 +1,142 @@
+Warning: --ftp-ssl is an insecure option, consider --ssl-reqd instead
+  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+                                 Dload  Upload  Total   Spent   Left   Speed
+
+  0      0   0      0   0      0      0      0                              0* Host ftp.poolsafeinc.com:21 was resolved.
+* IPv6: (none)
+* IPv4: 66.102.133.37
+*   Trying 66.102.133.37:21...
+* Established connection to ftp.poolsafeinc.com (66.102.133.37 port 21) from 192.168.2.37 port 50205 
+< 220---------- Welcome to Pure-FTPd [privsep] [TLS] ----------
+
+< 220-You are user number 1 of 50 allowed.
+
+< 220-Local time is now 11:23. Server port: 21.
+
+< 220-This is a private system - No anonymous login
+
+< 220-IPv6 connections are also welcome on this server.
+
+< 220 You will be disconnected after 15 minutes of inactivity.
+
+> AUTH SSL
+
+< 500 This security scheme is not implemented
+
+> AUTH TLS
+
+< 234 AUTH TLS OK.
+
+* schannel: disabled automatic use of client certificate
+* Established connection to ftp.poolsafeinc.com (66.102.133.37 port 21) from 192.168.2.37 port 50205 
+> USER copilot@loungenie.com
+
+* schannel: remote party requests renegotiation
+* schannel: renegotiating SSL/TLS connection
+* schannel: SSL/TLS connection renegotiated
+* schannel: remote party requests renegotiation
+* schannel: renegotiating SSL/TLS connection
+* schannel: SSL/TLS connection renegotiated
+< 331 User copilot@loungenie.com OK. Password required
+
+> PASS LounGenie21!
+
+< 230 OK. Current restricted directory is /
+
+> PBSZ 0
+
+< 200 PBSZ=0
+
+> PROT P
+
+< 200 Data protection level set to "private"
+
+> PWD
+
+< 257 "/" is your current location
+
+* Entry path is '/'
+* Request has same path as previous transfer
+> EPSV
+
+* Connect data stream passively
+
+  0      0   0      0   0      0      0      0                              0< 229 Extended Passive mode OK (|||55653|)
+
+* Connecting to 66.102.133.37 (66.102.133.37) port 55653
+*   Trying 66.102.133.37:55653...
+> TYPE A
+
+< 200 TYPE is now ASCII
+
+> LIST
+
+< 150 Accepted data connection
+
+* Maxdownload = -1
+* Established 2nd connection to ftp.poolsafeinc.com (66.102.133.37 port 55653) from 192.168.2.37 port 50238 
+{ [3925 bytes data]
+* schannel: server close notification received (close_notify)
+* schannel: shutting down SSL/TLS connection with ftp.poolsafeinc.com port 21
+{ [0 bytes data]
+
+100   3925   0   3925   0      0   5449      0                              0
+100   3925   0   3925   0      0   5447      0                              0* Remembering we are in directory ""
+< 226-Options: -a -l 
+
+< 226 51 matches total
+
+
+100   3925   0   3925   0      0   5183      0                              0
+* Connection #0 to host ftp.poolsafeinc.com:21 left intact
+drwx--x--x   34 pools425   pools425         4096 Mar 23 21:56 .
+drwx--x--x   34 pools425   pools425         4096 Mar 23 21:56 ..
+-rw-------    1 pools425   pools425         7316 Mar  1 19:27 .bash_history
+-rw-r--r--    1 pools425   pools425           18 Nov 21  2023 .bash_logout
+-rw-r--r--    1 pools425   pools425          193 Nov 21  2023 .bash_profile
+-rw-r--r--    1 pools425   pools425          231 Nov 21  2023 .bashrc
+drwxrwx--x    5 pools425   pools425           55 Nov 21  2023 .cagefs
+drwxr-xr-x    4 pools425   pools425           65 Jul 22  2025 .caldav
+drwxr-xr-x    2 pools425   pools425          210 Mar 21 01:15 .cl.selector
+drwx------    9 pools425   pools425         4096 Mar 24 11:19 .cpanel
+drwx------    4 pools425   pools425           69 Nov 21  2023 .cphorde
+-rw-------    1 pools425   pools425           20 Mar 23 14:57 .ftpquota
+-rw-r--r--    1 pools425   pools425          928 May  5  2025 .htaccess
+drwxr-x---   20 pools425   65534            4096 Mar 12 22:31 .htpasswds
+-rw-r--r--    1 pools425   pools425          106 Apr 17  2025 .imunify_patch_id
+-rw-------    1 pools425   pools425          580 Mar 24 11:19 .lastlogin
+-rw-rw----    1 pools425   pools425          102 Nov 21  2023 .myimunify_id
+drwxr-----    3 pools425   pools425           27 Nov 29  2023 .pki
+drwx--x--x    8 pools425   pools425         4096 Dec  3 12:50 .softaculous
+drwx------    2 pools425   pools425           32 Nov 21  2023 .spamassassin
+-rw-r--r--    1 pools425   pools425            0 Nov 21  2023 .spamassassinboxenable
+-rw-r--r--    1 pools425   pools425            0 Nov 21  2023 .spamassassinenable
+drwx------    2 pools425   pools425           36 Jan 13  2025 .subaccounts
+drwx------   10 pools425   pools425         4096 Mar 24 01:19 .trash
+-rw-------    1 pools425   pools425        11763 Feb 10 19:12 .viminfo
+drwxrwxr-x    3 pools425   pools425           27 Apr 17  2025 .wp-cli
+drwx------    4 pools425   pools425           49 Apr 15  2025 .wp-toolkit
+-rw-------    1 pools425   pools425          684 Oct  1  2024 .wp-toolkit-identifier
+lrwxrwxrwx    1 pools425   pools425           34 Nov 21  2023 access-logs -> /etc/apache2/logs/domlogs/pools425
+-rw-------    1 pools425   pools425         602459575537 May 17  2025 backup-5.17.2025_17-01-40_pools425.tar.gz
+drwxr-xr-x    2 pools425   pools425           54 May 15  2025 backups
+drwxr-x---    3 pools425   12                 57 Mar 24 11:19 etc
+drwxrwxrwx   14 pools425   pools425         8192 Mar 20 23:36 final
+drwx------    3 pools425   pools425         4096 Mar 24 08:16 logs
+drwxr-x---    3 pools425   65534              29 Apr 15  2025 loungenie
+drwxr-x---    4 pools425   65534              73 Mar  3 16:17 loungenie.ca
+drwxr-x---    7 pools425   65534            4096 Mar 23 21:09 loungenie.com
+drwxr-xr-x    2 pools425   pools425           10 May 18  2025 loungenie.com.poolsafeinc.com
+drwxr-x--x   11 pools425   pools425         4096 Mar 23 21:56 mail
+-rw-r--r--    1 pools425   pools425          189 Jan  2  2025 ms55428136.txt
+drwxr-xr-x    2 pools425   pools425           10 Mar 20 15:21 poolsafeinc.com
+drwxr-x---    3 pools425   65534              29 May 18  2025 portal.loungenie.com
+drwxr-x---    3 pools425   65534              29 May  6  2025 portal.poolsafeinc.com
+drwxr-x---   21 pools425   65534            4096 Mar 24 06:34 public_html
+drwxr-xr-x    2 pools425   pools425           10 Nov 29  2023 public_html_archivers
+drwx--x--x    3 pools425   pools425          275 Mar 24 06:34 softaculous_backups
+drwxr-xr-x    5 pools425   pools425          101 Mar  2 11:32 ssl
+drwxr-x---    3 pools425   65534              27 Mar 23 15:03 support.loungenie.com
+drwxr-xr-x    7 pools425   pools425         4096 Mar 20 23:14 tmp
+drwx------    2 pools425   pools425           10 Mar  2 12:18 wordpress-backups
+lrwxrwxrwx    1 pools425   pools425           11 Nov 21  2023 www -> public_html

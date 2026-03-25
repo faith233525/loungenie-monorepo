@@ -1,0 +1,36 @@
+<!-- wp:html -->[[GLOBAL_STYLE]]
+<style>
+.ir-skip-link { position:absolute; left:-9999px; top:0; z-index:10000; padding:10px 14px; border-radius:8px; background:#0a4f95; color:#fff; font-weight:800; }
+.ir-skip-link:focus { left:14px; top:14px; outline:3px solid #8ed9ff; }
+.ir-actions { display:flex; flex-wrap:wrap; gap:10px; padding:0 0 14px; margin:0 0 14px; border-bottom:1px solid #e4edf6; }
+.ir-actions .wp-block-button { margin:0; }
+.ir-actions .wp-block-button__link { display:inline-flex; align-items:center; justify-content:center; padding:9px 14px; border-radius:10px; font-size:13px; font-weight:800; text-decoration:none; border:1px solid #d1e5f9; background:#eef6ff; color:#174168; white-space:nowrap; }
+.ir-actions .wp-block-button__link:hover { background:#0a4f95; border-color:#0a4f95; color:#fff; }
+.ir-toolbar-links .wp-block-button__link { border:1px solid #d4e8fb; }
+.page-id-5668 .ir-toolbar-links a[href*="/investors/"] { background:#0a4f95 !important; border-color:#0a4f95 !important; color:#fff !important; }
+.page-id-5651 .ir-toolbar-links a[href*="/board/"] { background:#0a4f95 !important; border-color:#0a4f95 !important; color:#fff !important; }
+.page-id-5686 .ir-toolbar-links a[href*="/financials/"] { background:#0a4f95 !important; border-color:#0a4f95 !important; color:#fff !important; }
+.page-id-5716 .ir-toolbar-links a[href*="/press/"] { background:#0a4f95 !important; border-color:#0a4f95 !important; color:#fff !important; }
+.ir-toolbar-links a:focus, .ir-actions .wp-block-button__link:focus { outline:3px solid #8ed9ff; outline-offset:2px; }
+</style>
+<!-- /wp:html -->
+<!-- wp:group {"className":"ir-shell","lock":{"move":true,"remove":true},"layout":{"type":"default"}} -->
+<div class="wp-block-group ir-shell">
+<!-- wp:html -->
+<a class="ir-skip-link" href="#ir-editable-content">Skip to editable content</a>
+<section class="ir-hero"><div class="ir-hero-bg"><img src="[[IR_HERO_IMAGE]]" alt="[[IR_TITLE]]" fetchpriority="high"></div><div class="ir-hero-overlay"></div><div class="ir-hero-inner"><div class="lg9-shell"><p class="lg9-kicker">[[IR_KICKER]]</p><h1>[[IR_TITLE]]</h1><p>[[IR_SUBTITLE]]</p></div></div></section>
+<!-- /wp:html -->
+<!-- wp:group {"className":"ir-content-wrap","lock":{"move":true,"remove":true}} -->
+<div class="wp-block-group ir-content-wrap"><!-- wp:group {"className":"ir-content-panel","lock":{"move":true,"remove":true}} --><div class="wp-block-group ir-content-panel"><!-- wp:buttons {"className":"ir-actions"} -->
+<div class="wp-block-buttons ir-actions"><!-- wp:button {"className":"ir-action-btn"} --><div class="wp-block-button ir-action-btn"><a class="wp-block-button__link wp-element-button" href="[[ROOT]]/index.php/financials/">Latest Financials</a></div>
+<!-- /wp:button -->
+
+<!-- wp:button {"className":"ir-action-btn"} --><div class="wp-block-button ir-action-btn"><a class="wp-block-button__link wp-element-button" href="[[ROOT]]/index.php/press/">Latest Press Release</a></div>
+<!-- /wp:button --></div>
+<!-- /wp:buttons --><!-- wp:group {"className":"ir-toolbar","layout":{"type":"flex","justifyContent":"space-between","flexWrap":"wrap"},"lock":{"move":true,"remove":true}} --><div class="wp-block-group ir-toolbar"><!-- wp:buttons {"className":"ir-toolbar-links"} --><div class="wp-block-buttons ir-toolbar-links"><!-- wp:button --><div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="[[ROOT]]/index.php/investors/">Investor Relations</a></div><!-- /wp:button --><!-- wp:button --><div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="[[ROOT]]/index.php/board/">Board</a></div><!-- /wp:button --><!-- wp:button --><div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="[[ROOT]]/index.php/financials/">Financials</a></div><!-- /wp:button --><!-- wp:button --><div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="[[ROOT]]/index.php/press/">Press</a></div><!-- /wp:button --></div><!-- /wp:buttons --></div><!-- /wp:group --><!-- wp:group {"className":"ir-source-content ir-editable-content","metadata":{"name":"Editable Content Area"}} --><div id="ir-editable-content" class="wp-block-group ir-source-content ir-editable-content">
+[[IR_REQUIRED_BLOCK]]
+[[IR_CONTENT]]
+</div><!-- /wp:group --></div><!-- /wp:group --></div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:group -->

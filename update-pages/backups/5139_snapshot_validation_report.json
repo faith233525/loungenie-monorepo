@@ -1,0 +1,20 @@
+{
+  "page_id": 5139,
+  "snapshot_file": "backups\\5139_page_snapshot.json",
+  "issues": [
+    "Found 2 inline <style> blocks in page content",
+    "Found 1 inline <script> blocks in page content"
+  ],
+  "checks": {
+    "inline_style_count": 2,
+    "inline_script_count": 1,
+    "raw_img_count_in_content": 0,
+    "payload": {
+      "gallery_count": 0,
+      "ids_occurrences": 0
+    },
+    "mapping": {
+      "found": false
+    }
+  }
+}

@@ -1,0 +1,42 @@
+/* FIX FOR HEADER MENU TEXT VISIBILITY */
+/* Problem: Dark text on dark background in main header nav */
+/* Solution: Light text color for better contrast */
+
+/* CHANGE #1: Main header navigation - change text to light color */
+.wp-site-blocks > header .wp-block-navigation-item__content {
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: rgba(255, 255, 255, .92) !important;  /* Changed from var(--lg-ink) dark to white */
+    transition: all .2s ease;
+}
+
+/* CHANGE #2: Header nav hover state */
+.wp-site-blocks > header .wp-block-navigation-item__content:hover {
+    background: rgba(255, 255, 255, .12) !important;
+    color: rgba(255, 255, 255, .98) !important;
+}
+
+/* CHANGE #3: Header nav active state (aria-current) */
+.wp-site-blocks > header .wp-block-navigation-item__content[aria-current="page"] {
+    background: rgba(255, 255, 255, .18) !important;
+    color: #fff !important;
+}
+
+/* CHANGE #4: Submenu toggle color */
+.wp-site-blocks > header .wp-block-navigation-submenu__toggle {
+    color: rgba(255, 255, 255, .92) !important;  /* Changed from var(--lg-ink) to white */
+}
+
+/* CHANGE #5: Ensure mobile menu icon is visible */
+@media (max-width: 600px) {
+    .wp-site-blocks > header .wp-block-navigation__responsive-button {
+        color: rgba(255, 255, 255, .92) !important;
+    }
+}
+
+/* Additional: Improve header logo visibility */
+.wp-site-blocks > header .lg9-head img {
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, .4)) !important;
+}

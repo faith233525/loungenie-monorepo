@@ -1,0 +1,32 @@
+/* Blue gradient header + footer and carousel styles */
+:root{
+  --lg-start:#003366;
+  --lg-end:#0073e6;
+  --accent:#ffffff;
+}
+.header-gradient, .footer-gradient{
+  background: linear-gradient(135deg,var(--lg-start),var(--lg-end));
+  color: var(--accent);
+}
+.header-gradient{padding:18px 24px;display:flex;align-items:center;justify-content:space-between}
+.header-gradient .site-title{font-weight:700;font-size:1.25rem}
+.header-gradient .site-logo{height:48px}
+
+.footer-gradient{padding:28px 24px;text-align:center}
+
+/* Responsive logo carousel */
+.logo-carousel{width:100%;overflow:hidden}
+.logo-carousel__track{display:flex;gap:16px;align-items:center;padding:12px 24px;scroll-snap-type:x mandatory;overflow-x:auto}
+.logo-carousel__slide{flex:0 0 auto;scroll-snap-align:center;display:flex;align-items:center;justify-content:center;padding:8px}
+.logo-carousel__slide img{max-height:64px;max-width:200px;object-fit:contain;opacity:.95}
+
+/* Hide native scrollbar elegantly */
+.logo-carousel__track{ -ms-overflow-style:none; scrollbar-width:none }
+.logo-carousel__track::-webkit-scrollbar{display:none}
+
+/* Small screens */
+@media (max-width:600px){
+  .header-gradient{padding:12px}
+  .header-gradient .site-title{font-size:1rem}
+  .logo-carousel__slide img{max-height:48px}
+}

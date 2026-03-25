@@ -1,0 +1,13 @@
+# Node / tooling
+node_modules/
+dist/
+
+# Python
+__pycache__/
+venv/
+
+# Local secrets (do not commit)
+scripts/secrets.ps1
+artifacts/
+# Local staging env (contains secrets)
+tools/.env.staging

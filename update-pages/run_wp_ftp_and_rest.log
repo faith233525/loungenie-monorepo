@@ -1,0 +1,5 @@
+ParserError: C:\Users\pools\Documents\wordpress-develop\run_wp_ftp_and_rest.ps1:166:36
+Line |
+ 166 |          $name = $name -replace '/ + $',''
+     |                                     ~
+     | Missing expression after unary operator '+'.

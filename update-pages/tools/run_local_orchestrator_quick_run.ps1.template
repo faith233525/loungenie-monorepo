@@ -1,0 +1,67 @@
+<#
+Local quick-run template for `run_local_orchestrator.ps1`.
+
+USAGE (recommended):
+- First run to store encrypted secrets locally (DPAPI):
+    pwsh -NoProfile -ExecutionPolicy Bypass -File .\tools\run_local_orchestrator_quick_run.ps1.template -StoreSecrets
+
+- Subsequent runs (re-uses stored secrets):
+    pwsh -NoProfile -ExecutionPolicy Bypass -File .\tools\run_local_orchestrator_quick_run.ps1.template -UseStored
+
+NOTES:
+- This file is a template and does NOT contain any secrets. Do NOT paste secrets into chat.
+- Encrypted secret files are stored under `tools\secrets\` and are protected by Windows DPAPI (current user on this machine).
+#>
+
+param(
+    [switch]$StoreSecrets,
+    [switch]$UseStored
+)
+
+$secretsDir = Join-Path $PSScriptRoot 'secrets'
+$ftpFile = Join-Path $secretsDir 'ftp.enc'
+$wpFile  = Join-Path $secretsDir 'wp.enc'
+
+function Get-PlainTextFromSecureString($secure) {
+    $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
+    try { [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr) }
+    finally { [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr) }
+}
+
+if ($UseStored) {
+    if (!(Test-Path $ftpFile) -or !(Test-Path $wpFile)) {
+        Write-Error "Stored secret files not found in $secretsDir. Run with -StoreSecrets first."
+        exit 2
+    }
+    $ftpEnc = Get-Content $ftpFile -Raw
+    $wpEnc  = Get-Content $wpFile -Raw
+    $ftpSecure = ConvertTo-SecureString $ftpEnc
+    $wpSecure  = ConvertTo-SecureString $wpEnc
+    $ftpPassPlain = Get-PlainTextFromSecureString $ftpSecure
+    $wpPassPlain  = Get-PlainTextFromSecureString $wpSecure
+} else {
+    Write-Host "Enter credentials (they will not be sent anywhere)."
+    $ftpSecure = Read-Host "FTP password" -AsSecureString
+    $wpSecure  = Read-Host "WP application password" -AsSecureString
+    $ftpPassPlain = Get-PlainTextFromSecureString $ftpSecure
+    $wpPassPlain  = Get-PlainTextFromSecureString $wpSecure
+
+    if ($StoreSecrets) {
+        if (!(Test-Path $secretsDir)) { New-Item -ItemType Directory -Path $secretsDir | Out-Null }
+        $ftpSecure | ConvertFrom-SecureString | Out-File $ftpFile -Force
+        $wpSecure  | ConvertFrom-SecureString | Out-File $wpFile -Force
+        Write-Host "Encrypted secrets written to $secretsDir (DPAPI, current user only)."
+    }
+}
+
+# Set environment variables for the orchestrator run
+$env:FTP_HOST = 'ftp.loungenie.com'
+$env:FTP_USER = 'copilot@loungenie.com'
+$env:FTP_PASS = $ftpPassPlain
+$env:WP_USER  = 'copilot'
+$env:WP_PASS  = $wpPassPlain
+
+Write-Host "Running orchestrator with environment variables set in this session..."
+& "$PSScriptRoot\run_local_orchestrator.ps1"
+
+Write-Host "Orchestrator finished. If you stored secrets, future runs can use -UseStored." 

@@ -1,0 +1,20 @@
+{
+  "page_id": 4701,
+  "snapshot_file": "backups\\4701_page_snapshot.json",
+  "issues": [
+    "Found gallery blocks in payload but no \"ids\" occurrences"
+  ],
+  "checks": {
+    "inline_style_count": 0,
+    "inline_script_count": 0,
+    "raw_img_count_in_content": 0,
+    "payload": {
+      "gallery_count": 1,
+      "ids_occurrences": 0
+    },
+    "mapping": {
+      "unique_mapped_ids": 0,
+      "duplicate_id_cases": {}
+    }
+  }
+}

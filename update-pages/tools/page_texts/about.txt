@@ -1,0 +1,5 @@
+Mission: We design commercial-grade hospitality tech that elevates premium seating experiences — combining elegant design with reliable, service-first engineering.
+What we build: LounGenie units are aluminum-bodied, waterproof, and fully customizable to match a property’s aesthetic. They include secure waterproof safes with waterproof keypads, solar USB charging ports, and removable ice buckets.
+Service model & credentials: No upfront hardware cost — a revenue-share model with installation, maintenance, and service handled by PoolSafe. Designed and built in North York; IAAPA Brass Ring award recipient.
+How it works: Staff receive service-call alerts on a dedicated touchscreen; QR orders print to a dedicated PoolSafe printer. There is no guest-facing touchscreen on any model.
+Tiers: Classic — STASH (safe) + CHARGE (solar USB) + CHILL (removable ice bucket). Service+ — Classic + service call button. 2.0 — Service+ + QR ordering (orders print to the provided printer).

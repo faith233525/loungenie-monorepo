@@ -1,0 +1,6 @@
+drwxr-xr-x    5 pools425   pools425          101 Mar 20 23:29 .
+drwxrwxrwx   14 pools425   pools425         4096 Mar 20 23:29 ..
+drwxr-xr-x    7 pools425   pools425         4096 Mar 20 23:29 astra
+drwxr-xr-x    4 pools425   pools425         4096 Mar 20 23:29 generatepress
+-rw-r--r--    1 pools425   pools425           28 Mar 20 23:29 index.php
+drwxr-xr-x    7 pools425   pools425          220 Mar 20 23:29 twentytwentyfour

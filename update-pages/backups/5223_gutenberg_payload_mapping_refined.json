@@ -1,0 +1,14 @@
+{
+  "page": 2989,
+  "mapped_count": 5,
+  "missing_count": 0,
+  "mapped": {
+    "https://www.loungenie.com/wp-content/uploads/2026/03/lg-about-westin-hilton-head-scaled.jpg": 8770,
+    "https://www.loungenie.com/wp-content/uploads/2026/03/lg-contact-owc-cabana-scaled.jpg": 8768,
+    "https://www.loungenie.com/wp-content/uploads/2026/03/IMG_2071.jpeg": 2071,
+    "https://www.loungenie.com/wp-content/uploads/2026/03/IMG_2073.jpeg": 2071,
+    "https://www.loungenie.com/wp-content/uploads/2026/03/IMG_2074.jpeg": 2071
+  },
+  "missing": [],
+  "notes": "Refined pass used normalized filename and substring matching."
+}
