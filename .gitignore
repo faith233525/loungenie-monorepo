@@ -11,3 +11,4 @@ scripts/secrets.ps1
 artifacts/
 # Local staging env (contains secrets)
 tools/.env.staging
+=ftp.loungenie.com.txt
