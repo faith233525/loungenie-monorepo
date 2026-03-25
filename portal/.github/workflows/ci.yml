@@ -1,0 +1,81 @@
+name: LounGenie Portal CI
+
+# This workflow enforces critical code quality standards:
+# - PHPUnit tests MUST pass (gating)
+# - PHP syntax MUST be valid (linting, gating)
+# - WordPress Coding Standards (PHPCS) reports as artifact (advisory)
+# 
+# Developers should fix WPCS violations locally before pushing.
+# Use: composer run cs (check) and composer run cbf (auto-fix)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [ '7.4', '8.0', '8.1', '8.2' ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer
+      - name: Validate composer.json
+        working-directory: loungenie-portal
+        run: composer validate --no-check-publish
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: loungenie-portal/vendor
+          key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ hashFiles('loungenie-portal/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-${{ matrix.php }}-
+      - name: Install dependencies
+        working-directory: loungenie-portal
+        run: composer install --no-progress --prefer-dist --no-interaction
+      - name: Run tests
+        working-directory: loungenie-portal
+        run: |
+          echo "Running PHPUnit suite (required to pass)..."
+          composer run test
+
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          tools: composer
+      - name: Install dependencies
+        working-directory: loungenie-portal
+        run: composer install --no-progress --prefer-dist --no-interaction
+      - name: Run PHPCS (advisory)
+        working-directory: loungenie-portal
+        # PHPCS runs but does not gate the build.
+        # Developers should resolve violations locally before push.
+        # This job reports findings as an artifact for awareness.
+        run: |
+          vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs
+          composer run cs || true
+      - name: Save PHPCS summary
+        if: always()
+        working-directory: loungenie-portal
+        run: |
+          mkdir -p artifacts
+          vendor/bin/phpcs -d memory_limit=512M -q -s --standard=WordPress --report=summary includes api templates *.php > artifacts/phpcs-summary.txt || true
+      - name: Upload artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phpcs-summary
+          path: loungenie-portal/artifacts/phpcs-summary.txt

@@ -1,0 +1,310 @@
+/**
+ * LounGenie Portal - CSS Reset & Isolation
+ * 
+ * This file COMPLETELY resets the portal environment.
+ * Applied FIRST before all other CSS to establish a clean slate.
+ * 
+ * Why this approach:
+ * - Prevents WordPress theme CSS from bleeding into portal
+ * - Creates hard boundary between theme and portal styles
+ * - Survives aggressive minification and caching plugin issues
+ * - Works on shared hosting with competing themes
+ * 
+ * @package LounGenie Portal
+ * @version 1.9.0
+ */
+
+/* ============================================================================
+   PHASE 1: HARD RESET - Everything inside .lgp-portal-container
+   ============================================================================ */
+
+.lgp-portal-container {
+    /* Remove ALL inherited styles from WordPress theme */
+    all: initial;
+
+    /* Establish our own display context */
+    display: block;
+    box-sizing: border-box;
+
+    /* Base typography - locked down */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #0F172A;
+
+    /* Prevent text selection issues from theme */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+
+    /* No margin/padding inheritance */
+    margin: 0;
+    padding: 0;
+
+    /* Clear any background from parent theme */
+    background: transparent;
+}
+
+/* ============================================================================
+   PHASE 2: UNIVERSAL SELECTOR INSIDE PORTAL ONLY
+   ============================================================================ */
+
+.lgp-portal-container * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid transparent;
+    background: transparent;
+}
+
+/* ============================================================================
+   PHASE 3: CRITICAL ELEMENT RESETS
+   ============================================================================ */
+
+/* Headings - locked to system defaults */
+.lgp-portal-container h1,
+.lgp-portal-container h2,
+.lgp-portal-container h3,
+.lgp-portal-container h4,
+.lgp-portal-container h5,
+.lgp-portal-container h6 {
+    margin: 0;
+    padding: 0;
+    font-weight: 600;
+    line-height: 1.2;
+    color: inherit;
+    border: none;
+    background: none;
+    font-size: inherit;
+}
+
+.lgp-portal-container h1 {
+    font-size: 2rem;
+}
+
+.lgp-portal-container h2 {
+    font-size: 1.75rem;
+}
+
+.lgp-portal-container h3 {
+    font-size: 1.5rem;
+}
+
+.lgp-portal-container h4 {
+    font-size: 1.25rem;
+}
+
+.lgp-portal-container h5 {
+    font-size: 1.125rem;
+}
+
+.lgp-portal-container h6 {
+    font-size: 1rem;
+}
+
+/* Text elements */
+.lgp-portal-container p {
+    margin: 0;
+    padding: 0;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+.lgp-portal-container ul,
+.lgp-portal-container ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.lgp-portal-container li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.lgp-portal-container table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+}
+
+.lgp-portal-container th,
+.lgp-portal-container td {
+    padding: 0;
+    text-align: left;
+    vertical-align: top;
+}
+
+/* Links - locked styling */
+.lgp-portal-container a {
+    color: #3AA6B9;
+    text-decoration: none;
+    background: transparent;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.lgp-portal-container a:hover {
+    color: #2A8A9A;
+    text-decoration: underline;
+}
+
+.lgp-portal-container a:active {
+    color: #1F6578;
+}
+
+/* Buttons - no theme interference */
+.lgp-portal-container button,
+.lgp-portal-container input[type="button"],
+.lgp-portal-container input[type="submit"],
+.lgp-portal-container input[type="reset"] {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Forms - locked styling */
+.lgp-portal-container input,
+.lgp-portal-container textarea,
+.lgp-portal-container select {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    background: #FFFFFF;
+    border: 1px solid #D8E9EC;
+    padding: 0.5rem;
+    margin: 0;
+    border-radius: 4px;
+}
+
+.lgp-portal-container input:focus,
+.lgp-portal-container textarea:focus,
+.lgp-portal-container select:focus {
+    outline: 2px solid #3AA6B9;
+    outline-offset: 2px;
+}
+
+.lgp-portal-container textarea {
+    resize: vertical;
+}
+
+.lgp-portal-container select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+}
+
+/* Images - locked sizing */
+.lgp-portal-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border: none;
+    background: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* ============================================================================
+   PHASE 4: DISPLAY RESETS (Combat theme display changes)
+   ============================================================================ */
+
+.lgp-portal-container {
+    /* Prevent flexbox/grid inheritance issues */
+    display: block;
+}
+
+.lgp-portal-container [role="button"],
+.lgp-portal-container button,
+.lgp-portal-container a.lgp-btn {
+    display: inline-block;
+    text-align: center;
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.lgp-portal-container .lgp-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.lgp-portal-container .lgp-flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lgp-portal-container .lgp-grid {
+    display: grid;
+}
+
+/* ============================================================================
+   PHASE 5: SPACING ISOLATION
+   ============================================================================ */
+
+/* Force margin collapse prevention */
+.lgp-portal-container>*+* {
+    margin-top: 0;
+}
+
+/* No cascading margins from theme */
+.lgp-portal-container * {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+}
+
+/* ============================================================================
+   PHASE 6: VISIBILITY/STACKING (Z-index management)
+   ============================================================================ */
+
+.lgp-portal-container {
+    /* Establish stacking context to isolate z-index */
+    position: relative;
+    z-index: 1;
+}
+
+.lgp-portal-container [class*="modal"],
+.lgp-portal-container [class*="dropdown"],
+.lgp-portal-container [class*="tooltip"] {
+    position: relative;
+    z-index: auto;
+}
+
+/* ============================================================================
+   PHASE 7: PRINT STYLES (Prevent theme print CSS)
+   ============================================================================ */
+
+@media print {
+    .lgp-portal-container {
+        background: white;
+        color: black;
+    }
+
+    .lgp-portal-container a {
+        text-decoration: underline;
+    }
+
+    .lgp-portal-container [class*="hidden"] {
+        display: none !important;
+    }
+}
+
+/* ============================================================================
+   IMPORTANT: This reset must be loaded FIRST in the asset enqueue order
+   Do not let other CSS files load before this.
+   ============================================================================ */

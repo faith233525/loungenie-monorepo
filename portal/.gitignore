@@ -1,0 +1,71 @@
+# WordPress-specific
+wp-config.php
+wp-content/uploads/
+wp-content/plugins/*/
+wp-content/themes/*/
+wp-content/backup-*
+wp-content/upgrade/
+wp-content/cache/
+wp-content/object-cache.php
+
+# Database
+*.sql
+*.sql.gz
+
+# Logs
+*.log
+logs/
+
+# Node modules
+node_modules/
+package-lock.json
+yarn.lock
+
+# Composer
+vendor/
+composer.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.editorconfig
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+
+# Testing
+phpunit.xml
+phpunit.xml.dist
+.phpunit.result.cache
+coverage/
+
+# Build & Distribution
+dist/
+build/
+*.zip
+loungenie-portal-*.zip
+
+# Documentation (repo only, not plugin)
+*.md
+!README.md
+!CHANGELOG.md
+
+# Config files (local)
+.env
+.env.local
+.env.*.local
+
+# OS
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Temporary
+tmp/
+temp/
+*.tmp

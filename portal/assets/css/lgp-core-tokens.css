@@ -1,0 +1,250 @@
+/**
+ * LounGenie Portal - Core Design Tokens
+ * 
+ * Theme-independent, plugin-controlled design system
+ * ALL colors, spacing, typography defined by the plugin
+ * NO theme dependencies
+ *
+ * @package LounGenie Portal
+ * @version 2.0.0
+ */
+
+:root {
+    /* ========================================================================
+     * PRIMARY BRAND COLORS - Plugin Authority
+     * ======================================================================== */
+    --lg-primary: #1CAAB6;        /* Primary brand - teal */
+    --lg-secondary: #67BED9;      /* Secondary brand - cyan */
+    --lg-success: #4DA88F;        /* Success/positive - green */
+    --lg-structure: #1A237E;      /* Structure/navigation - navy */
+
+    /* ========================================================================
+     * DERIVED COLOR STATES
+     * ======================================================================== */
+    --lg-primary-hover: #158A94;
+    --lg-primary-light: #E3F2F3;
+    --lg-primary-dark: #127983;
+    
+    --lg-secondary-hover: #4A9FBE;
+    --lg-secondary-light: #E8F6FB;
+    --lg-secondary-dark: #3688A8;
+    
+    --lg-success-hover: #3D8A75;
+    --lg-success-light: #E0F5F0;
+    --lg-success-dark: #2D6A5B;
+    
+    --lg-structure-hover: #141B5E;
+    --lg-structure-light: #E8EAF6;
+    --lg-structure-dark: #0D1450;
+
+    /* ========================================================================
+     * NEUTRAL COLORS - Backgrounds & Surfaces
+     * ======================================================================== */
+    --lgp-white: #FFFFFF;
+    --lgp-black: #000000;
+    --lgp-background: #F8F9FA;
+    --lgp-surface: #FFFFFF;
+    --lgp-surface-raised: #FFFFFF;
+    
+    /* Borders */
+    --lgp-border: #E0E0E0;
+    --lgp-border-light: #EEEEEE;
+    --lgp-border-dark: #BDBDBD;
+    
+    /* Text Colors */
+    --lgp-text-primary: #212121;
+    --lgp-text-secondary: #757575;
+    --lgp-text-tertiary: #9E9E9E;
+    --lgp-text-disabled: #BDBDBD;
+    --lgp-text-inverse: #FFFFFF;
+
+    /* ========================================================================
+     * FEEDBACK COLORS - Status & Alerts
+     * ======================================================================== */
+    --lgp-error: #D32F2F;
+    --lgp-error-light: #FFCDD2;
+    --lgp-error-dark: #B71C1C;
+    
+    --lgp-warning: #F57C00;
+    --lgp-warning-light: #FFE0B2;
+    --lgp-warning-dark: #E65100;
+    
+    --lgp-info: #0288D1;
+    --lgp-info-light: #B3E5FC;
+    --lgp-info-dark: #01579B;
+
+    /* ========================================================================
+     * TYPOGRAPHY - Plugin-Controlled Fonts
+     * ======================================================================== */
+    --lgp-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --lgp-font-family-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, monospace;
+    
+    /* Font Sizes */
+    --lgp-text-xs: 0.75rem;       /* 12px */
+    --lgp-text-sm: 0.875rem;      /* 14px */
+    --lgp-text-base: 1rem;        /* 16px */
+    --lgp-text-lg: 1.125rem;      /* 18px */
+    --lgp-text-xl: 1.25rem;       /* 20px */
+    --lgp-text-2xl: 1.5rem;       /* 24px */
+    --lgp-text-3xl: 1.875rem;     /* 30px */
+    --lgp-text-4xl: 2.25rem;      /* 36px */
+    
+    /* Font Weights */
+    --lgp-weight-normal: 400;
+    --lgp-weight-medium: 500;
+    --lgp-weight-semibold: 600;
+    --lgp-weight-bold: 700;
+    
+    /* Line Heights */
+    --lgp-leading-none: 1;
+    --lgp-leading-tight: 1.25;
+    --lgp-leading-normal: 1.5;
+    --lgp-leading-relaxed: 1.75;
+
+    /* ========================================================================
+     * SPACING - Consistent Layout System
+     * ======================================================================== */
+    --lgp-space-1: 0.25rem;       /* 4px */
+    --lgp-space-2: 0.5rem;        /* 8px */
+    --lgp-space-3: 0.75rem;       /* 12px */
+    --lgp-space-4: 1rem;          /* 16px */
+    --lgp-space-5: 1.25rem;       /* 20px */
+    --lgp-space-6: 1.5rem;        /* 24px */
+    --lgp-space-8: 2rem;          /* 32px */
+    --lgp-space-10: 2.5rem;       /* 40px */
+    --lgp-space-12: 3rem;         /* 48px */
+    --lgp-space-16: 4rem;         /* 64px */
+
+    /* ========================================================================
+     * LAYOUT - Component Dimensions
+     * ======================================================================== */
+    --lgp-sidebar-width: 260px;
+    --lgp-header-height: 64px;
+    --lgp-container-max: 1200px;
+    --lgp-container-wide: 1400px;
+
+    /* ========================================================================
+     * BORDERS & RADIUS
+     * ======================================================================== */
+    --lgp-radius-sm: 4px;
+    --lgp-radius-md: 8px;
+    --lgp-radius-lg: 12px;
+    --lgp-radius-xl: 16px;
+    --lgp-radius-full: 9999px;
+    
+    --lgp-border-width: 1px;
+    --lgp-border-width-thick: 2px;
+
+    /* ========================================================================
+     * SHADOWS - Elevation System
+     * ======================================================================== */
+    --lgp-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --lgp-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --lgp-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --lgp-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+    /* ========================================================================
+     * TRANSITIONS - Smooth Interactions
+     * ======================================================================== */
+    --lgp-transition-fast: 150ms ease-in-out;
+    --lgp-transition-base: 250ms ease-in-out;
+    --lgp-transition-slow: 350ms ease-in-out;
+
+    /* ========================================================================
+     * Z-INDEX - Layering System
+     * ======================================================================== */
+    --lgp-z-base: 1;
+    --lgp-z-dropdown: 1000;
+    --lgp-z-sticky: 1020;
+    --lgp-z-fixed: 1030;
+    --lgp-z-modal-backdrop: 1040;
+    --lgp-z-modal: 1050;
+    --lgp-z-popover: 1060;
+    --lgp-z-tooltip: 1070;
+}
+
+/* ========================================================================
+ * GLOBAL RESETS - Plugin-Controlled Base Styles
+ * ======================================================================== */
+.lgp-portal,
+.lgp-portal * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.lgp-portal {
+    font-family: var(--lgp-font-family);
+    font-size: var(--lgp-text-base);
+    line-height: var(--lgp-leading-normal);
+    color: var(--lgp-text-primary);
+    background-color: var(--lgp-background);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================================================
+ * COMPONENT BASE CLASSES
+ * ======================================================================== */
+
+/* Buttons */
+.lgp-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--lgp-space-3) var(--lgp-space-6);
+    font-size: var(--lgp-text-base);
+    font-weight: var(--lgp-weight-medium);
+    line-height: var(--lgp-leading-tight);
+    border: var(--lgp-border-width) solid transparent;
+    border-radius: var(--lgp-radius-md);
+    cursor: pointer;
+    transition: all var(--lgp-transition-fast);
+    text-decoration: none;
+}
+
+.lgp-btn-primary {
+    background-color: var(--lg-primary);
+    color: var(--lgp-text-inverse);
+}
+
+.lgp-btn-primary:hover {
+    background-color: var(--lg-primary-hover);
+}
+
+.lgp-btn-secondary {
+    background-color: var(--lg-secondary);
+    color: var(--lgp-text-inverse);
+}
+
+.lgp-btn-secondary:hover {
+    background-color: var(--lg-secondary-hover);
+}
+
+/* Cards */
+.lgp-card {
+    background-color: var(--lgp-surface);
+    border: var(--lgp-border-width) solid var(--lgp-border);
+    border-radius: var(--lgp-radius-lg);
+    padding: var(--lgp-space-6);
+    box-shadow: var(--lgp-shadow-sm);
+}
+
+/* Forms */
+.lgp-input {
+    width: 100%;
+    padding: var(--lgp-space-3) var(--lgp-space-4);
+    font-size: var(--lgp-text-base);
+    line-height: var(--lgp-leading-normal);
+    color: var(--lgp-text-primary);
+    background-color: var(--lgp-surface);
+    border: var(--lgp-border-width) solid var(--lgp-border);
+    border-radius: var(--lgp-radius-md);
+    transition: border-color var(--lgp-transition-fast);
+}
+
+.lgp-input:focus {
+    outline: none;
+    border-color: var(--lg-primary);
+    box-shadow: 0 0 0 3px var(--lg-primary-light);
+}

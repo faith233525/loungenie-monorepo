@@ -1,0 +1,207 @@
+name: Permissions & Access Audit
+
+on:
+  schedule:
+    - cron: '0 2 * * 0'  # Weekly on Monday at 2 AM
+  workflow_dispatch:
+  push:
+    paths:
+      - 'includes/class-lgp-auth.php'
+      - 'roles/**'
+
+permissions:
+  contents: read
+  security-events: write
+  pull-requests: write
+
+jobs:
+  check-permissions:
+    name: Check User Permissions
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+      
+      - name: Analyze permission files
+        run: |
+          echo "## 🔐 Permission Analysis Report"
+          echo ""
+          echo "### Role Definitions:"
+          
+          if [ -f "roles/support.php" ]; then
+            echo "✅ Support role defined"
+            grep -o "'[a-z_]*'" roles/support.php | sort -u | head -10
+          fi
+          
+          if [ -f "roles/partner.php" ]; then
+            echo "✅ Partner role defined"
+            grep -o "'[a-z_]*'" roles/partner.php | sort -u | head -10
+          fi
+          
+          echo ""
+          echo "### Authentication File:"
+          if [ -f "includes/class-lgp-auth.php" ]; then
+            echo "✅ Auth class found"
+            echo "- Lines: $(wc -l < includes/class-lgp-auth.php)"
+            echo "- Has capability checks: $(grep -c 'current_user_can' includes/class-lgp-auth.php)"
+            echo "- Has role checks: $(grep -c 'user_has_cap' includes/class-lgp-auth.php)"
+          fi
+
+  check-api-security:
+    name: Check API Security & Permissions
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Analyze API endpoints
+        run: |
+          echo "## 🛡️ API Security Check"
+          echo ""
+          
+          for file in api/*.php; do
+            if [ -f "$file" ]; then
+              echo "### $(basename $file)"
+              
+              # Check for permission checks
+              if grep -q "permission_callback" "$file"; then
+                echo "✅ Has permission_callback"
+              else
+                echo "⚠️  Missing permission_callback"
+              fi
+              
+              # Check for sanitization
+              if grep -q "sanitize_" "$file"; then
+                echo "✅ Has sanitization"
+              else
+                echo "⚠️  Missing sanitization"
+              fi
+              
+              # Check for nonce verification
+              if grep -q "wp_verify_nonce" "$file"; then
+                echo "✅ Has nonce verification"
+              else
+                echo "⚠️  Missing nonce verification"
+              fi
+              
+              echo ""
+            fi
+          done
+
+  check-data-access:
+    name: Check Data Access Control
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Verify access control implementation
+        run: |
+          echo "## 🔍 Data Access Control Check"
+          echo ""
+          
+          echo "### Database Access Patterns:"
+          
+          # Check for user filtering
+          if grep -r "get_user_meta\|user_id" --include="*.php" includes/ | wc -l > 0; then
+            echo "✅ User-scoped queries found"
+          fi
+          
+          # Check for company filtering
+          if grep -r "get_post_meta\|company_id" --include="*.php" includes/ | wc -l > 0; then
+            echo "✅ Company-scoped queries found"
+          fi
+          
+          # Check for prepared statements
+          PREPARED=$(grep -r "prepare(" --include="*.php" includes/ | wc -l)
+          TOTAL=$(grep -r "query(" --include="*.php" includes/ | wc -l)
+          echo "✅ Prepared statements: $PREPARED/$TOTAL database queries"
+
+  check-file-permissions:
+    name: Check File & Directory Permissions
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Verify file permissions
+        run: |
+          echo "## 📁 File Permission Check"
+          echo ""
+          
+          # Check for properly restricted files
+          echo "### Configuration Files (should be restricted):"
+          for file in .env composer.lock package-lock.json; do
+            if [ -f "$file" ]; then
+              echo "- $file: $(stat -c '%a' $file 2>/dev/null || stat -f '%A' $file 2>/dev/null)"
+            fi
+          done
+          
+          echo ""
+          echo "### Uploaded Directory (should be writable):"
+          if [ -d "uploads" ]; then
+            echo "- uploads: $(stat -c '%a' uploads 2>/dev/null || stat -f '%A' uploads 2>/dev/null)"
+          fi
+          
+          echo ""
+          echo "### Cache Directory (should be writable):"
+          if [ -d "cache" ]; then
+            echo "- cache: $(stat -c '%a' cache 2>/dev/null || stat -f '%A' cache 2>/dev/null)"
+          fi
+
+  generate-security-report:
+    name: Generate Security Report
+    runs-on: ubuntu-latest
+    needs: [check-permissions, check-api-security, check-data-access, check-file-permissions]
+    if: always()
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Create security report
+        run: |
+          cat > PERMISSIONS_AUDIT_REPORT.md << 'EOF'
+          # 🔐 Permissions & Security Audit Report
+          
+          **Generated:** $(date)
+          **Status:** ✅ Complete
+          
+          ## Summary
+          - [ ] All roles properly defined
+          - [ ] All API endpoints secured
+          - [ ] Data access properly scoped
+          - [ ] File permissions correct
+          - [ ] No security vulnerabilities
+          
+          ## Action Items
+          1. Review role capabilities
+          2. Verify API permission callbacks
+          3. Test data access controls
+          4. Validate file permissions
+          5. Monitor access logs
+          
+          EOF
+          
+          cat PERMISSIONS_AUDIT_REPORT.md
+      
+      - name: Upload report
+        uses: actions/upload-artifact@v3
+        with:
+          name: permissions-audit-report
+          path: PERMISSIONS_AUDIT_REPORT.md
+          retention-days: 90

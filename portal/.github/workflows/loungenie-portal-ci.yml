@@ -1,0 +1,129 @@
+name: LounGenie Portal E2E CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: read
+
+jobs:
+
+  php-validation:
+    name: PHP Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0.30
+      - name: Check PHP syntax
+        run: |
+          find loungenie-portal -name "*.php" -type f -exec php -l {} \;
+
+  composer-setup:
+    name: Composer Setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0.30
+          tools: composer:2.9.2
+      - name: Install Composer dependencies
+        working-directory: loungenie-portal
+        run: composer install --no-interaction --no-progress
+
+  phpunit-tests:
+    name: PHPUnit Tests
+    runs-on: ubuntu-latest
+    needs: composer-setup
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0.30
+          coverage: xdebug
+          tools: composer:2.9.2
+      - name: Install Composer dependencies
+        working-directory: loungenie-portal
+        run: composer install --no-interaction --no-progress
+      - name: Run PHPUnit with coverage
+        working-directory: loungenie-portal
+        run: ./vendor/bin/phpunit --configuration phpunit.xml --coverage-clover=coverage.xml
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: php-coverage
+          path: loungenie-portal/coverage.xml
+
+  code-standards:
+    name: PHPCS Lint
+    runs-on: ubuntu-latest
+    needs: composer-setup
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0.30
+          tools: composer:2.9.2
+      - name: Install Composer dependencies
+        working-directory: loungenie-portal
+        run: composer install --no-interaction --no-progress
+      - name: Run PHPCS
+        working-directory: loungenie-portal
+        run: ./vendor/bin/phpcs --standard=phpcs.xml . --ignore=vendor,tests || echo "⚠ PHPCS check completed with warnings"
+
+  security-checks:
+    name: Security Checks
+    runs-on: ubuntu-latest
+    needs: [php-validation, composer-setup]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ensure no Twilio references
+        run: |
+          # Fail the build if any 'twilio' references exist in the plugin
+          if grep -Rni "twilio" loungenie-portal --exclude-dir=vendor --exclude-dir=tests --include="*.php" --include="*.json" --include="*.md"; then
+            echo "❌ Found disallowed Twilio reference(s). Remove all Twilio usage." >&2
+            exit 1
+          fi
+      - name: Scan for SQL injection patterns
+        run: |
+          ! grep -r "->query(" loungenie-portal --include="*.php" | grep -v "prepare" | grep -v "//" || echo "⚠ SQL injection pattern found"
+      - name: Scan for XSS patterns
+        run: |
+          ! grep -r "echo \$_" loungenie-portal --include="*.php" | grep -v "esc_" || echo "⚠ Unescaped output found"
+
+  build-artifact:
+    name: Build & Generate Artifact
+    runs-on: ubuntu-latest
+    needs: [php-validation, composer-setup, phpunit-tests, code-standards, security-checks]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate Deployment Package
+        run: |
+          cd loungenie-portal
+          zip -r ../loungenie-portal-plugin.zip . \
+            -x "*.git*" \
+            -x "*.DS_Store" \
+            -x "tests/*" \
+            -x "*.md" \
+            -x "vendor/*"
+          cd ..
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: loungenie-portal-plugin
+          path: loungenie-portal-plugin.zip
+          retention-days: 30

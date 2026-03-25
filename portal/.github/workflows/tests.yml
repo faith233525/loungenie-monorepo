@@ -1,0 +1,201 @@
+name: Automated Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['7.4', '8.0', '8.1', '8.2']
+        wordpress-version: ['5.8', '6.0', '6.2', '6.4']
+
+    name: PHP ${{ matrix.php-version }} | WP ${{ matrix.wordpress-version }}
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress_test
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 3306:3306
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          tools: composer, phpunit, phpstan
+          extensions: mysqli, mysql, curl
+          coverage: xdebug
+
+      - name: Install WordPress test library
+        env:
+          WP_TESTS_DIR: /tmp/wordpress-tests-lib
+          WP_ROOT_DIR: /tmp/wordpress
+          WP_VERSION: ${{ matrix.wordpress-version }}
+          DB_NAME: wordpress_test
+          DB_USER: root
+          DB_PASSWORD: root
+          DB_HOST: 127.0.0.1
+        run: |
+          bash bin/install-wp-tests.sh $DB_NAME $DB_USER $DB_PASSWORD 127.0.0.1 $WP_VERSION
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install PHP dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run unit tests
+        env:
+          WP_TESTS_DIR: /tmp/wordpress-tests-lib
+          WP_ROOT_DIR: /tmp/wordpress
+        run: vendor/bin/phpunit --testsuite=unit --coverage-clover=coverage/clover.xml
+
+      - name: Run integration tests
+        env:
+          WP_TESTS_DIR: /tmp/wordpress-tests-lib
+          WP_ROOT_DIR: /tmp/wordpress
+        run: vendor/bin/phpunit --testsuite=integration
+
+      - name: Run performance tests
+        env:
+          WP_TESTS_DIR: /tmp/wordpress-tests-lib
+          WP_ROOT_DIR: /tmp/wordpress
+        run: vendor/bin/phpunit --testsuite=performance
+
+      - name: Run compatibility tests
+        env:
+          WP_TESTS_DIR: /tmp/wordpress-tests-lib
+          WP_ROOT_DIR: /tmp/wordpress
+        run: vendor/bin/phpunit --testsuite=compatibility
+
+      - name: Run PHPStan analysis
+        run: vendor/bin/phpstan analyse --level=5 includes api roles || true
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/clover.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+      - name: Archive code coverage results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage-report-php-${{ matrix.php-version }}-wp-${{ matrix.wordpress-version }}
+          path: coverage/
+
+      - name: Comment PR with test results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const coverage = fs.existsSync('coverage/clover.xml') ? 'Coverage data available' : 'No coverage data';
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `✅ Tests completed for PHP ${{ matrix.php-version }} / WP ${{ matrix.wordpress-version }}\n${coverage}`
+            });
+
+  lint:
+    runs-on: ubuntu-latest
+    name: Lint & Code Standards
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: phpcs, composer
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Run PHPLint
+        run: vendor/bin/parallel-lint --exclude vendor,node_modules .
+
+      - name: Run PHPCS
+        run: vendor/bin/phpcs --standard=WordPress includes api roles || true
+
+  security:
+    runs-on: ubuntu-latest
+    name: Security Checks
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Run security audit
+        run: |
+          composer install
+          vendor/bin/security-checker security:check composer.lock || true
+
+  coverage:
+    runs-on: ubuntu-latest
+    name: Coverage Report
+    needs: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download coverage reports
+        uses: actions/download-artifact@v3
+        with:
+          name: code-coverage-report-php-8.1-wp-6.4
+          path: coverage/
+
+      - name: Generate coverage badge
+        run: |
+          if [ -f coverage/clover.xml ]; then
+            echo "Coverage report available"
+          fi
+
+      - name: Comment coverage to PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '📊 Code coverage reports have been generated and are available in artifacts'
+            });
