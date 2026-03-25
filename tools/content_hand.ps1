@@ -18,7 +18,8 @@ function Test-WPConnection {
         $resp = Invoke-RestMethod -Uri "$BaseUrl/wp-json/" -Method Get -ErrorAction Stop
         Write-Output "WP REST OK: $($resp.name)"
         return $true
-    } catch {
+    }
+    catch {
         Write-Error "WP REST check failed: $($_.Exception.Message)"
         return $false
     }
@@ -55,7 +56,7 @@ if (-not $Apply.IsPresent) {
     Write-Output "Dry run mode (no remote changes). Use -Apply to perform updates and purge."
     foreach ($id in $targetIDs) {
         Write-Output "--- Preview for Page $id (truncated) ---"
-        Write-Output ($markup.Substring(0,[Math]::Min(1000,$markup.Length)))
+        Write-Output ($markup.Substring(0, [Math]::Min(1000, $markup.Length)))
     }
     Write-Output "DryRun complete."
     exit 0
@@ -68,7 +69,8 @@ foreach ($id in $targetIDs) {
         $body = @{ content = $markup; status = 'publish' } | ConvertTo-Json -Depth 8
         $resp = Invoke-RestMethod -Uri $uri -Method Post -Headers @{ Authorization = "Basic $auth"; 'Content-Type' = 'application/json' } -Body $body -ErrorAction Stop
         Write-Output "Updated $($resp.id) -> status: $($resp.status)"
-    } catch {
+    }
+    catch {
         Write-Warning ("Failed to update page {0}: {1}" -f $id, $_.Exception.Message)
     }
 }
@@ -81,7 +83,8 @@ if ($Cleanup.IsPresent) {
             Write-Output "Deleting draft id: $($d.id) title: $($d.title.rendered)"
             Invoke-RestMethod -Uri "$($env:WP_SITE_URL)/wp-json/wp/v2/pages/$($d.id)?force=true" -Method Delete -Headers @{ Authorization = "Basic $auth" } -ErrorAction Stop
         }
-    } catch {
+    }
+    catch {
         Write-Warning ("Cleanup failed: {0}" -f $_.Exception.Message)
     }
 }
@@ -91,7 +94,8 @@ try {
     $purgeUri = "$($env:WP_SITE_URL)/wp-json/loungenie/v1/purge"
     $p = Invoke-RestMethod -Uri $purgeUri -Method Post -ErrorAction Stop
     Write-Output "Purge response: $p"
-} catch {
+}
+catch {
     Write-Warning ("Purge endpoint failed or not present: {0}" -f $_.Exception.Message)
 }
 

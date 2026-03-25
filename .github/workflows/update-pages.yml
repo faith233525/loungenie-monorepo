@@ -1,37 +1,32 @@
 name: Update WordPress Pages
 
 on:
-  push:
-    branches: [ main ]
-  workflow_dispatch: {}
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
 
 jobs:
   update-pages:
     runs-on: ubuntu-latest
     concurrency:
-      group: update-pages
+      group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          python-version: '3.10'
+          node-version: '18'
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+        run: npm install
 
-      - name: Run updater
+      - name: Run WordPress page updater
         env:
-          # Provide both legacy and standardized secret names for compatibility
-          WP_USER: ${{ secrets.WP_USER }}
-          WP_PASS: ${{ secrets.WP_PASS }}
-          WP_USERNAME: ${{ secrets.WP_USER }}
-          WP_APP_PASSWORD: ${{ secrets.WP_PASS }}
-          WP_SITE_URL: ${{ secrets.WP_SITE_URL }}
-        run: |
-          python scripts/update_pages.py --content-dir content --media media_lookup.json
+          WP_URL: ${{ secrets.WP_URL }}
+          WP_USERNAME: ${{ secrets.WP_USERNAME }}
+          WP_APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
+        run: node ai_premium_optimizer.js
