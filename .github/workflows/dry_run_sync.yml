@@ -1,0 +1,71 @@
+name: Safe Dry-Run Staging Sync
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in dry-run mode (no remote writes)'
+        required: false
+        default: 'true'
+      run_ftp_backup:
+        description: 'Run FTP backup step'
+        required: false
+        default: 'true'
+
+jobs:
+  dry-run-sync:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate required secrets
+        run: |
+          MISSING=0
+          for s in WP_URL WP_USER WP_APP_PASS FTP_HOST FTP_USER FTP_PASS; do
+            if [ -z "${{ secrets[$s] }}" ]; then
+              echo "WARN: secret $s is not set"
+              MISSING=$((MISSING+1))
+            fi
+          done
+          if [ "$MISSING" -gt 0 ]; then
+            echo "Secrets missing — workflow will run in dry-run only. Add secrets to enable live deploy."
+          fi
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install requirements
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt || true; fi
+
+      - name: Run safe orchestrator (dry-run)
+        shell: bash
+        env:
+          RUN_FTP_BACKUP: ${{ github.event.inputs.run_ftp_backup }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+          WP_URL: ${{ secrets.WP_URL }}
+          WP_USER: ${{ secrets.WP_USER }}
+          WP_APP_PASS: ${{ secrets.WP_APP_PASS }}
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
+        run: |
+          pwsh -NoProfile -Command "pwsh -NoProfile -ExecutionPolicy Bypass -File .\tools\run_wp_ftp_and_rest_safe.ps1"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: staging-artifacts
+          path: |
+            artifacts/duplicate_report.txt
+            artifacts/media_uploads.json
+            artifacts/image_audit.json
+            run_wp_ftp_and_rest.log
+
+      - name: Comment with artifact link
+        run: echo "Dry-run finished — check uploaded artifacts in the workflow run artifacts." 
