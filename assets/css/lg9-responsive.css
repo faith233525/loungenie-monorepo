@@ -1,0 +1,22 @@
+/* Responsive tweaks for header/logo carousel */
+.lg9-logo-carousel{display:flex;gap:1rem;align-items:center;justify-content:center;flex-wrap:nowrap;overflow:hidden}
+.lg9-logo-carousel img{max-height:60px;width:auto;object-fit:contain}
+@media (max-width:1024px){
+  .lg9-logo-carousel img{max-height:48px}
+}
+@media (max-width:768px){
+  .lg9-logo-carousel{gap:.6rem}
+  .lg9-logo-carousel img{max-height:36px}
+}
+@media (max-width:420px){
+  .lg9-logo-carousel{gap:.4rem}
+  .lg9-logo-carousel img{max-height:28px}
+}
+
+/* Header responsive layout */
+.lg9-header{display:flex;align-items:center;justify-content:space-between;padding:0.5rem 1rem}
+.lg9-header .lg9-site-logo{max-height:48px}
+@media (max-width:768px){
+  .lg9-header{padding:0.4rem .6rem}
+  .lg9-header .lg9-site-logo{max-height:40px}
+}
