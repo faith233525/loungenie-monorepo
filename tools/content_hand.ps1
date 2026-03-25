@@ -69,7 +69,7 @@ foreach ($id in $targetIDs) {
         $resp = Invoke-RestMethod -Uri $uri -Method Post -Headers @{ Authorization = "Basic $auth"; 'Content-Type' = 'application/json' } -Body $body -ErrorAction Stop
         Write-Output "Updated $($resp.id) -> status: $($resp.status)"
     } catch {
-        Write-Warning "Failed to update page $id: $($_.Exception.Message)"
+        Write-Warning ("Failed to update page {0}: {1}" -f $id, $_.Exception.Message)
     }
 }
 
@@ -82,7 +82,7 @@ if ($Cleanup.IsPresent) {
             Invoke-RestMethod -Uri "$($env:WP_SITE_URL)/wp-json/wp/v2/pages/$($d.id)?force=true" -Method Delete -Headers @{ Authorization = "Basic $auth" } -ErrorAction Stop
         }
     } catch {
-        Write-Warning "Cleanup failed: $($_.Exception.Message)"
+        Write-Warning ("Cleanup failed: {0}" -f $_.Exception.Message)
     }
 }
 
@@ -92,7 +92,7 @@ try {
     $p = Invoke-RestMethod -Uri $purgeUri -Method Post -ErrorAction Stop
     Write-Output "Purge response: $p"
 } catch {
-    Write-Warning "Purge endpoint failed or not present: $($_.Exception.Message)"
+    Write-Warning ("Purge endpoint failed or not present: {0}" -f $_.Exception.Message)
 }
 
 Write-Host "✅ Content sync complete." -ForegroundColor Green
