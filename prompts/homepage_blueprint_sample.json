@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "page_type": "homepage",
+    "brand": "LounGenie",
+    "target_audience": "resorts, waterparks, hotels",
+    "goal": "demo requests",
+    "tone": "confident, benefit-first"
+  },
+  "sections": [
+    {
+      "id": "hero",
+      "title": "The LounGenie — Revenue from Premium Seating",
+      "subheading": "Order, stash, charge, chill — built for cabanas & daybeds",
+      "body": "Zero upfront cost. Revenue-share installation. Increase F&B conversion at premium seats.",
+      "cta": { "text": "Request Demo", "url": "/contact", "priority": "primary" },
+      "images": [ { "filename": "https://www.loungenie.com/wp-content/uploads/2026/03/lg-home-hero-the-grove-7-scaled.jpg", "role": "hero", "alt": "LounGenie in a Grove resort cabana", "caption": "" } ],
+      "notes": "Hero H1, Kadence full-bleed cover, CTA left"
+    },
+    {
+      "id": "value_props",
+      "title": "Core Capabilities",
+      "body": "Order (QR) • Stash (waterproof safe) • Charge (solar USB) • Chill (removable ice bucket)",
+      "images": [
+        { "filename": "https://www.loungenie.com/wp-content/uploads/2025/10/soaky.jpg", "role": "prop", "alt": "Soaky deployment", "caption": "" },
+        { "filename": "https://www.loungenie.com/wp-content/uploads/2025/10/Water-World-clamshell-in-the-sun.jpg", "role": "prop", "alt": "Water World deployment", "caption": "" },
+        { "filename": "https://www.loungenie.com/wp-content/uploads/2026/03/lg-home-daybed-hilton-scaled.jpg", "role": "prop", "alt": "Hilton daybed install", "caption": "" }
+      ],
+      "notes": "Kadence 3-column on desktop"
+    },
+    {
+      "id": "gallery",
+      "title": "Installations & Rollouts",
+      "images": [
+        { "filename": "https://www.loungenie.com/wp-content/uploads/2026/03/lg-gallery-water-world-cabana-1.jpg", "alt": "Water World cabana" },
+        { "filename": "https://www.loungenie.com/wp-content/uploads/2026/03/lg-gallery-cowabunga-cabana-1-scaled.jpg", "alt": "Cowabunga Bay" },
+        { "filename": "https://www.loungenie.com/wp-content/uploads/2026/03/lg-gallery-hilton-kona-cabana-4-scaled.jpg", "alt": "Hilton Kona" }
+      ],
+      "notes": "Render as wp:gallery with ids[]"
+    }
+  ],
+  "block_blueprint": [
+    {
+      "section_id": "hero",
+      "blocks": [
+        { "block": "wp:group", "attrs": { "className": "lg9-hero" }, "inner": [
+          { "block": "wp:heading", "attrs": { "level": 1 }, "text": "The LounGenie — Revenue from Premium Seating" },
+          { "block": "wp:paragraph", "text": "Zero upfront cost. Revenue-share installation. Increase F&B conversion at premium seats." },
+          { "block": "wp:image", "attrs": { "src": "https://www.loungenie.com/wp-content/uploads/2026/03/lg-home-hero-the-grove-7-scaled.jpg", "alt": "LounGenie in a Grove resort cabana", "caption": "" } },
+          { "block": "wp:buttons", "inner": [ { "block": "wp:button", "attrs": {}, "text": "Request Demo" } ] }
+        ] }
+      ]
+    },
+    {
+      "section_id": "value_props",
+      "blocks": [
+        { "block": "wp:group", "attrs": { "className": "lg9-values" }, "inner": [
+          { "block": "wp:heading", "attrs": { "level": 2 }, "text": "Core Capabilities" },
+          { "block": "wp:paragraph", "text": "Order (QR) • Stash (waterproof safe) • Charge (solar USB) • Chill (removable ice bucket)" },
+          { "block": "wp:gallery", "attrs": { "ids": ["https://www.loungenie.com/wp-content/uploads/2025/10/soaky.jpg","https://www.loungenie.com/wp-content/uploads/2025/10/Water-World-clamshell-in-the-sun.jpg","https://www.loungenie.com/wp-content/uploads/2026/03/lg-home-daybed-hilton-scaled.jpg"] } }
+        ] }
+      ]
+    },
+    {
+      "section_id": "gallery",
+      "blocks": [
+        { "block": "wp:group", "attrs": { "className": "lg9-gallery-section" }, "inner": [
+          { "block": "wp:heading", "attrs": { "level": 2 }, "text": "Installations & Rollouts" },
+          { "block": "wp:gallery", "attrs": { "ids": ["https://www.loungenie.com/wp-content/uploads/2026/03/lg-gallery-water-world-cabana-1.jpg","https://www.loungenie.com/wp-content/uploads/2026/03/lg-gallery-cowabunga-cabana-1-scaled.jpg","https://www.loungenie.com/wp-content/uploads/2026/03/lg-gallery-hilton-kona-cabana-4-scaled.jpg"] } }
+        ] }
+      ]
+    }
+  ]
+}

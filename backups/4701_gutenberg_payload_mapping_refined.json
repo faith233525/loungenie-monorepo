@@ -1,0 +1,22 @@
+{
+  "page": 4701,
+  "mapped_count": 13,
+  "missing_count": 0,
+  "mapped": {
+    "https://www.loungenie.com/wp-content/uploads/2025/10/R-1-scaled.png": 2013,
+    "https://www.loungenie.com/wp-content/uploads/2025/10/cowabunga-vegas-logo-300x173.png.webp": 1995,
+    "https://www.loungenie.com/wp-content/uploads/2025/10/logo-color.png": 1999,
+    "https://www.loungenie.com/wp-content/uploads/2025/10/logos-pc-black-horizontal.png": 2000,
+    "https://www.loungenie.com/wp-content/uploads/2026/02/Carnival-Cruise-Emblem-1-scaled.webp": 5480,
+    "https://www.loungenie.com/wp-content/uploads/2026/03/lg-about-westin-hilton-head-scaled.jpg": 8770,
+    "https://www.loungenie.com/wp-content/uploads/2026/03/lg-contact-owc-cabana-scaled.jpg": 8768,
+    "https://www.loungenie.com/wp-content/uploads/2026/03/lg-gallery-cowabunga-cabana-1-scaled.jpg": 8773,
+    "https://www.loungenie.com/wp-content/uploads/2026/03/lg-gallery-hilton-kona-cabana-4-scaled.jpg": 8775,
+    "https://www.loungenie.com/wp-content/uploads/2026/03/lg-gallery-sea-world-san-diego.jpg": 8774,
+    "https://www.loungenie.com/wp-content/uploads/2026/03/lg-home-daybed-hilton-scaled.jpg": 8769,
+    "https://www.loungenie.com/wp-content/uploads/2026/03/lg-home-hero-the-grove-7-scaled.jpg": 8767,
+    "https://www.loungenie.com/wp-content/uploads/2026/03/IMG_2074.jpeg": 2071
+  },
+  "missing": [],
+  "notes": "Refined pass used normalized filename and substring matching."
+}

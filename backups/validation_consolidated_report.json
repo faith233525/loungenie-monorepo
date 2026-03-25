@@ -1,0 +1,74 @@
+{
+  "pages": [
+    {
+      "page_file": "content\\4701.json",
+      "page_id": 4701,
+      "issues": [],
+      "checks": {
+        "raw_img_count": 0,
+        "wp_image_blocks": 12,
+        "gallery_blocks": 1,
+        "has_block_comments": true,
+        "used_attachment_ids_count": 0
+      },
+      "ok": true
+    },
+    {
+      "page_file": "content\\about.json",
+      "page_id": 4862,
+      "issues": [],
+      "checks": {
+        "raw_img_count": 0,
+        "wp_image_blocks": 2,
+        "gallery_blocks": 0,
+        "has_block_comments": true,
+        "used_attachment_ids_count": 0
+      },
+      "ok": true
+    },
+    {
+      "page_file": "content\\contact.json",
+      "page_id": 5139,
+      "issues": [],
+      "checks": {
+        "raw_img_count": 0,
+        "wp_image_blocks": 2,
+        "gallery_blocks": 0,
+        "has_block_comments": true,
+        "used_attachment_ids_count": 0
+      },
+      "ok": true
+    },
+    {
+      "page_file": "content\\features.json",
+      "page_id": 2989,
+      "issues": [],
+      "checks": {
+        "raw_img_count": 0,
+        "wp_image_blocks": 5,
+        "gallery_blocks": 0,
+        "has_block_comments": true,
+        "used_attachment_ids_count": 0
+      },
+      "ok": true
+    },
+    {
+      "page_file": "content\\home.json",
+      "page_id": 4701,
+      "issues": [],
+      "checks": {
+        "raw_img_count": 0,
+        "wp_image_blocks": 12,
+        "gallery_blocks": 1,
+        "has_block_comments": true,
+        "used_attachment_ids_count": 0
+      },
+      "ok": true
+    }
+  ],
+  "summary": {
+    "total_pages": 5,
+    "pages_ok": 5,
+    "pages_with_issues": 0
+  }
+}

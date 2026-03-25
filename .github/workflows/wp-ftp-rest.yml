@@ -1,0 +1,38 @@
+name: WP FTP & REST tasks
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: windows-latest
+    concurrency:
+      group: wp-ftp-rest
+      cancel-in-progress: true
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      DRY_RUN: 'true'
+      CREATE_DRAFT_ONLY: 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run WP FTP & REST script
+        shell: pwsh
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
+          WP_USER:  ${{ secrets.WP_USER }}
+          WP_PASS:  ${{ secrets.WP_PASS }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          # Ensure script is executable and run non-interactively (use pwsh for consistency)
+          pwsh -NoProfile -ExecutionPolicy Bypass -File .\run_wp_ftp_and_rest.ps1 *> run_wp_ftp_and_rest.log
+
+      - name: Upload log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: run_wp_ftp_and_rest-log
+          path: run_wp_ftp_and_rest.log

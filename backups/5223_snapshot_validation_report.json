@@ -1,0 +1,18 @@
+{
+  "page_id": 5223,
+  "snapshot_file": "backups\\5223_page_snapshot.json",
+  "issues": [],
+  "checks": {
+    "inline_style_count": 0,
+    "inline_script_count": 0,
+    "raw_img_count_in_content": 0,
+    "payload": {
+      "gallery_count": 0,
+      "ids_occurrences": 0
+    },
+    "mapping": {
+      "unique_mapped_ids": 0,
+      "duplicate_id_cases": {}
+    }
+  }
+}

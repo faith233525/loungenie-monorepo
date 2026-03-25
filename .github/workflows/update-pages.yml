@@ -8,6 +8,9 @@ on:
 jobs:
   update-pages:
     runs-on: ubuntu-latest
+    concurrency:
+      group: update-pages
+      cancel-in-progress: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -24,8 +27,11 @@ jobs:
 
       - name: Run updater
         env:
-          WP_USERNAME: ${{ secrets.WP_USERNAME }}
-          WP_APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
+          # Provide both legacy and standardized secret names for compatibility
+          WP_USER: ${{ secrets.WP_USER }}
+          WP_PASS: ${{ secrets.WP_PASS }}
+          WP_USERNAME: ${{ secrets.WP_USER }}
+          WP_APP_PASSWORD: ${{ secrets.WP_PASS }}
           WP_SITE_URL: ${{ secrets.WP_SITE_URL }}
         run: |
           python scripts/update_pages.py --content-dir content --media media_lookup.json

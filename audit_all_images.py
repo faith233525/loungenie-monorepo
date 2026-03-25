@@ -1,3 +1,12 @@
+import sys
+try:
+    sys.stdout.reconfigure(encoding='utf-8')
+except Exception:
+    pass
+
+"""
+Image audit script
+"""
 import urllib.request, json, base64, re
 
 cred = base64.b64encode(b"admin:i6IM cqLZ vQDC pIRk nKFr g35i").decode()

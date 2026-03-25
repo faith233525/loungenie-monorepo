@@ -6,8 +6,8 @@ Required repository secrets for GitHub Actions (add under repo Settings → Secr
 - `FTP_HOST` — FTP(S) hostname (e.g. ftp.example.com)
 - `FTP_USER` — FTP username
 - `FTP_PASS` — FTP password
-- `WP_USER`  — WordPress username (use app password with REST permissions)
-- `WP_PASS`  — WordPress application password
+ - `WP_USER`  — WordPress username (use app password with REST permissions)
+ - `WP_PASS`  — WordPress application password
 - `STAGING_URL` — Base URL for staging site (e.g. https://example.com/staging)
 - `ALLOW_UNTRUSTED_FTP_CERT` — Optional. Set to `true` only if you explicitly trust a self-signed FTPS certificate. Default: leave unset or `false`.
 
@@ -33,6 +33,22 @@ To control what the CI script runs, set the following env vars in the workflow o
 - `RUN_HEADER_POST` (true/false)
 - `RUN_BULK_POST` (true/false)
 - `RUN_AUDITS` (true/false)
+
+Recommended canonical secret names (used by workflows):
+
+- `FTP_HOST`
+- `FTP_USER`
+- `FTP_PASS` (or `SFTP_PRIVATE_KEY` for key-based SFTP)
+- `FTP_TYPE` (ftps | ftp | sftp)
+- `ALLOW_UNTRUSTED_FTP_CERT` (optional)
+- `WP_USER`
+- `WP_PASS`
+- `STAGING_URL`
+
+CI default safety flags set in workflows:
+
+- `DRY_RUN=true` — script will avoid destructive publishes by default.
+- `CREATE_DRAFT_ONLY=true` — create drafts instead of publishing.
 
 Default CI behavior: `RUN_FTP_BACKUP=true`, `RUN_AUDITS=true`, other run flags default to `false`.
 

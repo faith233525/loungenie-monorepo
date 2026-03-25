@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+import sys
+try:
+    sys.stdout.reconfigure(encoding='utf-8')
+except Exception:
+    pass
 """
 COLOR AUDIT REPORT - Staging Pages
 Analyzes all CSS colors and identifies contrast/visibility issues

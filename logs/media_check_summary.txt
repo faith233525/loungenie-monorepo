@@ -1,0 +1,12 @@
+FILE: backups\4701_raw.html STATUS: OK
+
+FILE: backups\2989_raw.html STATUS: OK
+200	image/jpeg	https://loungenie.com/staging/wp-content/uploads/2026/03/Example-A-Roll-Image-1024x793-1.jpg
+200	image/jpeg	https://loungenie.com/staging/wp-content/uploads/2026/03/Example-B-Roll-Image-1-scaled-1.jpg
+200	image/jpeg	https://loungenie.com/staging/wp-content/uploads/2026/03/Example-B-Roll-Image-2-scaled-1.jpg
+200	image/jpeg	https://loungenie.com/staging/wp-content/uploads/2026/03/Example-B-Roll-Image-3-scaled-1.jpg
+200	image/jpeg	https://loungenie.com/staging/wp-content/uploads/2026/03/Example-B-Roll-Image-819x1024-1.jpg
+200	image/jpeg	https://loungenie.com/staging/wp-content/uploads/2026/03/Example-Background-Image.jpg
+200	image/jpeg	https://loungenie.com/staging/wp-content/uploads/2026/03/Example-Portrait-Image-1024x683-1.jpg
+200	image/png	https://loungenie.com/staging/wp-content/uploads/2026/03/logo-placeholder-3.png
+

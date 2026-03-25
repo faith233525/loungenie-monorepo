@@ -4,18 +4,26 @@ on:
   workflow_dispatch:
     inputs:
       dry_run:
-        description: 'Run in dry-run mode (no remote writes)'
+        description: "Run in dry-run mode (no remote writes)"
         required: false
-        default: 'true'
+        default: "true"
+      allow_live:
+        description: "When true and secrets are set, allows live writes (must be manually set)"
+        required: false
+        default: "false"
       run_ftp_backup:
-        description: 'Run FTP backup step'
+        description: "Run FTP backup step"
         required: false
-        default: 'true'
+        default: "true"
+  push:
+    branches:
+      - feature/staging-deploy
+  schedule:
+    - cron: "0 3 * * 0" # weekly on Sunday at 03:00 UTC
 
 jobs:
   dry-run-sync:
     runs-on: ubuntu-latest
-    environment: staging
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,18 +44,19 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install requirements
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt || true; fi
 
-      - name: Run safe orchestrator (dry-run)
+      - name: Run safe orchestrator
         shell: bash
         env:
           RUN_FTP_BACKUP: ${{ github.event.inputs.run_ftp_backup }}
           DRY_RUN: ${{ github.event.inputs.dry_run }}
+          ALLOW_LIVE: ${{ github.event.inputs.allow_live }}
           WP_URL: ${{ secrets.WP_URL }}
           WP_USER: ${{ secrets.WP_USER }}
           WP_APP_PASS: ${{ secrets.WP_APP_PASS }}
@@ -55,7 +64,23 @@ jobs:
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASS: ${{ secrets.FTP_PASS }}
         run: |
-          pwsh -NoProfile -Command "pwsh -NoProfile -ExecutionPolicy Bypass -File .\tools\run_wp_ftp_and_rest_safe.ps1"
+          # Determine whether to enable live writes: user must set allow_live=true and all secrets must be present
+          LIVE=false
+          if [ "${ALLOW_LIVE}" = "true" ]; then
+            if [ -n "${WP_APP_PASS}" ] && [ -n "${FTP_PASS}" ]; then
+              echo "All secrets present and allow_live requested — enabling LIVE mode."
+              LIVE=true
+            else
+              echo "allow_live requested but secrets missing — staying in dry-run."
+            fi
+          else
+            echo "allow_live not set — running in dry-run (safe) mode."
+          fi
+          if [ "${LIVE}" = "true" ]; then
+            pwsh -NoProfile -ExecutionPolicy Bypass -File .\tools\run_wp_ftp_and_rest_safe.ps1 -Live
+          else
+            pwsh -NoProfile -ExecutionPolicy Bypass -File .\tools\run_wp_ftp_and_rest_safe.ps1
+          fi
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -68,4 +93,4 @@ jobs:
             run_wp_ftp_and_rest.log
 
       - name: Comment with artifact link
-        run: echo "Dry-run finished — check uploaded artifacts in the workflow run artifacts." 
+        run: echo "Dry-run finished — check uploaded artifacts in the workflow run artifacts."

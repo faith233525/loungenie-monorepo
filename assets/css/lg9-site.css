@@ -1,0 +1,27 @@
+/* LG9 Site shared styles for header/footer and marquee */
+:root{--lg-bg:#f2f7fb;--lg-surface:#ffffff;--lg-ink:#0b1726;--lg-ink-soft:#2f455c;--lg-line:#dbe6ef;--lg-blue:#0052ab;--lg-cyan:#00a9dd}
+.lg9-site-header{position:sticky;top:0;z-index:999;background:linear-gradient(90deg,#041224 0%,#0a315f 60%,#0f4a86 100%);color:#fff}
+.lg9-topbar-inner{display:flex;align-items:center;justify-content:space-between;max-width:1280px;margin:0 auto;padding:12px 24px}
+.lg9-topbar-left img{height:46px;width:auto}
+.lg9-main-nav .wp-block-navigation{display:flex;gap:14px}
+.lg9-main-nav .wp-block-navigation-item__content{padding:8px 12px;border-radius:8px;background:transparent;color:#fff;font-weight:700}
+.lg9-main-nav .wp-block-navigation-item__content:hover{background:#edf6ff;color:var(--lg-blue)}
+
+/* Marquee */
+.lg9-marquee-wrap{overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:10px 0}
+.lg9-marquee-track{display:flex;gap:40px;align-items:center;white-space:nowrap;animation:lg9Marquee 36s linear infinite}
+.lg9-marquee-inner{display:flex;gap:28px;align-items:center}
+.lg9-logo-mark{display:inline-flex;align-items:center;padding:6px 10px;border-radius:10px;background:#fff}
+.lg9-logo-mark img{height:44px;display:block}
+@keyframes lg9Marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.lg9-marquee-track:hover{animation-play-state:paused}
+
+/* Footer */
+.lg9-site-footer{background:linear-gradient(130% 160% at 0% 0%,#133b62 0%,#081624 52%,#050e1a 100%);color:rgba(255,255,255,.92);padding:36px 24px}
+.lg9-footer-inner{max-width:1280px;margin:0 auto;display:flex;gap:32px;flex-wrap:wrap}
+.lg9-footer-col{flex:1 1 220px;min-width:180px}
+.lg9-footer-col .lg9-copy{color:rgba(255,255,255,.82);margin-top:8px}
+
+/* Responsive */
+@media(max-width:900px){.lg9-topbar-inner{padding:12px 16px}.lg9-main-nav .wp-block-navigation{display:none}.lg9-logo-mark img{height:38px}}
+@media(max-width:480px){.lg9-footer-inner{flex-direction:column;align-items:center;text-align:center}.lg9-footer-col{min-width:0}}

@@ -13,10 +13,18 @@ Investors page (5668) is intentionally untouched.
 import base64
 import hashlib
 import json
+import os
 import requests
 
 BASE = 'https://loungenie.com/staging/wp-json/wp/v2'
-AUTH = base64.b64encode('admin:i6IM cqLZ vQDC pIRk nKFr g35i'.encode()).decode()
+# Use WP_AUTH env var. Accept either raw 'user:pass' or a base64 string.
+WP_AUTH = os.environ.get('WP_AUTH')
+if not WP_AUTH:
+    raise SystemExit('Environment variable WP_AUTH not set; set to "user:pass" or base64 string')
+if ':' in WP_AUTH:
+    AUTH = base64.b64encode(WP_AUTH.encode()).decode()
+else:
+    AUTH = WP_AUTH
 HEADERS = {'Authorization': f'Basic {AUTH}', 'Content-Type': 'application/json'}
 
 STAGING = 'https://loungenie.com/staging'

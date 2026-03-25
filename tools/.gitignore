@@ -1,0 +1,3 @@
+# Ignore local secret files for orchestrator
+secrets/
+.env.local

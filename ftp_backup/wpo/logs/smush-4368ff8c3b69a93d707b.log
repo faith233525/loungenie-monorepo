@@ -1,0 +1,285 @@
+[2025-09-24 23:10:23 : INFO] - Re_Smush_It_Task with attachment ID : 142, auto created on : September 24, 2025 11:10:21 
+[2025-09-24 23:11:30 : INFO] - Re_Smush_It_Task with attachment ID : 143, auto created on : September 24, 2025 11:11:28 
+[2025-09-24 23:13:10 : INFO] - Re_Smush_It_Task with attachment ID : 144, auto created on : September 24, 2025 11:13:07 
+[2025-09-24 23:16:10 : INFO] - Re_Smush_It_Task with attachment ID : 145, auto created on : September 24, 2025 11:16:06 
+[2025-09-24 23:17:31 : INFO] - A total of 4 tasks of type smush found and will be processed in this iteration 
+[2025-09-24 23:17:33 : DEBUG] - Lock option (updraft_lock_smush, wpjd_options) was created in the database 
+[2025-09-24 23:17:35 : INFO] - Lock (updraft_lock_smush, wpjd_options) acquired after initialising the database 
+[2025-09-24 23:17:38 : INFO] - Processing task with ID : 1, and type 'smush' 
+[2025-09-24 23:17:41 : INFO] - Re_Smush_It_Task with attachment ID : 142, auto created on : September 24, 2025 11:10:21 
+[2025-09-24 23:17:41 : INFO] - File: Untitled-design-1.png, Compression quality: 92 
+[2025-09-24 23:17:50 : INFO] - Backing up the original image - 2025/09/Untitled-design-1-updraft-pre-smush-original.png 
+[2025-09-24 23:18:09 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/09/Untitled-design-1.png.The file was compressed from 296.16 KB to 161.24 KB, saving 45.56 percent, using WP-Optimize 
+[2025-09-24 23:18:24 : INFO] - Completed processing task with ID : 1, and type 'smush' 
+[2025-09-24 23:18:31 : INFO] - Processing task with ID : 2, and type 'smush' 
+[2025-09-24 23:18:37 : INFO] - Re_Smush_It_Task with attachment ID : 143, auto created on : September 24, 2025 11:11:28 
+[2025-09-24 23:18:37 : INFO] - File: Untitled-design-1-1.png, Compression quality: 92 
+[2025-09-24 23:18:51 : INFO] - Backing up the original image - 2025/09/Untitled-design-1-1-updraft-pre-smush-original.png 
+[2025-09-24 23:18:58 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/09/Untitled-design-1-1.png.The file was compressed from 296.16 KB to 161.24 KB, saving 45.56 percent, using WP-Optimize 
+[2025-09-24 23:19:03 : INFO] - Completed processing task with ID : 2, and type 'smush' 
+[2025-09-24 23:19:07 : INFO] - Processing task with ID : 3, and type 'smush' 
+[2025-09-24 23:19:12 : INFO] - Re_Smush_It_Task with attachment ID : 144, auto created on : September 24, 2025 11:13:07 
+[2025-09-24 23:19:12 : INFO] - File: Pool-Safe-Logo.png, Compression quality: 92 
+[2025-09-24 23:19:17 : INFO] - Backing up the original image - 2025/09/Pool-Safe-Logo-updraft-pre-smush-original.png 
+[2025-09-24 23:19:26 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/09/Pool-Safe-Logo.png.The file was compressed from 296.16 KB to 161.24 KB, saving 45.56 percent, using WP-Optimize 
+[2025-09-24 23:19:41 : INFO] - Completed processing task with ID : 3, and type 'smush' 
+[2025-09-24 23:19:50 : INFO] - Processing task with ID : 4, and type 'smush' 
+[2025-09-24 23:19:53 : INFO] - Re_Smush_It_Task with attachment ID : 145, auto created on : September 24, 2025 11:16:06 
+[2025-09-24 23:19:53 : INFO] - File: Pool-Safe-Logo.jpg, Compression quality: 92 
+[2025-09-24 23:19:56 : INFO] - Backing up the original image - 2025/09/Pool-Safe-Logo-updraft-pre-smush-original.jpg 
+[2025-09-24 23:20:22 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/09/Pool-Safe-Logo.jpg.The file was compressed from 34.70 KB to 27.35 KB, saving 21.17 percent, using WP-Optimize 
+[2025-09-24 23:20:31 : INFO] - Completed processing task with ID : 4, and type 'smush' 
+[2025-09-24 23:20:33 : INFO] - Lock option (updraft_lock_smush, wpjd_options) released 
+[2025-09-24 23:20:36 : INFO] - Successfully processed the queue (smush). 4 tasks were processed out of 4. 
+[2025-09-24 23:20:39 : INFO] - Lock option (updraft_lock_smush, wpjd_options) was deleted from the database 
+[2025-09-24 23:20:39 : INFO] - Cleaning up tasks of type (smush). A total of 4 tasks will be deleted. 
+[2025-09-25 14:49:44 : INFO] - Re_Smush_It_Task with attachment ID : 148, auto created on : September 25, 2025 02:49:40 
+[2025-09-25 14:50:20 : INFO] - Re_Smush_It_Task with attachment ID : 149, auto created on : September 25, 2025 02:50:15 
+[2025-09-25 14:51:36 : INFO] - Re_Smush_It_Task with attachment ID : 150, auto created on : September 25, 2025 02:51:31 
+[2025-09-25 14:54:10 : INFO] - Re_Smush_It_Task with attachment ID : 152, auto created on : September 25, 2025 02:54:06 
+[2025-09-25 14:54:22 : INFO] - Re_Smush_It_Task with attachment ID : 153, auto created on : September 25, 2025 02:54:18 
+[2025-09-25 14:54:45 : INFO] - A total of 6 tasks of type smush found and will be processed in this iteration 
+[2025-09-25 14:54:45 : DEBUG] - Lock option (updraft_lock_smush, wpjd_options) was created in the database 
+[2025-09-25 14:54:46 : INFO] - Lock (updraft_lock_smush, wpjd_options) acquired after initialising the database 
+[2025-09-25 14:54:46 : INFO] - Processing task with ID : 8, and type 'smush' 
+[2025-09-25 14:54:46 : INFO] - Re_Smush_It_Task with attachment ID : 148, auto created on : September 25, 2025 02:49:40 
+[2025-09-25 14:54:46 : INFO] - File: Copy-of-LounGenie-Logo-112-x-112-px.png, Compression quality: 92 
+[2025-09-25 14:54:49 : INFO] - Re_Smush_It_Task with attachment ID : 155, auto created on : September 25, 2025 02:54:45 
+[2025-09-25 14:54:50 : INFO] - Backing up the original image - 2025/09/Copy-of-LounGenie-Logo-112-x-112-px-updraft-pre-smush-original.png 
+[2025-09-25 14:54:52 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/09/Copy-of-LounGenie-Logo-112-x-112-px.png.The file was compressed from 8.18 KB to 4.67 KB, saving 42.9 percent, using WP-Optimize 
+[2025-09-25 14:54:53 : INFO] - Completed processing task with ID : 8, and type 'smush' 
+[2025-09-25 14:54:53 : INFO] - Processing task with ID : 9, and type 'smush' 
+[2025-09-25 14:54:53 : INFO] - Re_Smush_It_Task with attachment ID : 149, auto created on : September 25, 2025 02:50:15 
+[2025-09-25 14:54:53 : INFO] - File: G-For-LounGenie-.png, Compression quality: 92 
+[2025-09-25 14:54:56 : INFO] - Backing up the original image - 2025/09/G-For-LounGenie--updraft-pre-smush-original.png 
+[2025-09-25 14:54:57 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/09/G-For-LounGenie-.png.The file was compressed from 10.13 KB to 4.85 KB, saving 52.11 percent, using WP-Optimize 
+[2025-09-25 14:54:58 : INFO] - Completed processing task with ID : 9, and type 'smush' 
+[2025-09-25 14:54:58 : INFO] - Processing task with ID : 10, and type 'smush' 
+[2025-09-25 14:54:58 : INFO] - Re_Smush_It_Task with attachment ID : 150, auto created on : September 25, 2025 02:51:31 
+[2025-09-25 14:54:58 : INFO] - File: cropped-G-For-LounGenie-.png, Compression quality: 92 
+[2025-09-25 14:55:00 : INFO] - Re_Smush_It_Task with attachment ID : 156, auto created on : September 25, 2025 02:54:58 
+[2025-09-25 14:55:05 : INFO] - Backing up the original image - 2025/09/cropped-G-For-LounGenie--updraft-pre-smush-original.png 
+[2025-09-25 14:55:23 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/09/cropped-G-For-LounGenie-.png.The file was compressed from 45.17 KB to 38.00 KB, saving 15.87 percent, using WP-Optimize 
+[2025-09-25 14:55:23 : INFO] - Completed processing task with ID : 10, and type 'smush' 
+[2025-09-25 14:55:24 : INFO] - Processing task with ID : 11, and type 'smush' 
+[2025-09-25 14:55:24 : INFO] - Re_Smush_It_Task with attachment ID : 152, auto created on : September 25, 2025 02:54:06 
+[2025-09-25 14:55:24 : INFO] - File: G-For-LounGenie-final-1.png, Compression quality: 92 
+[2025-09-25 14:55:28 : INFO] - Backing up the original image - 2025/09/G-For-LounGenie-final-1-updraft-pre-smush-original.png 
+[2025-09-25 14:55:34 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/09/G-For-LounGenie-final-1.png.The file was compressed from 74.75 KB to 21.96 KB, saving 70.62 percent, using WP-Optimize 
+[2025-09-25 14:55:35 : INFO] - Completed processing task with ID : 11, and type 'smush' 
+[2025-09-25 14:55:36 : INFO] - Processing task with ID : 12, and type 'smush' 
+[2025-09-25 14:55:36 : INFO] - Re_Smush_It_Task with attachment ID : 153, auto created on : September 25, 2025 02:54:18 
+[2025-09-25 14:55:36 : INFO] - File: cropped-G-For-LounGenie-final-1.png, Compression quality: 92 
+[2025-09-25 14:55:43 : INFO] - Backing up the original image - 2025/09/cropped-G-For-LounGenie-final-1-updraft-pre-smush-original.png 
+[2025-09-25 14:55:55 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/09/cropped-G-For-LounGenie-final-1.png.The file was compressed from 27.63 KB to 25.55 KB, saving 7.53 percent, using WP-Optimize 
+[2025-09-25 14:55:56 : INFO] - Completed processing task with ID : 12, and type 'smush' 
+[2025-09-25 14:55:56 : INFO] - Processing task with ID : 13, and type 'smush' 
+[2025-09-25 14:55:56 : INFO] - Re_Smush_It_Task with attachment ID : 155, auto created on : September 25, 2025 02:54:45 
+[2025-09-25 14:55:56 : INFO] - File: G-For-LounGenie-final-1-1.png, Compression quality: 92 
+[2025-09-25 14:56:00 : INFO] - Backing up the original image - 2025/09/G-For-LounGenie-final-1-1-updraft-pre-smush-original.png 
+[2025-09-25 14:56:05 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/09/G-For-LounGenie-final-1-1.png.The file was compressed from 74.75 KB to 21.96 KB, saving 70.62 percent, using WP-Optimize 
+[2025-09-25 14:56:06 : INFO] - Completed processing task with ID : 13, and type 'smush' 
+[2025-09-25 14:56:06 : INFO] - Lock option (updraft_lock_smush, wpjd_options) released 
+[2025-09-25 14:56:06 : INFO] - Successfully processed the queue (smush). 6 tasks were processed out of 6. 
+[2025-09-25 14:56:06 : INFO] - Lock option (updraft_lock_smush, wpjd_options) was deleted from the database 
+[2025-09-25 14:56:06 : INFO] - Cleaning up tasks of type (smush). A total of 6 tasks will be deleted. 
+[2025-09-25 15:06:28 : INFO] - A total of 1 tasks of type smush found and will be processed in this iteration 
+[2025-09-25 15:06:29 : DEBUG] - Lock option (updraft_lock_smush, wpjd_options) was created in the database 
+[2025-09-25 15:06:29 : INFO] - Lock (updraft_lock_smush, wpjd_options) acquired after initialising the database 
+[2025-09-25 15:06:29 : INFO] - Processing task with ID : 14, and type 'smush' 
+[2025-09-25 15:06:30 : INFO] - Re_Smush_It_Task with attachment ID : 156, auto created on : September 25, 2025 02:54:58 
+[2025-09-25 15:06:30 : INFO] - File: cropped-G-For-LounGenie-final-1-1.png, Compression quality: 92 
+[2025-09-25 15:06:34 : INFO] - Backing up the original image - 2025/09/cropped-G-For-LounGenie-final-1-1-updraft-pre-smush-original.png 
+[2025-09-25 15:06:46 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/09/cropped-G-For-LounGenie-final-1-1.png.The file was compressed from 27.63 KB to 25.55 KB, saving 7.53 percent, using WP-Optimize 
+[2025-09-25 15:06:47 : INFO] - Completed processing task with ID : 14, and type 'smush' 
+[2025-09-25 15:06:47 : INFO] - Lock option (updraft_lock_smush, wpjd_options) released 
+[2025-09-25 15:06:47 : INFO] - Successfully processed the queue (smush). 1 tasks were processed out of 1. 
+[2025-09-25 15:06:48 : INFO] - Lock option (updraft_lock_smush, wpjd_options) was deleted from the database 
+[2025-09-25 15:06:48 : INFO] - Cleaning up tasks of type (smush). A total of 1 tasks will be deleted. 
+[2025-09-25 15:34:26 : INFO] - Re_Smush_It_Task server status: Online 
+[2025-09-25 15:35:20 : INFO] - A total of 21 tasks of type smush found and will be processed in this iteration 
+[2025-09-25 15:35:20 : DEBUG] - Lock option (updraft_lock_smush, wpjd_options) was created in the database 
+[2025-09-25 15:35:20 : INFO] - Lock (updraft_lock_smush, wpjd_options) acquired after initialising the database 
+[2025-09-25 15:35:20 : INFO] - Processing task with ID : 1, and type 'smush' 
+[2025-09-25 15:35:20 : INFO] - Re_Smush_It_Task - Attachment ID : 25, Started on : September 25, 2025 03:34:27 
+[2025-09-25 15:35:20 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:35:23 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:35:30 : INFO] - Task with ID 1 and type (smush) failed with error code invalid_response - The compression apparently succeeded, but WP-Optimize could not retrieve the compressed image from the remote server. 
+[2025-09-25 15:35:31 : INFO] - data: {"src":"http:\/\/hel2.static.resmush.it\/be74794001adb5804c7e86e51478ca33\/_src_24-0628_PS_TyphoonTexas_WaterPark_compressed-1024x742.jpg","dest":"http:\/\/hel2.static.resmush.it\/be74794001adb5804c7e86e51478ca33\/24-0628_PS_TyphoonTexas_WaterPark_compressed-1024x742.jpg","src_size":148248,"dest_size":143166,"percent":3,"output":"json","expires":"Thu, 25 Sep 2025 17:40:25 +0200","generator":"reSmush.it rev.3.0.11.20240125"} 
+[2025-09-25 15:35:34 : INFO] - A total of 20 tasks of type smush found and will be processed in this iteration 
+[2025-09-25 15:35:34 : DEBUG] - Lock option (updraft_lock_smush, wpjd_options) already existed in the database 
+[2025-09-25 15:35:34 : INFO] - Lock (updraft_lock_smush, wpjd_options) could not be acquired (it is locked) 
+[2025-09-25 15:35:34 : INFO] - Failed to gain semaphore lock (smush) - another process is already processing the queue - aborting (if this is wrong - i.e. if the other process crashed without removing the lock, then another can be started after 1 minute 
+[2025-09-25 15:35:36 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:35:36 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 484.08 KB to 468.11 KB, saving 3.3 percent, using WP-Optimize 
+[2025-09-25 15:35:37 : INFO] - Completed processing task with ID : 1, and type 'smush' 
+[2025-09-25 15:35:37 : INFO] - Processing task with ID : 2, and type 'smush' 
+[2025-09-25 15:35:38 : INFO] - Re_Smush_It_Task - Attachment ID : 26, Started on : September 25, 2025 03:34:29 
+[2025-09-25 15:35:38 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:35:41 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:35:50 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:35:51 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 468.11 KB to 468.11 KB, saving 0 percent, using WP-Optimize 
+[2025-09-25 15:35:51 : INFO] - Completed processing task with ID : 2, and type 'smush' 
+[2025-09-25 15:35:52 : INFO] - Processing task with ID : 3, and type 'smush' 
+[2025-09-25 15:35:53 : INFO] - Re_Smush_It_Task - Attachment ID : 27, Started on : September 25, 2025 03:34:30 
+[2025-09-25 15:35:53 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:35:57 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:36:07 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:36:08 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 468.11 KB to 468.11 KB, saving 0 percent, using WP-Optimize 
+[2025-09-25 15:36:09 : INFO] - Completed processing task with ID : 3, and type 'smush' 
+[2025-09-25 15:36:09 : INFO] - Processing task with ID : 4, and type 'smush' 
+[2025-09-25 15:36:10 : INFO] - Re_Smush_It_Task - Attachment ID : 35, Started on : September 25, 2025 03:34:32 
+[2025-09-25 15:36:10 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:36:13 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:36:21 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:36:22 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 468.11 KB to 468.11 KB, saving 0 percent, using WP-Optimize 
+[2025-09-25 15:36:22 : INFO] - Completed processing task with ID : 4, and type 'smush' 
+[2025-09-25 15:36:22 : INFO] - Processing task with ID : 5, and type 'smush' 
+[2025-09-25 15:36:23 : INFO] - Re_Smush_It_Task - Attachment ID : 36, Started on : September 25, 2025 03:34:35 
+[2025-09-25 15:36:23 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:36:25 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:36:28 : INFO] - A total of 17 tasks of type smush found and will be processed in this iteration 
+[2025-09-25 15:36:28 : DEBUG] - Lock option (updraft_lock_smush, wpjd_options) already existed in the database 
+[2025-09-25 15:36:28 : INFO] - Lock (updraft_lock_smush, wpjd_options) could not be acquired (it is locked) 
+[2025-09-25 15:36:28 : INFO] - Failed to gain semaphore lock (smush) - another process is already processing the queue - aborting (if this is wrong - i.e. if the other process crashed without removing the lock, then another can be started after 1 minute 
+[2025-09-25 15:36:28 : INFO] - Cleaning up tasks of type (smush). A total of 4 tasks will be deleted. 
+[2025-09-25 15:36:38 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:36:39 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 468.11 KB to 468.11 KB, saving 0 percent, using WP-Optimize 
+[2025-09-25 15:36:41 : INFO] - Completed processing task with ID : 5, and type 'smush' 
+[2025-09-25 15:36:42 : INFO] - Processing task with ID : 6, and type 'smush' 
+[2025-09-25 15:36:44 : INFO] - Re_Smush_It_Task - Attachment ID : 37, Started on : September 25, 2025 03:34:37 
+[2025-09-25 15:36:44 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:36:46 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:36:52 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:36:52 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 468.11 KB to 468.11 KB, saving 0 percent, using WP-Optimize 
+[2025-09-25 15:36:52 : INFO] - Completed processing task with ID : 6, and type 'smush' 
+[2025-09-25 15:36:52 : INFO] - Processing task with ID : 7, and type 'smush' 
+[2025-09-25 15:36:53 : INFO] - Re_Smush_It_Task - Attachment ID : 49, Started on : September 25, 2025 03:34:39 
+[2025-09-25 15:36:53 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:36:55 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:37:02 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:37:03 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 468.11 KB to 468.11 KB, saving 0 percent, using WP-Optimize 
+[2025-09-25 15:37:03 : INFO] - Completed processing task with ID : 7, and type 'smush' 
+[2025-09-25 15:37:04 : INFO] - Processing task with ID : 8, and type 'smush' 
+[2025-09-25 15:37:04 : INFO] - Re_Smush_It_Task - Attachment ID : 50, Started on : September 25, 2025 03:34:41 
+[2025-09-25 15:37:04 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:37:07 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:37:15 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:37:15 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 468.11 KB to 468.11 KB, saving 0 percent, using WP-Optimize 
+[2025-09-25 15:37:17 : INFO] - Completed processing task with ID : 8, and type 'smush' 
+[2025-09-25 15:37:17 : INFO] - Processing task with ID : 9, and type 'smush' 
+[2025-09-25 15:37:18 : INFO] - Re_Smush_It_Task - Attachment ID : 51, Started on : September 25, 2025 03:34:43 
+[2025-09-25 15:37:18 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:37:20 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:37:27 : INFO] - A total of 13 tasks of type smush found and will be processed in this iteration 
+[2025-09-25 15:37:27 : DEBUG] - Lock option (updraft_lock_smush, wpjd_options) already existed in the database 
+[2025-09-25 15:37:27 : INFO] - Lock (updraft_lock_smush, wpjd_options) could not be acquired (it is locked) 
+[2025-09-25 15:37:27 : INFO] - Failed to gain semaphore lock (smush) - another process is already processing the queue - aborting (if this is wrong - i.e. if the other process crashed without removing the lock, then another can be started after 1 minute 
+[2025-09-25 15:37:27 : INFO] - Cleaning up tasks of type (smush). A total of 4 tasks will be deleted. 
+[2025-09-25 15:37:29 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:37:29 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 468.11 KB to 468.11 KB, saving 0 percent, using WP-Optimize 
+[2025-09-25 15:37:29 : INFO] - Completed processing task with ID : 9, and type 'smush' 
+[2025-09-25 15:37:30 : INFO] - Processing task with ID : 10, and type 'smush' 
+[2025-09-25 15:37:30 : INFO] - Re_Smush_It_Task - Attachment ID : 61, Started on : September 25, 2025 03:34:46 
+[2025-09-25 15:37:30 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:37:32 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:37:38 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:37:38 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 468.11 KB to 468.11 KB, saving 0 percent, using WP-Optimize 
+[2025-09-25 15:37:38 : INFO] - Completed processing task with ID : 10, and type 'smush' 
+[2025-09-25 15:37:38 : INFO] - Processing task with ID : 11, and type 'smush' 
+[2025-09-25 15:37:39 : INFO] - Re_Smush_It_Task - Attachment ID : 62, Started on : September 25, 2025 03:34:48 
+[2025-09-25 15:37:39 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:37:40 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:37:49 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:37:49 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 468.11 KB to 468.11 KB, saving 0 percent, using WP-Optimize 
+[2025-09-25 15:37:52 : INFO] - Completed processing task with ID : 11, and type 'smush' 
+[2025-09-25 15:37:52 : INFO] - Processing task with ID : 12, and type 'smush' 
+[2025-09-25 15:37:53 : INFO] - Re_Smush_It_Task - Attachment ID : 63, Started on : September 25, 2025 03:34:50 
+[2025-09-25 15:37:53 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:37:55 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:38:03 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:38:03 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 468.11 KB to 468.11 KB, saving 0 percent, using WP-Optimize 
+[2025-09-25 15:38:04 : INFO] - Completed processing task with ID : 12, and type 'smush' 
+[2025-09-25 15:38:05 : INFO] - Processing task with ID : 13, and type 'smush' 
+[2025-09-25 15:38:06 : INFO] - Re_Smush_It_Task - Attachment ID : 70, Started on : September 25, 2025 03:34:54 
+[2025-09-25 15:38:06 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:38:08 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:38:15 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:38:15 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 468.11 KB to 468.11 KB, saving 0 percent, using WP-Optimize 
+[2025-09-25 15:38:16 : INFO] - Completed processing task with ID : 13, and type 'smush' 
+[2025-09-25 15:38:16 : INFO] - Processing task with ID : 14, and type 'smush' 
+[2025-09-25 15:38:16 : INFO] - Re_Smush_It_Task - Attachment ID : 99, Started on : September 25, 2025 03:34:57 
+[2025-09-25 15:38:16 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:38:18 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:38:27 : INFO] - Task with ID 14 and type (smush) failed with error code invalid_response - The compression apparently succeeded, but WP-Optimize could not retrieve the compressed image from the remote server. 
+[2025-09-25 15:38:27 : INFO] - data: {"src":"http:\/\/hel2.static.resmush.it\/15e1df8ce933946af74b1c7de976e5c2\/_src_24-0628_PS_TyphoonTexas_WaterPark_compressed-1536x1113.jpg","dest":"http:\/\/hel2.static.resmush.it\/15e1df8ce933946af74b1c7de976e5c2\/24-0628_PS_TyphoonTexas_WaterPark_compressed-1536x1113.jpg","src_size":272892,"dest_size":272892,"percent":0,"output":"json","expires":"Thu, 25 Sep 2025 17:43:24 +0200","generator":"reSmush.it rev.3.0.11.20240125"} 
+[2025-09-25 15:38:27 : INFO] - A total of 7 tasks of type smush found and will be processed in this iteration 
+[2025-09-25 15:38:27 : DEBUG] - Lock option (updraft_lock_smush, wpjd_options) already existed in the database 
+[2025-09-25 15:38:27 : INFO] - Lock (updraft_lock_smush, wpjd_options) could not be acquired (it is locked) 
+[2025-09-25 15:38:27 : INFO] - Failed to gain semaphore lock (smush) - another process is already processing the queue - aborting (if this is wrong - i.e. if the other process crashed without removing the lock, then another can be started after 1 minute 
+[2025-09-25 15:38:27 : INFO] - Cleaning up tasks of type (smush). A total of 5 tasks will be deleted. 
+[2025-09-25 15:39:27 : INFO] - A total of 7 tasks of type smush found and will be processed in this iteration 
+[2025-09-25 15:39:27 : DEBUG] - Lock option (updraft_lock_smush, wpjd_options) already existed in the database 
+[2025-09-25 15:39:27 : INFO] - Lock (updraft_lock_smush, wpjd_options) could not be acquired (it is locked) 
+[2025-09-25 15:39:27 : INFO] - Failed to gain semaphore lock (smush) - another process is already processing the queue - aborting (if this is wrong - i.e. if the other process crashed without removing the lock, then another can be started after 1 minute 
+[2025-09-25 15:40:27 : INFO] - A total of 7 tasks of type smush found and will be processed in this iteration 
+[2025-09-25 15:40:27 : INFO] - Lock (updraft_lock_smush, wpjd_options) acquired 
+[2025-09-25 15:40:27 : INFO] - Processing task with ID : 15, and type 'smush' 
+[2025-09-25 15:40:28 : INFO] - Re_Smush_It_Task - Attachment ID : 103, Started on : September 25, 2025 03:35:00 
+[2025-09-25 15:40:28 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:40:31 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:40:39 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:40:39 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 468.11 KB to 468.11 KB, saving 0 percent, using WP-Optimize 
+[2025-09-25 15:40:39 : INFO] - Completed processing task with ID : 15, and type 'smush' 
+[2025-09-25 15:40:39 : INFO] - Processing task with ID : 16, and type 'smush' 
+[2025-09-25 15:40:40 : INFO] - Re_Smush_It_Task - Attachment ID : 105, Started on : September 25, 2025 03:35:01 
+[2025-09-25 15:40:40 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:40:42 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:40:48 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:40:48 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 468.11 KB to 468.11 KB, saving 0 percent, using WP-Optimize 
+[2025-09-25 15:40:48 : INFO] - Completed processing task with ID : 16, and type 'smush' 
+[2025-09-25 15:40:48 : INFO] - Processing task with ID : 17, and type 'smush' 
+[2025-09-25 15:40:49 : INFO] - Re_Smush_It_Task - Attachment ID : 109, Started on : September 25, 2025 03:35:06 
+[2025-09-25 15:40:49 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:40:51 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:40:56 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:40:57 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 468.11 KB to 468.11 KB, saving 0 percent, using WP-Optimize 
+[2025-09-25 15:40:57 : INFO] - Completed processing task with ID : 17, and type 'smush' 
+[2025-09-25 15:40:57 : INFO] - Processing task with ID : 18, and type 'smush' 
+[2025-09-25 15:40:58 : INFO] - Re_Smush_It_Task - Attachment ID : 133, Started on : September 25, 2025 03:35:09 
+[2025-09-25 15:40:58 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:41:03 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:41:14 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:41:14 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 468.11 KB to 468.11 KB, saving 0 percent, using WP-Optimize 
+[2025-09-25 15:41:15 : INFO] - Completed processing task with ID : 18, and type 'smush' 
+[2025-09-25 15:41:15 : INFO] - Processing task with ID : 19, and type 'smush' 
+[2025-09-25 15:41:15 : INFO] - Re_Smush_It_Task - Attachment ID : 134, Started on : September 25, 2025 03:35:12 
+[2025-09-25 15:41:15 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:41:17 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:41:23 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:41:24 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 468.11 KB to 468.11 KB, saving 0 percent, using WP-Optimize 
+[2025-09-25 15:41:24 : INFO] - Completed processing task with ID : 19, and type 'smush' 
+[2025-09-25 15:41:24 : INFO] - Processing task with ID : 20, and type 'smush' 
+[2025-09-25 15:41:24 : INFO] - Re_Smush_It_Task - Attachment ID : 135, Started on : September 25, 2025 03:35:14 
+[2025-09-25 15:41:24 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:41:26 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:41:27 : INFO] - A total of 2 tasks of type smush found and will be processed in this iteration 
+[2025-09-25 15:41:27 : DEBUG] - Lock option (updraft_lock_smush, wpjd_options) already existed in the database 
+[2025-09-25 15:41:27 : INFO] - Lock (updraft_lock_smush, wpjd_options) could not be acquired (it is locked) 
+[2025-09-25 15:41:27 : INFO] - Failed to gain semaphore lock (smush) - another process is already processing the queue - aborting (if this is wrong - i.e. if the other process crashed without removing the lock, then another can be started after 1 minute 
+[2025-09-25 15:41:27 : INFO] - Cleaning up tasks of type (smush). A total of 5 tasks will be deleted. 
+[2025-09-25 15:41:33 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:41:33 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 468.11 KB to 468.11 KB, saving 0 percent, using WP-Optimize 
+[2025-09-25 15:41:33 : INFO] - Completed processing task with ID : 20, and type 'smush' 
+[2025-09-25 15:41:33 : INFO] - Processing task with ID : 21, and type 'smush' 
+[2025-09-25 15:41:33 : INFO] - Re_Smush_It_Task - Attachment ID : 136, Started on : September 25, 2025 03:35:17 
+[2025-09-25 15:41:33 : INFO] - File: 24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg, Compression quality: 92 
+[2025-09-25 15:41:35 : INFO] - Backing up the original image - 2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed-updraft-pre-smush-original.jpg 
+[2025-09-25 15:41:42 : INFO] - There were no WebP conversion tools found on your server. 
+[2025-09-25 15:41:42 : INFO] - Successfully optimized the image - /home/pools425/public_html/wp-content/uploads/2025/04/24-0628_PS_TyphoonTexas_WaterPark_compressed.jpg.The file was compressed from 468.11 KB to 468.11 KB, saving 0 percent, using WP-Optimize 
+[2025-09-25 15:41:43 : INFO] - Completed processing task with ID : 21, and type 'smush' 
+[2025-09-25 15:41:43 : INFO] - Lock option (updraft_lock_smush, wpjd_options) released 
+[2025-09-25 15:41:43 : INFO] - Successfully processed the queue (smush). 7 tasks were processed out of 7. 
+[2025-09-25 15:41:43 : INFO] - Lock option (updraft_lock_smush, wpjd_options) was deleted from the database 
+[2025-09-25 15:41:43 : INFO] - Cleaning up tasks of type (smush). A total of 2 tasks will be deleted. 
+[2025-09-25 17:38:14 : INFO] - Pruning the smush log file 

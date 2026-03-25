@@ -1,0 +1,7 @@
+About (4862) https://loungenie.com/staging/?page_id=4862 SHA:b50875b4943e9ae5585648b80362fcc1124565e8f056d400801127f28738bc1b expected:True old_links:[]
+Contact (5139) https://loungenie.com/staging/?page_id=5139 SHA:18bb2898c567c09fae9aafd5f4855893f9b7b6e36e857f97f179284b65ab557c expected:True old_links:[]
+Videos (5285) https://loungenie.com/staging/?page_id=5285 SHA:d60551a31bab234c008ba99d6ae073da9db71b560e76228ad6eab72898d01ba4 expected:True old_links:[]
+Home (4701) https://loungenie.com/staging/?page_id=4701 SHA:947a9006de30c13ef9e48334043800bc190ebd6e872ea51e093bb33be54d2244 expected:True old_links:[]
+Features (2989) https://loungenie.com/staging/?page_id=2989 SHA:f926f3fd61a93f848ee9c2c75b863d9f43faa365f7796b92909928c21c5114ac expected:True old_links:[]
+Gallery (5223) https://loungenie.com/staging/?page_id=5223 SHA:853d5bef9c0419ec1c6094c8427c34736ac4ff7912bd2d1af4fc5b9d642908ea expected:False old_links:[]
+Investors (5668) https://loungenie.com/staging/?page_id=5668 SHA:c66d6200b07fae90193cc76e09c7bb08676517457c092f207099246d199b83ef expected:False old_links:[]

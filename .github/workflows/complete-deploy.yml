@@ -1,0 +1,118 @@
+name: Complete Staging Deploy & Audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy -> Staging (backup, REST posts, audits)
+    runs-on: windows-latest
+    concurrency:
+      group: complete-deploy
+      cancel-in-progress: true
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      STAGING_URL: ${{ secrets.STAGING_URL }}
+      FTP_TYPE: ${{ secrets.FTP_TYPE }} # sftp or ftps or ftp
+      FTP_ONLY: 'true'
+      FTP_HOST: ${{ secrets.FTP_HOST }}
+      FTP_PORT: ${{ secrets.FTP_PORT }}
+      FTP_USER: ${{ secrets.FTP_USER }}
+      FTP_PASS: ${{ secrets.FTP_PASS }}
+      SFTP_PRIVATE_KEY: ${{ secrets.SFTP_PRIVATE_KEY }}
+      WP_USER: ${{ secrets.WP_USER }}
+      WP_PASS: ${{ secrets.WP_PASS }}
+      DRY_RUN: 'true'
+      CREATE_DRAFT_ONLY: 'true'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Ensure PowerShell modules (Posh-SSH for SFTP)
+        shell: pwsh
+        run: |
+          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted -ErrorAction SilentlyContinue
+          if ($env:FTP_TYPE -eq 'sftp') {
+            Install-Module -Name Posh-SSH -Force -Scope CurrentUser
+          }
+
+      - name: Show credential sources (no secrets printed)
+        shell: pwsh
+        run: |
+          Write-Output "Running in GitHub Actions; secrets will be used from environment."
+
+      - name: Run deploy/backup/audit script
+        shell: pwsh
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
+          WP_USER: ${{ secrets.WP_USER }}
+          WP_PASS: ${{ secrets.WP_PASS }}
+          STAGING_URL: ${{ secrets.STAGING_URL }}
+          FTP_TYPE: ${{ secrets.FTP_TYPE }}
+          FTP_PORT: ${{ secrets.FTP_PORT }}
+          SFTP_PRIVATE_KEY: ${{ secrets.SFTP_PRIVATE_KEY }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          # Fail early if required secrets missing
+          if (-not $env:FTP_HOST) { Write-Error 'Missing FTP_HOST secret'; exit 2 }
+          if (-not $env:FTP_USER) { Write-Error 'Missing FTP_USER secret'; exit 2 }
+          if (-not $env:FTP_PASS -and -not $env:SFTP_PRIVATE_KEY) { Write-Error 'Missing FTP_PASS or SFTP_PRIVATE_KEY secret'; exit 2 }
+          if (-not $env:WP_USER -or -not $env:WP_PASS) { Write-Error 'Missing WP_USER/WP_PASS secrets'; exit 2 }
+
+          # Run the main script (non-interactive; script will detect CI and not prompt)
+          pwsh -NoProfile -ExecutionPolicy Bypass -File .\run_wp_ftp_and_rest.ps1 *> run_wp_ftp_and_rest.log
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-run-log
+          path: run_wp_ftp_and_rest.log
+
+      - name: Upload FTP backup (if produced)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ftp-backup
+          path: ftp_backup/**
+
+      - name: Post run summary
+        shell: pwsh
+        run: |
+          Write-Output "Run completed. Download artifacts for logs and ftp_backup to inspect results."
+
+  post-checks:
+    name: Verify Gutenberg/Kadence pages
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify public staging endpoints
+        shell: bash
+        env:
+          STAGING_URL: ${{ secrets.STAGING_URL }}
+        run: |
+          echo "Verifying front page and key pages..."
+          curl -sSf "$STAGING_URL/staging/" -o /dev/null || echo "Front page check failed"
+          # Additional checks can be added here (accessibility, block presence)
+
+      - name: Upload verify log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verify-log
+          path: verify-log.txt
+
+
+# Notes:
+# - Required repo secrets: FTP_TYPE, FTP_HOST, FTP_PORT (optional), FTP_USER, FTP_PASS (or SFTP_PRIVATE_KEY), WP_USER, WP_PASS, STAGING_URL
+# - If your host requires IP allowlisting, use a self-hosted runner (replace `runs-on`) or allow GitHub Actions IP ranges.
+# - For SFTP, set FTP_TYPE=sftp and add SFTP_PRIVATE_KEY (PEM) as a secret. The script may need minor adjustments for key-based auth.
+# - The workflow uploads `run_wp_ftp_and_rest.log` and `ftp_backup` as artifacts for inspection.

@@ -1,0 +1,38 @@
+[2025-09-24 17:53:32 : INFO] - Setting changed, purging cache 
+[2025-09-24 18:43:55 : INFO] - Pruning the Cache log file 
+[2025-09-24 18:53:43 : INFO] - Full Cache Purge triggered by: plugin activation/deactivation 
+[2025-09-24 18:53:50 : INFO] - Full Cache Purge triggered by: plugin activation/deactivation 
+[2025-09-24 18:58:15 : INFO] - Full Cache Purge triggered by: plugin activation/deactivation 
+[2025-09-24 23:17:38 : INFO] - Full Cache Purge triggered by action: customize_save_after 
+[2025-09-24 23:19:56 : INFO] - Full Cache Purge triggered by action: customize_save_after 
+[2025-09-24 23:26:20 : INFO] - Full Cache Purge triggered by: plugin activation/deactivation 
+[2025-09-24 23:26:26 : INFO] - Full Cache Purge triggered by: plugin activation/deactivation 
+[2025-09-24 23:26:47 : INFO] - Full Cache Purge triggered by: plugin activation/deactivation 
+[2025-09-24 23:37:54 : INFO] - Full Cache Purge triggered by: plugin activation/deactivation 
+[2025-09-24 23:37:54 : INFO] - Full Cache Purge triggered by: plugin activation/deactivation 
+[2025-09-24 23:40:49 : INFO] - Full Cache Purge triggered by: plugin activation/deactivation 
+[2025-09-24 23:41:05 : INFO] - Full Cache Purge triggered by: plugin activation/deactivation 
+[2025-09-24 23:42:12 : INFO] - Full Cache Purge triggered by: WPO_Page_Cache::handle_purge_single_page_cache 
+[2025-09-24 23:46:47 : INFO] - Full Cache Purge triggered by: plugin activation/deactivation 
+[2025-09-24 23:46:52 : INFO] - Full Cache Purge triggered by: plugin activation/deactivation 
+[2025-09-24 23:47:45 : INFO] - Full Cache Purge triggered by: plugin activation/deactivation 
+[2025-09-24 23:50:48 : INFO] - Full Cache Purge triggered by: plugin activation/deactivation 
+[2025-09-25 14:40:15 : INFO] - Full Cache Purge triggered by: plugin activation/deactivation 
+[2025-09-25 14:40:47 : INFO] - Full Cache Purge triggered by: WPO_Page_Cache::handle_purge_single_page_cache 
+[2025-09-25 14:54:33 : INFO] - Full Cache Purge triggered by action: customize_save_after 
+[2025-09-25 14:55:13 : INFO] - Full Cache Purge triggered by action: customize_save_after 
+[2025-09-25 15:10:30 : INFO] - Full Cache Purge triggered by action: customize_save_after 
+[2025-09-25 15:10:40 : INFO] - Full Cache Purge triggered by action: after_switch_theme 
+[2025-09-25 15:10:40 : INFO] - Full Cache Purge triggered by action: after_switch_theme 
+[2025-09-25 15:13:16 : INFO] - Full Cache Purge triggered by: WP_Optimize_Cache_Commands::purge_page_cache 
+[2025-09-25 15:13:19 : INFO] - Full Cache Purge triggered by: WP_Optimize_Minify_Cache_Functions::purge_others 
+[2025-09-25 15:20:54 : INFO] - Cache for URL: https://poolsafeinc.com/?elementor_library=default-kit has been purged, triggered by action: save_post 
+[2025-09-25 15:20:55 : INFO] - Cache for author page URL: https://poolsafeinc.com/author/admin/ associated with post_type: elementor_library and Title: "Default Kit" has been purged, triggered by action: save_post 
+[2025-09-25 15:20:56 : INFO] - Cache for URL: https://poolsafeinc.com/?elementor_library=default-kit has been purged, triggered by action: save_post 
+[2025-09-25 15:20:56 : INFO] - Cache for author page URL: https://poolsafeinc.com/author/admin/ associated with post_type: elementor_library and Title: "Default Kit" has been purged, triggered by action: save_post 
+[2025-09-25 15:20:56 : INFO] - Cache for URL: https://poolsafeinc.com/?elementor_library=default-kit has been purged, triggered by action: save_post 
+[2025-09-25 15:20:56 : INFO] - Cache for author page URL: https://poolsafeinc.com/author/admin/ associated with post_type: elementor_library and Title: "Default Kit" has been purged, triggered by action: save_post 
+[2026-03-17 00:28:00 : INFO] - Cache for URL: https://poolsafeinc.com/?elementor_library=default-kit has been purged, triggered by action: save_post 
+[2026-03-17 00:28:00 : INFO] - Cache for author page URL: https://poolsafeinc.com/author/admin/ associated with post_type: elementor_library and Title: "Default Kit" has been purged, triggered by action: save_post 
+[2026-03-17 00:29:06 : INFO] - Full Cache Purge triggered by: plugin activation/deactivation 
+[2026-03-17 00:29:09 : INFO] - Full Cache Purge triggered by: plugin activation/deactivation 

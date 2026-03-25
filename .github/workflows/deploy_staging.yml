@@ -1,0 +1,47 @@
+name: Deploy to Staging (LounGenie)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy_staging
+      cancel-in-progress: true
+    env:
+      WP_BASE: https://www.loungenie.com/staging
+      DRY_RUN: 'true'
+      CREATE_DRAFT_ONLY: 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Prepare env
+        run: |
+          echo "WP_AUTH=${{ secrets.WP_AUTH }}" >> $GITHUB_ENV
+          echo "DEFAULT_BACKUP=backups/professional-redesign-v12-live-backup-20260321-160731.json" >> $GITHUB_ENV
+
+      - name: Run orchestrator
+        run: |
+          python scripts/orchestrator_deploy.py
+        env:
+          WP_AUTH: ${{ secrets.WP_AUTH }}
+          DEFAULT_BACKUP: backups/professional-redesign-v12-live-backup-20260321-160731.json
+
+      - name: Upload backups as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: loungenie-backups
+          path: backups/**

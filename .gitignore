@@ -1,0 +1,11 @@
+# Node / tooling
+node_modules/
+dist/
+
+# Python
+__pycache__/
+venv/
+
+# Local secrets (do not commit)
+scripts/secrets.ps1
+artifacts/

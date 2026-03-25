@@ -114,7 +114,13 @@ def build_page_markup(page_json, media_map):
 
 def backup_page(page_id, wp_site, auth, out_dir):
     url = f"{wp_site.rstrip('/')}/wp-json/wp/v2/pages/{page_id}"
-    r = requests.get(url, auth=auth, timeout=30)
+    # auth can be a tuple (user,pass) or None; if headers provided, use them
+    headers = None
+    if isinstance(auth, dict) and auth.get('Authorization'):
+        headers = {'Authorization': auth.get('Authorization')}
+        r = requests.get(url, headers=headers, timeout=30)
+    else:
+        r = requests.get(url, auth=auth, timeout=30)
     timestamp = int(time.time())
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -128,7 +134,12 @@ def backup_page(page_id, wp_site, auth, out_dir):
 def update_page(page_id, wp_site, auth, content_raw, out_dir):
     url = f"{wp_site.rstrip('/')}/wp-json/wp/v2/pages/{page_id}"
     payload = {'content': {'raw': content_raw}}
-    r = requests.patch(url, json=payload, auth=auth, timeout=60)
+    # auth may be a requests-compatible auth tuple or a dict with Authorization header
+    if isinstance(auth, dict) and auth.get('Authorization'):
+        headers = {'Authorization': auth.get('Authorization')}
+        r = requests.patch(url, json=payload, headers=headers, timeout=60)
+    else:
+        r = requests.patch(url, json=payload, auth=auth, timeout=60)
     timestamp = int(time.time())
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -143,6 +154,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--content-dir', required=True, help='Directory with page JSON files')
     ap.add_argument('--media', required=True, help='media_lookup.json mapping filenames to IDs')
+    ap.add_argument('--site', required=False, help='Override WP site URL (e.g. https://example.com/staging)')
+    ap.add_argument('--pages', nargs='+', help='List of page IDs to deploy (only those in content dir)')
     ap.add_argument('--stop-on-error', action='store_true', help='Stop on first page error')
     ap.add_argument('--backup-dir', default='backups', help='Directory to save page backups')
     ap.add_argument('--output-dir', default='outputs', help='Directory to save API responses')
@@ -153,15 +166,41 @@ def main():
     wp_user = os.getenv('WP_USERNAME')
     wp_pass = os.getenv('WP_APP_PASSWORD')
     wp_site = os.getenv('WP_SITE_URL')
-    if not (wp_user and wp_pass and wp_site):
-        LOG.error('Missing WP_USERNAME, WP_APP_PASSWORD, or WP_SITE_URL environment variables')
-        sys.exit(2)
+    wp_auth_env = os.getenv('WP_AUTH')
 
+    # Allow --site to override env
+    if args.site:
+        wp_site = args.site
+
+    # Build media map
     media_map = load_media_map(args.media)
 
-    auth = (wp_user, wp_pass)
+    # Determine auth: prefer explicit username/pass, otherwise accept WP_AUTH as header
+    auth = None
+    if wp_user and wp_pass:
+        auth = (wp_user, wp_pass)
+    elif wp_auth_env:
+        # accept WP_AUTH as base64 or spaced token; remove spaces
+        token = wp_auth_env.replace(' ', '')
+        auth = {'Authorization': 'Basic ' + token}
+    else:
+        LOG.error('Missing WP credentials: set WP_USERNAME & WP_APP_PASSWORD, or WP_AUTH')
+        sys.exit(2)
+
+    if not wp_site:
+        LOG.error('Missing WP_SITE_URL (set env or pass --site)')
+        sys.exit(2)
 
     content_files = sorted(glob(os.path.join(args.content_dir, '*.json')))
+    # If --pages provided, filter the content files to those page IDs or filenames
+    if args.pages:
+        wanted = set(str(x) for x in args.pages)
+        filtered = []
+        for p in content_files:
+            name = os.path.splitext(os.path.basename(p))[0]
+            if name in wanted:
+                filtered.append(p)
+        content_files = filtered
     if not content_files:
         LOG.error('No JSON files found in %s', args.content_dir)
         sys.exit(2)
