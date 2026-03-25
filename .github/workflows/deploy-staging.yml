@@ -1,0 +1,54 @@
+name: Automated Staging Deploy
+
+on:
+  push:
+    branches:
+      - 'automated/**'
+  workflow_dispatch:
+
+jobs:
+  staging:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run backup + deploy + patches
+        shell: pwsh
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
+          WP_USER:  ${{ secrets.WP_USER }}
+          WP_PASS:  ${{ secrets.WP_PASS }}
+          STAGING_URL: ${{ secrets.STAGING_URL }}
+          FTP_TYPE: ftps
+          ALLOW_UNTRUSTED_FTP_CERT: ${{ secrets.ALLOW_UNTRUSTED_FTP_CERT }}
+          RUN_FTP_BACKUP: 'true'
+          RUN_AUDITS: 'true'
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if (-not $env:FTP_HOST -or -not $env:FTP_USER -or -not $env:FTP_PASS) { Write-Error 'Missing FTP secrets'; exit 2 }
+          if (-not $env:WP_USER -or -not $env:WP_PASS) { Write-Error 'Missing WP secrets'; exit 2 }
+
+          Write-Output 'Starting backup and deploy script'
+          pwsh -NoProfile -ExecutionPolicy Bypass -File .\run_wp_ftp_and_rest.ps1 *> run_wp_ftp_and_rest.log
+
+          Write-Output 'Applying page patches (content/patches)'
+          pwsh -NoProfile -ExecutionPolicy Bypass -File .\apply_patches.ps1 *> apply_patches.log
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: staging-artifacts
+          path: |
+            run_wp_ftp_and_rest.log
+            apply_patches.log
+            ftp_backup/**
+
+      - name: Run smoke tests (quick)
+        shell: pwsh
+        env:
+          STAGING_URL: ${{ secrets.STAGING_URL }}
+        run: |
+          try { Invoke-RestMethod -Uri "$env:STAGING_URL/staging/" -Method Get -UseBasicParsing -TimeoutSec 30; Write-Output 'Front page reachable' } catch { Write-Warning 'Front page check failed' }
