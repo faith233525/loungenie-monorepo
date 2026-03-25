@@ -33,12 +33,13 @@ jobs:
           MISSING=0
           for s in WP_URL WP_USER WP_APP_PASS FTP_HOST FTP_USER FTP_PASS; do
             if [ -z "${{ secrets[$s] }}" ]; then
-              echo "WARN: secret $s is not set"
+              echo "ERROR: secret $s is not set"
               MISSING=$((MISSING+1))
             fi
           done
           if [ "$MISSING" -gt 0 ]; then
-            echo "Secrets missing — workflow will run in dry-run only. Add secrets to enable live deploy."
+            echo "ERROR: Missing $MISSING required secrets. Exiting."
+            exit 1
           fi
 
       - name: Setup Python
@@ -68,18 +69,18 @@ jobs:
           LIVE=false
           if [ "${ALLOW_LIVE}" = "true" ]; then
             if [ -n "${WP_APP_PASS}" ] && [ -n "${FTP_PASS}" ]; then
-              echo "All secrets present and allow_live requested — enabling LIVE mode."
+              echo "All secrets present and allow_live requested  enabling LIVE mode."
               LIVE=true
             else
-              echo "allow_live requested but secrets missing — staying in dry-run."
+              echo "allow_live requested but secrets missing  staying in dry-run."
             fi
           else
-            echo "allow_live not set — running in dry-run (safe) mode."
+            echo "allow_live not set  running in dry-run (safe) mode."
           fi
           if [ "${LIVE}" = "true" ]; then
             pwsh -NoProfile -ExecutionPolicy Bypass -File .\tools\run_wp_ftp_and_rest_safe.ps1 -Live
           else
-            pwsh -NoProfile -ExecutionPolicy Bypass -File .\tools\run_wp_ftp_and_rest_safe.ps1
+            pwsh -NoProfile -ExecutionPolicy Bypass -File .\tools\run_wp_ftp_and_rest_safe.ps1 -DryRun
           fi
 
       - name: Upload artifacts
