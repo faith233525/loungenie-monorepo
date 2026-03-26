@@ -25,6 +25,9 @@ jobs:
 
       - name: Select target vars
         id: target
+        env:
+          STAGING_SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
+          PRODUCTION_SSH_KEY: ${{ secrets.PRODUCTION_SSH_KEY }}
         run: |
           if [ "${{ github.event.inputs.environment }}" = "production" ]; then
             echo "HOST=${{ secrets.PRODUCTION_HOST }}" >> $GITHUB_OUTPUT
@@ -39,7 +42,7 @@ jobs:
           fi
 
           # Check if SSH key is available
-          if [ -z "${{ secrets.STAGING_SSH_KEY }}" ] && [ -z "${{ secrets.PRODUCTION_SSH_KEY }}" ]; then
+          if [ -z "$STAGING_SSH_KEY" ] && [ -z "$PRODUCTION_SSH_KEY" ]; then
             echo "No SSH key configured, skipping SSH deployment"
             echo "skip=true" >> $GITHUB_OUTPUT
           else
@@ -80,8 +83,10 @@ jobs:
 
       - name: Check FTP availability
         id: ftp_check
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
         run: |
-          if [ -z "${{ secrets.FTP_HOST }}" ]; then
+          if [ -z "$FTP_HOST" ]; then
             echo "No FTP host configured, skipping FTP deployment"
             echo "skip=true" >> $GITHUB_OUTPUT
           else
