@@ -109,6 +109,7 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
+          port: 21
           server-dir: ${{ secrets.STAGING_PATH }}
           local-dir: .
 

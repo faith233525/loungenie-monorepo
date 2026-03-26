@@ -34,6 +34,7 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
+          port: 21
           local-dir: "./"
           server-dir: ${{ env.TARGET_DIR }}
           exclude: ".github/**,.git/**,.vscode/**,*.ps1,*.md,tests/**"
