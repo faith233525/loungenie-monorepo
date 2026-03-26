@@ -6,6 +6,15 @@ import sys
 
 # Try multiple env var names for flexibility
 os = __import__("os")
+
+# Debug: show all env vars containing WP
+print("DEBUG - Environment variables:")
+for key in sorted(os.environ.keys()):
+    if 'WP' in key.upper() or 'STAGING' in key.upper():
+        val = os.environ.get(key, '')
+        masked = val[:10] + '...' if len(val) > 10 else val
+        print(f"  {key}: {masked}")
+
 BASE = (os.environ.get("STAGING_WP_URL") or 
         os.environ.get("WP_SITE_URL") or 
         os.environ.get("WP_URL") or "").rstrip("/")

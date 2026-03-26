@@ -2,10 +2,10 @@ name: Deploy Portal to Staging (FTP)
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
-      - 'portal/**'
-      - 'wp-content/mu-plugins/**'
+      - "portal/**"
+      - "wp-content/mu-plugins/**"
   workflow_dispatch:
 
 jobs:
@@ -31,6 +31,6 @@ jobs:
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           FTP_PORT: ${{ secrets.FTP_PORT }}
-          REMOTE_BASE: '/public_html/stage'
+          REMOTE_BASE: "/public_html/stage"
         run: |
           ./scripts/deploy_via_lftp.sh
