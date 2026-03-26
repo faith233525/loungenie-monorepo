@@ -1,0 +1,90 @@
+name: cPanel SSL Install
+
+on:
+  workflow_dispatch:
+    inputs:
+      domain:
+        description: 'Primary domain (e.g., loungenie.com)'
+        required: true
+      crt:
+        description: 'Certificate (PEM) as workflow secret name or multiline input'
+        required: false
+      key:
+        description: 'Private key (PEM) as workflow secret name or multiline input'
+        required: false
+      cabundle:
+        description: 'CA bundle (optional) as workflow secret name or multiline input'
+        required: false
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate inputs
+        run: |
+          if [ -z "${{ github.event.inputs.domain }}" ]; then
+            echo "Domain is required"; exit 1
+          fi
+
+      - name: Prepare certificate files
+        env:
+          CRT_SECRET: ${{ secrets.CRT }}
+          KEY_SECRET: ${{ secrets.KEY }}
+          CABUNDLE_SECRET: ${{ secrets.CABUNDLE }}
+        run: |
+          mkdir -p certs
+          if [ -n "$CRT_SECRET" ]; then
+            printf "%s" "$CRT_SECRET" > certs/cert.crt
+          elif [ -n "${{ github.event.inputs.crt }}" ]; then
+            printf "%s" "${{ github.event.inputs.crt }}" > certs/cert.crt
+          else
+            echo "No certificate provided in secrets or inputs"; exit 1
+          fi
+
+          if [ -n "$KEY_SECRET" ]; then
+            printf "%s" "$KEY_SECRET" > certs/cert.key
+          elif [ -n "${{ github.event.inputs.key }}" ]; then
+            printf "%s" "${{ github.event.inputs.key }}" > certs/cert.key
+          else
+            echo "No private key provided in secrets or inputs"; exit 1
+          fi
+
+          if [ -n "$CABUNDLE_SECRET" ]; then
+            printf "%s" "$CABUNDLE_SECRET" > certs/cabundle.crt || true
+          elif [ -n "${{ github.event.inputs.cabundle }}" ]; then
+            printf "%s" "${{ github.event.inputs.cabundle }}" > certs/cabundle.crt || true
+          fi
+
+      - name: Install certificate via cPanel UAPI
+        env:
+          CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
+          CPANEL_USER: ${{ secrets.CPANEL_USER }}
+          CPANEL_TOKEN: ${{ secrets.CPANEL_TOKEN }}
+          DOMAIN: ${{ github.event.inputs.domain }}
+        run: |
+          if [ -z "$CPANEL_HOST" ] || [ -z "$CPANEL_USER" ] || [ -z "$CPANEL_TOKEN" ]; then
+            echo "CPANEL_HOST, CPANEL_USER and CPANEL_TOKEN must be set as repository secrets"; exit 1
+          fi
+
+          URL="https://$CPANEL_HOST:2083/execute/SSL/install_ssl"
+          CRT=$(cat certs/cert.crt | sed ':a;N;$!ba;s/\n/\n/g')
+          KEY=$(cat certs/cert.key | sed ':a;N;$!ba;s/\n/\n/g')
+          CABUNDLE_FILE=certs/cabundle.crt
+
+          # Build curl form data
+          DATA=( -F domain="$DOMAIN" -F cert=@certs/cert.crt -F key=@certs/cert.key )
+          if [ -f "$CABUNDLE_FILE" ]; then
+            DATA+=( -F cabundle=@$CABUNDLE_FILE )
+          fi
+
+          echo "Installing certificate for $DOMAIN on $CPANEL_HOST"
+          HTTP_STATUS=$(curl -sS -w "%{http_code}" -o response.json -H "Authorization: cpanel $CPANEL_USER:$CPANEL_TOKEN" "$URL" "${DATA[@]}" ) || true
+          echo "HTTP status: $HTTP_STATUS"
+          echo "Response:"; cat response.json
+          if [ "$HTTP_STATUS" -ge 400 ]; then
+            echo "cPanel API returned error"; exit 1
+          fi
+
+      - name: Cleanup
+        run: |
+          rm -rf certs || true
