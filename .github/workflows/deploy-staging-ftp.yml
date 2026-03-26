@@ -19,23 +19,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Deploy `portal/` to staging plugins
-        uses: SamKirkland/FTP-Deploy-Action@4.4.0
+      - name: Deploy portal to staging plugins
+        uses: SamKirkland/FTP-Deploy-Action@v4
         with:
-          server: ${{ env.FTP_HOST }}
-          username: ${{ env.FTP_USERNAME }}
-          password: ${{ env.FTP_PASSWORD }}
-          port: ${{ env.FTP_PORT }}
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ secrets.FTP_PORT }}
           local-dir: 'portal'
           server-dir: '/public_html/stage/wp-content/plugins/loungenie-portal'
 
       - name: Deploy mu-plugins to staging
-        uses: SamKirkland/FTP-Deploy-Action@4.4.0
+        uses: SamKirkland/FTP-Deploy-Action@v4
         with:
-          server: ${{ env.FTP_HOST }}
-          username: ${{ env.FTP_USERNAME }}
-          password: ${{ env.FTP_PASSWORD }}
-          port: ${{ env.FTP_PORT }}
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ secrets.FTP_PORT }}
           local-dir: 'wp-content/mu-plugins'
           server-dir: '/public_html/stage/wp-content/mu-plugins'
