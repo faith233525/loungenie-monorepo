@@ -1,0 +1,44 @@
+# ── Node / tooling ──────────────────────────────────
+node_modules/
+dist/
+
+# ── Python ──────────────────────────────────────────
+__pycache__/
+venv/
+*.pyc
+
+# ── WordPress sensitive files ────────────────────────
+wp-config.php
+staging-wp-config.php
+staging-wp-config.downloaded.php
+
+# ── SSH keys ─────────────────────────────────────────
+id_copilot
+id_copilot.pub
+*.pem
+*.private.key
+
+# ── Local secrets and deploy env ─────────────────────
+.deploy.env
+scripts/secrets.ps1
+scripts/test-cpanel-token.ps1
+scripts/cpanel-login-check.ps1
+
+# ── Logs / temp artifacts ─────────────────────────────
+logs/
+artifacts/
+*.log
+*.txt
+ftp_*.txt
+tmp_*.txt
+response.json
+uapi-*.json
+uapi_*.json
+installer_response*.txt
+probe-results/
+repo-backups/
+
+# ── VS Code / local tool config ───────────────────────
+.thunder/
+.vscode/sftp.json
+.vscode/rest-client.env.json

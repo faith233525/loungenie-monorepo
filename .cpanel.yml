@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/pools425/loungenie.com/stage
+    - /bin/cp -R * $DEPLOYPATH
