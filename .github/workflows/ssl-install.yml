@@ -85,6 +85,23 @@ jobs:
             echo "cPanel API returned error"; exit 1
           fi
 
+      - name: Upload cert files via FTP (optional)
+        if: always()
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          # Upload cert files to a safe path under the user's home; adjust path if needed
+          REMOTE_DIR="/home/$FTP_USERNAME/certs"
+          echo "Uploading certs to ftp://$FTP_HOST$REMOTE_DIR"
+          # create remote dir and upload files using curl
+          curl -sS --ftp-create-dirs -T certs/cert.crt -u "$FTP_USERNAME:$FTP_PASSWORD" "ftp://$FTP_HOST$REMOTE_DIR/cert.crt" || true
+          curl -sS --ftp-create-dirs -T certs/cert.key -u "$FTP_USERNAME:$FTP_PASSWORD" "ftp://$FTP_HOST$REMOTE_DIR/cert.key" || true
+          if [ -f certs/cabundle.crt ]; then
+            curl -sS --ftp-create-dirs -T certs/cabundle.crt -u "$FTP_USERNAME:$FTP_PASSWORD" "ftp://$FTP_HOST$REMOTE_DIR/cabundle.crt" || true
+          fi
+
       - name: Cleanup
         run: |
           rm -rf certs || true
