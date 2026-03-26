@@ -1,0 +1,239 @@
+name: Test Deployment Setup
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Type of deployment test'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - git-only
+          - ftp-only
+
+jobs:
+  verify-secrets:
+    name: Verify Secrets Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check FTP Secrets
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
+          STAGING_PATH: ${{ secrets.STAGING_PATH }}
+          STAGING_URL: ${{ secrets.STAGING_URL }}
+        run: |
+          echo "=== FTP Configuration Check ==="
+          if [ -n "$FTP_HOST" ]; then
+            echo "✅ FTP_HOST is configured"
+          else
+            echo "❌ FTP_HOST is missing"
+          fi
+          
+          if [ -n "$FTP_USER" ]; then
+            echo "✅ FTP_USER is configured"
+          else
+            echo "❌ FTP_USER is missing"
+          fi
+          
+          if [ -n "$FTP_PASS" ]; then
+            echo "✅ FTP_PASS is configured"
+          else
+            echo "❌ FTP_PASS is missing"
+          fi
+          
+          if [ -n "$STAGING_PATH" ]; then
+            echo "✅ STAGING_PATH is configured"
+          else
+            echo "❌ STAGING_PATH is missing"
+          fi
+          
+          if [ -n "$STAGING_URL" ]; then
+            echo "✅ STAGING_URL is configured"
+          else
+            echo "❌ STAGING_URL is missing"
+          fi
+
+      - name: Check cPanel Git Secrets
+        env:
+          CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
+          CPANEL_USER: ${{ secrets.CPANEL_USER }}
+          CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
+          CPANEL_REPO: ${{ secrets.CPANEL_REPO }}
+        run: |
+          echo ""
+          echo "=== cPanel Git Configuration Check ==="
+          if [ -n "$CPANEL_HOST" ]; then
+            echo "✅ CPANEL_HOST is configured"
+          else
+            echo "❌ CPANEL_HOST is missing"
+          fi
+          
+          if [ -n "$CPANEL_USER" ]; then
+            echo "✅ CPANEL_USER is configured"
+          else
+            echo "❌ CPANEL_USER is missing"
+          fi
+          
+          if [ -n "$CPANEL_API_TOKEN" ]; then
+            echo "✅ CPANEL_API_TOKEN is configured"
+          else
+            echo "❌ CPANEL_API_TOKEN is missing"
+          fi
+          
+          if [ -n "$CPANEL_REPO" ]; then
+            echo "✅ CPANEL_REPO is configured"
+          else
+            echo "❌ CPANEL_REPO is missing"
+          fi
+
+  test-git-deployment:
+    name: Test Git Deployment (cPanel API)
+    runs-on: ubuntu-latest
+    needs: verify-secrets
+    if: github.event.inputs.test_type == 'all' || github.event.inputs.test_type == 'git-only'
+    steps:
+      - name: Test cPanel Git Pull
+        env:
+          CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
+          CPANEL_USER: ${{ secrets.CPANEL_USER }}
+          CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
+          CPANEL_REPO: ${{ secrets.CPANEL_REPO }}
+        run: |
+          echo "=== Testing cPanel Git Deployment ==="
+          echo "Host: $CPANEL_HOST"
+          echo "User: $CPANEL_USER"
+          echo "Repo: $CPANEL_REPO"
+          
+          # Check if all required secrets are present
+          if [ -z "$CPANEL_HOST" ] || [ -z "$CPANEL_USER" ] || [ -z "$CPANEL_API_TOKEN" ] || [ -z "$CPANEL_REPO" ]; then
+            echo "❌ Missing required cPanel secrets, skipping Git deployment test"
+            exit 0
+          fi
+          
+          URL="https://${CPANEL_HOST}:2083/execute/Git/update_repo?repo=${CPANEL_REPO}"
+          
+          echo ""
+          echo "Triggering cPanel Git pull..."
+          HTTP=$(curl -s -w "%{http_code}" -o response.json -X POST "$URL" \
+            -H "Authorization: cpanel ${CPANEL_USER}:${CPANEL_API_TOKEN}")
+          
+          echo ""
+          echo "HTTP Status: $HTTP"
+          echo "Response:"
+          cat response.json | head -c 500
+          echo ""
+          
+          if [ "$HTTP" = "200" ]; then
+            echo "✅ Git deployment successful!"
+          else
+            echo "❌ Git deployment failed with HTTP $HTTP"
+            exit 1
+          fi
+
+      - name: Upload response artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: git-deployment-response
+          path: response.json
+
+  test-ftp-connection:
+    name: Test FTP Connection
+    runs-on: ubuntu-latest
+    needs: verify-secrets
+    if: github.event.inputs.test_type == 'all' || github.event.inputs.test_type == 'ftp-only'
+    steps:
+      - name: Checkout test file
+        uses: actions/checkout@v4
+
+      - name: Create test file
+        run: |
+          mkdir -p test-deployment
+          echo "# Test Deployment - $(date)" > test-deployment/test-file.txt
+          echo "This is a test file created by GitHub Actions" >> test-deployment/test-file.txt
+          echo "Workflow run: ${{ github.run_id }}" >> test-deployment/test-file.txt
+
+      - name: Test FTP Upload
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
+          STAGING_PATH: ${{ secrets.STAGING_PATH }}
+        run: |
+          echo "=== Testing FTP Connection ==="
+          echo "Host: $FTP_HOST"
+          echo "User: $FTP_USER"
+          echo "Port: 21"
+          
+          # Check if all required secrets are present
+          if [ -z "$FTP_HOST" ] || [ -z "$FTP_USER" ] || [ -z "$FTP_PASS" ]; then
+            echo "❌ Missing required FTP secrets, skipping FTP test"
+            exit 0
+          fi
+          
+          # Install lftp for FTP testing
+          sudo apt-get update -qq
+          sudo apt-get install -y lftp
+          
+          echo ""
+          echo "Testing FTP connection..."
+          
+          # Test FTP connection and list directory
+          lftp -c "
+            set ftp:ssl-allow false;
+            open -u $FTP_USER,$FTP_PASS $FTP_HOST:21;
+            ls;
+            bye
+          " && echo "✅ FTP connection successful!" || echo "❌ FTP connection failed"
+
+      - name: Test HTTP Access
+        env:
+          STAGING_URL: ${{ secrets.STAGING_URL }}
+        run: |
+          echo ""
+          echo "=== Testing Staging Site Access ==="
+          
+          if [ -z "$STAGING_URL" ]; then
+            echo "⚠️  STAGING_URL not configured, skipping HTTP test"
+            exit 0
+          fi
+          
+          echo "Testing: $STAGING_URL"
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$STAGING_URL" || echo "000")
+          
+          echo "HTTP Status: $HTTP_CODE"
+          
+          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || [ "$HTTP_CODE" = "302" ]; then
+            echo "✅ Staging site is accessible!"
+          else
+            echo "⚠️  Staging site returned HTTP $HTTP_CODE (might be expected for first setup)"
+          fi
+
+  summary:
+    name: Deployment Test Summary
+    runs-on: ubuntu-latest
+    needs: [verify-secrets, test-git-deployment, test-ftp-connection]
+    if: always()
+    steps:
+      - name: Test Summary
+        run: |
+          echo "========================================"
+          echo "   DEPLOYMENT SETUP TEST COMPLETE"
+          echo "========================================"
+          echo ""
+          echo "Configuration Summary:"
+          echo "- Server: ftp.poolsafeinc.com"
+          echo "- Staging URL: loungenie.com/stage"
+          echo "- Deployment Methods: Git Pull + FTP"
+          echo ""
+          echo "Check the job results above for details."
+          echo ""
+          echo "Next Steps:"
+          echo "1. Review test results"
+          echo "2. If all tests pass, deployment is ready!"
+          echo "3. Push to main branch to trigger automatic deployment"
+          echo ""

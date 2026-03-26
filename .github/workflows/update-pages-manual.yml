@@ -1,0 +1,304 @@
+name: Update Pages - Manual
+
+on:
+  workflow_dispatch:
+    inputs:
+      pages_to_update:
+        description: "Pages to update (all, home, about, contact, features, gallery, or comma-separated page IDs)"
+        required: true
+        default: "all"
+        type: string
+      dry_run:
+        description: "Dry run mode (preview changes without applying)"
+        required: false
+        default: true
+        type: boolean
+      create_backup:
+        description: "Create backup before updating pages"
+        required: false
+        default: true
+        type: boolean
+      exclude_investor_pages:
+        description: "Exclude investor pages from updates (safety feature)"
+        required: false
+        default: true
+        type: boolean
+      validate_media_first:
+        description: "Validate media IDs before updating pages"
+        required: false
+        default: true
+        type: boolean
+
+concurrency:
+  group: update-pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate-prerequisites:
+    name: Validate Prerequisites
+    runs-on: ubuntu-latest
+    outputs:
+      secrets_valid: ${{ steps.check-secrets.outputs.valid }}
+    steps:
+      - name: Check required secrets
+        id: check-secrets
+        run: |
+          MISSING=""
+          [[ -z "${{ secrets.WP_USERNAME }}" ]] && MISSING="${MISSING}WP_USERNAME "
+          [[ -z "${{ secrets.WP_APP_PASSWORD }}" ]] && MISSING="${MISSING}WP_APP_PASSWORD "
+          [[ -z "${{ secrets.WP_SITE_URL }}" ]] && MISSING="${MISSING}WP_SITE_URL "
+          
+          if [[ -n "$MISSING" ]]; then
+            echo "❌ Missing required secrets: $MISSING"
+            echo "Please add these secrets in repository Settings → Secrets and variables → Actions"
+            echo "valid=false" >> $GITHUB_OUTPUT
+            exit 1
+          else
+            echo "✅ All required secrets are configured"
+            echo "valid=true" >> $GITHUB_OUTPUT
+          fi
+
+  update-pages:
+    name: Update WordPress Pages
+    runs-on: ubuntu-latest
+    needs: validate-prerequisites
+    if: needs.validate-prerequisites.outputs.secrets_valid == 'true'
+    env:
+      WP_USERNAME: ${{ secrets.WP_USERNAME }}
+      WP_APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
+      WP_SITE_URL: ${{ secrets.WP_SITE_URL }}
+      DRY_RUN: ${{ inputs.dry_run }}
+      CREATE_BACKUP: ${{ inputs.create_backup }}
+      EXCLUDE_INVESTOR: ${{ inputs.exclude_investor_pages }}
+      VALIDATE_MEDIA: ${{ inputs.validate_media_first }}
+      PAGES_INPUT: ${{ inputs.pages_to_update }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: 'pip'
+
+      - name: Install dependencies
+        working-directory: ./update-pages
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            pip install requests
+          fi
+
+      - name: Display workflow configuration
+        run: |
+          echo "### 📋 Workflow Configuration"
+          echo "- **Pages to update:** ${{ inputs.pages_to_update }}"
+          echo "- **Dry run mode:** ${{ inputs.dry_run }}"
+          echo "- **Create backup:** ${{ inputs.create_backup }}"
+          echo "- **Exclude investor pages:** ${{ inputs.exclude_investor_pages }}"
+          echo "- **Validate media first:** ${{ inputs.validate_media_first }}"
+          echo "- **Triggered by:** @${{ github.actor }}"
+          echo "- **Repository:** ${{ github.repository }}"
+          echo "- **Branch:** ${{ github.ref_name }}"
+
+      - name: Validate media lookup file
+        if: inputs.validate_media_first == true
+        working-directory: ./update-pages
+        run: |
+          echo "🔍 Validating media lookup against WordPress site..."
+          if [ -f scripts/validate_media_lookup.py ]; then
+            if [ -f media_lookup.json ] || [ -f media_lookup_5223.json ]; then
+              MEDIA_FILE=$([ -f media_lookup.json ] && echo "media_lookup.json" || echo "media_lookup_5223.json")
+              python scripts/validate_media_lookup.py --media-file "$MEDIA_FILE" || true
+              
+              if [ -f outputs/validate_media_report.json ]; then
+                echo "📊 Media validation report generated"
+                cat outputs/validate_media_report.json
+              fi
+            else
+              echo "⚠️  No media_lookup.json file found, skipping media validation"
+            fi
+          else
+            echo "⚠️  Validation script not found, skipping media validation"
+          fi
+
+      - name: Create backup directory
+        if: inputs.create_backup == true
+        working-directory: ./update-pages
+        run: |
+          echo "📦 Creating backup directory..."
+          mkdir -p backups outputs
+          echo "Backup directory ready at: $(pwd)/backups"
+
+      - name: Determine pages to update
+        id: determine-pages
+        working-directory: ./update-pages
+        run: |
+          echo "🔍 Determining which pages to update..."
+          PAGES="${{ inputs.pages_to_update }}"
+          
+          # If "all" is specified, find all content JSON files
+          if [[ "$PAGES" == "all" ]]; then
+            echo "Updating all available pages from content directory"
+            # This will be handled by update_pages.py scanning the content directory
+            echo "mode=all" >> $GITHUB_OUTPUT
+          elif [[ "$PAGES" =~ ^[0-9,]+$ ]]; then
+            echo "Updating specific page IDs: $PAGES"
+            echo "mode=specific" >> $GITHUB_OUTPUT
+            echo "page_ids=$PAGES" >> $GITHUB_OUTPUT
+          else
+            echo "Updating named pages: $PAGES"
+            echo "mode=named" >> $GITHUB_OUTPUT
+            echo "page_names=$PAGES" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update pages via WordPress REST API
+        working-directory: ./update-pages
+        run: |
+          echo "🚀 Starting page update process..."
+          
+          # Build command with options
+          CMD="python scripts/update_pages.py"
+          
+          # Add content directory
+          if [ -d content ]; then
+            CMD="$CMD --content-dir content"
+          fi
+          
+          # Add media file if it exists
+          if [ -f media_lookup.json ]; then
+            CMD="$CMD --media-file media_lookup.json"
+          elif [ -f media_lookup_5223.json ]; then
+            CMD="$CMD --media-file media_lookup_5223.json"
+          fi
+          
+          # Add stop-on-error for safety
+          CMD="$CMD --stop-on-error"
+          
+          echo "Running command: $CMD"
+          
+          if [[ "${{ inputs.dry_run }}" == "true" ]]; then
+            echo "🔍 DRY RUN MODE - No changes will be applied"
+            echo "This would run: $CMD"
+            echo "To actually apply changes, set dry_run to false"
+            
+            # Show what pages would be updated
+            echo ""
+            echo "📄 Pages that would be updated:"
+            if [ -d content ]; then
+              ls -1 content/*.json 2>/dev/null | while read file; do
+                PAGE_ID=$(python3 -c "import json; print(json.load(open('$file')).get('page_id', 'unknown'))" 2>/dev/null || echo "unknown")
+                TITLE=$(python3 -c "import json; print(json.load(open('$file')).get('title', 'Unknown'))" 2>/dev/null || echo "Unknown")
+                echo "  - Page ID $PAGE_ID: $TITLE (from $(basename $file))"
+              done
+            fi
+          else
+            echo "✍️  LIVE MODE - Changes will be applied to WordPress"
+            $CMD
+            
+            echo ""
+            echo "✅ Page update process completed"
+            
+            # Show results if output files exist
+            if [ -d outputs ]; then
+              echo ""
+              echo "📊 Update results:"
+              ls -lh outputs/ 2>/dev/null || echo "No output files generated"
+            fi
+            
+            # Show backups if created
+            if [ -d backups ] && [ "$(ls -A backups 2>/dev/null)" ]; then
+              echo ""
+              echo "💾 Backups created:"
+              ls -lh backups/ 2>/dev/null
+            fi
+          fi
+
+      - name: Upload backup artifacts
+        if: inputs.create_backup == true && inputs.dry_run == false
+        uses: actions/upload-artifact@v4
+        with:
+          name: page-backups-${{ github.run_number }}
+          path: update-pages/backups/
+          retention-days: 30
+
+      - name: Upload update results
+        if: inputs.dry_run == false
+        uses: actions/upload-artifact@v4
+        with:
+          name: update-results-${{ github.run_number }}
+          path: |
+            update-pages/outputs/
+            update-pages/*.log
+          retention-days: 14
+
+      - name: Generate summary
+        if: always()
+        run: |
+          echo "## 📊 Page Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Configuration:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Pages: \`${{ inputs.pages_to_update }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Mode: \`${{ inputs.dry_run && 'DRY RUN' || 'LIVE UPDATE' }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Backup: \`${{ inputs.create_backup }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Exclude Investors: \`${{ inputs.exclude_investor_pages }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ inputs.dry_run }}" == "true" ]]; then
+            echo "### 🔍 Dry Run Results" >> $GITHUB_STEP_SUMMARY
+            echo "No changes were applied. Set \`dry_run: false\` to apply updates." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ✅ Update Applied" >> $GITHUB_STEP_SUMMARY
+            echo "Changes have been applied to the WordPress site." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "📦 **Artifacts:**" >> $GITHUB_STEP_SUMMARY
+            echo "- Backups: Available in workflow artifacts" >> $GITHUB_STEP_SUMMARY
+            echo "- Results: Available in workflow artifacts" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "*Triggered by @${{ github.actor }} on ${{ github.ref_name }}*" >> $GITHUB_STEP_SUMMARY
+
+  verify-updates:
+    name: Verify Updates (Optional)
+    runs-on: ubuntu-latest
+    needs: update-pages
+    if: inputs.dry_run == false && success()
+    env:
+      WP_SITE_URL: ${{ secrets.WP_SITE_URL }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4
+
+      - name: Verify pages are accessible
+        working-directory: ./update-pages
+        run: |
+          echo "🔍 Verifying updated pages are accessible..."
+          
+          # Check if site is reachable
+          if curl -f -s -o /dev/null -w "%{http_code}" "$WP_SITE_URL" | grep -q "200"; then
+            echo "✅ WordPress site is accessible"
+          else
+            echo "⚠️  WordPress site may not be accessible"
+          fi
+          
+          # If verification scripts exist, run them
+          if [ -f verify_staging_pages.py ]; then
+            python verify_staging_pages.py || true
+          fi
+          
+          echo "Manual verification recommended at: $WP_SITE_URL"
