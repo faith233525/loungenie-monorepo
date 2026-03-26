@@ -215,6 +215,7 @@ steps:
 
 ## Related Documentation
 
+- [DEPLOYMENT_HEALTH_CHECK.md](DEPLOYMENT_HEALTH_CHECK.md) - **NEW:** Check if deployments are working
 - [DEPLOYING.md](DEPLOYING.md) - General deployment guide
 - [DEPLOYMENT_STATUS.md](DEPLOYMENT_STATUS.md) - Current deployment status
 - [.cpanel.yml](.cpanel.yml) - cPanel deployment configuration
