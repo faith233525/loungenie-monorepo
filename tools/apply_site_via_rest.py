@@ -72,3 +72,4 @@ for f in payloads:
         continue
     updated = update_page(page["id"], html, page.get("title",{}).get("rendered", slug.title()))
     print(f"UPDATED {slug} -> id {updated['id']}")
+    time.sleep(1)  # Delay between requests to avoid API overload
