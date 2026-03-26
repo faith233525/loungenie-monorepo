@@ -1,0 +1,55 @@
+name: Remove Loungenie Portal from Staging (FTP)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  remove-portal:
+    runs-on: ubuntu-latest
+    env:
+      FTP_HOST: ${{ secrets.FTP_HOST }}
+      FTP_USER: ${{ secrets.FTP_USERNAME }}
+      FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+      FTP_PORT: ${{ secrets.FTP_PORT }}
+      REMOTE_BASE: '/public_html/stage'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      - name: Remove Loungenie portal plugin directory
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USERNAME }}
+          FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+          FTP_PORT: ${{ secrets.FTP_PORT }}
+          REMOTE_BASE: '/public_html/stage'
+        run: |
+          set -euo pipefail
+          echo "Connecting to $FTP_HOST to remove plugin directories"
+          lftp -u "$FTP_USER","$FTP_PASS" -p "${FTP_PORT:-21}" "$FTP_HOST" <<'LFTP'
+          set ftp:ssl-allow no
+          # remove plugin folder
+          rm -r ${REMOTE_BASE}/wp-content/plugins/loungenie-portal || true
+          # remove mu-plugin if present
+          rm -r ${REMOTE_BASE}/wp-content/mu-plugins/loungenie-portal || true
+          quit
+          LFTP
+
+      - name: Confirm removal (list remote plugin path)
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USERNAME }}
+          FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+          FTP_PORT: ${{ secrets.FTP_PORT }}
+          REMOTE_BASE: '/public_html/stage'
+        run: |
+          set -euo pipefail
+          lftp -u "$FTP_USER","$FTP_PASS" -p "${FTP_PORT:-21}" "$FTP_HOST" <<'LFTP'
+          set ftp:ssl-allow no
+          cls -1 ${REMOTE_BASE}/wp-content/plugins || true
+          cls -1 ${REMOTE_BASE}/wp-content/mu-plugins || true
+          quit
+          LFTP
