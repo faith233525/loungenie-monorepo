@@ -1,0 +1,22 @@
+name: Apply Site Staging
+on:
+  workflow_dispatch:
+    inputs:
+      apply_all_pages:
+        description: "Apply all page payloads"
+        required: false
+        default: "true"
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    env:
+      STAGING_WP_URL: ${{ secrets.STAGING_WP_URL }}
+      STAGING_WP_USER: ${{ secrets.STAGING_WP_USER }}
+      STAGING_WP_APP_PASSWORD: ${{ secrets.STAGING_WP_APP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install requests
+      - run: python tools/apply_site_via_rest.py
