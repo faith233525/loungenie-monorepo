@@ -51,7 +51,8 @@ jobs:
 
       - name: Run repository duplicate detector
         run: |
-          python scripts\find_artifact_duplicates.py > artifacts\duplicate_report.txt
+          New-Item -ItemType Directory -Force -Path artifacts | Out-Null
+          python update-pages/scripts/find_artifact_duplicates.py > artifacts/duplicate_report.txt
         shell: pwsh
 
       - name: Validate required secrets
@@ -60,7 +61,7 @@ jobs:
           $missing = @()
           $required = @('WP_URL','WP_USER','WP_APP_PASS','FTP_HOST','FTP_USER','FTP_PASS','STAGING_URL')
           foreach ($r in $required) {
-            if (-not $env:$r) { $missing += $r }
+            if (-not [Environment]::GetEnvironmentVariable($r)) { $missing += $r }
           }
           if ($missing.Count -gt 0) {
             Write-Error "Missing required secrets: $($missing -join ', ')"
@@ -85,7 +86,7 @@ jobs:
           DRY_RUN: ${{ github.event.inputs.dry_run || 'true' }}
           RUN_FTP_BACKUP: ${{ github.event.inputs.run_ftp_backup || 'false' }}
         run: |
-          pwsh -NoProfile -ExecutionPolicy Bypass -File tools\run_wp_ftp_and_rest_safe.ps1
+          pwsh -NoProfile -ExecutionPolicy Bypass -File update-pages/tools/run_wp_ftp_and_rest_safe.ps1
         shell: pwsh
 
       - name: Upload logs (if produced)

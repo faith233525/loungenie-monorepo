@@ -86,9 +86,9 @@ jobs:
             echo "allow_live not set - running in dry-run (safe) mode."
           fi
           if [ "${LIVE}" = "true" ]; then
-            pwsh -NoProfile -ExecutionPolicy Bypass -File .\tools\run_wp_ftp_and_rest_safe.ps1 -Live
+            pwsh -NoProfile -ExecutionPolicy Bypass -File ./update-pages/tools/run_wp_ftp_and_rest_safe.ps1 -Live
           else
-            pwsh -NoProfile -ExecutionPolicy Bypass -File .\tools\run_wp_ftp_and_rest_safe.ps1 -DryRun
+            pwsh -NoProfile -ExecutionPolicy Bypass -File ./update-pages/tools/run_wp_ftp_and_rest_safe.ps1 -DryRun
           fi
 
       - name: Upload artifacts
