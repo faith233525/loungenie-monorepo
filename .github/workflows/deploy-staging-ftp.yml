@@ -1,11 +1,10 @@
-name: Deploy Portal to Staging (FTP)
+name: Deploy Portal to Staging (FTP) [standalone]
+
+# Standalone FTP-only workflow — kept for manual use.
+# The master deployment workflow (deploy-cpanel.yml) now handles
+# FTP sync automatically on every push to main.
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "portal/**"
-      - "wp-content/mu-plugins/**"
   workflow_dispatch:
 
 jobs:

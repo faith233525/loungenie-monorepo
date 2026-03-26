@@ -1,8 +1,10 @@
-name: Automated Staging Deploy
+name: Automated Staging Deploy [standalone]
+
+# Standalone Windows-based FTP+REST workflow — kept for manual use.
+# The master deployment workflow (deploy-cpanel.yml) now handles
+# Git pull + FTP + REST automatically on every push to main.
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
     inputs:
       dry_run:
@@ -53,6 +55,7 @@ jobs:
 
       - name: Run repository duplicate detector
         run: |
+          New-Item -ItemType Directory -Force -Path artifacts | Out-Null
           python scripts\find_artifact_duplicates.py > artifacts\duplicate_report.txt
         shell: pwsh
 
