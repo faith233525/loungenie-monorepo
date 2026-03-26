@@ -15,6 +15,15 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install requests
+      - name: Debug - Check environment variables
+        env:
+          WP_SITE_URL: ${{ secrets.WP_SITE_URL }}
+          WP_REST_USER: ${{ secrets.WP_REST_USER }}
+          WP_REST_PASS: ${{ secrets.WP_REST_PASS }}
+        run: |
+          echo "WP_SITE_URL: ${WP_SITE_URL:0:20}..."
+          echo "WP_REST_USER: ${WP_REST_USER:0:10}..."
+          echo "WP_REST_PASS: ${WP_REST_PASS:0:10}..."
       - name: Sync pages to WordPress staging
         env:
           WP_SITE_URL: ${{ secrets.WP_SITE_URL }}
