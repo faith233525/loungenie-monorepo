@@ -18,6 +18,8 @@ jobs:
       - name: Trigger cPanel Pull
         env:
           CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
+          # Canonical hostname used when CPANEL_HOST contains a bare IP address
+          CPANEL_HOSTNAME: cpanel.loungenie.com
           CPANEL_USER: ${{ secrets.CPANEL_USER }}
           CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
           CPANEL_REPO: ${{ secrets.CPANEL_REPO }}
@@ -31,9 +33,18 @@ jobs:
             exit 1
           fi
 
-          URL="https://${CPANEL_HOST}:2083/execute/Git/update_repo?repo=${REPO}"
+          # Normalize host: if CPANEL_HOST is a bare IPv4 address, use the known
+          # cPanel hostname so the TLS certificate is valid (avoids curl exit 60).
+          # CPANEL_HOSTNAME is the authoritative hostname set at the workflow level.
+          HOST="$CPANEL_HOST"
+          if echo "$HOST" | grep -qE '^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'; then
+            echo "Warning: CPANEL_HOST looks like an IP ($HOST). Using $CPANEL_HOSTNAME for SSL." >&2
+            HOST="$CPANEL_HOSTNAME"
+          fi
 
-          echo "Triggering cPanel pull for repo: ${REPO} on host ${CPANEL_HOST}"
+          URL="https://${HOST}:2083/execute/Git/update_repo?repo=${REPO}"
+
+          echo "Triggering cPanel pull for repo: ${REPO} on host ${HOST}"
 
           # Use cPanel API token in Authorization header. The body and response are JSON.
           HTTP=$(curl -s -w "%{http_code}" -o pull.json -X POST "$URL" \
