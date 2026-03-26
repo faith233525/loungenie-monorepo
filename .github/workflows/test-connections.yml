@@ -1,0 +1,89 @@
+name: Test Connections (REST / FTP / cPanel)
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_live_tests:
+        description: "When true, run live connection checks (default: true)"
+        required: false
+        default: "true"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      WP_SITE_URL: ${{ secrets.WP_SITE_URL }}
+      WP_REST_USERNAME: ${{ secrets.WP_REST_USERNAME }}
+      WP_REST_PASSWORD: ${{ secrets.WP_REST_PASSWORD }}
+      FTP_HOST: ${{ secrets.FTP_HOST }}
+      FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
+      CPANEL_USER: ${{ secrets.CPANEL_USER || secrets.FTP_USERNAME }}
+      CPANEL_HOST: ${{ secrets.CPANEL_HOST || secrets.FTP_HOST }}
+      RUN_LIVE: ${{ github.event.inputs.run_live_tests }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Test WP REST API
+        if: env.RUN_LIVE != 'false'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${WP_SITE_URL-}" ] || [ -z "${WP_REST_USERNAME-}" ] || [ -z "${WP_REST_PASSWORD-}" ]; then
+            echo "SKIP: WP REST credentials missing"
+            exit 0
+          fi
+          echo "Testing WP REST: ${WP_SITE_URL}/wp-json/wp/v2/pages?per_page=1"
+          if curl -fsS -u "${WP_REST_USERNAME}:${WP_REST_PASSWORD}" "${WP_SITE_URL}/wp-json/wp/v2/pages?per_page=1" -o /dev/null; then
+            echo "OK: WP REST reachable and auth accepted"
+          else
+            echo "FAIL: WP REST request failed"
+            exit 2
+          fi
+
+      - name: Test FTP List
+        if: env.RUN_LIVE != 'false'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${FTP_HOST-}" ] || [ -z "${FTP_USERNAME-}" ] || [ -z "${FTP_PASSWORD-}" ]; then
+            echo "SKIP: FTP credentials missing"
+            exit 0
+          fi
+          echo "Testing FTP list on ${FTP_HOST}"
+          if curl --ftp-ssl -s --list-only -u "${FTP_USERNAME}:${FTP_PASSWORD}" "ftp://${FTP_HOST}/" >/dev/null 2>&1; then
+            echo "OK: FTP reachable and credentials accepted"
+          else
+            echo "FAIL: FTP list failed"
+            exit 3
+          fi
+
+      - name: Test cPanel API token
+        if: env.RUN_LIVE != 'false'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${CPANEL_HOST-}" ] || [ -z "${CPANEL_USER-}" ] || [ -z "${CPANEL_API_TOKEN-}" ]; then
+            echo "SKIP: cPanel credentials missing"
+            exit 0
+          fi
+          echo "Testing cPanel UAPI Version endpoint on ${CPANEL_HOST}"
+          if curl -fsS -k -H "Authorization: cpanel ${CPANEL_USER}:${CPANEL_API_TOKEN}" "https://${CPANEL_HOST}:2083/execute/Version/version" -o /dev/null; then
+            echo "OK: cPanel API token accepted"
+          else
+            echo "FAIL: cPanel API request failed"
+            exit 4
+          fi
+
+      - name: Upload results artifact
+        if: always()
+        run: |
+          mkdir -p artifacts
+          echo "Connection checks completed at: $(date -u)" > artifacts/connection-check.txt
+        uses: actions/upload-artifact@v4
+        with:
+          name: connection-check-summary
+          path: artifacts/connection-check.txt
