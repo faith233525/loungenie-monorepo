@@ -22,32 +22,15 @@ jobs:
       - name: Install lftp
         run: sudo apt-get update && sudo apt-get install -y lftp
 
-      - name: Upload portal via lftp
-        env:
-          FTP_HOST: ${{ secrets.FTP_HOST }}
-          FTP_USER: ${{ secrets.FTP_USERNAME }}
-          FTP_PASS: ${{ secrets.FTP_PASSWORD }}
-          FTP_PORT: ${{ secrets.FTP_PORT }}
-        run: |
-          set -euo pipefail
-          lftp -u "$FTP_USER","$FTP_PASS" -p "${FTP_PORT:-21}" "$FTP_HOST" <<'LFTP'
-          set ftp:ssl-allow no
-          set net:max-retries 2
-          mirror -R portal /public_html/stage/wp-content/plugins/loungenie-portal --delete --verbose
-          quit
-          LFTP
+      - name: Make deploy script executable
+        run: chmod +x scripts/deploy_via_lftp.sh
 
-      - name: Upload mu-plugins via lftp
+      - name: Run deploy script
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
-          FTP_USER: ${{ secrets.FTP_USERNAME }}
-          FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           FTP_PORT: ${{ secrets.FTP_PORT }}
+          REMOTE_BASE: '/public_html/stage'
         run: |
-          set -euo pipefail
-          lftp -u "$FTP_USER","$FTP_PASS" -p "${FTP_PORT:-21}" "$FTP_HOST" <<'LFTP'
-          set ftp:ssl-allow no
-          set net:max-retries 2
-          mirror -R wp-content/mu-plugins /public_html/stage/wp-content/mu-plugins --delete --verbose
-          quit
-          LFTP
+          ./scripts/deploy_via_lftp.sh
