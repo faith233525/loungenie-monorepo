@@ -4,6 +4,7 @@ from pathlib import Path
 import requests
 import sys
 import os
+import time
 
 # Get environment variables - try each naming convention
 wp_url = os.environ.get('WP_SITE_URL') or os.environ.get('STAGING_WP_URL') or os.environ.get('WP_URL') or ''
@@ -35,16 +36,32 @@ pages_dir = Path("content/pages")
 payloads = sorted(pages_dir.glob("*.html"))
 
 def find_page(slug: str):
-    r = requests.get(f"{BASE}/wp-json/wp/v2/pages", params={"slug": slug, "per_page": 1}, headers=HEADERS, timeout=30)
-    r.raise_for_status()
-    data = r.json()
-    return data[0] if data else None
+    for attempt in range(3):
+        try:
+            r = requests.get(f"{BASE}/wp-json/wp/v2/pages", params={"slug": slug, "per_page": 1}, headers=HEADERS, timeout=60)
+            r.raise_for_status()
+            data = r.json()
+            return data[0] if data else None
+        except requests.exceptions.Timeout:
+            if attempt < 2:
+                print(f"  (timeout on {slug}, retrying...)")
+                time.sleep(2)
+            else:
+                raise
 
 def update_page(page_id: int, html: str, title: str):
-    body = {"content": html, "title": title, "status": "publish"}
-    r = requests.post(f"{BASE}/wp-json/wp/v2/pages/{page_id}", headers={**HEADERS, "Content-Type":"application/json"}, data=json.dumps(body), timeout=30)
-    r.raise_for_status()
-    return r.json()
+    for attempt in range(3):
+        try:
+            body = {"content": html, "title": title, "status": "publish"}
+            r = requests.post(f"{BASE}/wp-json/wp/v2/pages/{page_id}", headers={**HEADERS, "Content-Type":"application/json"}, data=json.dumps(body), timeout=60)
+            r.raise_for_status()
+            return r.json()
+        except requests.exceptions.Timeout:
+            if attempt < 2:
+                print(f"  (timeout on page {page_id}, retrying...)")
+                time.sleep(2)
+            else:
+                raise
 
 for f in payloads:
     slug = f.stem.lower()
