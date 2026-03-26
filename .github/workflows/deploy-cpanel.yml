@@ -1,79 +1,155 @@
-name: Deploy to cPanel (Git Pull)
+name: Deploy to Staging
+
+# Master deployment workflow — chains all three deployment methods:
+#   1. cPanel Git Pull  (deploys all Git-tracked code; runs .cpanel.yml tasks)
+#   2. FTP File Sync    (mirrors portal plugin and mu-plugins via lftp)
+#   3. REST Content     (pushes WordPress page HTML via REST API + app token)
+#   4. Smoke Test       (quick HTTP check — always runs)
+#
+# Each step is independently skippable via workflow_dispatch inputs.
+# On push to main all steps run automatically.
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
     inputs:
-      repo:
-        description: 'cPanel repo name (overrides CPANEL_REPO secret)'
+      skip_git_pull:
+        description: 'Skip cPanel Git pull step'
         required: false
-        default: ''
+        default: 'false'
+      skip_ftp:
+        description: 'Skip FTP file sync step'
+        required: false
+        default: 'false'
+      skip_rest:
+        description: 'Skip WordPress REST content update step'
+        required: false
+        default: 'false'
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
+  # ── Step 1: cPanel Git Pull ────────────────────────────────────────────────
   git-pull:
-    name: Trigger cPanel Git Pull
+    name: 1 · Git Pull (cPanel)
     runs-on: ubuntu-latest
+    # On push events github.event.inputs is empty, so != 'true' → job runs.
+    if: ${{ github.event.inputs.skip_git_pull != 'true' }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          submodules: false
+
       - name: Trigger cPanel Git Pull
         env:
           CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
-          # Canonical hostname — used automatically when CPANEL_HOST contains a bare IP
           CPANEL_HOSTNAME: cpanel.loungenie.com
           CPANEL_USER: ${{ secrets.CPANEL_USER }}
           CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
           CPANEL_REPO: ${{ secrets.CPANEL_REPO }}
-          INPUT_REPO: ${{ github.event.inputs.repo }}
         run: |
           set -euo pipefail
-
-          REPO="${INPUT_REPO:-${CPANEL_REPO}}"
-          if [ -z "$REPO" ]; then
-            echo "No repo specified (set CPANEL_REPO secret or pass repo input)." >&2
-            exit 1
+          if [ -z "${CPANEL_REPO}" ]; then
+            echo "CPANEL_REPO secret is not set." >&2; exit 1
           fi
-
-          # Normalise host: if the secret is a bare IPv4 address the TLS cert will
-          # not match — use the known hostname instead to avoid curl exit code 60.
-          HOST="$CPANEL_HOST"
-          if echo "$HOST" | grep -qE '^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'; then
-            echo "Warning: CPANEL_HOST is an IP ($HOST); using $CPANEL_HOSTNAME for SSL." >&2
-            HOST="$CPANEL_HOSTNAME"
-          fi
-
-          URL="https://${HOST}:2083/execute/Git/update_repo?repo=${REPO}"
-          echo "Triggering Git pull for repo '${REPO}' on ${HOST}"
-
-          HTTP=$(curl -s -w "%{http_code}" -o deploy.json -X POST "$URL" \
+          source scripts/normalize_cpanel_host.sh
+          HOST=$(normalize_cpanel_host "${CPANEL_HOST}" "${CPANEL_HOSTNAME}")
+          URL="https://${HOST}:2083/execute/Git/update_repo?repo=${CPANEL_REPO}"
+          echo "Triggering Git pull → repo '${CPANEL_REPO}' on ${HOST}"
+          HTTP=$(curl -s -w "%{http_code}" -o git-pull.json -X POST "${URL}" \
             -H "Authorization: cpanel ${CPANEL_USER}:${CPANEL_API_TOKEN}" \
             -H "Content-Type: application/json")
-
-          echo "HTTP status: $HTTP"
-          echo "cPanel response (first 500 chars):"
-          head -c 500 deploy.json || true
-
-          if [ "$HTTP" -ge 400 ]; then
-            echo "cPanel API returned error status $HTTP" >&2
-            exit 1
+          echo "HTTP status: ${HTTP}"
+          head -c 500 git-pull.json || true
+          if [ "${HTTP}" -ge 400 ]; then
+            echo "cPanel API returned error ${HTTP}" >&2; exit 1
           fi
 
-      - name: Upload deploy response
+      - name: Upload cPanel response
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cpanel-deploy-response
-          path: deploy.json
+          name: git-pull-response
+          path: git-pull.json
 
-  post-deploy-check:
-    name: Post-deploy smoke test
+  # ── Step 2: FTP File Sync ──────────────────────────────────────────────────
+  ftp-sync:
+    name: 2 · FTP File Sync
     runs-on: ubuntu-latest
     needs: [git-pull]
+    # Run even if git-pull was skipped or failed; skip only if explicitly requested
+    if: ${{ always() && github.event.inputs.skip_ftp != 'true' }}
+    env:
+      FTP_HOST: ${{ secrets.FTP_HOST }}
+      FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      FTP_PORT: ${{ secrets.FTP_PORT }}
+      REMOTE_BASE: /public_html/stage
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          submodules: false
+
+      - name: Install lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y lftp
+
+      - name: Sync portal plugin and mu-plugins via FTP
+        run: |
+          if [ -z "${FTP_HOST}" ] || [ -z "${FTP_USERNAME}" ] || [ -z "${FTP_PASSWORD}" ]; then
+            echo "FTP credentials not set; skipping FTP sync."
+            exit 0
+          fi
+          chmod +x scripts/deploy_via_lftp.sh
+          ./scripts/deploy_via_lftp.sh
+
+  # ── Step 3: WordPress REST Content Update ─────────────────────────────────
+  rest-update:
+    name: 3 · REST Content Update
+    runs-on: ubuntu-latest
+    needs: [ftp-sync]
+    if: ${{ always() && github.event.inputs.skip_rest != 'true' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          submodules: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Push page content via WordPress REST API
+        env:
+          WP_SITE_URL: ${{ secrets.WP_SITE_URL }}
+          WP_REST_USER: ${{ secrets.WP_REST_USER }}
+          WP_REST_PASS: ${{ secrets.WP_REST_PASS }}
+        run: |
+          if [ -z "${WP_SITE_URL}" ] || [ -z "${WP_REST_USER}" ] || [ -z "${WP_REST_PASS}" ]; then
+            echo "WordPress REST credentials not set; skipping content update."
+            exit 0
+          fi
+          python tools/apply_site_via_rest.py
+
+  # ── Step 4: Smoke Test ─────────────────────────────────────────────────────
+  smoke-test:
+    name: 4 · Smoke Test
+    runs-on: ubuntu-latest
+    needs: [git-pull, ftp-sync, rest-update]
     if: always()
     steps:
-      - name: HTTP smoke check
+      - name: HTTP check
         run: |
           URL="${{ secrets.STAGING_URL }}"
           if [ -z "$URL" ]; then
@@ -81,4 +157,8 @@ jobs:
             exit 0
           fi
           echo "Checking $URL"
-          curl -fsSI "$URL" | head -n 10
+          if curl -fsSI "$URL" | head -n 10; then
+            echo "✅ Staging site is reachable."
+          else
+            echo "⚠️  Staging site did not respond as expected."
+          fi
