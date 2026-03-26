@@ -1,0 +1,41 @@
+name: Deploy Portal to Staging (FTP)
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'portal/**'
+      - 'wp-content/mu-plugins/**'
+  workflow_dispatch:
+
+jobs:
+  ftp-deploy:
+    runs-on: ubuntu-latest
+    env:
+      FTP_HOST: ${{ secrets.FTP_HOST }}
+      FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      FTP_PORT: ${{ secrets.FTP_PORT }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy `portal/` to staging plugins
+        uses: SamKirkland/FTP-Deploy-Action@4.4.0
+        with:
+          server: ${{ env.FTP_HOST }}
+          username: ${{ env.FTP_USERNAME }}
+          password: ${{ env.FTP_PASSWORD }}
+          port: ${{ env.FTP_PORT }}
+          local-dir: 'portal'
+          server-dir: '/public_html/stage/wp-content/plugins/loungenie-portal'
+
+      - name: Deploy mu-plugins to staging
+        uses: SamKirkland/FTP-Deploy-Action@4.4.0
+        with:
+          server: ${{ env.FTP_HOST }}
+          username: ${{ env.FTP_USERNAME }}
+          password: ${{ env.FTP_PASSWORD }}
+          port: ${{ env.FTP_PORT }}
+          local-dir: 'wp-content/mu-plugins'
+          server-dir: '/public_html/stage/wp-content/mu-plugins'
