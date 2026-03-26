@@ -29,10 +29,18 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Validate required secrets
+        shell: bash
+        env:
+          WP_URL: ${{ secrets.WP_URL }}
+          WP_USER: ${{ secrets.WP_USER }}
+          WP_APP_PASS: ${{ secrets.WP_APP_PASS }}
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
         run: |
           MISSING=0
           for s in WP_URL WP_USER WP_APP_PASS FTP_HOST FTP_USER FTP_PASS; do
-            if [ -z "${{ secrets[$s] }}" ]; then
+            if [ -z "${!s-}" ]; then
               echo "ERROR: secret $s is not set"
               MISSING=$((MISSING+1))
             fi
@@ -69,18 +77,18 @@ jobs:
           LIVE=false
           if [ "${ALLOW_LIVE}" = "true" ]; then
             if [ -n "${WP_APP_PASS}" ] && [ -n "${FTP_PASS}" ]; then
-              echo "All secrets present and allow_live requested  enabling LIVE mode."
+              echo "All secrets present and allow_live requested - enabling LIVE mode."
               LIVE=true
             else
-              echo "allow_live requested but secrets missing  staying in dry-run."
+              echo "allow_live requested but secrets missing - staying in dry-run."
             fi
           else
-            echo "allow_live not set  running in dry-run (safe) mode."
+            echo "allow_live not set - running in dry-run (safe) mode."
           fi
           if [ "${LIVE}" = "true" ]; then
-            pwsh -NoProfile -ExecutionPolicy Bypass -File .\tools\run_wp_ftp_and_rest_safe.ps1 -Live
+            pwsh -NoProfile -ExecutionPolicy Bypass -File ./update-pages/tools/run_wp_ftp_and_rest_safe.ps1 -Live
           else
-            pwsh -NoProfile -ExecutionPolicy Bypass -File .\tools\run_wp_ftp_and_rest_safe.ps1 -DryRun
+            pwsh -NoProfile -ExecutionPolicy Bypass -File ./update-pages/tools/run_wp_ftp_and_rest_safe.ps1 -DryRun
           fi
 
       - name: Upload artifacts

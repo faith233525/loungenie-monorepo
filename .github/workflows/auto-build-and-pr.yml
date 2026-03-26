@@ -8,6 +8,10 @@ on:
       - "assets/css/**"
       - "dist/**"
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   build-and-pr:
     runs-on: ubuntu-latest

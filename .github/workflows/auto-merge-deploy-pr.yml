@@ -4,6 +4,10 @@ on:
   pull_request:
     types: [opened, labeled, reopened, synchronize]
 
+permissions:
+  pull-requests: write
+  contents: write
+
 jobs:
   auto-merge:
     name: Auto-merge if labeled
@@ -15,11 +19,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           REPO: ${{ github.repository }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
         run: |
           echo "Merging PR #$PR_NUMBER in $REPO"
           API_URL="https://api.github.com/repos/$REPO/pulls/$PR_NUMBER/merge"
-          TITLE=${{ github.event.pull_request.title }}
-          PAYLOAD=$(jq -n --arg title "Auto-merge: $TITLE" '{commit_title: $title, merge_method: "squash"}')
+          PAYLOAD=$(jq -n --arg title "Auto-merge: $PR_TITLE" '{commit_title: $title, merge_method: "squash"}')
           http_status=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" -d "$PAYLOAD" "$API_URL")
           if [ "$http_status" -eq 200 ] || [ "$http_status" -eq 201 ]; then
             echo "PR merged successfully"
