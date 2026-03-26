@@ -4,6 +4,10 @@ name: Automated Staging Deploy [standalone]
 # The master deployment workflow (deploy-cpanel.yml) now handles
 # Git pull + FTP + REST automatically on every push to main.
 
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   workflow_dispatch:
     inputs:
