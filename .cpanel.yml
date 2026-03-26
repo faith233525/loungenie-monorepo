@@ -1,5 +1,11 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/pools425/loungenie.com/stage
-    - /bin/cp -R * $DEPLOYPATH
+    # Deploy the loungenie-portal plugin to staging
+    - export WP_PLUGINS=/home/pools425/loungenie.com/stage/wp-content/plugins
+    - mkdir -p $WP_PLUGINS/loungenie-portal
+    - /bin/cp -R portal/* $WP_PLUGINS/loungenie-portal/
+    # Deploy the LG9 mu-plugin (inline CSS)
+    - export WP_MU=/home/pools425/loungenie.com/stage/wp-content/mu-plugins
+    - mkdir -p $WP_MU
+    - /bin/cp wp-content/mu-plugins/lg9-inline.php $WP_MU/lg9-inline.php
