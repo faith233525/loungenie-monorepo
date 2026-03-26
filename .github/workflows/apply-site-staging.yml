@@ -17,9 +17,9 @@ jobs:
       - run: pip install requests
       - name: Sync pages to WordPress staging
         env:
-          STAGING_WP_URL: ${{ secrets.WP_SITE_URL }}
-          STAGING_WP_USER: ${{ secrets.WP_REST_USER }}
-          STAGING_WP_APP_PASSWORD: ${{ secrets.WP_REST_PASS }}
+          WP_SITE_URL: ${{ secrets.WP_SITE_URL }}
+          WP_REST_USER: ${{ secrets.WP_REST_USER }}
+          WP_REST_PASS: ${{ secrets.WP_REST_PASS }}
         run: python tools/apply_site_via_rest.py
       - name: Success Summary
         if: success()
