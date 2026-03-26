@@ -9,6 +9,10 @@ name: Deploy to Staging
 # Each step is independently skippable via workflow_dispatch inputs.
 # On push to main all steps run automatically.
 
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   push:
     branches: [main]

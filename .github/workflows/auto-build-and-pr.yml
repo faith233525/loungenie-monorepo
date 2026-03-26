@@ -1,5 +1,9 @@
 name: Build plugin ZIP and open PR to deploy-staging
 
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   push:
     branches: ["portal", "main"]

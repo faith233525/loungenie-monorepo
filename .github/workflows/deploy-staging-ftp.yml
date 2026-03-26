@@ -4,6 +4,10 @@ name: Deploy Portal to Staging (FTP) [standalone]
 # The master deployment workflow (deploy-cpanel.yml) now handles
 # FTP sync automatically on every push to main.
 
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   workflow_dispatch:
 
