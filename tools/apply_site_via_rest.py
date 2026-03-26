@@ -2,13 +2,38 @@ import base64
 import json
 from pathlib import Path
 import requests
+import sys
 
-BASE = (Path.cwd() and __import__("os").environ.get("STAGING_WP_URL","")).rstrip("/")
-USER = __import__("os").environ.get("STAGING_WP_USER","")
-APP  = __import__("os").environ.get("STAGING_WP_APP_PASSWORD","")
+# Try multiple env var names for flexibility
+os = __import__("os")
+BASE = (os.environ.get("STAGING_WP_URL") or 
+        os.environ.get("WP_SITE_URL") or 
+        os.environ.get("WP_URL") or "").rstrip("/")
+
+USER = (os.environ.get("STAGING_WP_USER") or 
+        os.environ.get("WP_REST_USER") or 
+        os.environ.get("WP_REST_USERNAME") or 
+        os.environ.get("WP_USER") or "")
+
+APP = (os.environ.get("STAGING_WP_APP_PASSWORD") or 
+       os.environ.get("WP_REST_PASSWORD") or 
+       os.environ.get("WP_REST_PASS") or 
+       os.environ.get("WP_APP_PASS") or "")
 
 if not BASE or not USER or not APP:
-    raise SystemExit("Missing STAGING_WP_URL / STAGING_WP_USER / STAGING_WP_APP_PASSWORD")
+    print("\n❌ MISSING WORDPRESS CREDENTIALS")
+    print("\nRequired env vars (set one of each group):\n")
+    print("  WordPress URL:")
+    print("    • STAGING_WP_URL, WP_SITE_URL, or WP_URL")
+    print(f"    Current: {BASE or '(not set)'}\n")
+    print("  WordPress User:")
+    print("    • STAGING_WP_USER, WP_REST_USER, WP_REST_USERNAME, or WP_USER")
+    print(f"    Current: {USER or '(not set)'}\n")
+    print("  App Password:")
+    print("    • STAGING_WP_APP_PASSWORD, WP_REST_PASSWORD, WP_REST_PASS, or WP_APP_PASS")
+    print(f"    Current: {'****' if APP else '(not set)'}\n")
+    print("To deploy your pages, add these as GitHub Actions secrets and re-run the workflow.")
+    sys.exit(1)
 
 auth = base64.b64encode(f"{USER}:{APP}".encode()).decode()
 HEADERS = {"Authorization": f"Basic {auth}"}

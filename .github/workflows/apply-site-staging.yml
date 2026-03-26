@@ -9,14 +9,40 @@ on:
 jobs:
   apply:
     runs-on: ubuntu-latest
-    env:
-      STAGING_WP_URL: ${{ secrets.STAGING_WP_URL }}
-      STAGING_WP_USER: ${{ secrets.STAGING_WP_USER }}
-      STAGING_WP_APP_PASSWORD: ${{ secrets.STAGING_WP_APP_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       - run: pip install requests
-      - run: python tools/apply_site_via_rest.py
+      - name: Sync pages to WordPress staging
+        env:
+          # Support multiple env var names for flexibility
+          STAGING_WP_URL: ${{ secrets.STAGING_WP_URL || secrets.WP_SITE_URL }}
+          STAGING_WP_USER: ${{ secrets.STAGING_WP_USER || secrets.WP_REST_USER }}
+          STAGING_WP_APP_PASSWORD: ${{ secrets.STAGING_WP_APP_PASSWORD || secrets.WP_REST_PASS }}
+        run: python tools/apply_site_via_rest.py
+      - name: Success Summary
+        if: success()
+        run: echo "✅ Pages synced to WordPress! Your blue gradient design is now live on staging."
+      - name: Setup Guide
+        if: failure()
+        run: |
+          echo ""
+          echo "❌ Page sync failed. To deploy:"
+          echo ""
+          echo "1️⃣  Add WordPress credentials to GitHub Secrets:"
+          echo "   gh secret set WP_SITE_URL --body 'https://loungenie.com/stage'"
+          echo "   gh secret set WP_REST_USER --body 'copilot'"
+          echo "   gh secret set WP_REST_PASS --body '<app-password-from-wp-admin>'"
+          echo ""
+          echo "2️⃣  Or set these secrets in GitHub → Settings → Secrets:"
+          echo "   - STAGING_WP_URL, WP_SITE_URL"
+          echo "   - STAGING_WP_USER, WP_REST_USER"
+          echo "   - STAGING_WP_APP_PASSWORD, WP_REST_PASS"
+          echo ""
+          echo "📖 Full guide: See DEPLOYMENT_STATUS.md"
+          exit 1
+
+
+
