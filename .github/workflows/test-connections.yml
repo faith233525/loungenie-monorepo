@@ -73,10 +73,11 @@ jobs:
             exit 0
           fi
           echo "Testing cPanel UAPI Version endpoint on ${CPANEL_HOST}"
-          if curl -fsS -k -H "Authorization: cpanel ${CPANEL_USER}:${CPANEL_API_TOKEN}" "https://${CPANEL_HOST}:2083/execute/Version/version" -o /dev/null; then
+          # Note: CPANEL_HOST must be a hostname from the SSL cert (e.g., cpanel.loungenie.com), not an IP
+          if curl -fsS -H "Authorization: cpanel ${CPANEL_USER}:${CPANEL_API_TOKEN}" "https://${CPANEL_HOST}:2083/execute/Version/version" -o /dev/null; then
             echo "OK: cPanel API token accepted"
           else
-            echo "FAIL: cPanel API request failed"
+            echo "FAIL: cPanel API request failed (check if CPANEL_HOST uses hostname not IP)"
             exit 4
           fi
 

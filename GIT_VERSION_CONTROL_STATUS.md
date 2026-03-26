@@ -14,7 +14,18 @@ This repository has **14 active GitHub Actions workflows** that use Git version 
 - ✅ **13/14 workflows** using proper checkout configuration  
 - ✅ **All Python workflows** using `actions/setup-python@v6`
 - ✅ **3 deployment methods** properly configured (cPanel Git, SSH, FTP)
-- ⚠️ **1 issue fixed**: SSL certificate validation in cPanel Git pull workflow
+- ⚠️ **Action Required**: CPANEL_HOST secret must use hostname (e.g., cpanel.loungenie.com), not IP address
+
+### Important SSL Certificate Information
+
+The loungenie.com domain has a **valid SSL certificate from GlobalSign** (expires May 19, 2026) that covers:
+- cpanel.loungenie.com
+- loungenie.com
+- www.loungenie.com
+- mail.loungenie.com
+- And other subdomains
+
+**Critical**: The `CPANEL_HOST` GitHub secret must be set to a hostname covered by this certificate (e.g., `cpanel.loungenie.com`), NOT an IP address. Using an IP address will cause SSL certificate verification to fail.
 
 ---
 
@@ -35,7 +46,7 @@ The repository supports three Git-based deployment methods:
 - Repository path: `/home/pools425/repositories/loungenie-stage`
 - Remote: `https://github.com/faith233525/loungenie-monorepo.git`
 
-**Status:** ✅ Fixed (added SSL certificate skip flag)
+**Status:** ✅ Working (requires correct hostname in CPANEL_HOST secret)
 
 ### 2. SSH Deployment with rsync
 **Workflow:** `deploy-cpanel.yml`
@@ -90,24 +101,38 @@ These workflows don't need code checkout:
 
 ## Issues Found and Fixed
 
-### 1. SSL Certificate Validation Error (FIXED)
+### 1. SSL Certificate Hostname Configuration (ACTION REQUIRED)
 
 **Issue:**
-The `cpanel-pull-deploy.yml` workflow was failing with curl exit code 60 (SSL certificate problem) when connecting to cPanel API.
+The `cpanel-pull-deploy.yml` and `test-connections.yml` workflows may fail with curl exit code 60 (SSL certificate problem) if the `CPANEL_HOST` secret is set to an IP address instead of a hostname.
 
 **Root Cause:**
-cPanel often uses self-signed SSL certificates. The workflow was missing the `-k` flag to skip certificate verification.
+- The cPanel server has a valid SSL certificate from GlobalSign
+- The certificate covers hostnames: cpanel.loungenie.com, loungenie.com, www.loungenie.com, etc.
+- SSL certificates are validated against hostnames, not IP addresses
+- If `CPANEL_HOST` contains `66.102.133.37` instead of `cpanel.loungenie.com`, SSL verification fails
 
-**Fix Applied:**
+**Correct Configuration:**
 ```yaml
-# Before:
-curl -s -w "%{http_code}" -o pull.json -X POST "$URL" \
-
-# After:
-curl -s -k -w "%{http_code}" -o pull.json -X POST "$URL" \
+# GitHub Secrets:
+CPANEL_HOST: cpanel.loungenie.com  # ✅ Use hostname
+# NOT:
+CPANEL_HOST: 66.102.133.37         # ❌ IP address will fail SSL verification
 ```
 
-**Status:** ✅ Fixed in this PR
+**What Was Fixed:**
+- Removed insecure `-k` flag that bypassed SSL verification
+- Added comments explaining hostname requirement
+- Updated error messages to guide users to correct configuration
+
+**Action Required:**
+Verify that the `CPANEL_HOST` GitHub secret is set to `cpanel.loungenie.com` or another hostname covered by the SSL certificate, not an IP address.
+
+**Security Note:**
+We do NOT use the `-k` or `--insecure` flag because:
+1. The SSL certificate is valid and from a trusted CA (GlobalSign)
+2. Bypassing SSL verification exposes the workflow to man-in-the-middle attacks
+3. The proper solution is to use the correct hostname
 
 ---
 
@@ -135,7 +160,7 @@ The workflows require these GitHub secrets to be configured:
 - `STAGING_PATH` or `PRODUCTION_PATH`
 
 #### cPanel Git API
-- `CPANEL_HOST`
+- `CPANEL_HOST` - **Must be hostname** (e.g., `cpanel.loungenie.com`), NOT IP address
 - `CPANEL_USER`
 - `CPANEL_API_TOKEN`
 - `CPANEL_REPO`
@@ -174,9 +199,10 @@ Use these workflows to verify connectivity:
    - Latest features
    - Improved caching
 
-4. **SSL Handling:** cPanel workflows skip SSL verification
-   - Required for self-signed certificates
-   - Consistent with test workflows
+4. **SSL Handling:** Uses proper SSL certificate validation
+   - Valid SSL certificate from GlobalSign
+   - Must use correct hostname in CPANEL_HOST
+   - NO certificate verification bypass (`-k` flag not used)
 
 ### 🔒 Security Considerations
 
@@ -224,8 +250,14 @@ These workflows trigger automatically:
 
 ### Common Issues
 
-#### 1. "Exit code 60" - SSL Certificate Error
-**Solution:** Ensure `-k` flag is in curl command for cPanel API calls
+#### 1. "Exit code 60" - SSL Certificate Hostname Mismatch
+**Cause:** CPANEL_HOST secret contains an IP address instead of hostname  
+**Solution:** Update CPANEL_HOST secret to `cpanel.loungenie.com`
+
+```bash
+# Update the secret:
+gh secret set CPANEL_HOST --body "cpanel.loungenie.com"
+```
 
 #### 2. "Exit code 128" - Git Submodule Error  
 **Solution:** Add `submodules: false` to checkout action

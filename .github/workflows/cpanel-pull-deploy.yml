@@ -36,8 +36,9 @@ jobs:
           echo "Triggering cPanel pull for repo: ${REPO} on host ${CPANEL_HOST}"
 
           # Use cPanel API token in Authorization header. The body and response are JSON.
-          # Use -k to skip SSL cert verification (self-signed cert on cPanel)
-          HTTP=$(curl -s -k -w "%{http_code}" -o pull.json -X POST "$URL" \
+          # Note: CPANEL_HOST must be a hostname from the SSL certificate (e.g., cpanel.loungenie.com)
+          # not an IP address, to avoid SSL verification errors.
+          HTTP=$(curl -s -w "%{http_code}" -o pull.json -X POST "$URL" \
             -H "Authorization: cpanel ${CPANEL_USER}:${CPANEL_API_TOKEN}" \
             -H "Content-Type: application/json")
 

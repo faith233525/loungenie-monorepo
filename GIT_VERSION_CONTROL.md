@@ -91,6 +91,8 @@ The `cpanel-pull-deploy.yml` workflow triggers cPanel to pull from the Git repos
 
 **Branch:** The cPanel staging environment is configured to track the `main` branch
 
+**SSL Certificate:** The cPanel server uses a valid SSL certificate from GlobalSign. The `CPANEL_HOST` secret must be set to a hostname covered by the certificate (e.g., `cpanel.loungenie.com`), NOT an IP address. See [CPANEL_SSL_CONFIGURATION.md](CPANEL_SSL_CONFIGURATION.md) for details.
+
 ### 2. SSH Deployment with Git
 
 The `deploy-cpanel.yml` workflow uses rsync over SSH after checking out code:
@@ -208,6 +210,12 @@ steps:
 
 **Solution:** Verify SSH keys are properly configured in secrets
 
+### "SSL certificate problem" (Exit code 60)
+
+**Symptom:** cPanel workflows fail with SSL certificate verification error
+
+**Solution:** Ensure `CPANEL_HOST` secret uses hostname (e.g., `cpanel.loungenie.com`), not IP address. See [CPANEL_SSL_CONFIGURATION.md](CPANEL_SSL_CONFIGURATION.md) for complete guide.
+
 ## Version History
 
 - **2026-03-26**: Updated all workflows to actions/checkout@v5 and actions/setup-python@v6
@@ -215,7 +223,9 @@ steps:
 
 ## Related Documentation
 
-- [DEPLOYMENT_HEALTH_CHECK.md](DEPLOYMENT_HEALTH_CHECK.md) - **NEW:** Check if deployments are working
+- [CPANEL_SSL_CONFIGURATION.md](CPANEL_SSL_CONFIGURATION.md) - **NEW:** cPanel SSL certificate setup
+- [GIT_VERSION_CONTROL_STATUS.md](GIT_VERSION_CONTROL_STATUS.md) - **NEW:** Current status report
+- [DEPLOYMENT_HEALTH_CHECK.md](DEPLOYMENT_HEALTH_CHECK.md) - Check if deployments are working
 - [DEPLOYING.md](DEPLOYING.md) - General deployment guide
 - [DEPLOYMENT_STATUS.md](DEPLOYMENT_STATUS.md) - Current deployment status
 - [.cpanel.yml](.cpanel.yml) - cPanel deployment configuration
