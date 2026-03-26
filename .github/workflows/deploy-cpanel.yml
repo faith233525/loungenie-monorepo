@@ -1,100 +1,84 @@
-name: Deploy to cPanel (SSH then FTP fallback)
+name: Deploy to cPanel (Git Pull)
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
     inputs:
-      environment:
-        description: "Target environment"
-        required: true
-        default: "staging"
-        type: choice
-        options: [staging, production]
+      repo:
+        description: 'cPanel repo name (overrides CPANEL_REPO secret)'
+        required: false
+        default: ''
 
 permissions:
   contents: read
 
 jobs:
-  deploy-ssh:
-    name: Deploy via SSH (if key provided)
+  git-pull:
+    name: Trigger cPanel Git Pull
     runs-on: ubuntu-latest
-    if: ${{ secrets.STAGING_SSH_KEY != '' || secrets.PRODUCTION_SSH_KEY != '' }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-        with:
-          submodules: false
-
-      - name: Select target vars
-        id: target
+      - name: Trigger cPanel Git Pull
+        env:
+          CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
+          # Canonical hostname — used automatically when CPANEL_HOST contains a bare IP
+          CPANEL_HOSTNAME: cpanel.loungenie.com
+          CPANEL_USER: ${{ secrets.CPANEL_USER }}
+          CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
+          CPANEL_REPO: ${{ secrets.CPANEL_REPO }}
+          INPUT_REPO: ${{ github.event.inputs.repo }}
         run: |
-          if [ "${{ github.event.inputs.environment }}" = "production" ]; then
-            echo "HOST=${{ secrets.PRODUCTION_HOST }}" >> $GITHUB_OUTPUT
-            echo "USER=${{ secrets.PRODUCTION_USER }}" >> $GITHUB_OUTPUT
-            echo "KEY=${{ secrets.PRODUCTION_SSH_KEY }}" >> $GITHUB_OUTPUT
-            echo "PATH=${{ secrets.PRODUCTION_PATH }}" >> $GITHUB_OUTPUT
-          else
-            echo "HOST=${{ secrets.STAGING_HOST }}" >> $GITHUB_OUTPUT
-            echo "USER=${{ secrets.STAGING_USER }}" >> $GITHUB_OUTPUT
-            echo "KEY=${{ secrets.STAGING_SSH_KEY }}" >> $GITHUB_OUTPUT
-            echo "PATH=${{ secrets.STAGING_PATH }}" >> $GITHUB_OUTPUT
+          set -euo pipefail
+
+          REPO="${INPUT_REPO:-${CPANEL_REPO}}"
+          if [ -z "$REPO" ]; then
+            echo "No repo specified (set CPANEL_REPO secret or pass repo input)." >&2
+            exit 1
           fi
 
-      - name: Prepare SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ steps.target.outputs.KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H "${{ steps.target.outputs.HOST }}" >> ~/.ssh/known_hosts
+          # Normalise host: if the secret is a bare IPv4 address the TLS cert will
+          # not match — use the known hostname instead to avoid curl exit code 60.
+          HOST="$CPANEL_HOST"
+          if echo "$HOST" | grep -qE '^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'; then
+            echo "Warning: CPANEL_HOST is an IP ($HOST); using $CPANEL_HOSTNAME for SSL." >&2
+            HOST="$CPANEL_HOSTNAME"
+          fi
 
-      - name: Rsync files to server
-        env:
-          HOST: ${{ steps.target.outputs.HOST }}
-          USER: ${{ steps.target.outputs.USER }}
-          PATH_ON_SERVER: ${{ steps.target.outputs.PATH }}
-        run: |
-          ARTIFACT_DIR=.
-          rsync -avz --delete -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes" "$ARTIFACT_DIR/" "$USER@$HOST:$PATH_ON_SERVER/"
+          URL="https://${HOST}:2083/execute/Git/update_repo?repo=${REPO}"
+          echo "Triggering Git pull for repo '${REPO}' on ${HOST}"
 
-      - name: Cleanup key
-        run: |
-          shred -u ~/.ssh/deploy_key || rm -f ~/.ssh/deploy_key || true
+          HTTP=$(curl -s -w "%{http_code}" -o deploy.json -X POST "$URL" \
+            -H "Authorization: cpanel ${CPANEL_USER}:${CPANEL_API_TOKEN}" \
+            -H "Content-Type: application/json")
 
-  deploy-ftp:
-    name: Deploy via FTP (fallback)
-    runs-on: ubuntu-latest
-    needs: [deploy-ssh]
-    # Run FTP deployment only when SSH deployment failed or was skipped (no SSH key)
-    # and FTP credentials are available.
-    if: ${{ always() && secrets.FTP_HOST != '' && (needs.deploy-ssh.result == 'failure' || needs.deploy-ssh.result == 'skipped') }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
+          echo "HTTP status: $HTTP"
+          echo "cPanel response (first 500 chars):"
+          head -c 500 deploy.json || true
+
+          if [ "$HTTP" -ge 400 ]; then
+            echo "cPanel API returned error status $HTTP" >&2
+            exit 1
+          fi
+
+      - name: Upload deploy response
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          submodules: false
-
-      - name: Deploy with FTP action
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-        with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASS }}
-          server-dir: ${{ secrets.STAGING_PATH }}
-          local-dir: .
+          name: cpanel-deploy-response
+          path: deploy.json
 
   post-deploy-check:
-    name: Post-deploy smoke tests
+    name: Post-deploy smoke test
     runs-on: ubuntu-latest
-    needs: [deploy-ssh, deploy-ftp]
+    needs: [git-pull]
     if: always()
     steps:
-      - name: Quick HTTP check
+      - name: HTTP smoke check
         run: |
-          URL=${{ secrets.STAGING_URL }}
+          URL="${{ secrets.STAGING_URL }}"
           if [ -z "$URL" ]; then
-            echo "No STAGING_URL secret set; skipping HTTP check";
+            echo "No STAGING_URL secret set; skipping smoke check."
             exit 0
           fi
           echo "Checking $URL"
-          curl -I -s "$URL" | head -n 5
+          curl -fsSI "$URL" | head -n 10
