@@ -37,7 +37,7 @@ jobs:
             echo "KEY=${{ secrets.STAGING_SSH_KEY }}" >> $GITHUB_OUTPUT
             echo "PATH=${{ secrets.STAGING_PATH }}" >> $GITHUB_OUTPUT
           fi
-          
+
           # Check if SSH key is available
           if [ -z "${{ secrets.STAGING_SSH_KEY }}" ] && [ -z "${{ secrets.PRODUCTION_SSH_KEY }}" ]; then
             echo "No SSH key configured, skipping SSH deployment"
