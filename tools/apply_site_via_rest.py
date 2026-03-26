@@ -3,45 +3,29 @@ import json
 from pathlib import Path
 import requests
 import sys
+import os
 
-# Try multiple env var names for flexibility
-os = __import__("os")
+# Get environment variables - try each naming convention
+wp_url = os.environ.get('WP_SITE_URL') or os.environ.get('STAGING_WP_URL') or os.environ.get('WP_URL') or ''
+wp_user = os.environ.get('WP_REST_USER') or os.environ.get('STAGING_WP_USER') or os.environ.get('WP_REST_USERNAME') or os.environ.get('WP_USER') or ''
+wp_pass = os.environ.get('WP_REST_PASS') or os.environ.get('STAGING_WP_APP_PASSWORD') or os.environ.get('WP_REST_PASSWORD') or os.environ.get('WP_APP_PASS') or ''
 
-# Debug: show all env vars containing WP
-print("DEBUG - Environment variables:")
-for key in sorted(os.environ.keys()):
-    if 'WP' in key.upper() or 'STAGING' in key.upper():
-        val = os.environ.get(key, '')
-        masked = val[:10] + '...' if len(val) > 10 else val
-        print(f"  {key}: {masked}")
+# Debug output
+sys.stderr.write(f"DEBUG: WP_SITE_URL={wp_url if wp_url else '(not set)'}\n")
+sys.stderr.write(f"DEBUG: WP_REST_USER={wp_user if wp_user else '(not set)'}\n")
+sys.stderr.write(f"DEBUG: WP_REST_PASS={'****' if wp_pass else '(not set)'}\n")
+sys.stderr.flush()
 
-BASE = (os.environ.get("STAGING_WP_URL") or 
-        os.environ.get("WP_SITE_URL") or 
-        os.environ.get("WP_URL") or "").rstrip("/")
-
-USER = (os.environ.get("STAGING_WP_USER") or 
-        os.environ.get("WP_REST_USER") or 
-        os.environ.get("WP_REST_USERNAME") or 
-        os.environ.get("WP_USER") or "")
-
-APP = (os.environ.get("STAGING_WP_APP_PASSWORD") or 
-       os.environ.get("WP_REST_PASSWORD") or 
-       os.environ.get("WP_REST_PASS") or 
-       os.environ.get("WP_APP_PASS") or "")
+BASE = wp_url.rstrip("/") if wp_url else ""
+USER = wp_user
+APP = wp_pass
 
 if not BASE or not USER or not APP:
     print("\n❌ MISSING WORDPRESS CREDENTIALS")
-    print("\nRequired env vars (set one of each group):\n")
-    print("  WordPress URL:")
-    print("    • STAGING_WP_URL, WP_SITE_URL, or WP_URL")
-    print(f"    Current: {BASE or '(not set)'}\n")
-    print("  WordPress User:")
-    print("    • STAGING_WP_USER, WP_REST_USER, WP_REST_USERNAME, or WP_USER")
-    print(f"    Current: {USER or '(not set)'}\n")
-    print("  App Password:")
-    print("    • STAGING_WP_APP_PASSWORD, WP_REST_PASSWORD, WP_REST_PASS, or WP_APP_PASS")
-    print(f"    Current: {'****' if APP else '(not set)'}\n")
-    print("To deploy your pages, add these as GitHub Actions secrets and re-run the workflow.")
+    print(f"  WP_SITE_URL: {BASE or '(not set)'}")
+    print(f"  WP_REST_USER: {USER or '(not set)'}")
+    print(f"  WP_REST_PASS: {'****' if APP else '(not set)'}\n")
+    print("Set these GitHub Actions secrets and re-run the workflow.")
     sys.exit(1)
 
 auth = base64.b64encode(f"{USER}:{APP}".encode()).decode()
