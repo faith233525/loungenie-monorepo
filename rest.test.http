@@ -1,0 +1,24 @@
+### Get pages by slug (example)
+GET {{wpSite}}/wp-json/wp/v2/pages?slug=home
+Authorization: Basic {{authBasic}}
+
+### Create a draft page (replace auth with app password)
+POST {{wpSite}}/wp-json/wp/v2/pages
+Content-Type: application/json
+Authorization: Basic {{authBasic}}
+
+{
+  "title": "Home (Test)",
+  "status": "draft",
+  "content": "<p>Test publish from REST Client.</p>",
+  "slug": "home-test"
+}
+
+### Update page example (replace {id} with page ID)
+POST {{wpSite}}/wp-json/wp/v2/pages/{id}
+Content-Type: application/json
+Authorization: Basic {{authBasic}}
+
+{
+  "content": "<p>Updated content from REST Client.</p>"
+}

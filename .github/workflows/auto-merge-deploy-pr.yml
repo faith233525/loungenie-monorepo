@@ -1,0 +1,28 @@
+name: Auto-merge automated deploy PRs
+
+on:
+  pull_request:
+    types: [opened, labeled, reopened, synchronize]
+
+jobs:
+  auto-merge:
+    name: Auto-merge if labeled
+    runs-on: ubuntu-latest
+    if: contains(join(github.event.pull_request.labels.*.name, ','), 'automated') && github.event.pull_request.base.ref == 'deploy-staging'
+    steps:
+      - name: Merge pull request via API
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          echo "Merging PR #$PR_NUMBER in $REPO"
+          API_URL="https://api.github.com/repos/$REPO/pulls/$PR_NUMBER/merge"
+          TITLE=${{ github.event.pull_request.title }}
+          PAYLOAD=$(jq -n --arg title "Auto-merge: $TITLE" '{commit_title: $title, merge_method: "squash"}')
+          http_status=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" -d "$PAYLOAD" "$API_URL")
+          if [ "$http_status" -eq 200 ] || [ "$http_status" -eq 201 ]; then
+            echo "PR merged successfully"
+          else
+            echo "Merge failed with status $http_status"; exit 1
+          fi

@@ -1,0 +1,37 @@
+name: Build plugin ZIP and open PR to deploy-staging
+
+on:
+  push:
+    branches: ["portal", "main"]
+    paths:
+      - "wp-content/plugins/lg-block-patterns/**"
+      - "assets/css/**"
+      - "dist/**"
+
+jobs:
+  build-and-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Build plugin ZIP
+        run: |
+          python3 scripts/build_plugin_zip.py
+
+      - name: Create pull request to deploy-staging
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: rebuild lg-block-patterns.zip (auto)"
+          branch: "auto/lg9-build-${{ github.sha }}"
+          base: deploy-staging
+          title: "Auto: Rebuild lg-block-patterns.zip"
+          body: |
+            This PR was created automatically to update `dist/lg-block-patterns.zip` from changes on `${{ github.ref }}`.
+          labels: automated, auto-deploy

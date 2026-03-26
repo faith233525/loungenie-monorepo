@@ -1,0 +1,6 @@
+# Code owners for LG9 deploy-critical paths
+# Format: path  @github-username
+
+/wp-content/plugins/lg-block-patterns/ @faith233525
+/assets/css/ @faith233525
+/.github/workflows/ @faith233525

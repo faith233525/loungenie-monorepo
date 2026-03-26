@@ -1,0 +1,51 @@
+name: Deploy to cPanel (Git Pull)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      repo:
+        description: 'cPanel repo name configured in cPanel (optional)'
+        required: false
+        default: ''
+
+jobs:
+  trigger-pull:
+    runs-on: ubuntu-latest
+    name: Trigger cPanel Git Pull
+    steps:
+      - name: Trigger cPanel Pull
+        env:
+          CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
+          CPANEL_USER: ${{ secrets.CPANEL_USER }}
+          CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
+          CPANEL_REPO: ${{ secrets.CPANEL_REPO }}
+          INPUT_REPO: ${{ github.event.inputs.repo }}
+        run: |
+          set -euo pipefail
+          # prefer explicit input repo, then secret
+          REPO="${INPUT_REPO:-${CPANEL_REPO}}"
+          if [ -z "$REPO" ]; then
+            echo "No repo specified (input or CPANEL_REPO secret)." >&2
+            exit 1
+          fi
+
+          URL="https://${CPANEL_HOST}:2083/execute/Git/update_repo?repo=${REPO}"
+
+          echo "Triggering cPanel pull for repo: ${REPO} on host ${CPANEL_HOST}"
+
+          # Use cPanel API token in Authorization header. The body and response are JSON.
+          HTTP=$(curl -s -w "%{http_code}" -o pull.json -X POST "$URL" \
+            -H "Authorization: cpanel ${CPANEL_USER}:${CPANEL_API_TOKEN}")
+
+          echo "cPanel response (first 200 chars):"
+          head -c 200 pull.json || true
+          echo "\nHTTP_STATUS:$HTTP"
+
+      - name: Upload pull response
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpanel-pull-response
+          path: pull.json

@@ -1,0 +1,61 @@
+name: Deploy to Staging (FTP)
+
+on:
+  push:
+    branches: [portal]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "If true, perform a dry-run (no remote changes)"
+        required: false
+        default: "true"
+
+jobs:
+  deploy:
+    name: FTP Deploy to Staging
+    runs-on: ubuntu-latest
+    concurrency:
+      group: loungenie-deploy-staging
+      cancel-in-progress: true
+    env:
+      TARGET_DIR: public_html/staging_loungenie
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare deploy list
+        run: |
+          echo "Preparing files to deploy..."
+          # Adjust this if you only want to deploy specific folders (themes/plugins)
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.4.0
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          local-dir: "./"
+          server-dir: ${{ env.TARGET_DIR }}
+          exclude: ".github/**,.git/**,.vscode/**,*.ps1,*.md,tests/**"
+          passive: true
+          dry-run: ${{ github.event.inputs.dry_run }}
+
+      - name: Verify install page (non-fatal)
+        run: |
+          if [ -n "${{ secrets.STAGING_URL }}" ]; then
+            url="${{ secrets.STAGING_URL }}/${{ env.TARGET_DIR }}/wp-admin/install.php"
+            echo "Checking $url"
+            curl --silent --show-error --fail --max-time 15 "$url" || echo "Install page not reachable or already installed"
+          else
+            echo "Set STAGING_URL secret to enable post-deploy verification"
+          fi
+
+      - name: Notify
+        if: success()
+        run: echo "Deploy job finished (dry-run=${{ github.event.inputs.dry_run }})"
+
+      - name: Fail on change when dry-run requested
+        if: ${{ github.event.inputs.dry_run == 'true' }}
+        run: echo "Dry-run enabled; no changes applied to remote server."
+
+    permissions: read-all
