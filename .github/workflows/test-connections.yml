@@ -80,7 +80,7 @@ jobs:
             exit 0
           fi
           echo "Testing cPanel UAPI Version endpoint on ${CPANEL_HOST}"
-          if curl -fsS -k -H "Authorization: cpanel ${CPANEL_USER}:${CPANEL_API_TOKEN}" "https://${CPANEL_HOST}:2083/execute/Version/version" -o /dev/null; then
+          if curl -fsS -H "Authorization: cpanel ${CPANEL_USER}:${CPANEL_API_TOKEN}" "https://${CPANEL_HOST}:2083/execute/Version/version" -o /dev/null; then
             echo "OK: cPanel API token accepted"
           else
             echo "FAIL: cPanel API request failed"
