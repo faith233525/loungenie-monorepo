@@ -1,0 +1,59 @@
+name: Deploy Loungenie theme to staging
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - portal
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      FTP_HOST: ${{ secrets.FTP_HOST }}
+      FTP_USER: ${{ secrets.FTP_USER }}
+      FTP_PASS: ${{ secrets.FTP_PASS }}
+      FTP_PORT: ${{ secrets.FTP_PORT }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Ensure upload script is executable
+        run: |
+          chmod +x scripts/deploy_theme_ftp.py || true
+
+      - name: Create temporary mu-plugin (fallback)
+        run: |
+          mkdir -p scripts/tmp
+          cat > scripts/tmp/activate-loungenie.php <<'PHP'
+          <?php
+          /**
+           * Activate Loungenie Theme (temporary mu-plugin)
+           */
+          add_action('init', function() {
+              if (function_exists('get_option') && function_exists('update_option')) {
+                  $current_template = get_option('template');
+                  $current_stylesheet = get_option('stylesheet');
+                  if ($current_template !== 'loungenie' || $current_stylesheet !== 'loungenie') {
+                      if (function_exists('switch_theme')) {
+                          switch_theme('loungenie');
+                      } else {
+                          update_option('template', 'loungenie');
+                          update_option('stylesheet', 'loungenie');
+                      }
+                  }
+              }
+              @unlink(__FILE__);
+          }, 1);
+          PHP
+
+      - name: Upload theme + mu-plugin to staging (no delete)
+        run: |
+          python3 scripts/deploy_theme_ftp.py \
+            -m "wp-content/themes/loungenie:/public_html/stage/wp-content/themes/loungenie" \
+            -m "scripts/tmp/activate-loungenie.php:/public_html/stage/wp-content/mu-plugins/activate-loungenie.php"
